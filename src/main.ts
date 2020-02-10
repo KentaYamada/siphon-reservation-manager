@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Buefy from "buefy";
-
 import firebase from "firebase";
-import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
@@ -10,6 +8,8 @@ import store from "./store";
 import "buefy/dist/buefy.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/css/fontawesome.css";
+
+import App from "@/views/app/App.vue";
 
 // Initialize Vue
 Vue.config.productionTip = false;

@@ -1,0 +1,42 @@
+<div id="app">
+    <div class="navigation" v-if="isShowNav">
+        <div class="navigation-item">
+            <router-link to="/">
+                予約登録
+            </router-link>
+        </div>
+        <div class="navigation-item">
+            <router-link to="/reservations/reserved">
+                予約完了
+            </router-link>
+        </div>
+        <div class="navigation-item">
+            <router-link to="/reservations/detail/1">
+                予約確認
+            </router-link>
+        </div>
+        <div class="navigation-item">
+            <router-link to="/management/reservations">
+                (管理) 予約一覧
+            </router-link>
+        </div>
+        <div class="navigation-item">
+            <router-link to="/managements">
+                Login
+            </router-link>
+        </div>
+        <div class="navigation-item">
+            <router-link to="/forbidden">
+                403ページ
+            </router-link>
+        </div>
+        <div class="navigation-item">
+            <router-link to="/notfound">
+                404ページ
+            </router-link>
+        </div>
+    </div>
+    <section class="section">
+        <router-view />
+    </section>
+</div>

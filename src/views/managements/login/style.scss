@@ -1,0 +1,30 @@
+.icon-container {
+    text-align: center;
+
+    .icon {
+        background-color: #999;
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+    }
+}
+.main-title {
+    font-size: 24px;
+    font-weight: 700;
+}
+.sub-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+.main-title,
+.sub-title {
+    text-align: center;
+}
+.login-form {
+    margin-top: 20px;
+
+    .actions {
+        text-align: right;
+    }
+}

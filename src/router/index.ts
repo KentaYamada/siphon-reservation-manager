@@ -1,23 +1,49 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import VueRouter, { RouteConfig } from "vue-router";
+import ReservationEntry from "@/views/reservations/reservation-entry/ReservationEntry.vue";
+import ReservationDetail from "@/views/reservations/reservation-detail/ReservationDetail.vue";
+import ReservaedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
+import Login from "@/views/managements/login/Login.vue";
+import Forbidden from "@/views/forbidden/Forbidden.vue";
+import NotFound from "@/views/notfound/NotFound.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
+const routes: RouteConfig[] = [
+  //{
+  //  path: "/",
+  //  name: "Home",
+  //  component: Home
+  //},
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "reservation-entry",
+    component: ReservationEntry
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    path: "/reservations/reserved",
+    name: "reserved-message",
+    component: ReservaedMessage
+  },
+  {
+    path: "/reservations/detail/:id",
+    name: "reservation-detail",
+    component: ReservationDetail
+  },
+  {
+    path: "/managements",
+    name: "login",
+    component: Login
+  },
+  {
+    path: "/forbidden",
+    name: "forbidden",
+    component: Forbidden
+  },
+  {
+    path: "*",
+    name: "notfound",
+    component: NotFound
   }
 ];
 

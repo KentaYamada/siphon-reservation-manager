@@ -27,7 +27,7 @@ const routes: RouteConfig[] = [
     component: ReservationDetail
   },
   {
-    path: "/managements",
+    path: "/managements/reservations",
     name: "reservation-list",
     component: ReservationList
   },

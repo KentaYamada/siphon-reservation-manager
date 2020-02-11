@@ -1,9 +1,9 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-    data() {
-        return {
-            isShowNav: true,
-        };
-    },
+  data() {
+    return {
+      isShowNav: true
+    };
+  }
 });

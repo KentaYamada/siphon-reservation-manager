@@ -9,21 +9,20 @@ export default Vue.extend({
         <small>取消後の予約は、再度予約登録してください。</small>
       `;
       const config: DialogConfig = {
-        type: 'is-danger',
-        title: '予約取消',
+        type: "is-danger",
+        title: "予約取消",
         message: message,
-        confirmText: '取消',
-        cancelText: 'キャンセル',
+        confirmText: "取消",
+        cancelText: "キャンセル",
         hasIcon: true,
         // iconPack: 'fas',
-        icon: 'fa-question-circle',
+        icon: "fa-question-circle",
         onConfirm: () => {
-            console.log('hoge');
-        },
+          console.log("hoge");
+        }
       };
 
       this.$buefy.dialog.confirm(config);
-    },
-  },
+    }
+  }
 });
-

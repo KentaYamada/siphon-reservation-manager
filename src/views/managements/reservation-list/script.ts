@@ -1,8 +1,10 @@
 import Vue from "vue";
 import ReservationListItem from "@/components/reservations/reservation-list-item/ReservationListItem.vue";
+import ReservationSearchForm from "@/components/reservations/reservation-search-form/ReservationSearchForm.vue";
 
 export default Vue.extend({
   components: {
+    ReservationSearchForm,
     ReservationListItem
   },
   data() {

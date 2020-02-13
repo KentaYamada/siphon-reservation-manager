@@ -6,5 +6,10 @@ export default Vue.extend({
     reservation: {
       required: true
     }
+  },
+  computed: {
+    numberOfReservations(): string {
+      return `${this.reservation.number_of_reservations}名`;
+    }
   }
 });

@@ -1,44 +1,7 @@
 <div id="app">
     <div class="navigation" v-if="isShowNav">
-        <div class="navigation-item">
-            <router-link to="/">
-                予約登録
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/reservations/reserved">
-                予約完了
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/reservations/detail/1">
-                予約確認
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/managements/reservations">
-                (管理) 予約一覧
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/managements/settings">
-                (管理) 営業日設定
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/managements/login">
-                Login
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/forbidden">
-                403ページ
-            </router-link>
-        </div>
-        <div class="navigation-item">
-            <router-link to="/notfound">
-                404ページ
-            </router-link>
+        <div class="navigation-item" v-for="nav in navigations">
+            <router-link :to="{ path: nav.url }">{{ nav.name }}</router-link>
         </div>
     </div>
     <section class="section">

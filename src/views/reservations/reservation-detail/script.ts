@@ -2,6 +2,12 @@ import Vue from "vue";
 import { DialogConfig, ToastConfig } from "buefy/types/components";
 
 export default Vue.extend({
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   methods: {
     confirmCancel(): void {
       const message = `

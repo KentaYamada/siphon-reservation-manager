@@ -20,7 +20,7 @@ export default Vue.extend({
 """
 SINGLE_FILE_COMPONENT_TEMPLATE = """<template src="./template.html"></template>
 <script src="./script.ts" lang="ts"></script>
-<style src="./src.scss" lang="scss" scoped></style>
+<style src="./style.scss" lang="scss" scoped></style>
 """
 
 

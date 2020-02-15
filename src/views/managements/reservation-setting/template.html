@@ -1,10 +1,78 @@
 <div class="container">
     <div class="columns">
         <div class="column is-half is-offset-3">
-            <h4 class="title is-size-3">
-                <i class="fas fa-store"></i>
-                営業日設定
-            </h4>
+            <div class="box">
+                <h4 class="title is-size-3">
+                    <i class="fas fa-store"></i>
+                    営業設定
+                </h4>
+
+                <div class="business-day-container">
+                    <div class="business-day-header">
+                        <h5 class="title is-size-4">営業日</h5>
+                        <div>
+                            <button type="button" class="button is-info is-outlined">追加</button>
+                        </div>
+                    </div>
+                    <table class="table is-bordered is-fullwidth">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <b-datepicker icon="calendar-alt" placeholder="営業日"></b-datepicker>
+                                </td>
+                                <td class="has-text-centered">
+                                    <button type="button" class="button is-danger is-outlined">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b-datepicker icon="calendar-alt" placeholder="営業日"></b-datepicker>
+                                </td>
+                                <td class="has-text-centered">
+                                    <button type="button" class="button is-danger is-outlined">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="time-table-container">
+                    <div class="time-table-header">
+                        <h5 class="title is-size-4">タイムテーブル</h5>
+                        <div>
+                            <button type="button" class="button is-info is-outlined">追加</button>
+                        </div>
+                    </div>
+                    <table class="table is-bordered is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>開始</th>
+                                <th>終了</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <b-timepicker icon="clock" placeholder="開始時間"></b-timepicker>
+                                </td>
+                                <td>
+                                    <b-timepicker icon="clock" placeholder="終了時間"></b-timepicker>
+                                </td>
+                                <td class="has-text-centered">
+                                    <button type="button" class="button is-danger is-outlined">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

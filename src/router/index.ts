@@ -5,6 +5,7 @@ import VueRouter, { RouteConfig, Route } from "vue-router";
 import {
   INDEX_URL,
   INQUIRY_ENTRY_URL,
+  INQUIRY_LIST_URL,
   INQUIRY_THREADS_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
@@ -17,6 +18,7 @@ import {
 
 // Inquiry
 import InquiryEntryForm from "@/views/inquiries/inquiry-entry-form/InquiryEntryForm.vue";
+import InquiryList from "@/views/inquiries/inquiry-list/InquiryList.vue";
 import InquiryThreads from "@/views/inquiries/inquiry-threads/InquiryThreads.vue";
 
 // Reservation
@@ -46,6 +48,11 @@ const routes: RouteConfig[] = [
     path: INQUIRY_ENTRY_URL,
     name: "inquiry-entry",
     component: InquiryEntryForm
+  },
+  {
+    path: INQUIRY_LIST_URL,
+    name: "inquiry-list",
+    component: InquiryList
   },
   {
     path: INQUIRY_THREADS_URL,

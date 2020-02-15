@@ -6,6 +6,8 @@ export const INDEX_URL = "/";
 
 export const INQUIRY_ENTRY_URL = "/inquiries/entry";
 
+export const INQUIRY_LIST_URL = "/inquiries/";
+
 export const INQUIRY_THREADS_URL = "/inquiries/threads/";
 
 export const RESERVATION_ENTRY_URL = "/reservations/entry";

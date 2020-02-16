@@ -1,0 +1,10 @@
+<div id="app">
+    <div class="navigation" v-if="isShowNav">
+        <div class="navigation-item" v-for="nav in navigations">
+            <router-link :to="{ path: nav.url }">{{ nav.name }}</router-link>
+        </div>
+    </div>
+    <section class="section">
+        <router-view />
+    </section>
+</div>

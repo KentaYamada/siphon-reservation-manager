@@ -3,8 +3,7 @@
         <thead>
             <tr>
                 <th>予約日時</th>
-                <th>予約者氏名</th>
-                <th>予約人数</th>
+                <th>予約者名</th>
                 <th>電話番号</th>
                 <th>メールアドレス</th>
             </tr>
@@ -16,9 +15,12 @@
                 </td>
             </tr>
             <tr v-for="r in reservations" :key="r.id">
-                <td>{{ r.reservation_date }}</td>
-                <td>{{ r.reserver_name }}</td>
-                <td>{{ r.number_of_reservations }}</td>
+                <td>
+                    {{ r.reservation_date | formatReservationDatetime(r.reservation_time) }}
+                </td>
+                <td>
+                    {{ r.reserver_name | formatReserver(r.number_of_reservations) }}
+                </td>
                 <td>{{ r.tel }}</td>
                 <td>{{ r.mail }}</td>
             </tr>

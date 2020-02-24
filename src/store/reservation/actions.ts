@@ -1,5 +1,6 @@
 import { ActionTree } from "vuex";
 import { Reservation } from "@/entity/reservation";
+import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { RootState } from "@/store";
 import { ReservationState } from "@/store/reservation";
 import { FETCH, SET_ITEMS } from "@/store/constant";
@@ -7,8 +8,10 @@ import { FETCH, SET_ITEMS } from "@/store/constant";
 const actions: ActionTree<ReservationState, RootState> = {
   /**
    * 予約一覧取得
+   * @param options
    */
-  [FETCH]: ({ commit }) => {
+  [FETCH]: ({ commit }, options: ReservationSearchOption) => {
+    console.log(options);
     const reservations: Reservation[] = [
       {
         id: 1,

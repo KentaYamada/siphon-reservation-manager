@@ -24,15 +24,22 @@ export default Vue.extend({
      * 検索パラメータ更新イベント
      */
     updateSearchOptions(options: ReservationSearchOption): void {
-      console.log(options);
+      this.$data.options = options;
+      this.fetch(options);
     }
   },
   data() {
+    const options: ReservationSearchOption = {
+      reservation_date: new Date(),
+      timezone_id: null
+    };
+
     return {
+      options: options,
       isMobilePhone: isMobile().phone
     };
   },
   mounted() {
-    this.fetch();
+    this.fetch(this.options);
   }
 });

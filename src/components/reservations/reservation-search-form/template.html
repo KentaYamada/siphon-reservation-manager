@@ -1,10 +1,15 @@
 <div class="reservation-search-form">
     <div class="field is-grouped">
         <div class="control">
-            <b-datepicker placeholder="予約日" icon="calendar-alt"></b-datepicker>
+            <b-datepicker v-model="options.reservation_date"
+                          placeholder="予約日"
+                          icon="calendar-alt">
+            </b-datepicker>
         </div>
         <div class="control">
-            <b-select placeholder="時間帯を選択してください" icon="clock">
+            <b-select v-model="options.timezone_id"
+                      placeholder="時間帯を選択してください"
+                      icon="clock">
                 <option v-for="t in timezones"
                         :key="t.id"
                         :value="t.id">

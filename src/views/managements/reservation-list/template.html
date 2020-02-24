@@ -6,23 +6,6 @@
     <div class="box reservation-search-form-container">
         <reservation-search-form/>
     </div>
-    <div class="reservation-list-container">
-        <table class="table is-striped is-fullwidth">
-            <thead>
-                <tr>
-                    <th>予約日時</th>
-                    <th>予約者</th>
-                    <th>人数</th>
-                    <th>電話番号</th>
-                    <th>メールアドレス</th>
-                </tr>
-            </thead>
-            <tbody>
-                <reservation-list-item
-                    v-for="reservation in reservations"
-                    :key="reservation.id"
-                    :reservation="reservation"/>
-            </tbody>
-        </table>
-    </div>
+    <reservation-list-for-mobile v-if="isMobilePhone"/>
+    <reservation-list-for-pc v-if="!isMobilePhone"/>
 </div>

@@ -1,6 +1,11 @@
 import isMobile from "ismobilejs";
 import Vue from "vue";
-import { createNamespacedHelpers } from "vuex";
+import {
+  mapActions,
+  mapGetters,
+  mapState,
+  createNamespacedHelpers
+} from "vuex";
 import reservation from "@/store/reservation";
 import { FETCH, HAS_ITEMS } from "@/store/constant";
 import ReservationListForPc from "@/components/reservations/reservation-list-for-pc/ReservationListForPc.vue";
@@ -13,22 +18,22 @@ export default Vue.extend({
     ReservationListForPc,
     ReservationListForMobile
   },
+  computed: {
+    ...mapState("reservation", ["reservations"]),
+    ...mapGetters("reservation", [HAS_ITEMS])
+  },
+  methods: {
+    ...mapActions("reservation", [FETCH]),
+    /**
+     * 検索パラメータ更新イベント
+     */
+    updateSearchOptions(): void {
+      console.log("hoge");
+    }
+  },
   data() {
     return {
       isMobilePhone: isMobile().phone
-    };
-  },
-  beforeCreate() {
-    const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
-      "reservation"
-    );
-    this.$store.registerModule("reservation", reservation);
-    this.$options.computed = {
-      ...mapState(["reservations"]),
-      ...mapGetters([HAS_ITEMS])
-    };
-    this.$options.methods = {
-      ...mapActions([FETCH])
     };
   },
   mounted() {

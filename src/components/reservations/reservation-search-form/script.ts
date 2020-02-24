@@ -8,9 +8,14 @@ export default Vue.extend({
     ...mapState("timezone", ["timezones"])
   },
   methods: {
-    ...mapActions("timezone", [FETCH])
+    ...mapActions("timezone", [FETCH]),
+
+    handleSearch(): void {
+      this.$emit("update-search-options");
+    }
   },
   mounted() {
+    // 予約時間帯データ取得
     this.fetch();
   }
 });

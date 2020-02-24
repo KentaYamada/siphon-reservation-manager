@@ -5,7 +5,7 @@
             予約状況確認
         </h4>
         <div class="search-form-container">
-            <reservation-search-form/>
+            <reservation-search-form v-on:update-search-options="updateSearchOptions" />
         </div>
         <div class="divider"></div>
         <reservation-list-for-mobile

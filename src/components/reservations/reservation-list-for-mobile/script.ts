@@ -1,4 +1,4 @@
-import Vue, { PropType} from "vue";
+import Vue, { PropType } from "vue";
 import { Reservation } from "@/entity/reservation";
 
 export default Vue.extend({
@@ -7,6 +7,10 @@ export default Vue.extend({
     reservations: {
       required: true,
       type: Array as PropType<Reservation[]>
+    },
+    hasItems: {
+      required: true,
+      type: Boolean
     }
   }
 });

@@ -9,7 +9,7 @@ const actions: ActionTree<ReservationState, RootState> = {
    * 予約一覧取得
    */
   [FETCH]: ({ commit }) => {
-    /*const reservations: Reservation[] = [
+    const reservations: Reservation[] = [
       {
         id: 1,
         reservation_date: "2020-02-01",
@@ -48,15 +48,15 @@ const actions: ActionTree<ReservationState, RootState> = {
       },
       {
         id: 5,
-        reservation_date: "2020-02-01 11:00 - 12:00",
+        reservation_date: "2020-02-01",
         reservation_time: "11:00 - 12:00",
         reserver_name: "Test太郎",
         number_of_reservations: 3,
         tel: "080-1479-7082",
         mail: "test@email.com"
       }
-    ];*/
-    const reservations: Reservation[] = [];
+    ];
+    // const reservations: Reservation[] = [];
     commit(SET_ITEMS, reservations);
   }
 };

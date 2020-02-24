@@ -1,0 +1,33 @@
+<div class="list-container">
+    <div class="list">
+        <div class="list-item" v-if="!hasItems">
+            <p class="has-text-centered">
+                表示できるデータがありません
+            </p>
+        </div>
+        <div class="list-item"
+             v-for="r in reservations"
+             :key="r.id">
+            <div>
+                <p><strong>予約日</strong></p>
+                <p>
+                    {{ r.reservation_date | formatReservationDatetime(r.reservation_time) }}
+                </p>
+            </div>
+            <div>
+                <p><strong>予約者名</strong></p>
+                <p>
+                    {{ r.reserver_name | formatReserver(r.number_of_reservations) }}
+                </p>
+            </div>
+            <div>
+                <p><strong>電話番号</strong></p>
+                <p>{{ r.tel }}</p>
+            </div>
+            <div>
+                <p><strong>メールアドレス</strong></p>
+                <p>{{ r.mail }}</p>
+            </div>
+        </div>
+    </div>
+</div>

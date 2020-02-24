@@ -1,1 +1,8 @@
-<p>for pc</p>
+<div>
+    <div class="no-item-message" v-if="!hasItems">
+        表示できるデータがありません
+    </div>
+    <div v-for="r in reservations" :key="r.id">
+        <div>{{ r.id }}</div>
+    </div>
+</div>

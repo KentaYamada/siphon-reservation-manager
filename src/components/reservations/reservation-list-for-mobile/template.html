@@ -1,1 +1,8 @@
-<p>for mobile</p>
+<div class="reservation-list-container">
+    <div class="no-item-message" v-if="!hasItems">
+        表示できるデータがありません
+    </div>
+    <div class="" v-for="r in reservations" :key="r.id">
+        <p>{{ r.id }}</p>
+    </div>
+</div>

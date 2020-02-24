@@ -1,11 +1,20 @@
 <div class="container">
-    <h4 class="title">
-        <i class="fas fa-calendar-check"></i>
-        予約状況確認
-    </h4>
-    <div class="box reservation-search-form-container">
-        <reservation-search-form/>
+    <div class="box">
+        <h4 class="title">
+            <i class="fas fa-calendar-check"></i>
+            予約状況確認
+        </h4>
+        <div class="search-form-container">
+            <reservation-search-form/>
+        </div>
+        <div class="divider"></div>
+        <reservation-list-for-mobile
+            v-if="isMobilePhone"
+            :reservations="reservations"
+            :hasItems="hasItems" />
+        <reservation-list-for-pc
+            v-if="!isMobilePhone"
+            :reservations="reservations"
+            :hasItems="hasItems" />
     </div>
-    <reservation-list-for-mobile v-if="isMobilePhone"/>
-    <reservation-list-for-pc v-if="!isMobilePhone"/>
 </div>

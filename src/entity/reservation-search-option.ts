@@ -3,5 +3,5 @@
  */
 export interface ReservationSearchOption {
   reservation_date: Date;
-  timezone_id: number;
+  timezone_id: number | null;
 }

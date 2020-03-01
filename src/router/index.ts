@@ -4,9 +4,6 @@ import VueRouter, { RouteConfig, Route } from "vue-router";
 // Routing URL
 import {
   INDEX_URL,
-  INQUIRY_ENTRY_URL,
-  INQUIRY_LIST_URL,
-  INQUIRY_THREADS_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
   RESERVED_MESSAGE_URL,
@@ -16,11 +13,6 @@ import {
   MANAGEMENT_LOGIN_URL,
   FORBIDDEN_URL
 } from "@/router/url";
-
-// Inquiry
-import InquiryEntryForm from "@/views/inquiries/inquiry-entry-form/InquiryEntryForm.vue";
-import InquiryList from "@/views/inquiries/inquiry-list/InquiryList.vue";
-import InquiryThreads from "@/views/inquiries/inquiry-threads/InquiryThreads.vue";
 
 // Reservation
 import ReservationEntry from "@/views/reservations/reservation-entry/ReservationEntry.vue";
@@ -45,21 +37,6 @@ const routes: RouteConfig[] = [
     redirect: {
       name: "reservation-entry"
     }
-  },
-  {
-    path: INQUIRY_ENTRY_URL,
-    name: "inquiry-entry",
-    component: InquiryEntryForm
-  },
-  {
-    path: INQUIRY_LIST_URL,
-    name: "inquiry-list",
-    component: InquiryList
-  },
-  {
-    path: INQUIRY_THREADS_URL,
-    name: "inquiry-threads",
-    component: InquiryThreads
   },
   {
     path: RESERVATION_ENTRY_URL,

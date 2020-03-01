@@ -1,4 +1,4 @@
-export const DELETE = "delete";
+export const CANCEL = "cancel";
 
 export const FETCH = "fetch";
 

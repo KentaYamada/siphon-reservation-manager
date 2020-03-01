@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
-import { DialogConfig, ToastConfig } from "buefy/types/components";
-import { FETCH_BY_ID } from "@/store/constant";
+import { DialogConfig } from "buefy/types/components";
+import { CANCEL, FETCH_BY_ID } from "@/store/constant";
 import ReservationDetailContent from "@/components/reservations/reservation-detail-content/ReservationDetailContent.vue";
 
 export default Vue.extend({
@@ -18,7 +18,7 @@ export default Vue.extend({
     ...mapState("reservation", ["reservation"])
   },
   methods: {
-    ...mapActions("reservation", [FETCH_BY_ID]),
+    ...mapActions("reservation", [CANCEL, FETCH_BY_ID]),
 
     /**
      * 予約取消
@@ -38,7 +38,7 @@ export default Vue.extend({
         // iconPack: 'fas',
         icon: "fa-question-circle",
         onConfirm: () => {
-          console.log("hoge");
+          this.cancel(this.id);
         }
       };
 

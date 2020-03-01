@@ -3,7 +3,13 @@ import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { RootState } from "@/store";
 import { ReservationState } from "@/store/reservation";
-import { FETCH, FETCH_BY_ID, SET_ITEM, SET_ITEMS } from "@/store/constant";
+import {
+  CANCEL,
+  FETCH,
+  FETCH_BY_ID,
+  SET_ITEM,
+  SET_ITEMS
+} from "@/store/constant";
 
 const actions: ActionTree<ReservationState, RootState> = {
   /**
@@ -241,6 +247,14 @@ const actions: ActionTree<ReservationState, RootState> = {
     };
 
     commit(SET_ITEM, reservation);
+  },
+
+  /**
+   * 予約取消
+   * @param id
+   */
+  [CANCEL]: ({ commit }, id: number) => {
+    console.log("run delete action");
   }
 };
 

@@ -53,7 +53,8 @@ const actions: ActionTree<ReservationState, RootState> = {
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 2,
@@ -89,7 +90,8 @@ const actions: ActionTree<ReservationState, RootState> = {
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 3,
@@ -125,7 +127,8 @@ const actions: ActionTree<ReservationState, RootState> = {
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 4,
@@ -161,7 +164,8 @@ const actions: ActionTree<ReservationState, RootState> = {
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 5,
@@ -197,7 +201,8 @@ const actions: ActionTree<ReservationState, RootState> = {
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       }
     ];
     // const reservations: Reservation[] = [];
@@ -243,7 +248,8 @@ const actions: ActionTree<ReservationState, RootState> = {
       ],
       number_of_reservations: 3,
       tel: "080-1479-7082",
-      mail: "test@email.com"
+      mail: "test@email.com",
+      comment: "This is test"
     };
 
     commit(SET_ITEM, reservation);

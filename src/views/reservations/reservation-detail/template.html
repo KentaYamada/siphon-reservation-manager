@@ -10,7 +10,7 @@
                     <p class="note">以下の内容でご予約を承っております。</p>
                 </div>
                 <div class="page-content">
-                    <reservation-detail-content :reservation="reservation"/>
+                    <reservation-detail-content :reservation="reservation" v-if="!!reservation"/>
                 </div>
                 <div class="page-footer">
                     <div class="buttons is-right">

@@ -10,8 +10,6 @@ export const RESERVATION_DETAIL_URL = "/reservations/detail";
 
 export const RESERVED_MESSAGE_URL = "/reservations/reserved";
 
-export const MANAGEMENT_DASHBOARD_URL = "/managements";
-
 export const MANAGEMENT_RESERVATION_LIST_URL = "/managements/reservations";
 
 export const MANAGEMENT_RESERVATION_SETTING_URL =

@@ -7,7 +7,6 @@ import {
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
   RESERVED_MESSAGE_URL,
-  MANAGEMENT_DASHBOARD_URL,
   MANAGEMENT_RESERVATION_LIST_URL,
   MANAGEMENT_RESERVATION_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
@@ -17,10 +16,9 @@ import {
 // Reservation
 import ReservationEntry from "@/views/reservations/reservation-entry/ReservationEntry.vue";
 import ReservationDetail from "@/views/reservations/reservation-detail/ReservationDetail.vue";
-import ReservaedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
+import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
 
 // Management
-import Dashboard from "@/views/managements/dashboard/Dashboard.vue";
 import Login from "@/views/managements/login/Login.vue";
 import ReservationList from "@/views/managements/reservation-list/ReservationList.vue";
 import ReservationSetting from "@/views/managements/reservation-setting/ReservationSetting.vue";
@@ -54,17 +52,12 @@ const routes: RouteConfig[] = [
   {
     path: RESERVED_MESSAGE_URL,
     name: "reserved-message",
-    component: ReservaedMessage
+    component: ReservedMessage
   },
   {
     path: MANAGEMENT_RESERVATION_LIST_URL,
     name: "reservation-list",
     component: ReservationList
-  },
-  {
-    path: MANAGEMENT_DASHBOARD_URL,
-    name: "management-dashborad",
-    component: Dashboard
   },
   {
     path: MANAGEMENT_RESERVATION_SETTING_URL,

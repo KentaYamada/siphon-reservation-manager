@@ -1,9 +1,9 @@
 import Vue from "vue";
-import ReservationTable from "@/components/reservations/reservation-table/ReservationTable.vue";
+import ReservationSeats from "@/components/reservations/reservation-seats/ReservationSeats.vue";
 
 export default Vue.extend({
   components: {
-    ReservationTable
+    ReservationSeats
   },
   data() {
     const timeTables = [

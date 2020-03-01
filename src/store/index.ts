@@ -10,10 +10,6 @@ export interface RootState {
 
 Vue.use(Vuex);
 
-export interface RootState {
-  version: string;
-}
-
 export default new Vuex.Store({
   modules: {
     reservation,

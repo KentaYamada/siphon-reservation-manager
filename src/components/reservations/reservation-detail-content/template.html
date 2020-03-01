@@ -1,5 +1,5 @@
 <div class="reservation-detail-content">
-    <table class="table">
+    <table class="table is-fullwidth">
         <tbody>
             <tr>
                 <th>お名前</th>
@@ -25,7 +25,11 @@
             </tr>
             <tr>
                 <th>お座席</th>
-                <td></td>
+                <td>
+                    <reservation-seats 
+                        :reservationSeats="reservation.reservation_seats"
+                        v-if="!!reservation"/>
+                </td>
             </tr>
             <tr>
                 <th>メモ</th>

@@ -1,0 +1,30 @@
+// テーブルの大きさ
+$vertical-table-height: 80px;
+$vertical-table-width: 30px;
+
+.reservation-seat {
+    border: 1px solid #aaa;
+    width: $vertical-table-width;
+    height: $vertical-table-height;
+    position: absolute;
+    top: 20px;
+
+    &.is-reserved {
+        background-color: #bbb;
+    }
+    &.no1 {
+        left: 40px;
+    }
+    &.no2 {
+        left: 90px;
+    }
+    &.no3 {
+        left: 140px;
+    }
+    &.no4 {
+        left: 190px;
+    }
+    &.no5 {
+        left: 240px;
+    }
+}

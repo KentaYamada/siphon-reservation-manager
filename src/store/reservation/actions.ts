@@ -18,6 +18,33 @@ const actions: ActionTree<ReservationState, RootState> = {
         reservation_date: "2020-02-01",
         reservation_time: "11:00 - 12:00",
         reserver_name: "Test太郎",
+        reservation_seats: [
+          {
+            id: 1,
+            seat_no: 1,
+            is_reserved: false
+          },
+          {
+            id: 2,
+            seat_no: 2,
+            is_reserved: true
+          },
+          {
+            id: 3,
+            seat_no: 3,
+            is_reserved: true
+          },
+          {
+            id: 4,
+            seat_no: 4,
+            is_reserved: false
+          },
+          {
+            id: 5,
+            seat_no: 5,
+            is_reserved: false
+          }
+        ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
         mail: "test@email.com"
@@ -27,6 +54,33 @@ const actions: ActionTree<ReservationState, RootState> = {
         reservation_date: "2020-02-01",
         reservation_time: "11:00 - 12:00",
         reserver_name: "Test太郎",
+        reservation_seats: [
+          {
+            id: 1,
+            seat_no: 1,
+            is_reserved: false
+          },
+          {
+            id: 2,
+            seat_no: 2,
+            is_reserved: true
+          },
+          {
+            id: 3,
+            seat_no: 3,
+            is_reserved: true
+          },
+          {
+            id: 4,
+            seat_no: 4,
+            is_reserved: false
+          },
+          {
+            id: 5,
+            seat_no: 5,
+            is_reserved: false
+          }
+        ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
         mail: "test@email.com"
@@ -36,6 +90,33 @@ const actions: ActionTree<ReservationState, RootState> = {
         reservation_date: "2020-02-01",
         reservation_time: "11:00 - 12:00",
         reserver_name: "Test太郎",
+        reservation_seats: [
+          {
+            id: 1,
+            seat_no: 1,
+            is_reserved: false
+          },
+          {
+            id: 2,
+            seat_no: 2,
+            is_reserved: true
+          },
+          {
+            id: 3,
+            seat_no: 3,
+            is_reserved: true
+          },
+          {
+            id: 4,
+            seat_no: 4,
+            is_reserved: false
+          },
+          {
+            id: 5,
+            seat_no: 5,
+            is_reserved: false
+          }
+        ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
         mail: "test@email.com"
@@ -45,6 +126,33 @@ const actions: ActionTree<ReservationState, RootState> = {
         reservation_date: "2020-02-01",
         reservation_time: "11:00 - 12:00",
         reserver_name: "Test太郎",
+        reservation_seats: [
+          {
+            id: 1,
+            seat_no: 1,
+            is_reserved: false
+          },
+          {
+            id: 2,
+            seat_no: 2,
+            is_reserved: true
+          },
+          {
+            id: 3,
+            seat_no: 3,
+            is_reserved: true
+          },
+          {
+            id: 4,
+            seat_no: 4,
+            is_reserved: false
+          },
+          {
+            id: 5,
+            seat_no: 5,
+            is_reserved: false
+          }
+        ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
         mail: "test@email.com"
@@ -54,6 +162,33 @@ const actions: ActionTree<ReservationState, RootState> = {
         reservation_date: "2020-02-01",
         reservation_time: "11:00 - 12:00",
         reserver_name: "Test太郎",
+        reservation_seats: [
+          {
+            id: 1,
+            seat_no: 1,
+            is_reserved: false
+          },
+          {
+            id: 2,
+            seat_no: 2,
+            is_reserved: true
+          },
+          {
+            id: 3,
+            seat_no: 3,
+            is_reserved: true
+          },
+          {
+            id: 4,
+            seat_no: 4,
+            is_reserved: false
+          },
+          {
+            id: 5,
+            seat_no: 5,
+            is_reserved: false
+          }
+        ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
         mail: "test@email.com"
@@ -73,6 +208,33 @@ const actions: ActionTree<ReservationState, RootState> = {
       reservation_date: "2020-02-01",
       reservation_time: "11:00 - 12:00",
       reserver_name: "Test太郎",
+      reservation_seats: [
+        {
+          id: 1,
+          seat_no: 1,
+          is_reserved: false
+        },
+        {
+          id: 2,
+          seat_no: 2,
+          is_reserved: true
+        },
+        {
+          id: 3,
+          seat_no: 3,
+          is_reserved: true
+        },
+        {
+          id: 4,
+          seat_no: 4,
+          is_reserved: false
+        },
+        {
+          id: 5,
+          seat_no: 5,
+          is_reserved: false
+        }
+      ],
       number_of_reservations: 3,
       tel: "080-1479-7082",
       mail: "test@email.com"

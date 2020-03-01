@@ -1,8 +1,6 @@
-<div class="room">
+<div class="reservation-seats">
     <!-- <div class="entrance"></div> -->
-    <div class="reservation-table no1"></div>
-    <div class="reservation-table no2"></div>
-    <div class="reservation-table no3"></div>
-    <div class="reservation-table no4"></div>
-    <div class="reservation-table no5"></div>
+    <reservation-seats-item v-for="seat in reservationSeats"
+                            :reservationSeat="seat"
+                            :key="seat.seat_no"/>
 </div>

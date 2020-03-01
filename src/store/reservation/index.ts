@@ -6,10 +6,12 @@ import getters from "@/store/reservation/getters";
 import mutations from "@/store/reservation/mutations";
 
 export interface ReservationState {
+  reservation: Reservation | null;
   reservations: Reservation[];
 }
 
 const state: ReservationState = {
+  reservation: null,
   reservations: []
 };
 const namespaced = true;

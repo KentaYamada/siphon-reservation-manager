@@ -1,58 +1,34 @@
 <div class="container">
-    <div class="card">
-        <header class="card-header">
-            <p class="card-header-title">
-                <i class="fas fa-calendar-alt"></i>ご予約内容
-            </p>
-        </header>
-
-        <div class="card-content">
-            <p class="content-note">以下の内容でご予約を承っております。</p>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <th>お名前</th>
-                        <td>Gamoyon 太郎</td>
-                    </tr>
-                    <tr>
-                        <th>ご予約日時</th>
-                        <td>2020年02月01日 11:00 - 12:00</td>
-                    </tr>
-                    <tr>
-                        <th>ご予約数</th>
-                        <td>3名</td>
-                    </tr>
-                    <tr>
-                        <th>TEL</th>
-                        <td>090-1234-5678</td>
-                    </tr>
-                    <tr>
-                        <th>Mail</th>
-                        <td>test@email.com</td>
-                    </tr>
-                    <tr>
-                        <th>お座席</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>メモ</th>
-                        <td>卵アレルギーあります orz...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <footer class="card-fooeter">
-            <div class="buttons is-right">
-                <button type="button" class="button is-danger is-inverted" @click="confirmCancel()">
-                    <i class="fas fa-times"></i>
-                    取消
-                </button>
-                <button type="button" class="button is-info is-inverted">
-                    <i class="fas fa-edit"></i>
-                    変更
-                </button>
+    <div class="columns is-centered is-desktop">
+        <div class="column is-half">
+            <div class="box">
+                <div class="page-header">
+                    <h4 class="title">
+                        <i class="fas fa-calendar-alt"></i>
+                        ご予約内容
+                    </h4>
+                    <p class="note">以下の内容でご予約を承っております。</p>
+                </div>
+                <div class="page-content">
+                    <reservation-detail-content :reservation="reservation" v-if="!!reservation"/>
+                </div>
+                <div class="page-footer">
+                    <div class="buttons is-right">
+                        <button type="button"
+                                class="button is-danger is-inverted"
+                                @click="confirmCancel()">
+                            <i class="fas fa-times"></i>
+                            取消
+                        </button>
+                        <button type="button"
+                                class="button is-info is-inverted"
+                                @click="onClickEdit()">
+                            <i class="fas fa-edit"></i>
+                            変更
+                        </button>
+                    </div>
+                </div>
             </div>
-        </footer>
+        </div>
     </div>
 </div>

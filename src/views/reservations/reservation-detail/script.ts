@@ -1,14 +1,28 @@
 import Vue from "vue";
-import { DialogConfig, ToastConfig } from "buefy/types/components";
+import { mapActions, mapState } from "vuex";
+import { DialogConfig } from "buefy/types/components";
+import { CANCEL, FETCH_BY_ID } from "@/store/constant";
+import ReservationDetailContent from "@/components/reservations/reservation-detail-content/ReservationDetailContent.vue";
 
 export default Vue.extend({
+  components: {
+    ReservationDetailContent
+  },
   props: {
     id: {
       type: Number,
       required: true
     }
   },
+  computed: {
+    ...mapState("reservation", ["reservation"])
+  },
   methods: {
+    ...mapActions("reservation", [CANCEL, FETCH_BY_ID]),
+
+    /**
+     * 予約取消
+     */
     confirmCancel(): void {
       const message = `
         <p>予約を取消しますか？</p>
@@ -24,11 +38,21 @@ export default Vue.extend({
         // iconPack: 'fas',
         icon: "fa-question-circle",
         onConfirm: () => {
-          console.log("hoge");
+          this.cancel(this.id);
         }
       };
 
       this.$buefy.dialog.confirm(config);
+    },
+
+    /**
+     * 予約変更
+     */
+    onClickEdit(): void {
+      console.log("redirect to edit view");
     }
+  },
+  mounted() {
+    this.fetchById(this.id);
   }
 });

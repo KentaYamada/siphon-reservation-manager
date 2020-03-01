@@ -3,7 +3,6 @@ import {
   INDEX_URL,
   RESERVATION_DETAIL_URL,
   RESERVED_MESSAGE_URL,
-  MANAGEMENT_DASHBOARD_URL,
   MANAGEMENT_LOGIN_URL,
   MANAGEMENT_RESERVATION_LIST_URL,
   MANAGEMENT_RESERVATION_SETTING_URL,
@@ -19,7 +18,6 @@ const getNavigations = () => {
     { name: "[管理] 予約一覧", url: MANAGEMENT_RESERVATION_LIST_URL },
     { name: "[管理] 営業日設定", url: MANAGEMENT_RESERVATION_SETTING_URL },
     { name: "[管理] ログイン", url: MANAGEMENT_LOGIN_URL },
-    { name: "[管理] ダッシュボード", url: MANAGEMENT_DASHBOARD_URL },
     { name: "403ページ", url: FORBIDDEN_URL },
     { name: "404ページ", url: "/notfound" }
   ];

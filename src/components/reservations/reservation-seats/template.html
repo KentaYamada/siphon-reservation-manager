@@ -1,0 +1,6 @@
+<div class="reservation-seats">
+    <!-- <div class="entrance"></div> -->
+    <reservation-seats-item v-for="seat in reservationSeats"
+                            :reservationSeat="seat"
+                            :key="seat.seat_no"/>
+</div>

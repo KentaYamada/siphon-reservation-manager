@@ -1,0 +1,36 @@
+<div class="reservation-detail-content">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>お名前</th>
+                <td>{{ reservation.reserver_name }}</td>
+            </tr>
+            <tr>
+                <th>ご予約日時</th>
+                <td>
+                    {{ reservation.reservation_date | formatReservationDatetime(reservation.reservation_time) }}
+                </td>
+            </tr>
+            <tr>
+                <th>ご予約数</th>
+                <td>{{ reservation.number_of_reservations }}名</td>
+            </tr>
+            <tr>
+                <th>TEL</th>
+                <td>{{ reservation.tel }}</td>
+            </tr>
+            <tr>
+                <th>メールアドレス</th>
+                <td>{{ reservation.mail }}</td>
+            </tr>
+            <tr>
+                <th>お座席</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>メモ</th>
+                <td>卵アレルギーあります orz...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -2,9 +2,12 @@ import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import { DialogConfig, ToastConfig } from "buefy/types/components";
 import { FETCH_BY_ID } from "@/store/constant";
-import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
+import ReservationDetailContent from "@/components/reservations/reservation-detail-content/ReservationDetailContent.vue";
 
 export default Vue.extend({
+  components: {
+    ReservationDetailContent
+  },
   props: {
     id: {
       type: Number,
@@ -48,9 +51,6 @@ export default Vue.extend({
     onClickEdit(): void {
       console.log("redirect to edit view");
     }
-  },
-  filters: {
-    formatReservationDatetime
   },
   mounted() {
     this.fetchById(this.id);

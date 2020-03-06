@@ -9,9 +9,9 @@
             </div>
             <div class="control">
                 <b-select placeholder="時間帯を選択してください">
-                    <option v-for="t in GET_TIMEZONES"
-                            :value="t.id"
-                            :key="t.id">
+                    <option v-for="t in timezones"
+                            :key="t.id"
+                            :value="t.id">
                         {{ t.text }}
                     </option>
                 </b-select>

@@ -2,7 +2,7 @@ import Vue, { PropType } from "vue";
 import { ReservationSeat } from "@/entity/reservation-seat";
 
 export default Vue.extend({
-  template: "<reservation-seats-item/>",
+  template: "<reservation-seat-list-item/>",
   props: {
     reservationSeat: {
       required: true,

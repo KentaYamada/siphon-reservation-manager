@@ -1,6 +1,6 @@
 import Vue from "vue";
-import { mapMutations, mapState } from "vuex";
-import { INITIALIZE } from "@/store/constant";
+import { mapActions, mapMutations, mapState } from "vuex";
+import { INITIALIZE, SAVE } from "@/store/constant";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 
 export default Vue.extend({
@@ -11,7 +11,12 @@ export default Vue.extend({
     ...mapState("reservation", ["reservation"])
   },
   methods: {
-    ...mapMutations("reservation", [INITIALIZE])
+    ...mapMutations("reservation", [INITIALIZE]),
+    ...mapActions("reservation", [SAVE]),
+
+    onClickSave(): void {
+      this.save(this.reservation);
+    }
   },
   mounted() {
     this.initialize();

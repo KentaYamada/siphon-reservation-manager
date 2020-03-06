@@ -7,6 +7,7 @@ import {
   CANCEL,
   FETCH,
   FETCH_BY_ID,
+  SAVE,
   SET_ITEM,
   SET_ITEMS
 } from "@/store/constant";
@@ -253,6 +254,14 @@ const actions: ActionTree<ReservationState, RootState> = {
     };
 
     commit(SET_ITEM, reservation);
+  },
+
+  /**
+   * 予約登録
+   * @param reservation
+   */
+  [SAVE]: ({ commit }, reservation: Reservation) => {
+    console.log(reservation);
   },
 
   /**

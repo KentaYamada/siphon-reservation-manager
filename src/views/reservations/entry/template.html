@@ -7,10 +7,15 @@
                     ご予約受付
                 </h4>
 
-                <reservation-form :reservation="reservation" />
+                <reservation-form :reservation="reservation"
+                                  v-if="!!reservation" />
 
                 <div class="form-actions">
-                    <button type="button" class="button is-info">予約</button>
+                    <button type="button"
+                            class="button is-info"
+                            @click="onClickSave()">
+                        予約
+                    </button>
                 </div>
             </div>
         </div>

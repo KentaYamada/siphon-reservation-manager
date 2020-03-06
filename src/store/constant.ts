@@ -10,7 +10,7 @@ export const INITIALIZE = "initialize";
 
 export const HAS_ITEMS = "hasItems";
 
-export const SAVE = "SAVE";
+export const SAVE = "save";
 
 export const SET_ITEM = "setItem";
 

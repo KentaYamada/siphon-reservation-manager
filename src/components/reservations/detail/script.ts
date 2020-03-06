@@ -1,12 +1,12 @@
 import Vue, { PropType } from "vue";
 import { Reservation } from "@/entity/reservation";
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
-import ReservationSeats from "@/components/reservations/reservation-seats/ReservationSeats.vue";
+import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
 
 export default Vue.extend({
   template: "<reservation-detail-content/>",
   components: {
-    ReservationSeats
+    ReservationSeatList
   },
   props: {
     reservation: {

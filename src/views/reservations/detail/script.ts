@@ -2,7 +2,7 @@ import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import { DialogConfig } from "buefy/types/components";
 import { CANCEL, FETCH_BY_ID } from "@/store/constant";
-import ReservationDetailContent from "@/components/reservations/reservation-detail-content/ReservationDetailContent.vue";
+import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
 
 export default Vue.extend({
   components: {

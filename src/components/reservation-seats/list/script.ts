@@ -1,11 +1,11 @@
 import Vue, { PropType } from "vue";
 import { ReservationSeat } from "@/entity/reservation-seat";
-import ReservationSeatsItem from "@/components/reservations/reservation-seats-item/ReservationSeatsItem.vue";
+import ReservationSeatListItem from "@/components/reservation-seats/list/item/ReservationSeatListItem.vue";
 
 export default Vue.extend({
-  template: "<reservation-seats/>",
+  template: "<reservation-seat-list/>",
   components: {
-    ReservationSeatsItem
+    ReservationSeatListItem
   },
   props: {
     reservationSeats: {

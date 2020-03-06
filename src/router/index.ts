@@ -14,13 +14,13 @@ import {
 } from "@/router/url";
 
 // Reservation
-import ReservationEntry from "@/views/reservations/reservation-entry/ReservationEntry.vue";
-import ReservationDetail from "@/views/reservations/reservation-detail/ReservationDetail.vue";
+import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
+import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
+import ReservationList from "@/views/reservations/list/ReservationList.vue";
 import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
 
 // Management
 import Login from "@/views/managements/login/Login.vue";
-import ReservationList from "@/views/managements/reservation-list/ReservationList.vue";
 import ReservationSetting from "@/views/managements/reservation-setting/ReservationSetting.vue";
 
 // Other

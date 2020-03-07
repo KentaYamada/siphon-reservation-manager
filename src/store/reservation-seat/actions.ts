@@ -15,27 +15,32 @@ const actions: ActionTree<ReservationSeatState, RootState> = {
       {
         id: 1,
         seat_no: 1,
-        is_reserved: false
+        is_reserved: false,
+        is_selected: false
       },
       {
         id: 2,
         seat_no: 2,
-        is_reserved: true
+        is_reserved: true,
+        is_selected: false
       },
       {
         id: 3,
         seat_no: 3,
-        is_reserved: true
+        is_reserved: true,
+        is_selected: false
       },
       {
         id: 4,
         seat_no: 4,
-        is_reserved: false
+        is_reserved: false,
+        is_selected: false
       },
       {
         id: 5,
         seat_no: 5,
-        is_reserved: false
+        is_reserved: false,
+        is_selected: false
       }
     ];
     commit(SET_ITEMS, reservationSeats);

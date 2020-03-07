@@ -1,7 +1,14 @@
+import _ from "lodash";
 import { MutationTree } from "vuex";
 import { Reservation } from "@/entity/reservation";
+import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationState } from "@/store/reservation";
-import { INITIALIZE, SET_ITEM, SET_ITEMS } from "@/store/constant";
+import {
+  INITIALIZE,
+  SET_ITEM,
+  SET_ITEMS,
+  SET_RESERVATION_SEAT
+} from "@/store/constant";
 
 const mutations: MutationTree<ReservationState> = {
   /**
@@ -47,6 +54,7 @@ const mutations: MutationTree<ReservationState> = {
       comment: ""
     } as Reservation;
   },
+
   /**
    * 予約データセット
    * @param state
@@ -55,6 +63,7 @@ const mutations: MutationTree<ReservationState> = {
   [SET_ITEM]: (state: ReservationState, item: Reservation): void => {
     state.reservation = item;
   },
+
   /**
    * 予約一覧データセット
    * @param state
@@ -62,6 +71,27 @@ const mutations: MutationTree<ReservationState> = {
    */
   [SET_ITEMS]: (state: ReservationState, items: Reservation[]): void => {
     state.reservations = items;
+  },
+
+  /**
+   * 予約座席更新
+   * @param state
+   * @param item
+   */
+  [SET_RESERVATION_SEAT]: (
+    state: ReservationState,
+    reservationSeat: ReservationSeat
+  ): void => {
+    _.forEach(state.reservation.reservation_seats, (item: ReservationSeat) => {
+      const updatable =
+        item.seat_no === reservationSeat.seat_no && !item.is_reserved;
+
+      if (updatable) {
+        // 座席選択を更新して処理終了
+        item.is_selected = reservationSeat.is_selected;
+        return false;
+      }
+    });
   }
 };
 

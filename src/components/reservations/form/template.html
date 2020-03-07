@@ -18,15 +18,16 @@
             </div>
         </div>
         <div class="field">
-            <label class="label">ご予約人数</label>
-            <div class="control">
-                <input type="text" class="input">
-            </div>
-        </div>
-        <div class="field">
             <label class="label">空席状況</label>
             <small>現在<strong>8名様</strong>までのご予約受け付けております。</small><br />
             <small>※ テーブルは2名席です。</small>
+        </div>
+        <selectable-reservation-seat-list/>
+        <div class="field">
+            <label class="label">ご予約人数</label>
+            <div class="control">
+                <input type="number" class="input has-text-right" v-model.number="reservation.number_of_reservations">
+            </div>
         </div>
         <div class="field">
             <label class="label">お名前</label>

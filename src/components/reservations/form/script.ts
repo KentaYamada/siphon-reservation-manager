@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
-import { mapActions, mapState } from "vuex";
-import { FETCH } from "@/store/constant";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { FETCH, GET_RESERVABLE_PEOPLE } from "@/store/constant";
 import { Reservation } from "@/entity/reservation";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
 
@@ -16,7 +16,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("timezone", ["timezones"])
+    ...mapState("timezone", ["timezones"]),
+    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE])
   },
   methods: {
     ...mapActions("timezone", [FETCH])

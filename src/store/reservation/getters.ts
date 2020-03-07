@@ -1,44 +1,40 @@
+import _ from "lodash";
 import { GetterTree } from "vuex";
+import { ReservationSeat } from "@/entity/reservation-seat";
 import { RootState } from "@/store";
+import { GET_RESERVABLE_PEOPLE, HAS_ITEMS } from "@/store/constant";
 import {
   ReservationState,
   MAX_NUMBER_OF_RESERVATIONS
 } from "@/store/reservation";
-import { GET_RESERVABLE_PEOPLE, HAS_ITEMS } from "@/store/constant";
 
 const getters: GetterTree<ReservationState, RootState> = {
   /**
    * 予約可能人数取得
    * @param state
-   * @param numberOfReservedSeats
    * @returns number
    */
-  [GET_RESERVABLE_PEOPLE]: (state: ReservationState) => (
-    numberOfReservedSeats: number
-  ): number => {
-    // 予約上限を満たしているか
-    const reservedPeople = numberOfReservedSeats * 2;
+  [GET_RESERVABLE_PEOPLE]: (state: ReservationState): number => {
+    const reservedSeats = _.filter(
+      state.reservation.reservation_seats,
+      (seat: ReservationSeat) => {
+        return seat.is_reserved;
+      }
+    );
+
+    // 1テーブル2名で計算
+    const reservedPeople = reservedSeats.length * 2;
 
     if (MAX_NUMBER_OF_RESERVATIONS <= reservedPeople) {
       return 0;
     }
 
-    // 10名以上の予約不可
-    if (MAX_NUMBER_OF_RESERVATIONS <= state.number_of_reservations) {
-      return 0;
-    }
-
-    const reservablePeople = reservedPeople + state.number_of_reservations;
-
-    if (MAX_NUMBER_OF_RESERVATIONS <= reservablePeople) {
-      return 0;
-    }
-
-    return reservablePeople;
+    return MAX_NUMBER_OF_RESERVATIONS - reservedPeople;
   },
 
   /**
    * 予約データがあるかどうか
+   * @param state
    * @returns boolean
    */
   [HAS_ITEMS]: (state: ReservationState): boolean => {

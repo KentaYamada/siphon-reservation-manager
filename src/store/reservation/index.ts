@@ -5,6 +5,8 @@ import actions from "@/store/reservation/actions";
 import getters from "@/store/reservation/getters";
 import mutations from "@/store/reservation/mutations";
 
+export const MAX_NUMBER_OF_RESERVATIONS = 10;
+
 export interface ReservationState {
   reservation: Reservation | null;
   reservations: Reservation[];

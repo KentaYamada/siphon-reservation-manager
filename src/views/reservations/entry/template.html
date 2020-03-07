@@ -2,13 +2,25 @@
     <div class="columns">
         <div class="column is-half is-offset-3">
             <div class="box">
-                <h4 class="title is-size-3">
-                    <i class="fas fa-calendar-alt"></i>
-                    ご予約受付
-                </h4>
+                <div class="page-header">
+                    <h4 class="title is-size-3">
+                        <i class="fas fa-calendar-alt"></i>
+                        予約受付
+                    </h4>
+                    <p>Cafe de Gamoyonをご利用いただきありがとうございます。<p>
+                    <p>
+                        当店は予約優先制となっております。<br>
+                        ご予約希望の方は以下の情報をご記入ください。<br>
+                    </p>
+                    <p>
+                        貸切などのご予約のご相談については、<a href="#">Facebookページ</a>からメッセージにてお問い合わせください。
+                    </p>
+                </div>
 
-                <reservation-form :reservation="reservation"
-                                  v-if="!!reservation" />
+                <div class="page-content">
+                    <reservation-form :reservation="reservation"
+                                      v-if="!!reservation" />
+                </div>
 
                 <div class="form-actions">
                     <button type="button"

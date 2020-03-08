@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
+import { FETCH_BY_ID, SAVE } from "@/store/constant";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 
 export default Vue.extend({
@@ -16,6 +17,8 @@ export default Vue.extend({
     ...mapState("reservation", ["reservation"])
   },
   methods: {
+    ...mapActions("reservation", [FETCH_BY_ID, SAVE]),
+
     /**
      *  予約変更イベント
      */
@@ -35,5 +38,8 @@ export default Vue.extend({
     };
 
     return { errors };
+  },
+  mounted() {
+    this.fetchById(this.id);
   }
 });

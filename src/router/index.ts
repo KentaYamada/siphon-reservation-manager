@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig, Route } from "vue-router";
 // Routing URL
 import {
   INDEX_URL,
+  RESERVATION_EDIT_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
   RESERVED_MESSAGE_URL,
@@ -14,8 +15,9 @@ import {
 } from "@/router/url";
 
 // Reservation
-import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
 import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
+import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
+import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
 import ReservationList from "@/views/reservations/list/ReservationList.vue";
 import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
 
@@ -40,6 +42,14 @@ const routes: RouteConfig[] = [
     path: RESERVATION_ENTRY_URL,
     name: "reservation-entry",
     component: ReservationEntry
+  },
+  {
+    path: `${RESERVATION_EDIT_URL}/:id`,
+    name: "reservation-edit",
+    component: ReservationEdit,
+    props: (router: Route) => ({
+      id: parseInt(router.params.id, 10)
+    })
   },
   {
     path: `${RESERVATION_DETAIL_URL}/:id`,

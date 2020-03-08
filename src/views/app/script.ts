@@ -2,6 +2,7 @@ import Vue from "vue";
 import {
   INDEX_URL,
   RESERVATION_DETAIL_URL,
+  RESERVATION_EDIT_URL,
   RESERVED_MESSAGE_URL,
   MANAGEMENT_LOGIN_URL,
   MANAGEMENT_RESERVATION_LIST_URL,
@@ -14,7 +15,7 @@ const getNavigations = () => {
     { name: "予約登録", url: INDEX_URL },
     { name: "予約完了", url: RESERVED_MESSAGE_URL },
     { name: "予約内容確認", url: `${RESERVATION_DETAIL_URL}/1` },
-    { name: "[管理] 予約一覧", url: MANAGEMENT_RESERVATION_LIST_URL },
+    { name: "予約変更", url: `${RESERVATION_EDIT_URL}/1` },
     { name: "[管理] 予約一覧", url: MANAGEMENT_RESERVATION_LIST_URL },
     { name: "[管理] 営業日設定", url: MANAGEMENT_RESERVATION_SETTING_URL },
     { name: "[管理] ログイン", url: MANAGEMENT_LOGIN_URL },

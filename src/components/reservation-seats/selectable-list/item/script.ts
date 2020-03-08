@@ -12,8 +12,10 @@ export default Vue.extend({
     }
   },
   data() {
+    const seatNo = this.reservationSeat.seat_no;
     return {
-      seatPositionCss: `no${this.reservationSeat.seat_no}`
+      seatPositionCss: `no${seatNo}`,
+      seatNo: `seat-no${seatNo}`
     };
   },
   methods: {
@@ -23,6 +25,7 @@ export default Vue.extend({
      * 予約座席更新イベント
      */
     onUpdateSeat(): void {
+      console.log(this.reservationSeat);
       this.setReservationSeat(this.reservationSeat);
     }
   }

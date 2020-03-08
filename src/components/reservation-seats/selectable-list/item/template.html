@@ -1,8 +1,13 @@
-<div class="selectable-reservation-seat" :class="[seatPositionCss, { 'is-reserved': reservationSeat.is_reserved }] ">
+<div class="selectable-reservation-seat"
+    :class="[seatPositionCss, { 'is-reserved': reservationSeat.is_reserved, 'is-selected': reservationSeat.is_selected }] ">
     <input type="checkbox"
-           class=""
+           :id="seatNo"
+           class="seat-checkbox"
            v-model="reservationSeat.is_selected"
            :disabled="reservationSeat.is_reserved"
            @change="onUpdateSeat()">
-    <label>{{ reservationSeat.seat_no }}</label>
+    <label :for="seatNo"
+            class="seat-label">
+        {{ reservationSeat.seat_no }}
+    </label>
 </div>

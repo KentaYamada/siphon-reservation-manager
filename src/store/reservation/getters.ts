@@ -15,21 +15,29 @@ const getters: GetterTree<ReservationState, RootState> = {
    * @returns number
    */
   [GET_RESERVABLE_PEOPLE]: (state: ReservationState): number => {
-    const reservedSeats = _.filter(
-      state.reservation?.reservation_seats,
-      (seat: ReservationSeat) => {
-        return seat.is_reserved;
-      }
-    );
+    // 予約済・座席選択データ取得
+    const seats = state.reservation?.reservation_seats;
+    const reservedSeats = _.filter(seats, (seat: ReservationSeat) => {
+      return seat.is_reserved;
+    });
+    const selectedSeats = _.filter(seats, (seat: ReservationSeat) => {
+      return seat.is_selected;
+    });
 
     // 1テーブル2名で計算
+    const reservePeople = selectedSeats.length * 2;
     const reservedPeople = reservedSeats.length * 2;
+    const total = reservedPeople + reservePeople;
 
     if (MAX_NUMBER_OF_RESERVATIONS <= reservedPeople) {
       return 0;
     }
 
-    return MAX_NUMBER_OF_RESERVATIONS - reservedPeople;
+    if (MAX_NUMBER_OF_RESERVATIONS <= total) {
+      return 0;
+    }
+
+    return MAX_NUMBER_OF_RESERVATIONS - total;
   },
 
   /**

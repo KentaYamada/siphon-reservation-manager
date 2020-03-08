@@ -13,6 +13,10 @@ export default Vue.extend({
     reservation: {
       required: true,
       type: Object as PropType<Reservation>
+    },
+    errors: {
+      required: true,
+      type: Object
     }
   },
   computed: {

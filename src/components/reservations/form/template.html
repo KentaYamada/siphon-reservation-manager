@@ -6,6 +6,11 @@
         <div class="field is-grouped">
             <div class="control">
                 <b-datepicker></b-datepicker>
+                <small class="help is-danger"
+                       v-for="(message, index) in errors.reservation_date"
+                       :key="index">
+                    {{ message }}
+                </small>
             </div>
             <div class="control">
                 <b-select placeholder="時間帯を選択してください">
@@ -15,36 +20,66 @@
                         {{ t.text }}
                     </option>
                 </b-select>
+                <small class="help is-danger"
+                       v-for="(message, index) in errors.reservation_timezone"
+                       :key="index">
+                    {{ message }}
+                </small>
             </div>
         </div>
         <div class="field">
             <label class="label">空席状況</label>
             <small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small><br />
             <small>※ テーブルは2名席です。</small>
+            <small class="help is-danger"
+                   v-for="(message, index) in errors.reservation_seats"
+                   :key="index">
+                {{ message }}
+            </small>
         </div>
         <selectable-reservation-seat-list/>
         <div class="field">
             <label class="label">予約人数</label>
             <div class="control">
                 <input type="number" class="input has-text-right" v-model.number="reservation.number_of_reservations">
+                <small class="help is-danger"
+                       v-for="(message, index) in errors.number_of_reservations"
+                       :key="index">
+                    {{ message }}
+                </small>
             </div>
         </div>
         <div class="field">
             <label class="label">お名前</label>
             <div class="control">
                 <input type="text" class="input" placeholder="例) Gamoyon 花子" v-model="reservation.name">
+                <small class="help is-danger"
+                       v-for="(message, index) in errors.name"
+                       :key="index">
+                    {{ message }}
+                </small>
             </div>
         </div>
         <div class="field">
             <label class="label">電話番号</label>
             <div class="control">
                 <input type="text" class="input" placeholder="例) 090-1234-5678" v-model="reservation.tel">
+                <small class="help is-danger"
+                       v-for="(message, index) in errors.tel"
+                       :key="index">
+                    {{ message }}
+                </small>
             </div>
         </div>
         <div class="field">
             <label class="label">メールアドレス</label>
             <div class="control">
                 <input type="text" class="input" placeholder="例) cafedegamoyon@email.com" v-model="reservation.mail">
+                <small class="help is-danger"
+                       v-for="(message, index) in errors.mail"
+                       :key="index">
+                    {{ message }}
+                </small>
             </div>
         </div>
         <div class="field">

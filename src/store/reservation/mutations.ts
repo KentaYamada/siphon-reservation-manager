@@ -104,7 +104,9 @@ const mutations: MutationTree<ReservationState> = {
     state: ReservationState,
     reservationSeats: ReservationSeat[]
   ): void => {
-    state.reservation.reservation_seats = reservationSeats;
+    if (state.reservation) {
+      state.reservation.reservation_seats = reservationSeats;
+    }
   }
 };
 

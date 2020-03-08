@@ -16,7 +16,7 @@ const getters: GetterTree<ReservationState, RootState> = {
    */
   [GET_RESERVABLE_PEOPLE]: (state: ReservationState): number => {
     const reservedSeats = _.filter(
-      state.reservation.reservation_seats,
+      state.reservation?.reservation_seats,
       (seat: ReservationSeat) => {
         return seat.is_reserved;
       }

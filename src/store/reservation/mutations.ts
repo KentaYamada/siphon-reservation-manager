@@ -82,7 +82,7 @@ const mutations: MutationTree<ReservationState> = {
     state: ReservationState,
     reservationSeat: ReservationSeat
   ): void => {
-    _.forEach(state.reservation.reservation_seats, (item: ReservationSeat) => {
+    _.forEach(state.reservation?.reservation_seats, (item: ReservationSeat) => {
       const updatable =
         item.seat_no === reservationSeat.seat_no && !item.is_reserved;
 

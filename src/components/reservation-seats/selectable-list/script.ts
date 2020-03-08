@@ -1,6 +1,6 @@
 import Vue from "vue";
-import { mapActions, mapState } from "vuex";
-import { FETCH } from "@/store/constant";
+import { mapActions, mapMutations, mapState } from "vuex";
+import { FETCH, SET_RESERVATION_SEATS } from "@/store/constant";
 import SelectableReservationSeatListItem from "@/components/reservation-seats/selectable-list/item/SelectableReservationSeatListItem.vue";
 
 export default Vue.extend({
@@ -12,9 +12,12 @@ export default Vue.extend({
     ...mapState("reservationSeat", ["reservationSeats"])
   },
   methods: {
-    ...mapActions("reservationSeat", [FETCH])
+    ...mapActions("reservationSeat", [FETCH]),
+    ...mapMutations("reservation", [SET_RESERVATION_SEATS])
   },
   mounted() {
+    // todo: set reservation seats if fetched
     this.fetch();
+    this.setReservationSeats(this.reservationSeats);
   }
 });

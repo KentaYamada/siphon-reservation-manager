@@ -7,7 +7,8 @@ import {
   INITIALIZE,
   SET_ITEM,
   SET_ITEMS,
-  SET_RESERVATION_SEAT
+  SET_RESERVATION_SEAT,
+  SET_RESERVATION_SEATS
 } from "@/store/constant";
 
 const mutations: MutationTree<ReservationState> = {
@@ -76,7 +77,7 @@ const mutations: MutationTree<ReservationState> = {
   /**
    * 予約座席更新
    * @param state
-   * @param item
+   * @param reservationSeat
    */
   [SET_RESERVATION_SEAT]: (
     state: ReservationState,
@@ -92,6 +93,18 @@ const mutations: MutationTree<ReservationState> = {
         return false;
       }
     });
+  },
+
+  /**
+   * 予約座席更新
+   * @param state
+   * @param reservationSeats
+   */
+  [SET_RESERVATION_SEATS]: (
+    state: ReservationState,
+    reservationSeats: ReservationSeat[]
+  ): void => {
+    state.reservation.reservation_seats = reservationSeats;
   }
 };
 

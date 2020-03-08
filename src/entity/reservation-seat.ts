@@ -2,7 +2,11 @@
  * Reservation seat entity
  */
 export interface ReservationSeat {
-    id: number;
-    seat_no: number;
-    is_reserved: boolean;
+  id: number | null;
+  /** 座席番号 */
+  seat_no: number;
+  /** 予約済かどうか */
+  is_reserved: boolean;
+  /** 予約するかどうか */
+  is_selected: boolean;
 }

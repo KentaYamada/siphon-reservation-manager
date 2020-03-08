@@ -4,7 +4,7 @@ import { ReservationSeat } from "@/entity/reservation-seat";
  * Reservation entity
  */
 export interface Reservation {
-  id: number;
+  id: number | null;
   reservation_date: string;
   reservation_time: string;
   reserver_name: string;
@@ -12,4 +12,5 @@ export interface Reservation {
   number_of_reservations: number;
   tel: string;
   mail: string;
+  comment: string;
 }

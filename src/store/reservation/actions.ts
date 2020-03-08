@@ -7,6 +7,7 @@ import {
   CANCEL,
   FETCH,
   FETCH_BY_ID,
+  SAVE,
   SET_ITEM,
   SET_ITEMS
 } from "@/store/constant";
@@ -28,32 +29,38 @@ const actions: ActionTree<ReservationState, RootState> = {
           {
             id: 1,
             seat_no: 1,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 2,
             seat_no: 2,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 3,
             seat_no: 3,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 4,
             seat_no: 4,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 5,
             seat_no: 5,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           }
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 2,
@@ -64,32 +71,38 @@ const actions: ActionTree<ReservationState, RootState> = {
           {
             id: 1,
             seat_no: 1,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 2,
             seat_no: 2,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 3,
             seat_no: 3,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 4,
             seat_no: 4,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 5,
             seat_no: 5,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           }
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 3,
@@ -100,32 +113,38 @@ const actions: ActionTree<ReservationState, RootState> = {
           {
             id: 1,
             seat_no: 1,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 2,
             seat_no: 2,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 3,
             seat_no: 3,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 4,
             seat_no: 4,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 5,
             seat_no: 5,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           }
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 4,
@@ -136,32 +155,38 @@ const actions: ActionTree<ReservationState, RootState> = {
           {
             id: 1,
             seat_no: 1,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 2,
             seat_no: 2,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 3,
             seat_no: 3,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 4,
             seat_no: 4,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 5,
             seat_no: 5,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           }
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       },
       {
         id: 5,
@@ -172,32 +197,38 @@ const actions: ActionTree<ReservationState, RootState> = {
           {
             id: 1,
             seat_no: 1,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 2,
             seat_no: 2,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 3,
             seat_no: 3,
-            is_reserved: true
+            is_reserved: true,
+            is_selected: false
           },
           {
             id: 4,
             seat_no: 4,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           },
           {
             id: 5,
             seat_no: 5,
-            is_reserved: false
+            is_reserved: false,
+            is_selected: false
           }
         ],
         number_of_reservations: 3,
         tel: "080-1479-7082",
-        mail: "test@email.com"
+        mail: "test@email.com",
+        comment: "This is test"
       }
     ];
     // const reservations: Reservation[] = [];
@@ -218,35 +249,49 @@ const actions: ActionTree<ReservationState, RootState> = {
         {
           id: 1,
           seat_no: 1,
-          is_reserved: false
+          is_reserved: false,
+          is_selected: false
         },
         {
           id: 2,
           seat_no: 2,
-          is_reserved: true
+          is_reserved: true,
+          is_selected: false
         },
         {
           id: 3,
           seat_no: 3,
-          is_reserved: true
+          is_reserved: true,
+          is_selected: false
         },
         {
           id: 4,
           seat_no: 4,
-          is_reserved: false
+          is_reserved: false,
+          is_selected: false
         },
         {
           id: 5,
           seat_no: 5,
-          is_reserved: false
+          is_reserved: false,
+          is_selected: false
         }
       ],
       number_of_reservations: 3,
       tel: "080-1479-7082",
-      mail: "test@email.com"
+      mail: "test@email.com",
+      comment: "This is test"
     };
 
     commit(SET_ITEM, reservation);
+  },
+
+  /**
+   * 予約登録
+   * @param reservation
+   */
+  [SAVE]: ({ commit }, reservation: Reservation) => {
+    console.log(reservation);
   },
 
   /**

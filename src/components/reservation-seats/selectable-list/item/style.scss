@@ -1,0 +1,42 @@
+// 予約席のサイズ
+$vertical-seat-height: 80px;
+$vertical-seat-width: 30px;
+
+.selectable-reservation-seat {
+    border: 1px solid #aaa;
+    width: $vertical-seat-width;
+    height: $vertical-seat-height;
+    position: absolute;
+    top: 20px;
+
+    &.no1 {
+        left: 40px;
+    }
+    &.no2 {
+        left: 90px;
+    }
+    &.no3 {
+        left: 140px;
+    }
+    &.no4 {
+        left: 190px;
+    }
+    &.no5 {
+        left: 240px;
+    }
+    &.is-reserved {
+        background-color: #bbb;
+    }
+    &.is-selected {
+        border-color: red;
+    }
+    .seat-checkbox {
+        display: none;
+    }
+    .seat-label {
+        cursor: pointer;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
+}

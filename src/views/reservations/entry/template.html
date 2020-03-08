@@ -1,69 +1,36 @@
 <div class="container">
     <div class="columns">
         <div class="column is-half is-offset-3">
-            <h4 class="title is-size-3">
-                <i class="fas fa-calendar-alt"></i>
-                ご予約受付
-            </h4>
             <div class="box">
-                <form class="reservation-entry-form">
-                    <div class="field">
-                        <label class="label">ご予約日時</label>
-                    </div>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <b-datepicker></b-datepicker>
-                        </div>
-                        <div class="control">
-                            <b-select placeholder="時間帯を選択してください">
-                                <option v-for="t in timeTables"
-                                        :value="t.id"
-                                        :key="t.id">
-                                    {{ t.name }}
-                                </option>
-                            </b-select>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">ご予約人数</label>
-                        <div class="control">
-                            <input type="text" class="input">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">空席状況</label>
-                        <small>現在<strong>8名様</strong>までのご予約受け付けております。</small><br />
-                        <small>※ テーブルは2名席です。</small>
-                    </div>
-                    <reservation-seats/>
-                    <div class="field">
-                        <label class="label">お名前</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="例) Gamoyon 花子">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">電話番号</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="例) 090-1234-5678">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">メールアドレス</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="例) cafedegamoyon@email.com">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">メモ</label>
-                        <textarea class="textarea" placeholder="お店への伝達事項などあれば記入してください(例: 卵アレルギーがあります)"></textarea>
-                    </div>
-                </form>
+                <div class="page-header">
+                    <h4 class="title is-size-3">
+                        <i class="fas fa-calendar-alt"></i>
+                        予約受付
+                    </h4>
+                    <p>Cafe de Gamoyonをご利用いただきありがとうございます。<p>
+                    <p>
+                        当店は予約優先制となっております。<br>
+                        ご予約希望の方は以下の情報をご記入ください。<br>
+                    </p>
+                    <p>
+                        貸切などのご予約のご相談については、<a href="#">Facebookページ</a>からメッセージにてお問い合わせください。
+                    </p>
+                </div>
+
+                <div class="page-content">
+                    <reservation-form :reservation="reservation"
+                                      :errors="errors"
+                                      v-if="!!reservation" />
+                </div>
+
                 <div class="form-actions">
-                    <button type="button" class="button is-info">予約</button>
+                    <button type="button"
+                            class="button is-info"
+                            @click="onClickSave()">
+                        予約
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

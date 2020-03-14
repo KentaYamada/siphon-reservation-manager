@@ -1,11 +1,29 @@
 import Vue from "vue";
 import { mapActions, mapMutations, mapState } from "vuex";
+import { required, email } from "vuelidate/lib/validators";
 import { INITIALIZE, SAVE } from "@/store/constant";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 
 export default Vue.extend({
   components: {
     ReservationForm
+  },
+  validations: {
+    reservation: {
+      reservation_time: {
+        required
+      },
+      reserver_name: {
+        required
+      },
+      tel: {
+        required
+      },
+      mail: {
+        required,
+        email
+      }
+    }
   },
   computed: {
     ...mapState("reservation", ["reservation"])
@@ -15,20 +33,10 @@ export default Vue.extend({
     ...mapActions("reservation", [SAVE]),
 
     onClickSave(): void {
+      console.log(this.$v);
+      this.$v.$touch();
       this.save(this.reservation);
     }
-  },
-  data() {
-    const errors = {
-      // reservation_date: ["予約日時は必須です。", "hoge"],
-      // reservation_timezone: ["時間帯を選択してください。", "hoge"],
-      // reservation_seats: ["座席を指定してください。"],
-      // number_of_reservations: ["予約人数は1名から入力してください。"],
-      // name: ["お名前は必須入力です。"],
-      // tel: ["電話番号は必須入力です。"],
-      // mail: ["メールアドレスは必須入力です。"]
-    };
-    return { errors };
   },
   mounted() {
     this.initialize();

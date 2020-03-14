@@ -7,26 +7,14 @@
 
                     </div>
                 </div>
-                <h3 class="main-title">予約管理システム</h3>
-                <h4 class="sub-title">Cafe de GAMOYON</h4>
-                <form class="login-form">
-                    <div class="field">
-                        <label class="label has-text-left">パスワード</label>
-                        <div class="control">
-                            <input type="password" class="input" placeholder="パスワード">
-                            <small class="help is-danger">
-                                <i class="fas fa-exclamation-circle"></i>
-                                入力したパスワードに誤りがあります
-                            </small>
-                        </div>
-                    </div>
-                    <div class="actions">
-                        <button type="button" class="button is-info">
-                            <i class="fas fa-door-open"></i>
-                            ログイン
-                        </button>
-                    </div>
-                </form>
+                <h3 class="main-title">Cafe de GAMOYON</h3>
+                <h4 class="sub-title">予約管理システム</h4>
+                <div class="actions">
+                    <button type="button" class="button is-info" @click="onClickSignIn()">
+                        <i class="fas fa-door-open"></i>
+                        ログイン
+                    </button>
+                </div>
             </div>
         </div>
     </div>

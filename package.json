@@ -17,11 +17,13 @@
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
+    "vuelidate": "^0.7.5",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@types/ismobilejs": "^1.0.1",
     "@types/lodash": "^4.14.149",
+    "@types/vuelidate": "^0.7.11",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "@vue/cli-plugin-babel": "^4.2.0",

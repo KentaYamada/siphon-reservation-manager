@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Buefy from "buefy";
+import Vuelidate from "vuelidate";
 import firebase from "firebase";
 import "./registerServiceWorker";
 import router from "./router";
@@ -13,9 +14,14 @@ import App from "@/views/app/App.vue";
 
 // Initialize Vue
 Vue.config.productionTip = false;
+
+// Buefy
 Vue.use(Buefy, {
   defaultIconPack: "fas"
 });
+
+// Vuelidate
+Vue.use(Vuelidate);
 
 // Initialize firebase
 const firebaseConfig = {

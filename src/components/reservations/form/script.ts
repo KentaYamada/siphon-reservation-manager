@@ -14,7 +14,7 @@ export default Vue.extend({
       required: true,
       type: Object as PropType<Reservation>
     },
-    errors: {
+    validations: {
       required: true,
       type: Object
     }

@@ -19,7 +19,7 @@
 
                 <div class="page-content">
                     <reservation-form :reservation="reservation"
-                                      :errors="errors"
+                                      :validations="$v"
                                       v-if="!!reservation" />
                 </div>
 

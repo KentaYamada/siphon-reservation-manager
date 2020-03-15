@@ -31,7 +31,7 @@ export default Vue.extend({
     handleClickSave(): void {
       this.$v.$touch();
 
-      if (!$v.$invalid()) {
+      if (!this.$v.$invalid) {
         this.saveBusinessDay(this.businessDay);
 
         // todo: when firestore save succeeded

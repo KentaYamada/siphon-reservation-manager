@@ -2,6 +2,6 @@
  * Timezone entity
  */
 export interface Timezone {
-  id: number;
+  id?: number;
   text: string;
 }

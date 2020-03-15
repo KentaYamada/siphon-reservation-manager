@@ -24,7 +24,9 @@
                            type="is-black"
                            always
                            :class="{ 'is-hidden': !showMenuButton }">
-                    <button type="button" class="fixed-button business-day-add-button">
+                    <button type="button"
+                            class="fixed-button business-day-add-button"
+                            @click="handleShowBusinessDayForm()">
                         <i class="fas fa-calendar-day button-icon"></i>
                     </button>
                 </b-tooltip>

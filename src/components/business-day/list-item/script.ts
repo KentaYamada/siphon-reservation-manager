@@ -1,5 +1,10 @@
 import Vue, { PropType } from "vue";
+
+// entity
 import { BusinessDay } from "@/entity/business-day";
+
+// filter
+import { formatDateJp } from "@/filters/format-date-jp";
 
 export default Vue.extend({
   template: "<business-day-list-item/>",
@@ -16,5 +21,8 @@ export default Vue.extend({
     handleClicDelete(): void {
       console.log("delete");
     }
+  },
+  filters: {
+    formatDateJp
   }
 });

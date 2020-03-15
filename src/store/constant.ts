@@ -33,6 +33,8 @@ export const GET_RESERVABLE_SEATS = "getReservableSeats";
 // Shop actions
 export const DELETE_BUSINESS_DAY = "deleteBusinessDay";
 
+export const SAVE_BUSINESS_DAY = "saveBusinessDay";
+
 export const SET_BUSINESS_DAYS = "setBusinessDays";
 
 export const SET_TIMEZONES = "setTimezones";

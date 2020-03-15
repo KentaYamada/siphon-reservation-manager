@@ -1,6 +1,9 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { DialogConfig } from "buefy/types/components";
+import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
+
+// component
+import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
 
 // entity
 import { BusinessDay } from "@/entity/business-day";
@@ -26,7 +29,28 @@ export default Vue.extend({
      * 営業日編集
      */
     handleClickEdit(): void {
-      console.log("edit");
+      const config: ModalConfig = {
+        parent: this,
+        component: BusinessDayForm,
+        hasModalCard: true,
+        scroll: "keep",
+        props: {
+          businessDay: this.businessDay
+        },
+        events: {
+          "save-success": () => {
+            const toastConfig: ToastConfig = {
+              message: "保存しました。",
+              type: "is-success"
+            };
+
+            this.$buefy.toast.open(toastConfig);
+            this.$emit("save-successed");
+          }
+        }
+      };
+
+      this.$buefy.modal.open(config);
     },
 
     /**

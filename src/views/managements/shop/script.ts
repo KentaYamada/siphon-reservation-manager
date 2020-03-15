@@ -19,8 +19,17 @@ export default Vue.extend({
   computed: {
     ...mapState("shop", ["businessDays", "timezones"])
   },
+  data() {
+    return {
+      showMenuButton: false
+    };
+  },
   methods: {
-    ...mapActions("shop", [FETCH])
+    ...mapActions("shop", [FETCH]),
+
+    toggleAddMenuButtons(): void {
+      this.showMenuButton = !this.showMenuButton;
+    }
   },
   mounted() {
     this.fetch();

@@ -17,6 +17,34 @@
                     <div class="timezone-list-container">
                     </div>
                 </div>
+
+                <b-tooltip class="business-day-tooltip"
+                           label="営業日追加"
+                           position="is-left"
+                           type="is-black"
+                           always
+                           :class="{ 'is-hidden': !showMenuButton }">
+                    <button type="button" class="fixed-button business-day-add-button">
+                        <i class="fas fa-calendar-day button-icon"></i>
+                    </button>
+                </b-tooltip>
+
+                <b-tooltip class="timezone-tooltip"
+                           label="予約時間帯追加"
+                           position="is-left"
+                           type="is-black"
+                           always
+                           :class="{ 'is-hidden': !showMenuButton }">
+                    <button type="button" class="fixed-button timezone-add-button">
+                        <i class="fas fa-clock button-icon"></i>
+                    </button>
+                </b-tooltip>
+
+                <button type="button"
+                        class="fixed-button menu-button"
+                        @click="toggleAddMenuButtons()">
+                    <i class="fas fa-plus plus-icon"></i>
+                </button>
             </div>
         </div>
     </div>

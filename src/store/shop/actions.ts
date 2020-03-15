@@ -3,7 +3,12 @@ import { BusinessDay } from "@/entity/business-day";
 import { Timezone } from "@/entity/timezone";
 import { RootState } from "@/store";
 import { ShopState } from "@/store/shop";
-import { FETCH, SET_BUSINESS_DAYS, SET_TIMEZONES } from "@/store/constant";
+import {
+  DELETE_BUSINESS_DAY,
+  FETCH,
+  SET_BUSINESS_DAYS,
+  SET_TIMEZONES
+} from "@/store/constant";
 
 const actions: ActionTree<ShopState, RootState> = {
   /**
@@ -24,6 +29,11 @@ const actions: ActionTree<ShopState, RootState> = {
 
     commit(SET_BUSINESS_DAYS, businessDays);
     commit(SET_TIMEZONES, timezones);
+  },
+
+  [DELETE_BUSINESS_DAY]: ({ commit }, businessDay: BusinessDay) => {
+    // todo: delete firestore request
+    console.log("delete business day");
   }
 };
 

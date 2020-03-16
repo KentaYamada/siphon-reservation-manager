@@ -11,7 +11,7 @@
 
                 <div class="page-content">
                     <div class="business-day-list-container">
-                        <h4>営業日</h4>
+                        <h4 class="title is-size-5">営業日</h4>
                         <business-day-list :businessDays="businessDays"/>
                     </div>
                     <div class="timezone-list-container">
@@ -37,7 +37,9 @@
                            type="is-black"
                            always
                            :class="{ 'is-hidden': !showMenuButton }">
-                    <button type="button" class="fixed-button timezone-add-button">
+                    <button type="button"
+                            class="fixed-button timezone-add-button"
+                            @click="handleShowTimezoneDialog()">
                         <i class="fas fa-clock button-icon"></i>
                     </button>
                 </b-tooltip>

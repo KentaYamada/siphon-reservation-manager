@@ -1,0 +1,27 @@
+<div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">
+            <i class="fas fa-clock"></i>
+            予約時間帯設定
+        </p>
+    </header>
+    <section class="modal-card-body">
+        <div class="field is-grouped">
+            <b-timepicker v-model="timezone.start_time">
+            </b-timepicker>
+            <span class="tilde">〜</span>
+            <b-timepicker v-model="timezone.end_time">
+            </b-timepicker>
+        </div>
+    </section>
+    <footer class="modal-card-foot buttons is-right">
+        <button type="button" class="button" @click="$parent.close()">
+            キャンセル
+        </button>
+        <button type="button" class="button is-info" @click="handleClickSave()">
+            <i class="fas fa-save"></i>
+            保存
+        </button>
+    </footer>
+</div>
+

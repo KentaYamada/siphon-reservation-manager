@@ -52,6 +52,7 @@ export default Vue.extend({
             };
 
             this.$buefy.toast.open(toastConfig);
+            this.showMenuButton = false;
           }
         }
       };

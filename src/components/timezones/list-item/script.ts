@@ -18,14 +18,14 @@ export default Vue.extend({
     /**
      * 予約時間帯設定
      */
-    handleClickEdit(): void {
+    handleShowTimezoneDialog(): void {
       const config: ModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
         scroll: "keep",
         props: {
-          businessDay: this.timezone
+          timezone: this.timezone
         },
         events: {
           "save-success": () => {

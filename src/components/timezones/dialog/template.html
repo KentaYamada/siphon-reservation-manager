@@ -6,12 +6,25 @@
         </p>
     </header>
     <section class="modal-card-body">
-        <div class="field is-grouped">
-            <b-timepicker v-model="timezone.start_time">
-            </b-timepicker>
-            <span class="tilde">〜</span>
-            <b-timepicker v-model="timezone.end_time">
-            </b-timepicker>
+        <div class="field">
+            <label class="label">開始時間</label>
+            <b-timepicker v-model="timezone.start_time"></b-timepicker>
+            <span v-if="$v.timezone.start_time.$error">
+                <small class="help is-danger"
+                       v-if="!$v.timezone.start_time.required">
+                    開始時間は必須入力です。
+                </small>
+            </span>
+        </div>
+        <div class="field">
+            <label class="label">終了時間</label>
+            <b-timepicker v-model="timezone.end_time"></b-timepicker>
+            <span v-if="$v.timezone.end_time.$error">
+                <small class="help is-danger"
+                       v-if="!$v.timezone.end_time.required">
+                    終了時間は必須入力です。
+                </small>
+            </span>
         </div>
     </section>
     <footer class="modal-card-foot buttons is-right">

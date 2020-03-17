@@ -1,4 +1,5 @@
 import Vue, { PropType } from "vue";
+import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
 
 // components
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";

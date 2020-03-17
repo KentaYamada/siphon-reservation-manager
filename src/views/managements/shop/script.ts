@@ -6,6 +6,7 @@ import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
 import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
 import BusinessDayList from "@/components/business-day/list/BusinessDayList.vue";
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
+import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
 
 // entity
 import { BusinessDay } from "@/entity/business-day";
@@ -17,7 +18,8 @@ import { ShopState } from "@/store/shop";
 
 export default Vue.extend({
   components: {
-    BusinessDayList
+    BusinessDayList,
+    TimezoneList
   },
   computed: {
     ...mapState("shop", ["businessDays", "timezones"])

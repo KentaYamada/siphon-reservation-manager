@@ -3,7 +3,7 @@
         v-for="timezone in timezones"
         :key="timezone.id"
         :timezone="timezone"/>
-    <div class="list-item" v-if="timezones.length ==0">
-        表示できるデータがありません
+    <div class="list-item" v-if="!hasTimezones">
+        <p class="has-text-centered">表示できるデータがありません</p>
     </div>
 </div>

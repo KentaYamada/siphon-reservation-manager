@@ -1,7 +1,6 @@
-<table class="table is-fullwidth">
-    <tbody>
-        <business-day-list-item
-            v-for="BusinessDay in businessDays"
-            :businessDay="BusinessDay"/>
-    </tbody>
-</table>
+<div class="list">
+    <business-day-list-item v-for="BusinessDay in businessDays" :businessDay="BusinessDay"/>
+    <div class="list-item" v-if="businessDays.length == 0">
+        表示できるデータがありません
+    </div>
+</div>

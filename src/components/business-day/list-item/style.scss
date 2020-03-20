@@ -1,0 +1,20 @@
+.list-item {
+    .business-date-col,
+    .actions-col {
+        display: inline-block;
+    }
+
+    /** For desktop */
+    @media screen and (min-width: 1024px) {
+        .business-date-col {
+            width: 72%;
+        }
+    }
+
+    /** For mobile */
+    @media screen and (max-width: 768px) {
+        .business-date-col {
+            width: 60%;
+        }
+    }
+}

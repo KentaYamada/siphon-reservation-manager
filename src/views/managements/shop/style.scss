@@ -1,8 +1,11 @@
-.timezone-list-container {
-    margin-top: 1.0rem;
+.page-content {
+    .business-day-list-container,
+    .timezone-list-container {
+        margin-top: 1.0rem;
 
-    .title {
-        margin-bottom: 0.6rem;
+        .title {
+            margin-bottom: 0.6rem;
+        }
     }
 }
 .business-day-tooltip {

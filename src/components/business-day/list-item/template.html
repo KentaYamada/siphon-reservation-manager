@@ -1,15 +1,17 @@
-<tr>
-    <td>{{ businessDay.business_date | formatDateJp }}</td>
-    <td>
+<div class="list-item">
+    <div class="business-date-col">
+        {{ businessDay.business_date | formatDateJp }}
+    </div>
+    <div class="actions-col">
         <div class="buttons">
             <button type="button" class="button is-info" @click="handleClickEdit()">
                 <i class="fas fa-edit"></i>
-                編集
+                <span class="is-hidden-mobile">編集</span>
             </button>
             <button type="button" class="button is-danger" @click="handleClicDelete()">
                 <i class="fas fa-trash"></i>
-                削除
+                <span class="is-hidden-mobile">削除</span>
             </button>
         </div>
-    </td>
-</tr>
+    </div>
+</div>

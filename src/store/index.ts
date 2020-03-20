@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import auth from "@/store/auth";
 import reservation from "@/store/reservation";
 import reservationSeat from "@/store/reservation-seat";
+import shop from "@/store/shop";
 import timezone from "@/store/timezone";
 
 export interface RootState {
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     auth,
     reservation,
     reservationSeat,
+    shop,
     timezone
   }
 });

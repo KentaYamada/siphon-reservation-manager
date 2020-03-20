@@ -1,0 +1,6 @@
+<div class="list">
+    <business-day-list-item v-for="BusinessDay in businessDays" :businessDay="BusinessDay"/>
+    <div class="list-item" v-if="!hasBusinessDays">
+        <p class="has-text-centered">表示できるデータがありません</p>
+    </div>
+</div>

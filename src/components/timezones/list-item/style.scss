@@ -1,0 +1,23 @@
+.list-item {
+    .timezone-col {
+        display: inline-block;
+    }
+    .actions-col {
+        display: inline-block;
+        margin-left: 12px;
+    }
+
+    /** For desktop */
+    @media screen and (min-width: 1024px) {
+        .timezone-col {
+            width: 70%;
+        }
+    }
+
+    /** For mobile */
+    @media screen and (max-width: 768px) {
+        .timezone-col {
+            width: 56%;
+        }
+    }
+}

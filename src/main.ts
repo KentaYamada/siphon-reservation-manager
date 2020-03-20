@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Buefy from "buefy";
 import Vuelidate from "vuelidate";
-import firebase from "firebase";
+import * as firebase from "firebase/app";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";

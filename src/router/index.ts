@@ -9,7 +9,7 @@ import {
   RESERVATION_DETAIL_URL,
   RESERVED_MESSAGE_URL,
   MANAGEMENT_RESERVATION_LIST_URL,
-  MANAGEMENT_RESERVATION_SETTING_URL,
+  SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
   FORBIDDEN_URL
 } from "@/router/url";
@@ -23,7 +23,7 @@ import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessa
 
 // Management
 import Login from "@/views/managements/login/Login.vue";
-import ReservationSetting from "@/views/managements/reservation-setting/ReservationSetting.vue";
+import Shop from "@/views/managements/shop/Shop.vue";
 
 // Other
 import Forbidden from "@/views/forbidden/Forbidden.vue";
@@ -70,9 +70,9 @@ const routes: RouteConfig[] = [
     component: ReservationList
   },
   {
-    path: MANAGEMENT_RESERVATION_SETTING_URL,
-    name: "reservation-setting",
-    component: ReservationSetting
+    path: SHOP_SETTING_URL,
+    name: "shop",
+    component: Shop
   },
   {
     path: MANAGEMENT_LOGIN_URL,

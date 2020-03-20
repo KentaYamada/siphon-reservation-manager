@@ -14,8 +14,7 @@ export const RESERVED_MESSAGE_URL = "/reservations/reserved";
 
 export const MANAGEMENT_RESERVATION_LIST_URL = "/managements/reservations";
 
-export const MANAGEMENT_RESERVATION_SETTING_URL =
-  "/managements/reservations/settings";
+export const SHOP_SETTING_URL = "/managements/shops";
 
 export const MANAGEMENT_LOGIN_URL = "/managements/login";
 

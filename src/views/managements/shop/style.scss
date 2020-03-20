@@ -1,0 +1,64 @@
+.page-content {
+    .business-day-list-container,
+    .timezone-list-container {
+        margin-top: 1.0rem;
+
+        .title {
+            margin-bottom: 0.6rem;
+        }
+    }
+}
+.business-day-tooltip {
+    position: fixed;
+    bottom: 162px;
+    right: 66px;
+}
+.timezone-tooltip {
+    position: fixed;
+    right: 66px;
+    bottom: 106px;
+}
+
+.fixed-button {
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    position: fixed;
+    text-decoration: none;
+
+    .button-icon {
+        font-size: 24px;
+        line-height: 48px;
+    }
+    &.business-day-add-button {
+        background-color: #1c9044;
+        color: #fff;
+        right: 16px;
+        bottom: 138px;
+        width: 50px;
+        height: 50px;
+        transition: bottom .2s;
+    }
+    &.timezone-add-button {
+        background-color: #2c73a2;
+        color: #fff;
+        right: 16px;
+        bottom: 80px;
+        width: 50px;
+        height: 50px;
+        transition: bottom .2s;
+    }
+    &.menu-button {
+        right: 10px;
+        bottom: 12px;
+        background-color: #ff3860;
+        color: #fff;
+        width: 60px;
+        height: 60px;
+
+        .plus-icon {
+            font-size: 24px;
+            line-height: 24px;
+        }
+    }
+}

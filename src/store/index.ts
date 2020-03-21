@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
+// store
 import auth from "@/store/auth";
+import businessDay from "@/store/business-day";
 import reservation from "@/store/reservation";
 import reservationSeat from "@/store/reservation-seat";
 import shop from "@/store/shop";
@@ -15,6 +18,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   modules: {
     auth,
+    businessDay,
     reservation,
     reservationSeat,
     shop,

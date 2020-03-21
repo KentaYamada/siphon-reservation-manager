@@ -1,4 +1,6 @@
 // General actions
+export const DELETE = "delete";
+
 export const FETCH = "fetch";
 
 export const FETCH_BY_ID = "fetchById";

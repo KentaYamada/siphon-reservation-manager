@@ -6,7 +6,7 @@ import { required } from "vuelidate/lib/validators";
 import { BusinessDay } from "@/entity/business-day";
 
 // store
-import { SAVE_BUSINESS_DAY } from "@/store/constant";
+import { SAVE } from "@/store/constant";
 
 export default Vue.extend({
   props: {
@@ -23,7 +23,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapActions("shop", [SAVE_BUSINESS_DAY]),
+    ...mapActions("businessDay", [SAVE]),
 
     /**
      * 営業日保存
@@ -33,7 +33,7 @@ export default Vue.extend({
 
       if (!this.$v.$invalid) {
         this.isSaving = true;
-        this.saveBusinessDay(this.businessDay)
+        this.save(this.businessDay)
           .then(() => {
             this.$emit("close");
             this.$emit("save-success", "保存しました。");

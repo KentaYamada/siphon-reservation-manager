@@ -12,7 +12,7 @@ import { BusinessDay } from "@/entity/business-day";
 import { formatDateJp } from "@/filters/format-date-jp";
 
 // store
-import { DELETE_BUSINESS_DAY } from "@/store/constant";
+import { DELETE } from "@/store/constant";
 
 export default Vue.extend({
   template: "<business-day-list-item/>",
@@ -23,7 +23,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapActions("shop", [DELETE_BUSINESS_DAY]),
+    ...mapActions("businessDay", [DELETE]),
 
     /**
      * 営業日編集
@@ -71,7 +71,18 @@ export default Vue.extend({
         iconPack: "fas",
         icon: "question-circle",
         onConfirm: () => {
-          this.deleteBusinessDay(this.businessDay);
+          this.delete(this.businessDay.id)
+            .then(() => {
+              const toastConfig: ToastConfig = {
+                message: "削除しました。",
+                type: "is-success"
+              };
+              this.$buefy.toast.open(toastConfig);
+              this.$emit("delete-succeeded");
+            })
+            .catch(error => {
+              // todo: error handling
+            });
         }
       };
 

@@ -1,27 +1,52 @@
-import Vue, { PropType } from "vue";
-import { mapGetters } from "vuex";
+import Vue from "vue";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
 
 // component
 import TimezoneListItem from "@/components/timezones/list-item/TimezoneListItem.vue";
 
-// entity
-import { Timezone } from "@/entity/timezone";
-
 // store
-import { HAS_TIMEZONES } from "@/store/constant";
+import { FETCH, HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
-  template: "<timezone-list>",
+  template: "<timezone-list/>",
   components: {
     TimezoneListItem
   },
-  props: {
-    timezones: {
-      required: true,
-      type: Array as PropType<Timezone[]>
+  computed: {
+    ...mapGetters("timezone", [HAS_ITEMS]),
+    ...mapState("timezone", ["timezones"])
+  },
+  methods: {
+    ...mapActions("timezone", [FETCH]),
+
+    /**
+     * 予約時間帯削除後イベント
+     * list-item component callback function
+     */
+    itemDeleteSucceeded(): void {
+      const toastConfig: ToastConfig = {
+        message: "削除しました。",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+      this.fetch();
+    },
+
+    /**
+     * 予約時間帯編集後イベント
+     * list-item component callback function
+     */
+    itemEditSucceeded(): void {
+      const toastConfig: ToastConfig = {
+        message: "保存しました。",
+        type: "is-success"
+      };
+      this.$buefy.toast.open(toastConfig);
+      this.fetch();
     }
   },
-  computed: {
-    ...mapGetters("shop", [HAS_TIMEZONES])
+  mounted() {
+    this.fetch();
   }
 });

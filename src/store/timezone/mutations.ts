@@ -1,6 +1,10 @@
 import { MutationTree } from "vuex";
-import { SET_ITEMS } from "@/store/constant";
+
+// entity
 import { Timezone } from "@/entity/timezone";
+
+// store
+import { SET_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
 
 const mutations: MutationTree<TimezoneState> = {

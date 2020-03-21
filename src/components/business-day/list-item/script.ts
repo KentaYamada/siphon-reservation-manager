@@ -12,7 +12,7 @@ import { BusinessDay } from "@/entity/business-day";
 import { formatDateJp } from "@/filters/format-date-jp";
 
 // store
-import { DELETE_BUSINESS_DAY } from "@/store/constant";
+import { DELETE } from "@/store/constant";
 
 export default Vue.extend({
   template: "<business-day-list-item/>",
@@ -23,7 +23,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapActions("shop", [DELETE_BUSINESS_DAY]),
+    ...mapActions("businessDay", [DELETE]),
 
     /**
      * 営業日編集
@@ -39,13 +39,7 @@ export default Vue.extend({
         },
         events: {
           "save-success": () => {
-            const toastConfig: ToastConfig = {
-              message: "保存しました。",
-              type: "is-success"
-            };
-
-            this.$buefy.toast.open(toastConfig);
-            this.$emit("save-successed");
+            this.$emit("edit-succeeded");
           }
         }
       };
@@ -59,7 +53,7 @@ export default Vue.extend({
     handleClicDelete(): void {
       const businessDay = formatDateJp(this.businessDay.business_date);
       const message = `
-        <p>${businessDay}を削除しますか？</p>
+        <p>「${businessDay}」を削除しますか？</p>
         <small>誤って削除した場合、再度データを登録してください。</small>`;
       const config: DialogConfig = {
         title: "営業日削除",
@@ -69,9 +63,15 @@ export default Vue.extend({
         cancelText: "キャンセル",
         hasIcon: true,
         iconPack: "fas",
-        icon: "question-circle",
+        icon: "exclamation-circle",
         onConfirm: () => {
-          this.deleteBusinessDay(this.businessDay);
+          this.delete(this.businessDay.id)
+            .then(() => {
+              this.$emit("delete-succeeded");
+            })
+            .catch(error => {
+              // todo: error handling
+            });
         }
       };
 

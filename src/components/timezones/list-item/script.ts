@@ -1,5 +1,7 @@
 import Vue, { PropType } from "vue";
-import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
+import { mapActions } from "vuex";
+import { DialogConfig, ModalConfig } from "buefy/types/components";
+import _ from "lodash";
 
 // components
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
@@ -7,8 +9,11 @@ import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
 // entity
 import { Timezone } from "@/entity/timezone";
 
+// store
+import { DELETE } from "@/store/constant";
+
 export default Vue.extend({
-  template: "<timezone-list-item>",
+  template: "<timezone-list-item/>",
   props: {
     timezone: {
       required: true,
@@ -16,27 +21,24 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions("timezone", [DELETE]),
+
     /**
      * 予約時間帯設定
      */
     handleShowTimezoneDialog(): void {
+      const model = _.clone(this.timezone);
       const config: ModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
         scroll: "keep",
         props: {
-          timezone: this.timezone
+          timezone: model
         },
         events: {
           "save-success": () => {
-            const toastConfig: ToastConfig = {
-              message: "保存しました。",
-              type: "is-success"
-            };
-
-            this.$buefy.toast.open(toastConfig);
-            this.$emit("save-successed");
+            this.$emit("edit-succeeded");
           }
         }
       };
@@ -48,7 +50,7 @@ export default Vue.extend({
      */
     handleClicDelete(): void {
       const message = `
-            <p>${this.timezone.text}を削除しますか？</p>
+            <p>「${this.timezone.text}」を削除しますか？</p>
             <small>誤って削除した場合、再度データを登録してください。</small>`;
       const config: DialogConfig = {
         title: "予約時間帯削除",
@@ -58,9 +60,15 @@ export default Vue.extend({
         cancelText: "キャンセル",
         hasIcon: true,
         iconPack: "fas",
-        icon: "question-circle",
+        icon: "exclamation-circle",
         onConfirm: () => {
-          // this.deleteBusinessDay(this.businessDay);
+          this.delete(this.timezone.id)
+            .then(() => {
+              this.$emit("delete-succeeded");
+            })
+            .catch(error => {
+              // todo: error handling
+            });
         }
       };
 

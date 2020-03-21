@@ -1,6 +1,6 @@
 import Vue from "vue";
-import { mapActions, mapState } from "vuex";
-import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
+import { mapActions } from "vuex";
+import { ModalConfig, ToastConfig } from "buefy/types/components";
 
 // component
 import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
@@ -14,15 +14,11 @@ import { Timezone } from "@/entity/timezone";
 
 // store
 import { FETCH } from "@/store/constant";
-import { ShopState } from "@/store/shop";
 
 export default Vue.extend({
   components: {
     BusinessDayList,
     TimezoneList
-  },
-  computed: {
-    ...mapState("shop", ["businessDays", "timezones"])
   },
   data() {
     return {
@@ -30,14 +26,21 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapActions("shop", [FETCH]),
+    ...mapActions("businessDay", {
+      fetchBusinessDays: FETCH
+    }),
+    ...mapActions("timezone", {
+      fetchTimezones: FETCH
+    }),
 
     /**
      * 予約時間帯設定ダイアログ表示
      */
     handleShowTimezoneDialog(): void {
       const timezone: Timezone = {
-        text: ""
+        text: "",
+        start_time: new Date(),
+        end_time: new Date()
       };
       const config: ModalConfig = {
         parent: this,
@@ -56,6 +59,7 @@ export default Vue.extend({
 
             this.$buefy.toast.open(toastConfig);
             this.showMenuButton = false;
+            this.fetchTimezones();
           }
         }
       };
@@ -87,6 +91,7 @@ export default Vue.extend({
 
             this.$buefy.toast.open(toastConfig);
             this.showMenuButton = false;
+            this.fetchBusinessDays();
           }
         }
       };
@@ -100,8 +105,5 @@ export default Vue.extend({
     toggleAddMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
     }
-  },
-  mounted() {
-    this.fetch();
   }
 });

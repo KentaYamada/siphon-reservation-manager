@@ -6,7 +6,7 @@ import { required } from "vuelidate/lib/validators";
 import { BusinessDay } from "@/entity/business-day";
 
 // store
-import { SAVE_BUSINESS_DAY } from "@/store/constant";
+import { SAVE } from "@/store/constant";
 
 export default Vue.extend({
   props: {
@@ -23,7 +23,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapActions("shop", [SAVE_BUSINESS_DAY]),
+    ...mapActions("businessDay", [SAVE]),
 
     /**
      * 営業日保存
@@ -32,12 +32,24 @@ export default Vue.extend({
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.saveBusinessDay(this.businessDay);
-
-        // todo: when firestore save succeeded
-        this.$emit("close");
-        this.$emit("save-success", "保存しました。");
+        this.isSaving = true;
+        this.save(this.businessDay)
+          .then(() => {
+            this.$emit("close");
+            this.$emit("save-success");
+          })
+          .catch(error => {
+            // todo: error handling
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
       }
     }
+  },
+  data() {
+    return {
+      isSaving: false
+    };
   }
 });

@@ -1,41 +1,33 @@
 import { ActionTree } from "vuex";
 
 // entity
-import { Timezone } from "@/entity/timezone";
+import { BusinessDay } from "@/entity/business-day";
 
 // plugin
 import firebase from "@/plugins/firebase";
-import moment from "moment";
 
 // store
 import { RootState } from "@/store";
 import { DELETE, FETCH, SAVE, SET_ITEMS } from "@/store/constant";
-import { TimezoneState } from "@/store/timezone";
+import { BusinessDayState } from "@/store/business-day";
 
 // firestore collection name
-const COLLECTION_NAME = "timezones";
+const COLLECTION_NAME = "business_days";
 
-const actions: ActionTree<TimezoneState, RootState> = {
+const actions: ActionTree<BusinessDayState, RootState> = {
   /**
-   * 予約時間帯取得
+   * 営業日一覧取得
    */
   [FETCH]: async ({ commit }) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const items: Timezone[] = [];
-
-    // todo: sort
+    const items: BusinessDay[] = [];
+    // todo: sort > business_date desc
     const $promise = collection.get().then(query => {
       query.forEach(doc => {
-        const data = doc.data();
-        const startTime = moment(data.start_time.toDate()).format("HH:mm");
-        const endTime = moment(data.end_time.toDate()).format("HH:mm");
-        const item: Timezone = {
+        const item: BusinessDay = {
           id: doc.id,
-          text: `${startTime} - ${endTime}`,
-          start_time: data.start_time.toDate(),
-          end_time: data.end_time.toDate()
+          business_date: doc.data().business_date.toDate()
         };
-
         items.push(item);
       });
 
@@ -46,19 +38,18 @@ const actions: ActionTree<TimezoneState, RootState> = {
   },
 
   /**
-   * 予約時間帯取得
-   * @param timezone
+   * 営業日保存
+   * @param businessDay
    */
-  [SAVE]: async ({ commit }, timezone: Timezone) => {
+  [SAVE]: async ({ commit }, businessDay: BusinessDay) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
     const requestBody = {
-      start_time: timezone.start_time,
-      end_time: timezone.end_time
+      business_date: businessDay.business_date
     };
     let $promise = null;
 
-    if (timezone.id) {
-      $promise = collection.doc(timezone.id).set(requestBody);
+    if (businessDay.id) {
+      $promise = collection.doc(businessDay.id).set(requestBody);
     } else {
       $promise = collection.add(requestBody);
     }
@@ -67,7 +58,7 @@ const actions: ActionTree<TimezoneState, RootState> = {
   },
 
   /**
-   * 予約時間帯削除
+   * 営業日削除
    * @param id
    */
   [DELETE]: async ({ commit }, id: string) => {

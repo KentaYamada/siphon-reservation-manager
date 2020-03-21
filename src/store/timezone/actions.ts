@@ -1,37 +1,78 @@
 import { ActionTree } from "vuex";
+
+// entity
 import { Timezone } from "@/entity/timezone";
+
+// plugin
+import firebase from "@/plugins/firebase";
+import moment from "moment";
+
+// store
 import { RootState } from "@/store";
-import { FETCH, SET_ITEMS } from "@/store/constant";
+import { DELETE, FETCH, SAVE, SET_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
+
+// firestore collection name
+const COLLECTION_NAME = "timezones";
 
 const actions: ActionTree<TimezoneState, RootState> = {
   /**
    * 予約時間帯取得
    */
-  [FETCH]: ({ commit }): void => {
-    const timezones: Timezone[] = [
-      {
-        id: 1,
-        text: "11:00 - 12:00"
-      },
-      {
-        id: 2,
-        text: "12:30 - 13:30"
-      },
-      {
-        id: 3,
-        text: "14:00 - 15:00"
-      },
-      {
-        id: 4,
-        text: "15:30 - 16:30"
-      },
-      {
-        id: 5,
-        text: "17:00 - 18:00"
-      }
-    ];
-    commit(SET_ITEMS, timezones);
+  [FETCH]: async ({ commit }) => {
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    const items: Timezone[] = [];
+
+    // todo: sort
+    const $promise = collection.get().then(query => {
+      query.forEach(doc => {
+        const data = doc.data();
+        const startTime = moment(data.start_time.toDate()).format("HH:mm");
+        const endTime = moment(data.end_time.toDate()).format("HH:mm");
+        const item: Timezone = {
+          id: doc.id,
+          text: `${startTime} - ${endTime}`,
+          start_time: data.start_time.toDate(),
+          end_time: data.end_time.toDate()
+        };
+
+        items.push(item);
+      });
+
+      commit(SET_ITEMS, items);
+    });
+
+    return await $promise;
+  },
+
+  /**
+   * 予約時間帯取得
+   * @param timezone
+   */
+  [SAVE]: async ({ commit }, timezone: Timezone) => {
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    const requestBody = {
+      start_time: timezone.start_time,
+      end_time: timezone.end_time
+    };
+    let $promise = null;
+
+    if (timezone.id) {
+      $promise = collection.doc(timezone.id).set(requestBody);
+    } else {
+      $promise = collection.add(requestBody);
+    }
+
+    return await $promise;
+  },
+
+  /**
+   * 予約時間帯削除
+   * @param id
+   */
+  [DELETE]: async ({ commit }, id: string) => {
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    return await collection.doc(id).delete();
   }
 };
 

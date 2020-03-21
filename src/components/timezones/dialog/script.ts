@@ -1,8 +1,12 @@
 import Vue, { PropType } from "vue";
+import { mapActions } from "vuex";
 import { required } from "vuelidate/lib/validators";
 
 // entity
 import { Timezone } from "@/entity/timezone";
+
+// store
+import { SAVE } from "@/store/constant";
 
 export default Vue.extend({
   props: {
@@ -22,14 +26,33 @@ export default Vue.extend({
     }
   },
   methods: {
+    ...mapActions("timezone", [SAVE]),
+
+    /**
+     * 予約時間帯保存
+     */
     handleClickSave(): void {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        // todo: when firestore save succeeded
-        this.$emit("close");
-        this.$emit("save-success", "保存しました。");
+        this.isSaving = true;
+        this.save(this.timezone)
+          .then(() => {
+            this.$emit("close");
+            this.$emit("save-success");
+          })
+          .catch(() => {
+            // todo: error handling
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
       }
     }
+  },
+  data() {
+    return {
+      isSaving: false
+    };
   }
 });

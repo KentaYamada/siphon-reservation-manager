@@ -2,8 +2,10 @@
     <timezone-list-item
         v-for="timezone in timezones"
         :key="timezone.id"
-        :timezone="timezone"/>
-    <div class="list-item" v-if="!hasTimezones">
+        :timezone="timezone"
+        @delete-succeeded="itemDeleteSucceeded"
+        @edit-succeeded="itemEditSucceeded" />
+    <div class="list-item" v-if="!hasItems">
         <p class="has-text-centered">表示できるデータがありません</p>
     </div>
 </div>

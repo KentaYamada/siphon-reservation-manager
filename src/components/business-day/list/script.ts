@@ -1,5 +1,6 @@
 import Vue, { PropType } from "vue";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
 
 // component
 import BusinessDayListItem from "@/components/business-day/list-item/BusinessDayListItem.vue";
@@ -8,20 +9,33 @@ import BusinessDayListItem from "@/components/business-day/list-item/BusinessDay
 import { BusinessDay } from "@/entity/business-day";
 
 // store
-import { HAS_BUSINESS_DAYS } from "@/store/constant";
+import { FETCH, HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
   template: "<business-day-list/>",
   components: {
     BusinessDayListItem
   },
-  props: {
-    businessDays: {
-      required: true,
-      type: Array as PropType<BusinessDay[]>
+  computed: {
+    ...mapGetters("businessDay", [HAS_ITEMS]),
+    ...mapState("businessDay", ["businessDays"])
+  },
+  methods: {
+    ...mapActions("businessDay", [FETCH]),
+
+    /**
+     * 営業日削除後イベント
+     */
+    itemDeleteSucceeded(): void {
+      const toastConfig: ToastConfig = {
+        message: "削除しました。",
+        type: "is-success"
+      };
+      this.$buefy.toast.open(toastConfig);
+      this.fetch();
     }
   },
-  computed: {
-    ...mapGetters("shop", [HAS_BUSINESS_DAYS])
+  mounted() {
+    this.fetch();
   }
 });

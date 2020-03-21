@@ -4,7 +4,7 @@ import { MutationTree } from "vuex";
 import { BusinessDay } from "@/entity/business-day";
 
 // store
-import { HAS_ITEMS } from "@/store/constant";
+import { SET_ITEMS } from "@/store/constant";
 import { BusinessDayState } from "@/store/business-day";
 
 const mutations: MutationTree<BusinessDayState> = {
@@ -12,7 +12,7 @@ const mutations: MutationTree<BusinessDayState> = {
    * 営業日一覧データセット
    * @param items
    */
-  [HAS_ITEMS]: (state: BusinessDayState, items: BusinessDay[]): void => {
+  [SET_ITEMS]: (state: BusinessDayState, items: BusinessDay[]): void => {
     state.businessDays = items;
   }
 };

@@ -22,7 +22,7 @@ export default Vue.extend({
     TimezoneList
   },
   computed: {
-    ...mapState("shop", ["businessDays", "timezones"])
+    ...mapState("shop", ["timezones"])
   },
   data() {
     return {
@@ -87,6 +87,7 @@ export default Vue.extend({
 
             this.$buefy.toast.open(toastConfig);
             this.showMenuButton = false;
+            this.fetch();
           }
         }
       };

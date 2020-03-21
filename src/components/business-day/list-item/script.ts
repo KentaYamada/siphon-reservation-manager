@@ -73,11 +73,6 @@ export default Vue.extend({
         onConfirm: () => {
           this.delete(this.businessDay.id)
             .then(() => {
-              const toastConfig: ToastConfig = {
-                message: "削除しました。",
-                type: "is-success"
-              };
-              this.$buefy.toast.open(toastConfig);
               this.$emit("delete-succeeded");
             })
             .catch(error => {

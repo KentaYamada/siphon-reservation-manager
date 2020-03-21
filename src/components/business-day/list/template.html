@@ -2,8 +2,9 @@
     <business-day-list-item
         v-for="businessDay in businessDays"
         :key="businessDay.id"
-        :businessDay="businessDay"/>
-    <div class="list-item" v-if="!hasBusinessDays">
+        :businessDay="businessDay"
+        @delete-succeeded="itemDeleteSucceeded"/>
+    <div class="list-item" v-if="!hasItems">
         <p class="has-text-centered">表示できるデータがありません</p>
     </div>
 </div>

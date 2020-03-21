@@ -1,6 +1,13 @@
 import { ActionTree } from "vuex";
+
+// entity
 import { BusinessDay } from "@/entity/business-day";
 import { Timezone } from "@/entity/timezone";
+
+// plugin
+import firebase from "@/plugins/firebase";
+
+// store
 import { RootState } from "@/store";
 import { ShopState } from "@/store/shop";
 import {
@@ -10,6 +17,10 @@ import {
   SET_BUSINESS_DAYS,
   SET_TIMEZONES
 } from "@/store/constant";
+
+// firestore collection name
+const BUSINESS_DAYS = "business_days";
+const TIMEZONES = "timezones";
 
 const actions: ActionTree<ShopState, RootState> = {
   /**
@@ -35,9 +46,11 @@ const actions: ActionTree<ShopState, RootState> = {
   /**
    * 営業日保存
    */
-  [SAVE_BUSINESS_DAY]: ({ commit }, businessDay: BusinessDay) => {
-    // todo: save firestore request
-    console.log("delete business day");
+  [SAVE_BUSINESS_DAY]: async ({ commit }, businessDay: BusinessDay) => {
+    const db = firebase.firestore();
+    return await db.collection(BUSINESS_DAYS).add({
+      business_date: businessDay.business_date
+    });
   },
 
   /**

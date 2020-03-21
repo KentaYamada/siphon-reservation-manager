@@ -32,12 +32,24 @@ export default Vue.extend({
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.saveBusinessDay(this.businessDay);
-
-        // todo: when firestore save succeeded
-        this.$emit("close");
-        this.$emit("save-success", "保存しました。");
+        this.isSaving = true;
+        this.saveBusinessDay(this.businessDay)
+          .then(() => {
+            this.$emit("close");
+            this.$emit("save-success", "保存しました。");
+          })
+          .catch(error => {
+            // todo: error handling
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
       }
     }
+  },
+  data() {
+    return {
+      isSaving: false
+    };
   }
 });

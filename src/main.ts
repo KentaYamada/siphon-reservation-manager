@@ -1,15 +1,16 @@
 import Vue from "vue";
 import Buefy from "buefy";
 import Vuelidate from "vuelidate";
-import * as firebase from "firebase/app";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 
+// css
 import "buefy/dist/buefy.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/css/fontawesome.css";
 
+// components
 import App from "@/views/app/App.vue";
 
 // Initialize Vue
@@ -22,19 +23,6 @@ Vue.use(Buefy, {
 
 // Vuelidate
 Vue.use(Vuelidate);
-
-// Initialize firebase
-const firebaseConfig = {
-  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
-  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.VUE_APP_FIREBASE_DATABASE_URL,
-  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.VUE_APP_FIREBASE_APP_ID,
-  measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
-};
-firebase.initializeApp(firebaseConfig);
 
 new Vue({
   router,

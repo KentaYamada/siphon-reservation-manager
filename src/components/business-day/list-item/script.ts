@@ -39,13 +39,7 @@ export default Vue.extend({
         },
         events: {
           "save-success": () => {
-            const toastConfig: ToastConfig = {
-              message: "保存しました。",
-              type: "is-success"
-            };
-
-            this.$buefy.toast.open(toastConfig);
-            this.$emit("save-successed");
+            this.$emit("edit-succeeded");
           }
         }
       };

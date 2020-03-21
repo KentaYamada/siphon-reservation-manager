@@ -29,6 +29,18 @@ export default Vue.extend({
     itemDeleteSucceeded(): void {
       const toastConfig: ToastConfig = {
         message: "削除しました。",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+      this.fetch();
+    },
+
+    /**
+     * 営業日編集後イベント
+     */
+    itemEditSucceeded(): void {
+      const toastConfig: ToastConfig = {
+        message: "保存しました。",
         type: "is-success"
       };
       this.$buefy.toast.open(toastConfig);

@@ -53,7 +53,7 @@ export default Vue.extend({
     handleClicDelete(): void {
       const businessDay = formatDateJp(this.businessDay.business_date);
       const message = `
-        <p>${businessDay}を削除しますか？</p>
+        <p>「${businessDay}」を削除しますか？</p>
         <small>誤って削除した場合、再度データを登録してください。</small>`;
       const config: DialogConfig = {
         title: "営業日削除",
@@ -63,7 +63,7 @@ export default Vue.extend({
         cancelText: "キャンセル",
         hasIcon: true,
         iconPack: "fas",
-        icon: "question-circle",
+        icon: "exclamation-circle",
         onConfirm: () => {
           this.delete(this.businessDay.id)
             .then(() => {

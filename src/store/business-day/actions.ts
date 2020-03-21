@@ -21,6 +21,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
   [FETCH]: async ({ commit }) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
     const items: BusinessDay[] = [];
+    // todo: sort > business_date desc
     const $promise = collection.get().then(query => {
       query.forEach(doc => {
         const item: BusinessDay = {
@@ -33,7 +34,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
       commit(SET_ITEMS, items);
     });
 
-    return $promise;
+    return await $promise;
   },
 
   /**
@@ -62,7 +63,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    */
   [DELETE]: async ({ commit }, id: string) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    return collection.doc(id).delete();
+    return await collection.doc(id).delete();
   }
 };
 

@@ -36,7 +36,7 @@ export default Vue.extend({
         this.save(this.businessDay)
           .then(() => {
             this.$emit("close");
-            this.$emit("save-success", "保存しました。");
+            this.$emit("save-success");
           })
           .catch(error => {
             // todo: error handling

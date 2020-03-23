@@ -1,6 +1,10 @@
 import Vue, { PropType } from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { FETCH, GET_RESERVABLE_PEOPLE } from "@/store/constant";
+import {
+  FETCH,
+  GET_RESERVABLE_PEOPLE,
+  GET_RESERVABLE_TIMEZONES
+} from "@/store/constant";
 import { Reservation } from "@/entity/reservation";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
 
@@ -20,13 +24,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("timezone", ["timezones"]),
-    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE])
+    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
+    ...mapGetters("timezone", {
+      timezones: GET_RESERVABLE_TIMEZONES
+    })
   },
   methods: {
-    ...mapActions("timezone", [FETCH])
+    ...mapActions("timezone", {
+      fetchTimezones: FETCH
+    })
   },
   mounted() {
-    this.fetch();
+    this.fetchTimezones();
   }
 });

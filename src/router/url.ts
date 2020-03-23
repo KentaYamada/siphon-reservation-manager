@@ -4,6 +4,8 @@
 
 export const INDEX_URL = "/";
 
+export const RESERVATION_CANCELED_URL = "/reservations/canceled";
+
 export const RESERVATION_DETAIL_URL = "/reservations/detail";
 
 export const RESERVATION_EDIT_URL = "/reservations/edit";

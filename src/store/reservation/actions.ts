@@ -295,8 +295,9 @@ const actions: ActionTree<ReservationState, RootState> = {
    * 予約取消
    * @param id
    */
-  [CANCEL]: ({ commit }, id: number) => {
-    console.log("run delete action");
+  [CANCEL]: async ({ commit }, id: string) => {
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    return await collection.doc(id).delete();
   }
 };
 

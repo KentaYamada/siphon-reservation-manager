@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
-import { DialogConfig } from "buefy/types/components";
+import { DialogConfig, ToastConfig } from "buefy/types/components";
 
 // store
 import { CANCEL, FETCH_BY_ID } from "@/store/constant";
@@ -42,7 +42,21 @@ export default Vue.extend({
         iconPack: "fas",
         icon: "exclamation-circle",
         onConfirm: () => {
-          this.cancel(this.id);
+          this.cancel(this.id)
+            .then(() => {
+              const toastConfig: ToastConfig = {
+                message: "削除しました",
+                type: "is-danger"
+              };
+              this.$buefy.toast.open(toastConfig);
+              this.$router.push({
+                name: "reservation-canceled-message"
+              });
+            })
+            .catch(error => {
+              // todo: error handling
+              console.error(error);
+            });
         }
       };
 

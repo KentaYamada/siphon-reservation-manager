@@ -1,6 +1,12 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
+import { required, email } from "vuelidate/lib/validators";
+
+// store
 import { FETCH_BY_ID, SAVE } from "@/store/constant";
+
+// component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 
 export default Vue.extend({
@@ -10,7 +16,27 @@ export default Vue.extend({
   props: {
     id: {
       required: true,
-      type: Number
+      type: String
+    }
+  },
+  validations: {
+    reservation: {
+      reservation_date: {
+        required
+      },
+      reservation_time: {
+        required
+      },
+      reserver_name: {
+        required
+      },
+      tel: {
+        required
+      },
+      mail: {
+        required,
+        email
+      }
     }
   },
   computed: {
@@ -23,21 +49,33 @@ export default Vue.extend({
      *  予約変更イベント
      */
     onClickSave(): void {
-      this.save(this.reservation);
+      this.$v.$touch();
+
+      if (this.$v.$invalid) {
+        this.isSaving = true;
+        this.save(this.reservation)
+          .then(() => {
+            const toastConfig: ToastConfig = {
+              message: "予約変更しました。",
+              type: "is-success"
+            };
+
+            this.$buefy.toast.open(toastConfig);
+          })
+          .catch(error => {
+            // todo: error handling
+            console.error(error);
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
+      }
     }
   },
   data() {
-    const errors = {
-      // reservation_date: ["予約日時は必須です。", "hoge"],
-      // reservation_timezone: ["時間帯を選択してください。", "hoge"],
-      // reservation_seats: ["座席を指定してください。"],
-      // number_of_reservations: ["予約人数は1名から入力してください。"],
-      // name: ["お名前は必須入力です。"],
-      // tel: ["電話番号は必須入力です。"],
-      // mail: ["メールアドレスは必須入力です。"]
+    return {
+      isSaving: false
     };
-
-    return { errors };
   },
   mounted() {
     this.fetchById(this.id);

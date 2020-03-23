@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig, Route } from "vue-router";
 // Routing URL
 import {
   INDEX_URL,
+  RESERVATION_CANCELED_URL,
   RESERVATION_EDIT_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
@@ -15,6 +16,7 @@ import {
 } from "@/router/url";
 
 // Reservation
+import ReservationCanceledMessage from "@/views/reservations/canceled-message/ReservationCanceledMessage.vue";
 import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
 import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
 import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
@@ -66,6 +68,11 @@ const routes: RouteConfig[] = [
     props: (router: Route) => ({
       id: router.params.id
     })
+  },
+  {
+    path: RESERVATION_CANCELED_URL,
+    name: "reservation-canceled-message",
+    component: ReservationCanceledMessage
   },
   {
     path: MANAGEMENT_RESERVATION_LIST_URL,

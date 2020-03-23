@@ -26,14 +26,14 @@
             <tr>
                 <th>お座席</th>
                 <td>
-                    <reservation-seats 
+                    <reservation-seat-list
                         :reservationSeats="reservation.reservation_seats"
                         v-if="!!reservation"/>
                 </td>
             </tr>
             <tr>
                 <th>メモ</th>
-                <td>卵アレルギーあります orz...</td>
+                <td>{{ reservation.comment }}</td>
             </tr>
         </tbody>
     </table>

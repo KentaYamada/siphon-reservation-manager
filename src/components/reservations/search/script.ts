@@ -1,6 +1,10 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
+
+// entity
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
+
+// store
 import { FETCH } from "@/store/constant";
 
 export default Vue.extend({

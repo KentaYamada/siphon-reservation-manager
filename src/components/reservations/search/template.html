@@ -1,27 +1,53 @@
 <div class="reservation-search-form">
-    <div class="field is-grouped">
-        <div class="control">
-            <b-datepicker v-model="options.reservation_date"
-                          placeholder="予約日"
-                          icon="calendar-alt">
+    <!-- For PC -->
+    <div class="is-hidden-mobile">
+        <div class="field is-grouped">
+            <div class="control">
+                <b-datepicker v-model="options.reservation_date"
+                              placeholder="予約日"
+                              icon="calendar-alt">
+                </b-datepicker>
+            </div>
+            <div class="control">
+                <b-select v-model="options.timezone_id"
+                          placeholder="時間帯を選択してください"
+                          icon="clock">
+                    <option v-for="t in timezones" :key="t.id" :value="t.id">
+                        {{ t.text }}
+                    </option>
+                </b-select>
+            </div>
+            <div class="control">
+                <button type="button" class="button is-info" @click="handleSearch()">
+                    <i class="fas fa-search"></i>
+                    <span>検索</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- For mobile -->
+    <div class="is-hidden-tablet">
+        <div class="field">
+            <label class="label">予約日</label>
+            <b-datepicker v-model="options.reservation_date" icon="calendar-alt">
             </b-datepicker>
         </div>
-        <div class="control">
-            <b-select v-model="options.timezone_id"
-                      placeholder="時間帯を選択してください"
-                      icon="clock">
-                <option v-for="t in timezones"
-                        :key="t.id"
-                        :value="t.id">
+        <div class="field">
+            <label class="label">時間帯</label>
+            <b-select v-model="options.timezone_id" icon="clock" placeholder="時間帯を選択してください">
+                <option v-for="t in timezones" :key="t.id" :value="t.id">
                     {{ t.text }}
                 </option>
             </b-select>
         </div>
-        <div class="control">
-            <button type="button" class="button is-info" @click="handleSearch()">
-                <i class="fas fa-search"></i>
-                <span>検索</span>
-            </button>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button type="button" class="button is-info" @click="handleSearch()">
+                    <i class="fas fa-search"></i>
+                    <span>検索</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

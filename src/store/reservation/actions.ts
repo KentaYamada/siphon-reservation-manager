@@ -27,222 +27,33 @@ const actions: ActionTree<ReservationState, RootState> = {
    * 予約一覧取得
    * @param options
    */
-  [FETCH]: ({ commit }, options: ReservationSearchOption) => {
+  [FETCH]: async ({ commit }, options: ReservationSearchOption) => {
     console.log(options);
-    const reservations: Reservation[] = [
-      {
-        id: 1,
-        reservation_date: "2020-02-01",
-        reservation_time: "11:00 - 12:00",
-        reserver_name: "Test太郎",
-        reservation_seats: [
-          {
-            id: 1,
-            seat_no: 1,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 2,
-            seat_no: 2,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 3,
-            seat_no: 3,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 4,
-            seat_no: 4,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 5,
-            seat_no: 5,
-            is_reserved: false,
-            is_selected: false
-          }
-        ],
-        number_of_reservations: 3,
-        tel: "080-1479-7082",
-        mail: "test@email.com",
-        comment: "This is test"
-      },
-      {
-        id: 2,
-        reservation_date: "2020-02-01",
-        reservation_time: "11:00 - 12:00",
-        reserver_name: "Test太郎",
-        reservation_seats: [
-          {
-            id: 1,
-            seat_no: 1,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 2,
-            seat_no: 2,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 3,
-            seat_no: 3,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 4,
-            seat_no: 4,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 5,
-            seat_no: 5,
-            is_reserved: false,
-            is_selected: false
-          }
-        ],
-        number_of_reservations: 3,
-        tel: "080-1479-7082",
-        mail: "test@email.com",
-        comment: "This is test"
-      },
-      {
-        id: 3,
-        reservation_date: "2020-02-01",
-        reservation_time: "11:00 - 12:00",
-        reserver_name: "Test太郎",
-        reservation_seats: [
-          {
-            id: 1,
-            seat_no: 1,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 2,
-            seat_no: 2,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 3,
-            seat_no: 3,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 4,
-            seat_no: 4,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 5,
-            seat_no: 5,
-            is_reserved: false,
-            is_selected: false
-          }
-        ],
-        number_of_reservations: 3,
-        tel: "080-1479-7082",
-        mail: "test@email.com",
-        comment: "This is test"
-      },
-      {
-        id: 4,
-        reservation_date: "2020-02-01",
-        reservation_time: "11:00 - 12:00",
-        reserver_name: "Test太郎",
-        reservation_seats: [
-          {
-            id: 1,
-            seat_no: 1,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 2,
-            seat_no: 2,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 3,
-            seat_no: 3,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 4,
-            seat_no: 4,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 5,
-            seat_no: 5,
-            is_reserved: false,
-            is_selected: false
-          }
-        ],
-        number_of_reservations: 3,
-        tel: "080-1479-7082",
-        mail: "test@email.com",
-        comment: "This is test"
-      },
-      {
-        id: 5,
-        reservation_date: "2020-02-01",
-        reservation_time: "11:00 - 12:00",
-        reserver_name: "Test太郎",
-        reservation_seats: [
-          {
-            id: 1,
-            seat_no: 1,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 2,
-            seat_no: 2,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 3,
-            seat_no: 3,
-            is_reserved: true,
-            is_selected: false
-          },
-          {
-            id: 4,
-            seat_no: 4,
-            is_reserved: false,
-            is_selected: false
-          },
-          {
-            id: 5,
-            seat_no: 5,
-            is_reserved: false,
-            is_selected: false
-          }
-        ],
-        number_of_reservations: 3,
-        tel: "080-1479-7082",
-        mail: "test@email.com",
-        comment: "This is test"
-      }
-    ];
-    // const reservations: Reservation[] = [];
-    commit(SET_ITEMS, reservations);
+
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    const items: Reservation[] = [];
+    const $promise = collection.get().then(query => {
+      query.forEach(doc => {
+        const data = doc.data();
+        const item: Reservation = {
+          id: doc.id,
+          reservation_date: data.reservation_date.toDate(),
+          reservation_time: data.reservation_time,
+          reserver_name: data.reserver_name,
+          number_of_reservations: data.number_of_reservations,
+          reservation_seats: [],
+          tel: data.tel,
+          mail: data.mail,
+          comment: data.comment
+        };
+
+        items.push(item);
+      });
+
+      commit(SET_ITEMS, items);
+    });
+
+    return await $promise;
   },
 
   /**
@@ -261,6 +72,7 @@ const actions: ActionTree<ReservationState, RootState> = {
           reservation_date: data.reservation_date.toDate(),
           reservation_time: data.reservation_time,
           reserver_name: data.reserver_name,
+          reservation_seats: [],
           number_of_reservations: data.number_of_reservations,
           tel: data.tel,
           mail: data.mail,

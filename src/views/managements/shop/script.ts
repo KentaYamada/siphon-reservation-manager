@@ -72,6 +72,7 @@ export default Vue.extend({
      */
     handleShowBusinessDayForm(): void {
       const businessDay: BusinessDay = {
+        text: "",
         business_date: new Date()
       };
       const config: ModalConfig = {

@@ -24,17 +24,22 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...mapState("businessDay", ["businessDays"]),
     ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES
     })
   },
   methods: {
+    ...mapActions("businessDay", {
+      fetchBusinessDays: FETCH
+    }),
     ...mapActions("timezone", {
       fetchTimezones: FETCH
     })
   },
   mounted() {
     this.fetchTimezones();
+    this.fetchBusinessDays();
   }
 });

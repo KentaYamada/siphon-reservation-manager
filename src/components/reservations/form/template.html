@@ -5,10 +5,16 @@
         </div>
         <div class="field is-grouped">
             <div class="control">
-                <b-datepicker></b-datepicker>
+                <b-select placeholder="予約日">
+                    <option v-for="d in businessDays"
+                            :key="d.id"
+                            :value="d.text">
+                        {{ d.text }}
+                    </option>
+                </b-select>
             </div>
             <div class="control">
-                <b-select placeholder="時間帯を選択してください">
+                <b-select placeholder="予約時間">
                     <option v-for="t in timezones"
                             :key="t.id"
                             :value="t.id">

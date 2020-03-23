@@ -33,7 +33,6 @@ const actions: ActionTree<BusinessDayState, RootState> = {
         };
         items.push(item);
       });
-      console.log(items);
 
       commit(SET_ITEMS, items);
     });

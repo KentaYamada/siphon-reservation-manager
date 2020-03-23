@@ -10,6 +10,8 @@ export const RESERVATION_DETAIL_URL = "/reservations/detail";
 
 export const RESERVATION_EDIT_URL = "/reservations/edit";
 
+export const RESERVATION_EDITED_URL = "/reservations/edited";
+
 export const RESERVATION_ENTRY_URL = "/reservations/entry";
 
 export const RESERVED_MESSAGE_URL = "/reservations/reserved";

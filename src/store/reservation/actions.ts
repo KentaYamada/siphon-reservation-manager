@@ -1,6 +1,13 @@
 import { ActionTree } from "vuex";
+
+// entity
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
+
+// plugin
+import firebase from "@/plugins/firebase";
+
+// store
 import { RootState } from "@/store";
 import { ReservationState } from "@/store/reservation";
 import {
@@ -11,6 +18,9 @@ import {
   SET_ITEM,
   SET_ITEMS
 } from "@/store/constant";
+
+// firestore collection name
+const COLLECTION_NAME = "reservations";
 
 const actions: ActionTree<ReservationState, RootState> = {
   /**
@@ -290,8 +300,20 @@ const actions: ActionTree<ReservationState, RootState> = {
    * 予約登録
    * @param reservation
    */
-  [SAVE]: ({ commit }, reservation: Reservation) => {
+  [SAVE]: async ({ commit }, reservation: Reservation) => {
     console.log(reservation);
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    const requestBody = {
+      reservation_date: reservation.reservation_date,
+      reservation_time: reservation.reservation_time,
+      reserver_name: reservation.reserver_name,
+      number_of_reservations: reservation.number_of_reservations,
+      tel: reservation.tel,
+      mail: reservation.mail,
+      comment: reservation.comment
+    };
+
+    return await collection.add(requestBody);
   },
 
   /**

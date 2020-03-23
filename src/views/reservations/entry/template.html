@@ -9,11 +9,13 @@
                     </h4>
                     <p>Cafe de Gamoyonをご利用いただきありがとうございます。<p>
                     <p>
-                        当店は予約優先制となっております。<br>
+                        当店は予約制となっております。<br>
                         ご予約希望の方は以下の情報をご記入ください。<br>
                     </p>
                     <p>
-                        貸切などのご予約のご相談については、<a href="#">Facebookページ</a>からメッセージにてお問い合わせください。
+                    貸切などのご予約のご相談については、<a href="https://www.facebook.com/gamoyon4204/" class="sns-link" target="_blank"><i class="fab fa-facebook"></i>Facebookページ</a>または
+                    <a href="https://www.instagram.com/cafedegamoyon/?hl=ja" class="sns-link" target="_blank"><i class="fab fa-instagram"></i>インスタグラム</a>
+                        からメッセージにてお問い合わせください。
                     </p>
                 </div>
 
@@ -26,8 +28,10 @@
                 <div class="form-actions">
                     <button type="button"
                             class="button is-info"
+                            :disabled="isSaving"
                             @click="onClickSave()">
-                        予約
+                        <i class="fas fa-calendar-check"></i>
+                        <span>予約</span>
                     </button>
                 </div>
             </div>

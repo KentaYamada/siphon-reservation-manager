@@ -5,7 +5,7 @@ import { ReservationSeat } from "@/entity/reservation-seat";
  */
 export interface Reservation {
   id: number | null;
-  reservation_date: string;
+  reservation_date: Date;
   reservation_time: string;
   reserver_name: string;
   reservation_seats: ReservationSeat[];

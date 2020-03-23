@@ -1,4 +1,8 @@
 .page-header {
+    .sns-link {
+        background-color: #fff;
+        color: #167df0;
+    }
 }
 
 .page-content {
@@ -8,4 +12,8 @@
 .form-actions {
     margin-top: 20px;
     text-align: right;
+
+    span {
+        margin-left: 6px;
+    }
 }

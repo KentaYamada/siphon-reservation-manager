@@ -34,7 +34,7 @@ export default Vue.extend({
   data() {
     return {
       navigations: getNavigations(),
-      isShowNav: true
+      isShowNav: process.env.NODE_ENV === "development"
     };
   }
 });

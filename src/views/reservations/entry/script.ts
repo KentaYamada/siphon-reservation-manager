@@ -41,20 +41,21 @@ export default Vue.extend({
     ...mapMutations("reservation", [INITIALIZE]),
 
     onClickSave(): void {
-      console.log(this.reservation);
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
         this.isSaving = true;
         this.save(this.reservation)
-          .then(() => {
+          .then(doc => {
             const toastConfig: ToastConfig = {
               message: "予約しました。",
               type: "is-success"
             };
             this.$buefy.toast.open(toastConfig);
-
-            // todo: redirect reserved message
+            this.$router.push({
+              name: "reserved-message",
+              params: { id: doc.id }
+            });
           })
           .catch(error => {
             // todo: error handling

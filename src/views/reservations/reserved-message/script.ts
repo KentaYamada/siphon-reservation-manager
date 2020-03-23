@@ -2,12 +2,16 @@ import Vue from "vue";
 import { RESERVATION_DETAIL_URL } from "@/router/url";
 
 export default Vue.extend({
+  props: {
+    id: {
+      required: true,
+      type: String
+    }
+  },
   data() {
-    // todo: get entried id
-    const id = 1;
-
+    const redirectUrl = `${RESERVATION_DETAIL_URL}/${this.id}`;
     return {
-      redirectUrl: `${RESERVATION_DETAIL_URL}/${id}`
+      redirectUrl: redirectUrl
     };
   }
 });

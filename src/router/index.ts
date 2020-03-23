@@ -48,7 +48,7 @@ const routes: RouteConfig[] = [
     name: "reservation-edit",
     component: ReservationEdit,
     props: (router: Route) => ({
-      id: parseInt(router.params.id, 10)
+      id: router.params.id
     })
   },
   {
@@ -56,13 +56,16 @@ const routes: RouteConfig[] = [
     name: "reservation-detail",
     component: ReservationDetail,
     props: (router: Route) => ({
-      id: parseInt(router.params.id, 10)
+      id: router.params.id
     })
   },
   {
     path: RESERVED_MESSAGE_URL,
     name: "reserved-message",
-    component: ReservedMessage
+    component: ReservedMessage,
+    props: (router: Route) => ({
+      id: router.params.id
+    })
   },
   {
     path: MANAGEMENT_RESERVATION_LIST_URL,

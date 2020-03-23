@@ -301,7 +301,6 @@ const actions: ActionTree<ReservationState, RootState> = {
    * @param reservation
    */
   [SAVE]: async ({ commit }, reservation: Reservation) => {
-    console.log(reservation);
     const collection = firebase.firestore().collection(COLLECTION_NAME);
     const requestBody = {
       reservation_date: reservation.reservation_date,

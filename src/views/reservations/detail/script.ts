@@ -1,7 +1,11 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import { DialogConfig } from "buefy/types/components";
+
+// store
 import { CANCEL, FETCH_BY_ID } from "@/store/constant";
+
+// component
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
 
 export default Vue.extend({
@@ -10,7 +14,7 @@ export default Vue.extend({
   },
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     }
   },
@@ -35,8 +39,8 @@ export default Vue.extend({
         confirmText: "取消",
         cancelText: "キャンセル",
         hasIcon: true,
-        // iconPack: 'fas',
-        icon: "fa-question-circle",
+        iconPack: "fas",
+        icon: "exclamation-circle",
         onConfirm: () => {
           this.cancel(this.id);
         }
@@ -49,10 +53,16 @@ export default Vue.extend({
      * 予約変更
      */
     onClickEdit(): void {
-      console.log("redirect to edit view");
+      this.$router.push({
+        name: "reservation-edit",
+        params: { id: this.id }
+      });
     }
   },
   mounted() {
-    this.fetchById(this.id);
+    this.fetchById(this.id).catch(error => {
+      console.error(error);
+      this.$router.push({ name: "notfound" });
+    });
   }
 });

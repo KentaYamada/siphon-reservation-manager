@@ -1,3 +1,5 @@
+import moment from "moment";
+
 /**
  * 予約日時のフォーマット
  *
@@ -6,12 +8,13 @@
  * @returns string
  */
 export const formatReservationDatetime = (
-  reservationDate: string,
+  reservationDate: Date,
   reservationTimezone: string
 ): string => {
   if (!reservationDate || !reservationTimezone) {
     return "";
   }
 
-  return `${reservationDate} ${reservationTimezone}`;
+  const formatDate = moment(reservationDate).format("YYYY年MM月DD日");
+  return `${formatDate} ${reservationTimezone}`;
 };

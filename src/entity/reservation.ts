@@ -1,14 +1,13 @@
-import { ReservationSeat } from "@/entity/reservation-seat";
-
 /**
  * Reservation entity
  */
 export interface Reservation {
-  id: number | null;
-  reservation_date: Date;
-  reservation_time: string;
+  id?: string;
+  reservation_date: Date | null;
+  reservation_start_time: Date | null;
+  reservation_end_time: Date | null;
+  reservation_timezone_id: string;
   reserver_name: string;
-  reservation_seats: ReservationSeat[];
   number_of_reservations: number;
   tel: string;
   mail: string;

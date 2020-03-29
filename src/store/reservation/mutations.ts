@@ -5,7 +5,6 @@ import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationState } from "@/store/reservation";
 import {
   INITIALIZE,
-  INITIALIZE_ALL_RESERVED,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_SEAT,
@@ -19,56 +18,11 @@ const mutations: MutationTree<ReservationState> = {
    */
   [INITIALIZE]: (state: ReservationState): void => {
     state.reservation = {
-      id: null,
-      reservation_date: "",
-      reservation_time: "",
-      reserver_name: "",
-      reservation_seats: [
-        {
-          id: null,
-          seat_no: 1,
-          is_reserved: false
-        },
-        {
-          id: null,
-          seat_no: 2,
-          is_reserved: false
-        },
-        {
-          id: null,
-          seat_no: 3,
-          is_reserved: false
-        },
-        {
-          id: null,
-          seat_no: 4,
-          is_reserved: false
-        },
-        {
-          id: null,
-          seat_no: 5,
-          is_reserved: false
-        }
-      ],
-      number_of_reservations: 0,
-      tel: "",
-      mail: "",
-      comment: ""
-    } as Reservation;
-  },
-
-  /**
-   * 貸切予約データ初期化
-   * @param state
-   */
-  [INITIALIZE_ALL_RESERVED]: (state: ReservationState): void => {
-    // todo: entityの定義を修正
-    state.reservation = {
-      id: null,
       reservation_date: null,
-      reservation_time: null,
+      reservation_start_time: null,
+      reservation_end_time: null,
+      reservation_timezone_id: "",
       reserver_name: "",
-      reservation_seats: [],
       number_of_reservations: 0,
       tel: "",
       mail: "",

@@ -6,7 +6,7 @@ import { required, email } from "vuelidate/lib/validators";
 import ReservationAllReservedForm from "@/components/reservations/form/all-reserved/ReservationAllReservedForm.vue";
 
 // store
-import { INITIALIZE_ALL_RESERVED } from "@/store/constant";
+import { INITIALIZE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -36,7 +36,7 @@ export default Vue.extend({
     ...mapState("reservation", ["reservation"])
   },
   methods: {
-    ...mapMutations("reservation", [INITIALIZE_ALL_RESERVED]),
+    ...mapMutations("reservation", [INITIALIZE]),
 
     onClickSave(): void {
       console.log(this.reservation);
@@ -48,6 +48,6 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.initializeAllReserved();
+    this.initialize();
   }
 });

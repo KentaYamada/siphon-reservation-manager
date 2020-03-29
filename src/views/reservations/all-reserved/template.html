@@ -1,4 +1,4 @@
-<div class="columns is-desktop">
+<div class="columns is-centered is-desktop">
     <div class="column is-half">
         <div class="container">
             <div class="box">
@@ -10,9 +10,15 @@
                 </div>
 
                 <div class="page-content">
+                    <reservation-all-reserved-form/>
                 </div>
 
                 <div class="form-actions">
+                    <button type="button" class="button is-info"
+                            :disabled="isSaving" @click="onClickSave()">
+                        <i class="fas fa-calendar-check"></i>
+                        <span class="button-text">設定</span>
+                    </button>
                 </div>
             </div>
         </div>

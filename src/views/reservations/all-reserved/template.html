@@ -10,7 +10,9 @@
                 </div>
 
                 <div class="page-content">
-                    <reservation-all-reserved-form/>
+                    <reservation-all-reserved-form
+                        :reservation="reservation"
+                        :validations="$v" />
                 </div>
 
                 <div class="form-actions">

@@ -25,6 +25,8 @@ export const CANCEL = "cancel";
 
 export const GET_RESERVABLE_PEOPLE = "getReservablePeople";
 
+export const INITIALIZE_ALL_RESERVED = "initializeAllReserved";
+
 export const SET_RESERVATION_SEAT = "setReservationSeat";
 
 export const SET_RESERVATION_SEATS = "setReservationSeats";

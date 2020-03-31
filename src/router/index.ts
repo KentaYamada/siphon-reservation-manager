@@ -10,6 +10,7 @@ import {
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
   RESERVED_MESSAGE_URL,
+  MANAGEMENT_RESERVATION_ALL_RESERVED,
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
@@ -17,6 +18,7 @@ import {
 } from "@/router/url";
 
 // Reservation
+import ReservationAllReserved from "@/views/reservations/all-reserved/ReservationAllReserved.vue";
 import ReservationCanceledMessage from "@/views/reservations/canceled-message/ReservationCanceledMessage.vue";
 import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
 import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
@@ -88,6 +90,11 @@ const routes: RouteConfig[] = [
     path: MANAGEMENT_RESERVATION_LIST_URL,
     name: "reservation-list",
     component: ReservationList
+  },
+  {
+    path: MANAGEMENT_RESERVATION_ALL_RESERVED,
+    name: "reservation-all-reserved",
+    component: ReservationAllReserved
   },
   {
     path: SHOP_SETTING_URL,

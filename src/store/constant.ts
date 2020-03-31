@@ -5,6 +5,8 @@ export const FETCH = "fetch";
 
 export const FETCH_BY_ID = "fetchById";
 
+export const GET_BY_ID = "getById";
+
 export const INITIALIZE = "initialize";
 
 export const HAS_ITEMS = "hasItems";
@@ -31,8 +33,14 @@ export const SET_RESERVATION_SEAT = "setReservationSeat";
 
 export const SET_RESERVATION_SEATS = "setReservationSeats";
 
+export const SET_RESERVATION_DATE = "setReservationDate";
+
+export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
+
 // Reservation seat actions
 export const GET_RESERVABLE_SEATS = "getReservableSeats";
 
 // Timezone
 export const GET_RESERVABLE_TIMEZONES = "getReservableTimezones";
+
+export const FETCH_ALL_RESERVED_TIMEZONES = "fetchAllReservedTimezones";

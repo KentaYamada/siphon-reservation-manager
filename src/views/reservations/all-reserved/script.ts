@@ -1,12 +1,13 @@
 import Vue from "vue";
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
 import { required, email } from "vuelidate/lib/validators";
 
-// components
+// component
 import ReservationAllReservedForm from "@/components/reservations/form/all-reserved/ReservationAllReservedForm.vue";
 
 // store
-import { INITIALIZE } from "@/store/constant";
+import { INITIALIZE, SAVE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -17,7 +18,7 @@ export default Vue.extend({
       reservation_date: {
         required
       },
-      reservation_time: {
+      reservation_start_time: {
         required
       },
       reserver_name: {
@@ -36,10 +37,33 @@ export default Vue.extend({
     ...mapState("reservation", ["reservation"])
   },
   methods: {
+    ...mapActions("reservation", [SAVE]),
     ...mapMutations("reservation", [INITIALIZE]),
 
     onClickSave(): void {
       console.log(this.reservation);
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.isSaving = true;
+        this.save(this.reservation)
+          .then(() => {
+            const toastConfig: ToastConfig = {
+              message: "設定しました。",
+              type: "is-success"
+            };
+
+            this.$buefy.toast.open(toastConfig);
+            this.$router.push({ name: "reservation-list" });
+          })
+          .catch(error => {
+            // todo: error handling
+            console.error(error);
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
+      }
     }
   },
   data() {

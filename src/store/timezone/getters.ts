@@ -5,26 +5,32 @@ import { Timezone } from "@/entity/timezone";
 
 // plugin
 import _ from "lodash";
-import moment from "moment";
 
 // store
 import { RootState } from "@/store";
-import { GET_RESERVABLE_TIMEZONES, HAS_ITEMS } from "@/store/constant";
+import {
+  GET_BY_ID,
+  GET_RESERVABLE_TIMEZONES,
+  HAS_ITEMS
+} from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
 
 const getters: GetterTree<TimezoneState, RootState> = {
   /**
-   * 予約時間帯データがあるかどうか
+   * 予約時間帯取得
    * @param state
-   * @returns boolean
+   * @returns Timezone
    */
-  [HAS_ITEMS]: (state: TimezoneState): boolean => {
-    return state.timezones.length > 0;
+  [GET_BY_ID]: (state: TimezoneState) => (id: string): Timezone => {
+    return _.find(state.timezones, (item: Timezone) => {
+      return item.id === id;
+    });
   },
 
   /**
    * 予約可能な時間帯取得
-   *
+   * @param state
+   * @returns Timezone[]
    */
   [GET_RESERVABLE_TIMEZONES]: (state: TimezoneState): Timezone[] => {
     const today = new Date();
@@ -34,6 +40,15 @@ const getters: GetterTree<TimezoneState, RootState> = {
     });
 
     return timezones;
+  },
+
+  /**
+   * 予約時間帯データがあるかどうか
+   * @param state
+   * @returns boolean
+   */
+  [HAS_ITEMS]: (state: TimezoneState): boolean => {
+    return state.timezones.length > 0;
   }
 };
 

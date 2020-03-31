@@ -1,15 +1,22 @@
 import _ from "lodash";
 import { MutationTree } from "vuex";
+
+// entity
 import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
-import { ReservationState } from "@/store/reservation";
+import { Timezone } from "@/entity/timezone";
+
+// store
 import {
   INITIALIZE,
+  SET_RESERVATION_DATE,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_SEAT,
-  SET_RESERVATION_SEATS
+  SET_RESERVATION_SEATS,
+  SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
+import { ReservationState } from "@/store/reservation";
 
 const mutations: MutationTree<ReservationState> = {
   /**
@@ -80,6 +87,31 @@ const mutations: MutationTree<ReservationState> = {
   ): void => {
     if (state.reservation) {
       state.reservation.reservation_seats = reservationSeats;
+    }
+  },
+
+  /**
+   * 予約日更新
+   */
+  [SET_RESERVATION_DATE]: (
+    state: ReservationState,
+    businessDay: Date
+  ): void => {
+    if (state.reservation) {
+      state.reservation.reservation_date = businessDay;
+    }
+  },
+
+  /**
+   * 予約時間帯更新
+   */
+  [SET_RESERVATION_TIMEZONE]: (
+    state: ReservationState,
+    timezone: Timezone
+  ): void => {
+    if (state.reservation) {
+      state.reservation.reservation_start_time = timezone.start_time;
+      state.reservation.reservation_end_time = timezone.end_time;
     }
   }
 };

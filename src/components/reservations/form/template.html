@@ -2,8 +2,8 @@
     <form>
         <div class="field">
             <label class="label">予約日</label>
-            <b-select placeholder="予約日" v-model="reservation.reservation_date">
-                <option v-for="d in businessDays" :key="d.id" :value="d.business_date">
+            <b-select placeholder="予約日" v-model="reservation.reservation_date_id">
+                <option v-for="d in businessDays" :key="d.id" :value="d.id">
                     {{ d.text }}
                 </option>
             </b-select>

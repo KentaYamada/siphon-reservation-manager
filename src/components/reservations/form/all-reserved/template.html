@@ -1,8 +1,8 @@
 <form>
     <div class="field">
         <label class="label">予約日</label>
-        <b-select placeholder="予約日" v-model="reservation.reservation_date">
-            <option v-for="d in businessDays" :key="d.id" :value="d.business_date">
+        <b-select placeholder="予約日" @input="onChangeBusinessDay($event)">
+            <option v-for="d in businessDays" :key="d.id" :value="d.id">
                 {{ d.text }}
             </option>
         </b-select>
@@ -15,14 +15,14 @@
     </div>
     <div class="field">
         <label class="label">予約時間</label>
-        <b-select placeholder="予約時間" >
-            <!--<option v-for="t in timezones" :key="t.id" :value="t.id">
+        <b-select placeholder="予約時間" @input="onChangeTimezone($event)">
+            <option v-for="t in timezones" :key="t.id" :value="t.id">
                 {{ t.text }}
-            </option>-->
+            </option>
         </b-select>
-        <div v-if="validations.reservation.reservation_time.$error">
+        <div v-if="validations.reservation.reservation_start_time.$error">
             <small class="help is-danger"
-                   v-if="!validations.reservation.reservation_time.required">
+                   v-if="!validations.reservation.reservation_start_time.required">
                 予約時間を選択してください。
             </small>
         </div>

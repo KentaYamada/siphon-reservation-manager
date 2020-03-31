@@ -12,7 +12,8 @@
                 <div class="page-content">
                     <reservation-all-reserved-form
                         :reservation="reservation"
-                        :validations="$v" />
+                        :validations="$v"
+                        v-if="!!reservation" />
                 </div>
 
                 <div class="form-actions">

@@ -1,0 +1,36 @@
+<div class="navbar is-dark" role="navigation" aria-label="main navigation" v-if="isShow">
+    <div class="navbar-brand">
+        <router-link :to="{ path: '/' }" class="navbar-item">
+            <i class="fas fa-mug-hot"</i>
+            <span>Cafe de Gamoyon</span>
+        </router-link>
+        <a role="button"
+           class="navbar-burger burger"
+           aria-label="menu"
+           data-target="nav-groups"
+           @click="toggleNavigation()">
+            <span aria-hidden="true"></span>
+            <span></span>
+            <span></span>
+        </a>
+    </div>
+
+    <div id="nav-groups" class="navbar-menu" :class="{ 'is-active': showNav }">
+        <div class="navbar-start">
+            <div class="navbar-item has-dropdown is-hoverable" v-for="n in navigations">
+                <a class="navbar-link is-arrowless">
+                    {{ n.name }}
+                </a>
+                <div class="navbar-dropdown" v-if="!!n.children">
+                    <router-link class="navbar-item"
+                                 v-for="c in n.children"
+                                 :key="c.name"
+                                 :to="{ path: c.url }"
+                                 @click.native="onCloseNavigation()">
+                        {{ c.name }}
+                    </router-link>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

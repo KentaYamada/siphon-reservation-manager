@@ -15,7 +15,8 @@ import {
   MANAGEMENT_LOGIN_URL,
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
-  FORBIDDEN_URL
+  FORBIDDEN_URL,
+  NOTFOUND_URL
 } from "@/router/url";
 
 /**
@@ -30,37 +31,65 @@ const getNavigations = (isDevMode: boolean, isAdmin: boolean): Navigation[] => {
     const reservationMenu: Navigation[] = [
       {
         name: "予約",
-        url: "",
+        icon: "fa-calendar-alt",
         children: [
           {
             name: "予約登録",
-            url: INDEX_URL
-          },
-          {
-            name: "予約完了",
-            url: RESERVED_MESSAGE_URL
+            url: INDEX_URL,
+            icon: "fa-calendar-plus"
           },
           {
             name: "予約内容確認",
-            url: RESERVATION_DETAIL_URL
+            url: RESERVATION_DETAIL_URL,
+            icon: "fa-calendar-alt"
           },
           {
             name: "予約変更",
-            url: RESERVATION_EDIT_URL
+            url: RESERVATION_EDIT_URL,
+            icon: "fa-calendar-alt"
+          },
+          {
+            name: "予約完了",
+            url: RESERVED_MESSAGE_URL,
+            icon: "fa-calendar-check"
           },
           {
             name: "予約変更完了",
-            url: RESERVATION_EDITED_URL
+            url: RESERVATION_EDITED_URL,
+            icon: "fa-calendar-check"
           },
           {
             name: "予約キャンセル完了",
-            url: RESERVATION_CANCELED_URL
+            url: RESERVATION_CANCELED_URL,
+            icon: "fa-calendar-times"
+          }
+        ]
+      }
+    ];
+
+    const otherMenu: Navigation[] = [
+      {
+        name: "その他",
+        children: [
+          {
+            name: "ログイン",
+            url: MANAGEMENT_LOGIN_URL,
+            icon: "fa-sign-in-alt"
+          },
+          {
+            name: "Forbidden",
+            url: FORBIDDEN_URL
+          },
+          {
+            name: "NotFound",
+            url: NOTFOUND_URL
           }
         ]
       }
     ];
 
     navigations.push(...reservationMenu);
+    navigations.push(...otherMenu);
   }
 
   if (isAdmin) {
@@ -68,22 +97,22 @@ const getNavigations = (isDevMode: boolean, isAdmin: boolean): Navigation[] => {
       {
         name: "管理",
         url: "",
+        icon: "fa-user-shield",
         children: [
           {
             name: "予約一覧",
-            url: MANAGEMENT_RESERVATION_LIST_URL
+            url: MANAGEMENT_RESERVATION_LIST_URL,
+            icon: "fa-list"
           },
           {
             name: "貸切設定",
-            url: MANAGEMENT_RESERVATION_ALL_RESERVED
+            url: MANAGEMENT_RESERVATION_ALL_RESERVED,
+            icon: "fa-calendar-check"
           },
           {
-            name: "店舗設定",
-            url: SHOP_SETTING_URL
-          },
-          {
-            name: "ログイン",
-            url: MANAGEMENT_LOGIN_URL
+            name: "営業設定",
+            url: SHOP_SETTING_URL,
+            icon: "fa-store"
           }
         ]
       }

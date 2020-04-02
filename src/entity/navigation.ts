@@ -3,6 +3,7 @@
  */
 export interface Navigation {
   name: string;
-  url: string;
+  url?: string;
+  icon?: string;
   children?: Navigation[];
 }

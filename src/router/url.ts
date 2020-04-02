@@ -26,3 +26,5 @@ export const SHOP_SETTING_URL = "/managements/shops";
 export const MANAGEMENT_LOGIN_URL = "/managements/login";
 
 export const FORBIDDEN_URL = "/forbidden";
+
+export const NOTFOUND_URL = "/notfound";

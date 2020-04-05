@@ -2,14 +2,15 @@
     <!-- For PC -->
     <div class="is-hidden-mobile">
         <div class="field is-grouped">
+            <b-select placeholder="予約日"
+                      v-model="options.reservation_date_id"
+                      icon="calendar">
+                <option v-for="d in businessDays" :key="d.id" :value="d.id">
+                    {{ d.text }}
+                </option>
+            </b-select>
             <div class="control">
-                <b-datepicker v-model="options.reservation_date"
-                              placeholder="予約日"
-                              icon="calendar-alt">
-                </b-datepicker>
-            </div>
-            <div class="control">
-                <b-select v-model="options.timezone_id"
+                <b-select v-model="options.reservation_timezone_id"
                           placeholder="時間帯を選択してください"
                           icon="clock">
                     <option v-for="t in timezones" :key="t.id" :value="t.id">
@@ -30,12 +31,17 @@
     <div class="is-hidden-tablet">
         <div class="field">
             <label class="label">予約日</label>
-            <b-datepicker v-model="options.reservation_date" icon="calendar-alt">
-            </b-datepicker>
+            <b-select placeholder="予約日"
+                      v-model="options.reservation_date_id"
+                      icon="calendar">
+                <option v-for="d in businessDays" :key="d.id" :value="d.id">
+                    {{ d.text }}
+                </option>
+            </b-select>
         </div>
         <div class="field">
             <label class="label">時間帯</label>
-            <b-select v-model="options.timezone_id" icon="clock" placeholder="時間帯を選択してください">
+            <b-select v-model="options.reservation_timezone_id" icon="clock" placeholder="時間帯を選択してください">
                 <option v-for="t in timezones" :key="t.id" :value="t.id">
                     {{ t.text }}
                 </option>

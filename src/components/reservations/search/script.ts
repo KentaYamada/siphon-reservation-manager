@@ -10,10 +10,16 @@ import { FETCH } from "@/store/constant";
 export default Vue.extend({
   template: "<reservation-search-form/>",
   computed: {
+    ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"])
   },
   methods: {
-    ...mapActions("timezone", [FETCH]),
+    ...mapActions("businessDay", {
+      fetchBusinessDays: FETCH
+    }),
+    ...mapActions("timezone", {
+      fetchTimezones: FETCH
+    }),
 
     handleSearch(): void {
       this.$emit("update-search-options", this.options);
@@ -21,16 +27,16 @@ export default Vue.extend({
   },
   data() {
     const options: ReservationSearchOption = {
-      reservation_date: new Date(),
-      timezone_id: null
+      reservation_date_id: "",
+      reservation_timezone_id: ""
     };
 
     return {
-      options
+      options: options
     };
   },
   mounted() {
-    // 予約時間帯データ取得
-    this.fetch();
+    this.fetchTimezones();
+    this.fetchBusinessDays();
   }
 });

@@ -1,17 +1,20 @@
-import isMobile from "ismobilejs";
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
+
+// store
 import { FETCH, HAS_ITEMS } from "@/store/constant";
+
+// entity
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
-import ReservationListForPc from "@/components/reservations/list/list-for-pc/ReservationListForPc.vue";
-import ReservationListForMobile from "@/components/reservations/list/list-for-mobile/ReservationListForMobile.vue";
+
+// component
+import ReservationList from "@/components/reservations/list/ReservationList.vue";
 import ReservationSearchForm from "@/components/reservations/search/ReservationSearchForm.vue";
 
 export default Vue.extend({
   components: {
-    ReservationSearchForm,
-    ReservationListForPc,
-    ReservationListForMobile
+    ReservationList,
+    ReservationSearchForm
   },
   computed: {
     ...mapState("reservation", ["reservations"]),
@@ -35,8 +38,7 @@ export default Vue.extend({
     };
 
     return {
-      options: options,
-      isMobilePhone: isMobile().phone
+      options: options
     };
   },
   mounted() {

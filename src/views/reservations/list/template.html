@@ -8,12 +8,7 @@
             <reservation-search-form @update-search-options="updateSearchOptions" />
         </div>
         <div class="divider"></div>
-        <reservation-list-for-mobile
-            v-if="isMobilePhone"
-            :reservations="reservations"
-            :hasItems="hasItems" />
-        <reservation-list-for-pc
-            v-if="!isMobilePhone"
+        <reservation-list
             :reservations="reservations"
             :hasItems="hasItems" />
     </div>

@@ -38,10 +38,12 @@ const actions: ActionTree<ReservationState, RootState> = {
         const item: Reservation = {
           id: doc.id,
           reservation_date: data.reservation_date.toDate(),
-          reservation_time: data.reservation_time,
+          reservation_date_id: data.reservation_date_id,
+          reservation_start_time: data.reservation_start_time.toDate(),
+          reservation_end_time: data.reservation_end_time.toDate(),
+          reservation_time_id: data.reservation_time_id,
           reserver_name: data.reserver_name,
           number_of_reservations: data.number_of_reservations,
-          reservation_seats: [],
           tel: data.tel,
           mail: data.mail,
           comment: data.comment

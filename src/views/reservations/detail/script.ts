@@ -45,7 +45,7 @@ export default Vue.extend({
           this.cancel(this.id)
             .then(() => {
               const toastConfig: ToastConfig = {
-                message: "削除しました",
+                message: "予約キャンセルしました",
                 type: "is-danger"
               };
               this.$buefy.toast.open(toastConfig);
@@ -54,8 +54,17 @@ export default Vue.extend({
               });
             })
             .catch(error => {
-              // todo: error handling
               console.error(error);
+
+              const message = `
+                <p>予約のキャンセルに失敗しました</p>
+                <p>お手数ですが、時間を置いて再度キャンセルを実行してください</p>
+              `;
+              const toastConfig: ToastConfig = {
+                message: message,
+                type: "is-danger"
+              };
+              this.$buefy.toast.open(toastConfig);
             });
         }
       };

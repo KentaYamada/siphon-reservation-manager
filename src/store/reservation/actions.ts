@@ -67,18 +67,22 @@ const actions: ActionTree<ReservationState, RootState> = {
       .get()
       .then(doc => {
         const data = doc.data();
-        const reservation: Reservation = {
-          id: id,
-          reservation_date: data.reservation_date.toDate(),
-          reservation_time: data.reservation_time,
-          reserver_name: data.reserver_name,
-          reservation_seats: [],
-          number_of_reservations: data.number_of_reservations,
-          tel: data.tel,
-          mail: data.mail,
-          comment: data.comment
-        };
-        commit(SET_ITEM, reservation);
+        
+        if (data) {
+          const reservation: Reservation = {
+            id: id,
+            reservation_date: data.reservation_date.toDate(),
+            reservation_start_time: data.reservation_start_time.toDate(),
+            reservation_end_time: data.reservation_end_time.toDate(),
+            reserver_name: data.reserver_name,
+            number_of_reservations: data.number_of_reservations,
+            tel: data.tel,
+            mail: data.mail,
+            comment: data.comment
+          };
+
+          commit(SET_ITEM, reservation);
+        }
       });
 
     return await collection.doc(id);

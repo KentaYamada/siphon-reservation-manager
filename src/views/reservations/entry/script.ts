@@ -18,7 +18,7 @@ export default Vue.extend({
       reservation_date: {
         required
       },
-      reservation_time: {
+      reservation_start_time: {
         required
       },
       reserver_name: {

@@ -90,17 +90,10 @@ const actions: ActionTree<ReservationState, RootState> = {
    */
   [SAVE]: async ({ commit }, reservation: Reservation) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const requestBody = {
-      reservation_date: reservation.reservation_date,
-      reservation_time: reservation.reservation_time,
-      reserver_name: reservation.reserver_name,
-      number_of_reservations: reservation.number_of_reservations,
-      tel: reservation.tel,
-      mail: reservation.mail,
-      comment: reservation.comment
-    };
+    
+    console.log(reservation);
 
-    return await collection.add(requestBody);
+    return await collection.add(reservation);
   },
 
   /**

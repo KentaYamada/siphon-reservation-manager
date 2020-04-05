@@ -22,16 +22,20 @@ export default Vue.extend({
   },
   computed: {
     reservationDateTime(): string {
-      let reservationDate ='';
-      let startTime = '';
-      let endTime = '';
+      let reservationDate = "";
+      let startTime = "";
+      let endTime = "";
 
       if (this.reservation.reservation_date) {
-        reservationDate = moment(this.reservation.reservation_date).format("YYYY年MM月DD日");
+        reservationDate = moment(this.reservation.reservation_date).format(
+          "YYYY年MM月DD日"
+        );
       }
 
       if (this.reservation.reservation_start_time) {
-        startTime = moment(this.reservation.reservation_start_time).format("HH:mm");
+        startTime = moment(this.reservation.reservation_start_time).format(
+          "HH:mm"
+        );
       }
 
       if (this.reservation.reservation_end_time) {
@@ -40,5 +44,5 @@ export default Vue.extend({
 
       return `${reservationDate} ${startTime} - ${endTime}`;
     }
-  },
+  }
 });

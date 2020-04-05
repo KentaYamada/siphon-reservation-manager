@@ -33,8 +33,8 @@ export default Vue.extend({
   },
   data() {
     const options: ReservationSearchOption = {
-      reservation_date: new Date(),
-      timezone_id: null
+      reservation_date_id: "",
+      reservation_time_id: ""
     };
 
     return {

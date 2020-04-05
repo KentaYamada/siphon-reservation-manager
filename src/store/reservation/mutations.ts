@@ -26,8 +26,10 @@ const mutations: MutationTree<ReservationState> = {
   [INITIALIZE]: (state: ReservationState): void => {
     state.reservation = {
       reservation_date: null,
+      reservation_date_id: "",
       reservation_start_time: null,
       reservation_end_time: null,
+      reservation_time_id: "",
       reservation_timezone_id: "",
       reserver_name: "",
       number_of_reservations: 0,

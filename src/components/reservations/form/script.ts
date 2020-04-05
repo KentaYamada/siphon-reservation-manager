@@ -1,9 +1,12 @@
 import Vue, { PropType } from "vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import {
   FETCH,
+  GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
-  GET_RESERVABLE_TIMEZONES
+  GET_RESERVABLE_TIMEZONES,
+  SET_RESERVATION_DATE,
+  SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
 import { Reservation } from "@/entity/reservation";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
@@ -25,9 +28,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
+    ...mapGetters("businessDay", {
+      getBusinessDayById: GET_BY_ID
+    }),
     ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
     ...mapGetters("timezone", {
-      timezones: GET_RESERVABLE_TIMEZONES
+      timezones: GET_RESERVABLE_TIMEZONES,
+      getTimezoneById: GET_BY_ID
     })
   },
   methods: {
@@ -36,7 +43,21 @@ export default Vue.extend({
     }),
     ...mapActions("timezone", {
       fetchTimezones: FETCH
-    })
+    }),
+    ...mapMutations("reservation", [
+      SET_RESERVATION_DATE,
+      SET_RESERVATION_TIMEZONE
+    ]),
+
+    onChangeBusinessDay(selectedId: string): void {
+      const businessDay = this.getBusinessDayById(selectedId);
+      this.setReservationDate(businessDay.business_date);
+    },
+
+    onChangeTimezone(selectedId: string): void {
+      const timezone = this.getTimezoneById(selectedId);
+      this.setReservationTimezone(timezone);
+    }
   },
   mounted() {
     this.fetchTimezones();

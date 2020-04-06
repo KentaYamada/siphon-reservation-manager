@@ -59,7 +59,6 @@ const actions: ActionTree<ReservationState, RootState> = {
           return item.reservation_date_id === options.reservation_date_id;
         });
       }
-      console.log(items);
 
       if (options.reservation_time_id) {
         // 予約時間

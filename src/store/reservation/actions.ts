@@ -5,6 +5,7 @@ import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 
 // plugin
+import _ from "lodash";
 import firebase from "@/plugins/firebase";
 
 // store
@@ -28,30 +29,10 @@ const actions: ActionTree<ReservationState, RootState> = {
    * @param options
    */
   [FETCH]: async ({ commit }, options: ReservationSearchOption) => {
-    console.log(options);
-
-    let collection = firebase.firestore().collection(COLLECTION_NAME);
-
-    if (options.reservation_date_id) {
-      // 予約日
-      collection = collection.where(
-        "reservation_date_id",
-        "==",
-        options.reservation_date_id
-      );
-    }
-
-    if (options.reservation_timezone_id) {
-      // 予約時間
-      collection = collection.where(
-        "reservation_time_id",
-        "==",
-        options.reservation_time_id
-      );
-    }
-
-    const items: Reservation[] = [];
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
     const $promise = collection.get().then(query => {
+      let items: Reservation[] = [];
+
       query.forEach(doc => {
         const data = doc.data();
         const item: Reservation = {
@@ -70,6 +51,25 @@ const actions: ActionTree<ReservationState, RootState> = {
 
         items.push(item);
       });
+
+
+      if (options.reservation_date_id) {
+        // 予約日
+        items = _.filter(items, (item: Reservation) => {
+          return item.reservation_date_id === options.reservation_date_id;
+        });
+      }
+      console.log(items);
+
+      if (options.reservation_time_id) {
+        // 予約時間
+        items = _.filter(items, (item: Reservation) => {
+          return item.reservation_time_id === options.reservation_time_id;
+        });
+      }
+
+      // sort
+      items = _.orderBy(items, ["reservation_date_id", "reservation_timezone_id"], ["desc", "asc"]);
 
       commit(SET_ITEMS, items);
     });

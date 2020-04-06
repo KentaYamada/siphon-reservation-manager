@@ -1,9 +1,7 @@
-import _ from "lodash";
 import { MutationTree } from "vuex";
 
 // entity
 import { Reservation } from "@/entity/reservation";
-import { ReservationSeat } from "@/entity/reservation-seat";
 import { Timezone } from "@/entity/timezone";
 
 // store
@@ -12,8 +10,6 @@ import {
   SET_RESERVATION_DATE,
   SET_ITEM,
   SET_ITEMS,
-  SET_RESERVATION_SEAT,
-  SET_RESERVATION_SEATS,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
 import { ReservationState } from "@/store/reservation";

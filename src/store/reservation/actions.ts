@@ -52,7 +52,6 @@ const actions: ActionTree<ReservationState, RootState> = {
         items.push(item);
       });
 
-
       if (options.reservation_date_id) {
         // 予約日
         items = _.filter(items, (item: Reservation) => {
@@ -68,7 +67,11 @@ const actions: ActionTree<ReservationState, RootState> = {
       }
 
       // sort
-      items = _.orderBy(items, ["reservation_date_id", "reservation_timezone_id"], ["desc", "asc"]);
+      items = _.orderBy(
+        items,
+        ["reservation_date_id", "reservation_timezone_id"],
+        ["desc", "asc"]
+      );
 
       commit(SET_ITEMS, items);
     });

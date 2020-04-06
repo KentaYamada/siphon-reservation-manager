@@ -34,11 +34,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("reservation", ["reservation"])
+    ...mapState("reservation", ["reservation"]),
+    ...mapState("reservationSeat", ["reservationSeats"])
   },
   methods: {
     ...mapActions("reservation", [SAVE]),
-    ...mapMutations("reservation", [INITIALIZE]),
+    ...mapMutations("reservation", {
+      initReservation: INITIALIZE
+    }),
+    ...mapMutations("reservationSeat", {
+      initReservationSeats: INITIALIZE
+    }),
 
     onClickSave(): void {
       this.$v.$touch();
@@ -59,6 +65,7 @@ export default Vue.extend({
           })
           .catch(error => {
             // todo: error handling
+            console.error(error);
           })
           .finally(() => {
             this.isSaving = false;
@@ -72,6 +79,7 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.initialize();
+    this.initReservation();
+    this.initReservationSeats();
   }
 });

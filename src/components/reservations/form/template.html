@@ -37,7 +37,7 @@
             <small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small><br />
             <small>※ テーブルは2名席です。</small>
         </div>
-        <selectable-reservation-seat-list/>
+        <selectable-reservation-seat-list :reservationSeats="reservationSeats" />
         <div class="field">
             <label class="label">予約人数</label>
             <div class="control">

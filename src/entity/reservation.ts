@@ -1,3 +1,5 @@
+import { ReservationSeat } from "@/entity/reservation-seat";
+
 /**
  * Reservation entity
  */

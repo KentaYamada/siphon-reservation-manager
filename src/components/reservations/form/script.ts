@@ -1,5 +1,14 @@
 import Vue, { PropType } from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+
+// component
+import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
+
+// entity
+import { Reservation } from "@/entity/reservation";
+import { ReservationSeat } from "@/entity/reservation-seat";
+
+// store
 import {
   FETCH,
   GET_BY_ID,
@@ -8,8 +17,6 @@ import {
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
-import { Reservation } from "@/entity/reservation";
-import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
 
 export default Vue.extend({
   template: "<reservation-form/>",
@@ -20,6 +27,10 @@ export default Vue.extend({
     reservation: {
       required: true,
       type: Object as PropType<Reservation>
+    },
+    reservationSeats: {
+      required: true,
+      type: Array as PropType<ReservationSeat[]>
     },
     validations: {
       required: true,

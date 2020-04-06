@@ -42,7 +42,7 @@ export default Vue.extend({
     ...mapGetters("businessDay", {
       getBusinessDayById: GET_BY_ID
     }),
-    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
+    ...mapGetters("reservationSeat", [GET_RESERVABLE_PEOPLE]),
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES,
       getTimezoneById: GET_BY_ID

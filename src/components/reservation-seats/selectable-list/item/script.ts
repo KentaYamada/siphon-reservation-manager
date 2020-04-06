@@ -1,7 +1,7 @@
 import Vue, { PropType } from "vue";
 import { mapMutations } from "vuex";
 import { ReservationSeat } from "@/entity/reservation-seat";
-import { SET_RESERVATION_SEAT } from "@/store/constant";
+import { SET_ITEM } from "@/store/constant";
 
 export default Vue.extend({
   template: "<selectable-reservation-seat-list-item/>",
@@ -19,14 +19,13 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapMutations("reservation", [SET_RESERVATION_SEAT]),
+    ...mapMutations("reservationSeat", [SET_ITEM]),
 
     /**
      * 予約座席更新イベント
      */
     onUpdateSeat(): void {
-      console.log(this.reservationSeat);
-      this.setReservationSeat(this.reservationSeat);
+      this.setItem(this.reservationSeat);
     }
   }
 });

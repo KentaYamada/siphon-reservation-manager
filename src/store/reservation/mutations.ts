@@ -58,41 +58,6 @@ const mutations: MutationTree<ReservationState> = {
   },
 
   /**
-   * 予約座席更新
-   * @param state
-   * @param reservationSeat
-   */
-  [SET_RESERVATION_SEAT]: (
-    state: ReservationState,
-    reservationSeat: ReservationSeat
-  ): void => {
-    _.forEach(state.reservation?.reservation_seats, (item: ReservationSeat) => {
-      const updatable =
-        item.seat_no === reservationSeat.seat_no && !item.is_reserved;
-
-      if (updatable) {
-        // 座席選択を更新して処理終了
-        item.is_selected = reservationSeat.is_selected;
-        return false;
-      }
-    });
-  },
-
-  /**
-   * 予約座席更新
-   * @param state
-   * @param reservationSeats
-   */
-  [SET_RESERVATION_SEATS]: (
-    state: ReservationState,
-    reservationSeats: ReservationSeat[]
-  ): void => {
-    if (state.reservation) {
-      state.reservation.reservation_seats = reservationSeats;
-    }
-  },
-
-  /**
    * 予約日更新
    */
   [SET_RESERVATION_DATE]: (

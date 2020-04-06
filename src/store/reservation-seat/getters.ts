@@ -37,7 +37,7 @@ const getters: GetterTree<ReservationSeatState, RootState> = {
         return seat.is_selected;
       }
     ).length;
-    const total = reservedSeats + selectedSeats;
+    const total = reservedSeats * 2 + selectedSeats * 2;
 
     // 1テーブル2名席で計算
     if (MAX_NUMBER_OF_RESERVATIONS <= reservedSeats * 2) {

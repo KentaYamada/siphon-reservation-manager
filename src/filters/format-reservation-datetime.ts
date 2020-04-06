@@ -18,8 +18,8 @@ export const formatReservationDatetime = (
 
   if (hasValue) {
     const formatDate = moment(reservationDate).format("YYYY年MM月DD日");
-    const formatStartTime = moment(startTime).format("HH:MM");
-    const formatendTime = moment(startTime).format("HH:MM");
+    const formatStartTime = moment(startTime).format("HH:mm");
+    const formatendTime = moment(endTime).format("HH:mm");
     formatDateTime = `${formatDate} ${formatStartTime}-${formatendTime}`;
   }
 

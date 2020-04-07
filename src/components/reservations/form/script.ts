@@ -6,7 +6,6 @@ import SelectableReservationSeatList from "@/components/reservation-seats/select
 
 // entity
 import { Reservation } from "@/entity/reservation";
-import { ReservationSeat } from "@/entity/reservation-seat";
 
 // store
 import {
@@ -28,10 +27,6 @@ export default Vue.extend({
       required: true,
       type: Object as PropType<Reservation>
     },
-    reservationSeats: {
-      required: true,
-      type: Array as PropType<ReservationSeat[]>
-    },
     validations: {
       required: true,
       type: Object
@@ -42,7 +37,7 @@ export default Vue.extend({
     ...mapGetters("businessDay", {
       getBusinessDayById: GET_BY_ID
     }),
-    ...mapGetters("reservationSeat", [GET_RESERVABLE_PEOPLE]),
+    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES,
       getTimezoneById: GET_BY_ID
@@ -63,11 +58,13 @@ export default Vue.extend({
     onChangeBusinessDay(selectedId: string): void {
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
+      this.$emit("update-reservation-date", selectedId);
     },
 
     onChangeTimezone(selectedId: string): void {
       const timezone = this.getTimezoneById(selectedId);
       this.setReservationTimezone(timezone);
+      this.$emit("update-reservation-time", selectedId);
     }
   },
   mounted() {

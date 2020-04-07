@@ -2,7 +2,9 @@ import { ActionTree } from "vuex";
 
 // entity
 import { Reservation } from "@/entity/reservation";
+import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
+import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 
 // plugin
 import _ from "lodash";
@@ -15,6 +17,7 @@ import {
   CANCEL,
   FETCH,
   FETCH_BY_ID,
+  FETCH_RESERVATION_SEATS,
   SAVE,
   SET_ITEM,
   SET_ITEMS
@@ -22,6 +25,7 @@ import {
 
 // firestore collection name
 const COLLECTION_NAME = "reservations";
+const RESERVATION_SEATS_COLLECTION = "reservation_seats";
 
 const actions: ActionTree<ReservationState, RootState> = {
   /**
@@ -43,6 +47,7 @@ const actions: ActionTree<ReservationState, RootState> = {
           reservation_end_time: data.reservation_end_time.toDate(),
           reservation_time_id: data.reservation_time_id,
           reserver_name: data.reserver_name,
+          reservation_seats: [],
           number_of_reservations: data.number_of_reservations,
           tel: data.tel,
           mail: data.mail,
@@ -79,6 +84,17 @@ const actions: ActionTree<ReservationState, RootState> = {
     return await $promise;
   },
 
+  [FETCH_RESERVATION_SEATS]: async (
+    { commit },
+    options: ReservationSeatSearchOption
+  ) => {
+    const collection = firebase
+      .firestore()
+      .collection(RESERVATION_SEATS_COLLECTION);
+
+    return await collection;
+  },
+
   /**
    * 予約情報取得
    * @param id
@@ -100,6 +116,7 @@ const actions: ActionTree<ReservationState, RootState> = {
             reservation_end_time: data.reservation_end_time.toDate(),
             reservation_time_id: data.reservation_time_id,
             reserver_name: data.reserver_name,
+            reservation_seats: [],
             number_of_reservations: data.number_of_reservations,
             tel: data.tel,
             mail: data.mail,

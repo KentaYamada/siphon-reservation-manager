@@ -25,9 +25,13 @@ export const SIGN_OUT = "signOut";
 // Reservation actions
 export const CANCEL = "cancel";
 
+export const FETCH_RESERVATION_SEATS = "fetchReservationSeats";
+
 export const GET_RESERVABLE_PEOPLE = "getReservablePeople";
 
 export const INITIALIZE_ALL_RESERVED = "initializeAllReserved";
+
+export const INITIALIZE_RESERVATION_SEATS = "initializeReservationSeats";
 
 export const SET_RESERVATION_SEAT = "setReservationSeat";
 

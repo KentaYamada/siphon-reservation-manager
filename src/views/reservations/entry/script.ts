@@ -12,7 +12,12 @@ import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-op
 import { required, email } from "vuelidate/lib/validators";
 
 // store
-import { FETCH, INITIALIZE, SAVE } from "@/store/constant";
+import {
+  FETCH_RESERVATION_SEATS,
+  INITIALIZE,
+  INITIALIZE_RESERVATION_SEATS,
+  SAVE
+} from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -39,18 +44,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("reservation", ["reservation"]),
-    ...mapState("reservationSeat", ["reservationSeats"])
+    ...mapState("reservation", ["reservation"])
   },
   methods: {
-    ...mapActions("reservation", [SAVE]),
-    ...mapActions("reservationSeat", [FETCH]),
-    ...mapMutations("reservation", {
-      initReservation: INITIALIZE
-    }),
-    ...mapMutations("reservationSeat", {
-      initReservationSeats: INITIALIZE
-    }),
+    ...mapActions("reservation", [SAVE, FETCH_RESERVATION_SEATS]),
+    ...mapMutations("reservation", [INITIALIZE, INITIALIZE_RESERVATION_SEATS]),
 
     onClickSave(): void {
       this.$v.$touch();
@@ -90,8 +88,8 @@ export default Vue.extend({
         this.seatSeachOption.reservation_time_id;
 
       if (hasSearchOption) {
-        this.initReservationSeats();
-        this.fetch(this.seatSeachOption);
+        this.initializeReservationSeats();
+        this.fetchReservationSeats(this.seatSeachOption);
       }
     },
 
@@ -106,8 +104,8 @@ export default Vue.extend({
         this.seatSeachOption.reservation_time_id;
 
       if (hasSearchOption) {
-        this.initReservationSeats();
-        this.fetch(this.seatSeachOption);
+        this.initializeReservationSeats();
+        this.fetchReservationSeats(this.seatSeachOption);
       }
     }
   },
@@ -123,7 +121,7 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.initReservation();
-    this.initReservationSeats();
+    this.initialize();
+    this.initializeReservationSeats();
   }
 });

@@ -1,13 +1,18 @@
 import Vue from "vue";
 import { mapActions, mapMutations, mapState } from "vuex";
 import { ToastConfig } from "buefy/types/components";
-import { required, email } from "vuelidate/lib/validators";
-
-// store
-import { INITIALIZE, SAVE } from "@/store/constant";
 
 // component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
+
+// entity
+import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
+
+// plugin
+import { required, email } from "vuelidate/lib/validators";
+
+// store
+import { FETCH, INITIALIZE, SAVE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -39,6 +44,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("reservation", [SAVE]),
+    ...mapActions("reservationSeat", [FETCH]),
     ...mapMutations("reservation", {
       initReservation: INITIALIZE
     }),
@@ -71,11 +77,49 @@ export default Vue.extend({
             this.isSaving = false;
           });
       }
+    },
+
+    /**
+     * 予約日更新callback
+     * @param selectedId
+     */
+    onUpdateReservationDate(selectedId: string): void {
+      this.seatSeachOption.reservation_date_id = selectedId;
+      const hasSearchOption =
+        this.seatSeachOption.reservation_date_id &&
+        this.seatSeachOption.reservation_time_id;
+
+      if (hasSearchOption) {
+        this.initReservationSeats();
+        this.fetch(this.seatSeachOption);
+      }
+    },
+
+    /**
+     * 予約時間帯更新callback
+     * @param selectedId
+     */
+    onUpdateReservationTime(selectedId: string): void {
+      this.seatSeachOption.reservation_time_id = selectedId;
+      const hasSearchOption =
+        this.seatSeachOption.reservation_date_id &&
+        this.seatSeachOption.reservation_time_id;
+
+      if (hasSearchOption) {
+        this.initReservationSeats();
+        this.fetch(this.seatSeachOption);
+      }
     }
   },
   data() {
+    const seatSeachOption: ReservationSeatSearchOption = {
+      reservation_id: "",
+      reservation_date_id: "",
+      reservation_time_id: ""
+    };
     return {
-      isSaving: false
+      isSaving: false,
+      seatSeachOption: seatSeachOption
     };
   },
   mounted() {

@@ -2,7 +2,7 @@ import { ActionTree } from "vuex";
 
 // entity
 import { ReservationSeat } from "@/entity/reservation-seat";
-import { ReservationSearchOption } from "@/entity/reservation-search-option";
+import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 
 // plugin
 import _ from "lodash";
@@ -21,7 +21,7 @@ const actions: ActionTree<ReservationSeatState, RootState> = {
    * 座席一覧取得
    * @param reservationId
    */
-  [FETCH]: async ({ commit }, options: ReservationSearchOption) => {
+  [FETCH]: async ({ commit }, options: ReservationSeatSearchOption) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
     const $promise = collection.get().then(query => {
       let items: ReservationSeat[] = [];
@@ -44,17 +44,25 @@ const actions: ActionTree<ReservationSeatState, RootState> = {
         items.push(item);
       });
 
-      // if (options.reservation_date_id) {
-      //   items = _.filter(items, (item: ReservationSeat) => {
-      //     return item.reservation_date_id === options.reservation_date_id;
-      //   });
-      // }
+      if (items.length > 0) {
+        if (options.reservation_date_id) {
+          items = _.filter(items, (item: ReservationSeat) => {
+            return item.reservation_date_id === options.reservation_date_id;
+          });
+        }
 
-      items = _.orderBy(items, ["seat_no"], ["asc"]);
+        if (options.reservation_time_id) {
+          items = _.filter(items, (item: ReservationSeat) => {
+            return item.reservation_date_id === options.reservation_date_id;
+          });
+        }
 
-      _.each(items, (item: ReservationSeat) => {
-        commit(SET_ITEM, item);
-      });
+        items = _.orderBy(items, ["seat_no"], ["asc"]);
+
+        _.each(items, (item: ReservationSeat) => {
+          commit(SET_ITEM, item);
+        });
+      }
     });
 
     return await $promise;

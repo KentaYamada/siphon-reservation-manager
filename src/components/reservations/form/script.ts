@@ -13,6 +13,7 @@ import {
   GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
   GET_RESERVABLE_TIMEZONES,
+  HAS_RESERVATION_SEATS,
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
@@ -37,7 +38,10 @@ export default Vue.extend({
     ...mapGetters("businessDay", {
       getBusinessDayById: GET_BY_ID
     }),
-    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
+    ...mapGetters("reservation", [
+      GET_RESERVABLE_PEOPLE,
+      HAS_RESERVATION_SEATS
+    ]),
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES,
       getTimezoneById: GET_BY_ID

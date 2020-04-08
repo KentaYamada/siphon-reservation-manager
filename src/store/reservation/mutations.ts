@@ -12,6 +12,7 @@ import _ from "lodash";
 import {
   INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
+  RESET_RESERVATION_SEATS,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_DATE,
@@ -27,22 +28,6 @@ const mutations: MutationTree<ReservationState> = {
    * @param state
    */
   [INITIALIZE]: (state: ReservationState): void => {
-    // todo: max 5
-    const seats: ReservationSeat[] = _.map([1, 2, 3, 4], (seatNo: number) => {
-      const seat: ReservationSeat = {
-        seat_no: seatNo,
-        is_reserved: false,
-        is_selected: false,
-        reservation_id: "",
-        reservation_date: null,
-        reservation_date_id: "",
-        reservation_start_time: null,
-        reservation_end_time: null,
-        reservation_time_id: ""
-      };
-
-      return seat;
-    });
     const reservation: Reservation = {
       reservation_date: null,
       reservation_date_id: "",
@@ -50,7 +35,7 @@ const mutations: MutationTree<ReservationState> = {
       reservation_end_time: null,
       reservation_time_id: "",
       reserver_name: "",
-      reservation_seats: seats,
+      reservation_seats: [],
       number_of_reservations: 0,
       tel: "",
       mail: "",
@@ -82,6 +67,12 @@ const mutations: MutationTree<ReservationState> = {
       });
 
       state.reservation.reservation_seats = items;
+    }
+  },
+
+  [RESET_RESERVATION_SEATS]: (state: ReservationState): void => {
+    if (state.reservation) {
+      state.reservation.reservation_seats = [];
     }
   },
 

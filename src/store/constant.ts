@@ -29,9 +29,13 @@ export const FETCH_RESERVATION_SEATS = "fetchReservationSeats";
 
 export const GET_RESERVABLE_PEOPLE = "getReservablePeople";
 
+export const HAS_RESERVATION_SEATS = "hasReservationSeats";
+
 export const INITIALIZE_ALL_RESERVED = "initializeAllReserved";
 
 export const INITIALIZE_RESERVATION_SEATS = "initializeReservationSeats";
+
+export const RESET_RESERVATION_SEATS = "resetReservationSeats";
 
 export const SET_RESERVATION_SEAT = "setReservationSeat";
 

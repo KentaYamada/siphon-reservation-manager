@@ -8,7 +8,11 @@ import _ from "lodash";
 
 // store
 import { RootState } from "@/store";
-import { GET_RESERVABLE_PEOPLE, HAS_ITEMS } from "@/store/constant";
+import {
+  GET_RESERVABLE_PEOPLE,
+  HAS_ITEMS,
+  HAS_RESERVATION_SEATS
+} from "@/store/constant";
 import {
   MAX_NUMBER_OF_RESERVATIONS,
   ReservationState
@@ -53,6 +57,14 @@ const getters: GetterTree<ReservationState, RootState> = {
    */
   [HAS_ITEMS]: (state: ReservationState): boolean => {
     return state.reservations.length > 0;
+  },
+
+  [HAS_RESERVATION_SEATS]: (state: ReservationState): boolean => {
+    if (!state.reservation) {
+      return false;
+    }
+
+    return state.reservation.reservation_seats.length > 0;
   }
 };
 

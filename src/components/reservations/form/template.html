@@ -34,12 +34,17 @@
         </div>
         <div class="field">
             <label class="label">空席状況</label>
-            <small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small><br />
-            <small>※ テーブルは2名席です。</small>
+            <div v-if="hasReservationSeats">
+                <small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small>
+                <selectable-reservation-seat-list
+                    :reservationSeats="reservation.reservation_seats"
+                    v-if="!!reservation.reservation_seats"/>
+                <small>※ テーブルは2名席です。</small>
+            </div>
+            <div v-if="!hasReservationSeats">
+                <p>予約日・予約時間を選択してください</p>
+            </div>
         </div>
-        <selectable-reservation-seat-list
-            :reservationSeats="reservation.reservation_seats"
-            v-if="!!reservation.reservation_seats"/>
         <div class="field">
             <label class="label">予約人数</label>
             <div class="control">

@@ -16,6 +16,7 @@ import {
   FETCH_RESERVATION_SEATS,
   INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
+  RESET_RESERVATION_SEATS,
   SAVE
 } from "@/store/constant";
 
@@ -48,7 +49,11 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("reservation", [SAVE, FETCH_RESERVATION_SEATS]),
-    ...mapMutations("reservation", [INITIALIZE, INITIALIZE_RESERVATION_SEATS]),
+    ...mapMutations("reservation", [
+      INITIALIZE,
+      INITIALIZE_RESERVATION_SEATS,
+      RESET_RESERVATION_SEATS
+    ]),
 
     onClickSave(): void {
       this.$v.$touch();
@@ -83,14 +88,7 @@ export default Vue.extend({
      */
     onUpdateReservationDate(selectedId: string): void {
       this.seatSeachOption.reservation_date_id = selectedId;
-      const hasSearchOption =
-        this.seatSeachOption.reservation_date_id &&
-        this.seatSeachOption.reservation_time_id;
-
-      if (hasSearchOption) {
-        this.initializeReservationSeats();
-        this.fetchReservationSeats(this.seatSeachOption);
-      }
+      this.__fetchReservationSeats();
     },
 
     /**
@@ -99,6 +97,13 @@ export default Vue.extend({
      */
     onUpdateReservationTime(selectedId: string): void {
       this.seatSeachOption.reservation_time_id = selectedId;
+      this.__fetchReservationSeats();
+    },
+
+    /**
+     * 予約座席情報取得
+     */
+    __fetchReservationSeats(): void {
       const hasSearchOption =
         this.seatSeachOption.reservation_date_id &&
         this.seatSeachOption.reservation_time_id;
@@ -106,6 +111,8 @@ export default Vue.extend({
       if (hasSearchOption) {
         this.initializeReservationSeats();
         this.fetchReservationSeats(this.seatSeachOption);
+      } else {
+        this.resetReservationSeats();
       }
     }
   },
@@ -122,6 +129,5 @@ export default Vue.extend({
   },
   mounted() {
     this.initialize();
-    this.initializeReservationSeats();
   }
 });

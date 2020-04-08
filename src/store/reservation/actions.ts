@@ -20,7 +20,8 @@ import {
   FETCH_RESERVATION_SEATS,
   SAVE,
   SET_ITEM,
-  SET_ITEMS
+  SET_ITEMS,
+  SET_RESERVATION_SEATS
 } from "@/store/constant";
 
 // firestore collection name
@@ -91,8 +92,51 @@ const actions: ActionTree<ReservationState, RootState> = {
     const collection = firebase
       .firestore()
       .collection(RESERVATION_SEATS_COLLECTION);
+    const $promise = collection.get().then(query => {
+      let items: ReservationSeat[] = [];
 
-    return await collection;
+      query.forEach(doc => {
+        const data = doc.data();
+        const item: ReservationSeat = {
+          id: doc.id,
+          seat_no: data.seat_no,
+          is_reserved: true,
+          is_selected: false,
+          reservation_id: data.reservation_id,
+          reservation_date: data.reservation_date.toDate(),
+          reservation_date_id: data.reservation_date_id,
+          reservation_start_time: data.reservation_start_time.toDate(),
+          reservation_end_time: data.reservation_end_time.toDate(),
+          reservation_time_id: data.reservation_time_id
+        };
+
+        items.push(item);
+
+        if (options.reservation_id) {
+          items = _.filter(items, (item: ReservationSeat) => {
+            return item.reservation_id === options.reservation_id;
+          });
+        }
+
+        if (options.reservation_date_id) {
+          items = _.filter(items, (item: ReservationSeat) => {
+            return item.reservation_date_id === options.reservation_date_id;
+          });
+        }
+
+        if (options.reservation_time_id) {
+          items = _.filter(items, (item: ReservationSeat) => {
+            return item.reservation_time_id === options.reservation_time_id;
+          });
+        }
+
+        items = _.orderBy(items, ["seat_no"], ["asc"]);
+
+        commit(SET_RESERVATION_SEATS, items);
+      });
+    });
+
+    return await $promise;
   },
 
   /**

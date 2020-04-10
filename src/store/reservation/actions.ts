@@ -179,18 +179,79 @@ const actions: ActionTree<ReservationState, RootState> = {
    * @param reservation
    */
   [SAVE]: async ({ commit }, reservation: Reservation) => {
-    console.log(reservation);
+    const db = firebase.firestore();
+    const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
+    const selectedSeatNo: number[] = [];
 
-    let promise$ = null;
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
+      if (seat.is_selected) {
+        selectedSeatNo.push(seat.seat_no);
+      }
+    });
 
-    if (reservation.id) {
-      promise$ = collection.doc(reservation.id).set(reservation);
-    } else {
-      promise$ = collection.add(reservation);
-    }
+    const query = reservationSeats
+      .where("reservation_date", "==", reservation.reservation_date)
+      .where("reservation_time_id", "==", reservation.reservation_time_id)
+      .where("is_reserved", "==", true)
+      .where("seat_no", "array-contains", selectedSeatNo);
+    
+    return await query.get().then(querySnapshot => {
+      if (!querySnapshot.empty) {
+        return Promise.reject();
+      }
 
-    return await promise$;
+      const $transaction = db.runTransaction(async transaction => {
+        const reservations = db.collection(COLLECTION_NAME);
+        const reservationRef = reservation.id ? reservations.doc(reservation.id) : reservations.doc();
+
+        return await transaction.get(reservationRef).then((doc) => {
+          const reservationData = {
+            reservation_date: reservation.reservation_date,
+            reservation_date_id: reservation.reservation_date_id,
+            reservation_start_time: reservation.reservation_start_time,
+            reservation_end_time: reservation.reservation_end_time,
+            reservation_time_id: reservation.reservation_time_id,
+            reserver_name: reservation.reserver_name,
+            number_of_reservations: reservation.number_of_reservations,
+            tel: reservation.tel,
+            mail: reservation.mail,
+            comment: reservation.comment
+          };
+
+          if (doc.exists) {
+            transaction.update(reservationRef, reservationData);
+          } else {
+            transaction.set(reservationRef, reservationData);
+          }
+
+          const query = reservationSeats
+            .where("reservation_date", "==", reservation.reservation_date)
+            .where("reservation_time_id", "==", reservation.reservation_time_id);
+
+          return query.get().then(querySnapshot => {
+            querySnapshot.forEach(doc => transaction.delete(doc.ref));
+
+            _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
+              const seatRef = reservationSeats.doc();
+              const seatData = {
+                seat_no: seat.seat_no,
+                is_reserved: seat.is_reserved,
+                reservation_id: seat.reservation_id ? seat.reservation_id : reservationRef.id,
+                reservation_date: reservation.reservation_date,
+                reservation_date_id: reservation.reservation_date_id,
+                reservation_start_time: reservation.reservation_start_time,
+                reservation_end_time: reservation.reservation_end_time,
+                reservation_time_id: reservation.reservation_time_id
+              };
+
+              transaction.set(seatRef, seatData);  
+            });
+          });
+        });
+      });
+
+      return $transaction;
+    });
   },
 
   /**

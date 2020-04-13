@@ -111,29 +111,31 @@ const actions: ActionTree<ReservationState, RootState> = {
         };
 
         items.push(item);
-
-        if (options.reservation_id) {
-          items = _.filter(items, (item: ReservationSeat) => {
-            return item.reservation_id === options.reservation_id;
-          });
-        }
-
-        if (options.reservation_date_id) {
-          items = _.filter(items, (item: ReservationSeat) => {
-            return item.reservation_date_id === options.reservation_date_id;
-          });
-        }
-
-        if (options.reservation_time_id) {
-          items = _.filter(items, (item: ReservationSeat) => {
-            return item.reservation_time_id === options.reservation_time_id;
-          });
-        }
-
-        items = _.orderBy(items, ["seat_no"], ["asc"]);
-
-        commit(SET_RESERVATION_SEATS, items);
       });
+
+      if (options.reservation_id) {
+        items = _.filter(items, (item: ReservationSeat) => {
+          return item.reservation_id === options.reservation_id;
+        });
+      }
+
+      if (options.reservation_date_id) {
+        items = _.filter(items, (item: ReservationSeat) => {
+          return item.reservation_date_id === options.reservation_date_id;
+        });
+      }
+
+      if (options.reservation_time_id) {
+        items = _.filter(items, (item: ReservationSeat) => {
+          return item.reservation_time_id === options.reservation_time_id;
+        });
+      }
+
+      items = _.orderBy(items, ["seat_no"], ["asc"]);
+
+      if (items.length > 0) {
+        commit(SET_RESERVATION_SEATS, items);
+      }
     });
 
     return await $promise;

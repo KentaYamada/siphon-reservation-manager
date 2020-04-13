@@ -9,6 +9,7 @@ import ReservationForm from "@/components/reservations/form/ReservationForm.vue"
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 
 // plugin
+import _ from "lodash";
 import { required, email } from "vuelidate/lib/validators";
 
 // store
@@ -105,8 +106,8 @@ export default Vue.extend({
      */
     __fetchReservationSeats(): void {
       const hasSearchOption =
-        this.seatSeachOption.reservation_date_id &&
-        this.seatSeachOption.reservation_time_id;
+        !_.isEmpty(this.seatSeachOption.reservation_date_id) &&
+        !_.isEmpty(this.seatSeachOption.reservation_time_id);
 
       if (hasSearchOption) {
         this.initializeReservationSeats();

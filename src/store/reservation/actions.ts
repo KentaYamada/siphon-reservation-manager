@@ -146,34 +146,71 @@ const actions: ActionTree<ReservationState, RootState> = {
    * @param id
    */
   [FETCH_BY_ID]: async ({ commit }, id: string) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    collection
+    if (!id) {
+      return Promise.reject("id cannot be empty");
+    }
+
+    const db = firebase.firestore();
+    const reservations = db.collection(COLLECTION_NAME);
+
+    return await reservations
       .doc(id)
       .get()
       .then(doc => {
         const data = doc.data();
 
-        if (data) {
-          const reservation: Reservation = {
-            id: id,
-            reservation_date: data.reservation_date.toDate(),
-            reservation_date_id: data.reservation_date_id,
-            reservation_start_time: data.reservation_start_time.toDate(),
-            reservation_end_time: data.reservation_end_time.toDate(),
-            reservation_time_id: data.reservation_time_id,
-            reserver_name: data.reserver_name,
-            reservation_seats: [],
-            number_of_reservations: data.number_of_reservations,
-            tel: data.tel,
-            mail: data.mail,
-            comment: data.comment
-          };
-
-          commit(SET_ITEM, reservation);
+        if (!data) {
+          return Promise.reject("Failed reservation.");
         }
-      });
 
-    return await collection.doc(id);
+        const reservation: Reservation = {
+          id: id,
+          reservation_date: data.reservation_date.toDate(),
+          reservation_date_id: data.reservation_date_id,
+          reservation_start_time: data.reservation_start_time.toDate(),
+          reservation_end_time: data.reservation_end_time.toDate(),
+          reservation_time_id: data.reservation_time_id,
+          reserver_name: data.reserver_name,
+          reservation_seats: [],
+          number_of_reservations: data.number_of_reservations,
+          tel: data.tel,
+          mail: data.mail,
+          comment: data.comment
+        };
+
+        commit(SET_ITEM, reservation);
+
+        const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
+        const query = reservationSeats
+          .where("reservation_date_id", "==", data.reservation_date_id)
+          .where("reservation_time_id", "==", data.reservation_time_id);
+
+        return query.get().then(querySnapshot => {
+          const items: ReservationSeat[] = [];
+
+          querySnapshot.forEach(doc => {
+            const data = doc.data();
+            const isMyReservation = id === data.reservation_id;
+            const isSelected = isMyReservation && data.is_reserved;
+            const item: ReservationSeat = {
+              id: doc.id,
+              seat_no: data.seat_no,
+              is_reserved: data.is_reserved,
+              is_selected: isSelected,
+              reservation_id: data.reservation_id,
+              reservation_date: data.reservation_date.toDate(),
+              reservation_date_id: data.reservation_date_id,
+              reservation_start_time: data.reservation_start_time,
+              reservation_end_time: data.reservation_end_time,
+              reservation_time_id: data.reservation_time_id
+            };
+
+            items.push(item);
+          });
+
+          commit(SET_RESERVATION_SEATS, items);
+        });
+      });
   },
 
   /**

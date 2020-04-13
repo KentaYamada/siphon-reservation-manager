@@ -100,7 +100,7 @@ const actions: ActionTree<ReservationState, RootState> = {
         const item: ReservationSeat = {
           id: doc.id,
           seat_no: data.seat_no,
-          is_reserved: true,
+          is_reserved: data.is_reserved,
           is_selected: false,
           reservation_id: data.reservation_id,
           reservation_date: data.reservation_date.toDate(),
@@ -194,7 +194,7 @@ const actions: ActionTree<ReservationState, RootState> = {
       .where("reservation_time_id", "==", reservation.reservation_time_id)
       .where("is_reserved", "==", true)
       .where("seat_no", "array-contains", selectedSeatNo);
-    
+
     return await query.get().then(querySnapshot => {
       if (!querySnapshot.empty) {
         return Promise.reject();
@@ -202,9 +202,11 @@ const actions: ActionTree<ReservationState, RootState> = {
 
       const $transaction = db.runTransaction(async transaction => {
         const reservations = db.collection(COLLECTION_NAME);
-        const reservationRef = reservation.id ? reservations.doc(reservation.id) : reservations.doc();
+        const reservationRef = reservation.id
+          ? reservations.doc(reservation.id)
+          : reservations.doc();
 
-        return await transaction.get(reservationRef).then((doc) => {
+        return await transaction.get(reservationRef).then(doc => {
           const reservationData = {
             reservation_date: reservation.reservation_date,
             reservation_date_id: reservation.reservation_date_id,
@@ -226,17 +228,21 @@ const actions: ActionTree<ReservationState, RootState> = {
 
           const query = reservationSeats
             .where("reservation_date", "==", reservation.reservation_date)
-            .where("reservation_time_id", "==", reservation.reservation_time_id);
+            .where(
+              "reservation_time_id",
+              "==",
+              reservation.reservation_time_id
+            );
 
           return query.get().then(querySnapshot => {
             querySnapshot.forEach(doc => transaction.delete(doc.ref));
 
             _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
               const seatRef = reservationSeats.doc();
+              //todo: 予約済と新しく追加する予約のデータ判定
               const seatData = {
                 seat_no: seat.seat_no,
                 is_reserved: seat.is_reserved,
-                reservation_id: seat.reservation_id ? seat.reservation_id : reservationRef.id,
                 reservation_date: reservation.reservation_date,
                 reservation_date_id: reservation.reservation_date_id,
                 reservation_start_time: reservation.reservation_start_time,
@@ -244,8 +250,22 @@ const actions: ActionTree<ReservationState, RootState> = {
                 reservation_time_id: reservation.reservation_time_id
               };
 
-              transaction.set(seatRef, seatData);  
+              if (seat.is_reserved) {
+                seatData.is_reserved = seat.is_reserved;
+                seatData.reservation_id = seat.reservation_id;
+              } else {
+                if (seat.is_selected) {
+                  seatData.reservation_id = seat.reservation_id
+                    ? seat.reservation_id
+                    : reservationRef.id;
+                  seatData.is_reserved = true;
+                }
+              }
+
+              transaction.set(seatRef, seatData);
             });
+
+            return reservationRef.id;
           });
         });
       });
@@ -259,8 +279,31 @@ const actions: ActionTree<ReservationState, RootState> = {
    * @param id
    */
   [CANCEL]: async ({ commit }, id: string) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    return await collection.doc(id).delete();
+    if (!id) {
+      return Promise.reject("not found");
+    }
+    const db = firebase.firestore();
+    const $transaction = db.runTransaction(async transaction => {
+      const reservationRef = db.collection(COLLECTION_NAME).doc(id);
+
+      return await transaction.get(reservationRef).then(doc => {
+        if (!doc.exists) {
+          return Promise.reject("reservation not found");
+        }
+
+        const query = db
+          .collection(RESERVATION_SEATS_COLLECTION)
+          .where("reservation_id", "==", id);
+
+        query.get().then(querySnapshot => {
+          querySnapshot.forEach(doc => transaction.delete(doc.ref));
+        });
+
+        transaction.delete(reservationRef);
+      });
+    });
+
+    return await $transaction;
   }
 };
 

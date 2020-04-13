@@ -61,7 +61,7 @@ export default Vue.extend({
       if (!this.$v.$invalid) {
         this.isSaving = true;
         this.save(this.reservation)
-          .then(doc => {
+          .then(newId => {
             const toastConfig: ToastConfig = {
               message: "予約しました。",
               type: "is-success"
@@ -69,7 +69,7 @@ export default Vue.extend({
             this.$buefy.toast.open(toastConfig);
             this.$router.push({
               name: "reserved-message",
-              params: { id: doc.id }
+              params: { id: newId }
             });
           })
           .catch(error => {

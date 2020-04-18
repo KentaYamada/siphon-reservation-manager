@@ -2,17 +2,13 @@
     <table class="table is-fullwidth">
         <tbody>
             <tr>
-                <th>お名前</th>
-                <td>{{ reservation.reserver_name }}</td>
-            </tr>
-            <tr>
-                <th>ご予約日時</th>
+                <th>予約日時</th>
                 <td>
                     {{ reservationDateTime }}
                 </td>
             </tr>
             <tr>
-                <th>ご予約数</th>
+                <th>予約人数</th>
                 <td>{{ reservation.number_of_reservations }}名</td>
             </tr>
             <tr>
@@ -24,8 +20,20 @@
                 <td>{{ reservation.mail }}</td>
             </tr>
             <tr>
-                <th>お座席</th>
+                <th>座席</th>
                 <td>
+                    <div class="reservation-status">
+                        <p class="status-title">座席表の見方</p>
+                        <small>
+                            <span class="status"></span>空席
+                        </small>
+                        <small>
+                            <span class="status selected"></span>予約中
+                        </small>
+                        <small>
+                            <span class="status reserved"></span>予約不可
+                        </small>
+                    </div>
                     <reservation-seat-list
                         :reservationSeats="reservation.reservation_seats"
                         v-if="!!reservation"/>

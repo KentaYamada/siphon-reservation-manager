@@ -1,11 +1,21 @@
-import _ from "lodash";
 import { GetterTree } from "vuex";
+
+// entity
 import { ReservationSeat } from "@/entity/reservation-seat";
+
+// plugin
+import _ from "lodash";
+
+// store
 import { RootState } from "@/store";
-import { GET_RESERVABLE_PEOPLE, HAS_ITEMS } from "@/store/constant";
 import {
-  ReservationState,
-  MAX_NUMBER_OF_RESERVATIONS
+  GET_RESERVABLE_PEOPLE,
+  HAS_ITEMS,
+  HAS_RESERVATION_SEATS
+} from "@/store/constant";
+import {
+  MAX_NUMBER_OF_RESERVATIONS,
+  ReservationState
 } from "@/store/reservation";
 
 const getters: GetterTree<ReservationState, RootState> = {
@@ -15,21 +25,21 @@ const getters: GetterTree<ReservationState, RootState> = {
    * @returns number
    */
   [GET_RESERVABLE_PEOPLE]: (state: ReservationState): number => {
-    // 予約済・座席選択データ取得
-    const seats = state.reservation?.reservation_seats;
+    if (!state.reservation) {
+      return 0;
+    }
+
+    const seats = state.reservation.reservation_seats;
     const reservedSeats = _.filter(seats, (seat: ReservationSeat) => {
       return seat.is_reserved;
-    });
+    }).length;
     const selectedSeats = _.filter(seats, (seat: ReservationSeat) => {
       return seat.is_selected;
-    });
+    }).length;
+    const total = reservedSeats * 2 + selectedSeats * 2;
 
-    // 1テーブル2名で計算
-    const reservePeople = selectedSeats.length * 2;
-    const reservedPeople = reservedSeats.length * 2;
-    const total = reservedPeople + reservePeople;
-
-    if (MAX_NUMBER_OF_RESERVATIONS <= reservedPeople) {
+    // 1テーブル2名席で計算
+    if (MAX_NUMBER_OF_RESERVATIONS <= reservedSeats * 2) {
       return 0;
     }
 
@@ -47,6 +57,14 @@ const getters: GetterTree<ReservationState, RootState> = {
    */
   [HAS_ITEMS]: (state: ReservationState): boolean => {
     return state.reservations.length > 0;
+  },
+
+  [HAS_RESERVATION_SEATS]: (state: ReservationState): boolean => {
+    if (!state.reservation) {
+      return false;
+    }
+
+    return state.reservation.reservation_seats.length > 0;
   }
 };
 

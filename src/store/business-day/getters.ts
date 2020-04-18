@@ -17,7 +17,9 @@ const getters: GetterTree<BusinessDayState, RootState> = {
    * @param state
    * @returns BusinessDay
    */
-  [GET_BY_ID]: (state: BusinessDayState) => (id: string): BusinessDay => {
+  [GET_BY_ID]: (state: BusinessDayState) => (
+    id: string
+  ): BusinessDay | undefined => {
     return _.find(state.businessDays, (item: BusinessDay) => {
       return item.id === id;
     });

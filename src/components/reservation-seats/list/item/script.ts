@@ -10,8 +10,19 @@ export default Vue.extend({
     }
   },
   data() {
+    let selectedColor = "";
+
+    if (this.reservationSeat.is_selected) {
+      selectedColor = "is-selected";
+    } else {
+      if (this.reservationSeat.is_reserved) {
+        selectedColor = "is-reserved";
+      }
+    }
+
     return {
-      seatPositionCss: `no${this.reservationSeat.seat_no}`
+      seatPositionCss: `no${this.reservationSeat.seat_no}`,
+      seatColorCss: selectedColor
     };
   }
 });

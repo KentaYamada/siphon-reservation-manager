@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+      function isAuth() {
+          return true;
+      }
+
+      function hasId(id) {
+          return id != null;
+      }
+
+      match /business_days/{document} {
+          allow list, create: if isAuth();
+      }
+
+      match /business_days/{businessDayId} {
+          allow update, delete: if isAuth() && hasId(businessDayId);
+      }
+
+      match /reservations/{document} {
+          allow list: if isAuth();
+      }
+
+      match /reservations {
+          allow create: if true;
+      }
+
+      match /reservations/{reservationId} {
+        allow get: if hasId(reservationId);
+      }
+
+      match /reservations/{reservationId} {
+          allow update, delete: if hasId(reservationId);
+      }
+
+      match /reservation_seats/{document} {
+          allow list, create, delete: if true;
+      }
+
+      match /timezones/{document} {
+          allow list, create: if isAuth();
+      }
+
+      match /timezones/{timezoneId} {
+          allow update, delete: if isAuth() && hasId(timezoneId);
+      }
+  }
+}

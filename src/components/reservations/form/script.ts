@@ -1,12 +1,22 @@
 import Vue, { PropType } from "vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+
+// component
+import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
+
+// entity
+import { Reservation } from "@/entity/reservation";
+
+// store
 import {
   FETCH,
+  GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
-  GET_RESERVABLE_TIMEZONES
+  GET_RESERVABLE_TIMEZONES,
+  HAS_RESERVATION_SEATS,
+  SET_RESERVATION_DATE,
+  SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
-import { Reservation } from "@/entity/reservation";
-import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
 
 export default Vue.extend({
   template: "<reservation-form/>",
@@ -25,9 +35,16 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
-    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE]),
+    ...mapGetters("businessDay", {
+      getBusinessDayById: GET_BY_ID
+    }),
+    ...mapGetters("reservation", [
+      GET_RESERVABLE_PEOPLE,
+      HAS_RESERVATION_SEATS
+    ]),
     ...mapGetters("timezone", {
-      timezones: GET_RESERVABLE_TIMEZONES
+      timezones: GET_RESERVABLE_TIMEZONES,
+      getTimezoneById: GET_BY_ID
     })
   },
   methods: {
@@ -36,7 +53,23 @@ export default Vue.extend({
     }),
     ...mapActions("timezone", {
       fetchTimezones: FETCH
-    })
+    }),
+    ...mapMutations("reservation", [
+      SET_RESERVATION_DATE,
+      SET_RESERVATION_TIMEZONE
+    ]),
+
+    onChangeBusinessDay(selectedId: string): void {
+      const businessDay = this.getBusinessDayById(selectedId);
+      this.setReservationDate(businessDay.business_date);
+      this.$emit("update-reservation-date", selectedId);
+    },
+
+    onChangeTimezone(selectedId: string): void {
+      const timezone = this.getTimezoneById(selectedId);
+      this.setReservationTimezone(timezone);
+      this.$emit("update-reservation-time", selectedId);
+    }
   },
   mounted() {
     this.fetchTimezones();

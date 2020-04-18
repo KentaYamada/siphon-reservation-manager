@@ -25,7 +25,6 @@ export default Vue.extend({
      * 予約座席更新イベント
      */
     onUpdateSeat(): void {
-      console.log(this.reservationSeat);
       this.setReservationSeat(this.reservationSeat);
     }
   }

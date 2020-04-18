@@ -12,6 +12,9 @@ $vertical-table-width: 30px;
     &.is-reserved {
         background-color: #bbb;
     }
+    &.is-selected {
+        background-color: red;
+    }
     &.no1 {
         left: 40px;
     }

@@ -1,8 +1,8 @@
 <div class="navbar is-dark" role="navigation" aria-label="main navigation" v-if="isShow">
     <div class="navbar-brand">
         <router-link :to="{ path: '/' }" class="navbar-item">
-            <i class="fas fa-mug-hot"</i>
-            <span>Cafe de Gamoyon</span>
+            <i class="fas fa-mug-hot"></i>
+            <span class="brand-name">Cafe de Gamoyon</span>
         </router-link>
         <a role="button"
            class="navbar-burger burger"
@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <div id="nav-groups" class="navbar-menu" :class="{ 'is-active': showNav }">
+    <div id="nav-groups" class="navbar-menu" :class="{ 'is-active': isShowNav }">
         <div class="navbar-start">
             <div class="navbar-item has-dropdown is-hoverable" v-for="n in navigations">
                 <a class="navbar-link is-arrowless">

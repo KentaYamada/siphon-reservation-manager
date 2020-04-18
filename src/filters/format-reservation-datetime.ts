@@ -4,17 +4,24 @@ import moment from "moment";
  * 予約日時のフォーマット
  *
  * @param reservationDate
- * @param reservationTimezone
+ * @param startTime
+ * @param endTime
  * @returns string
  */
 export const formatReservationDatetime = (
   reservationDate: Date,
-  reservationTimezone: string
+  startTime: Date,
+  endTime: Date
 ): string => {
-  if (!reservationDate || !reservationTimezone) {
-    return "";
+  const hasValue = reservationDate && startTime && endTime;
+  let formatDateTime = "";
+
+  if (hasValue) {
+    const formatDate = moment(reservationDate).format("YYYY年MM月DD日");
+    const formatStartTime = moment(startTime).format("HH:mm");
+    const formatendTime = moment(endTime).format("HH:mm");
+    formatDateTime = `${formatDate} ${formatStartTime}-${formatendTime}`;
   }
 
-  const formatDate = moment(reservationDate).format("YYYY年MM月DD日");
-  return `${formatDate} ${reservationTimezone}`;
+  return formatDateTime;
 };

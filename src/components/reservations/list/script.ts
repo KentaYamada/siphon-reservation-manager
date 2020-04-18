@@ -1,10 +1,14 @@
 import Vue, { PropType } from "vue";
+
+// entity
 import { Reservation } from "@/entity/reservation";
+
+// filter
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 import { formatReserver } from "@/filters/format-reserver";
 
 export default Vue.extend({
-  template: "<reservation-list-for-pc/>",
+  template: "<reservation-list/>",
   props: {
     reservations: {
       required: true,

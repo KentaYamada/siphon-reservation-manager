@@ -1,3 +1,4 @@
 <div class="reservation-seat"
-     :class="[seatPositionCss, { 'is-reserved': reservationSeat.is_reserved }]">
+     :class="[seatPositionCss, seatColorCss]">
+    <span>{{ reservationSeat.seat_no }}</span>
 </div>

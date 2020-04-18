@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue, { PropType } from "vue";
 import { mapActions, mapState } from "vuex";
 
 // entity
@@ -9,28 +9,30 @@ import { FETCH } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-search-form/>",
+  props: {
+    searchOptions: {
+      required: true,
+      type: Object as PropType<ReservationSearchOption>
+    }
+  },
   computed: {
+    ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"])
   },
   methods: {
-    ...mapActions("timezone", [FETCH]),
+    ...mapActions("businessDay", {
+      fetchBusinessDays: FETCH
+    }),
+    ...mapActions("timezone", {
+      fetchTimezones: FETCH
+    }),
 
     handleSearch(): void {
-      this.$emit("update-search-options", this.options);
+      this.$emit("update-search-options", this.searchOptions);
     }
   },
-  data() {
-    const options: ReservationSearchOption = {
-      reservation_date: new Date(),
-      timezone_id: null
-    };
-
-    return {
-      options
-    };
-  },
   mounted() {
-    // 予約時間帯データ取得
-    this.fetch();
+    this.fetchTimezones();
+    this.fetchBusinessDays();
   }
 });

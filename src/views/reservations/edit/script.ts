@@ -24,7 +24,7 @@ export default Vue.extend({
       reservation_date: {
         required
       },
-      reservation_time: {
+      reservation_start_time: {
         required
       },
       reserver_name: {
@@ -51,7 +51,7 @@ export default Vue.extend({
     onClickSave(): void {
       this.$v.$touch();
 
-      if (this.$v.$invalid) {
+      if (!this.$v.$invalid) {
         this.isSaving = true;
         this.save(this.reservation)
           .then(() => {

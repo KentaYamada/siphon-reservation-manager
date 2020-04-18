@@ -21,7 +21,7 @@ const getters: GetterTree<TimezoneState, RootState> = {
    * @param state
    * @returns Timezone
    */
-  [GET_BY_ID]: (state: TimezoneState) => (id: string): Timezone => {
+  [GET_BY_ID]: (state: TimezoneState) => (id: string): Timezone | undefined => {
     return _.find(state.timezones, (item: Timezone) => {
       return item.id === id;
     });

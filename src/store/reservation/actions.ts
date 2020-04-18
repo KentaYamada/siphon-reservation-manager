@@ -186,7 +186,7 @@ const actions: ActionTree<ReservationState, RootState> = {
           .where("reservation_time_id", "==", data.reservation_time_id);
 
         return query.get().then(querySnapshot => {
-          const items: ReservationSeat[] = [];
+          let items: ReservationSeat[] = [];
 
           querySnapshot.forEach(doc => {
             const data = doc.data();
@@ -208,6 +208,7 @@ const actions: ActionTree<ReservationState, RootState> = {
             items.push(item);
           });
 
+          items = _.orderBy(items, ["seat_no"], ["asc"]);
           commit(SET_RESERVATION_SEATS, items);
         });
       });
@@ -296,7 +297,7 @@ const actions: ActionTree<ReservationState, RootState> = {
               const seatData = {
                 seat_no: seat.seat_no,
                 is_reserved: isReserved,
-                reservatoin_id: reservationId,
+                reservation_id: reservationId,
                 reservation_date: reservation.reservation_date,
                 reservation_date_id: reservation.reservation_date_id,
                 reservation_start_time: reservation.reservation_start_time,

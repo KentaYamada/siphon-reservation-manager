@@ -277,29 +277,32 @@ const actions: ActionTree<ReservationState, RootState> = {
             querySnapshot.forEach(doc => transaction.delete(doc.ref));
 
             _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
+              let reservationId = null;
+              let isReserved = null;
+
+              if (seat.is_reserved) {
+                reservationId = seat.reservation_id;
+                isReserved = seat.is_reserved;
+              } else {
+                if (seat.is_selected) {
+                  reservationId = seat.reservation_id
+                    ? seat.reservation_id
+                    : reservationRef.id;
+                  isReserved = true;
+                }
+              }
+
               const seatRef = reservationSeats.doc();
-              //todo: 予約済と新しく追加する予約のデータ判定
               const seatData = {
                 seat_no: seat.seat_no,
-                is_reserved: seat.is_reserved,
+                is_reserved: isReserved,
+                reservatoin_id: reservationId,
                 reservation_date: reservation.reservation_date,
                 reservation_date_id: reservation.reservation_date_id,
                 reservation_start_time: reservation.reservation_start_time,
                 reservation_end_time: reservation.reservation_end_time,
                 reservation_time_id: reservation.reservation_time_id
               };
-
-              if (seat.is_reserved) {
-                seatData.is_reserved = seat.is_reserved;
-                seatData.reservation_id = seat.reservation_id;
-              } else {
-                if (seat.is_selected) {
-                  seatData.reservation_id = seat.reservation_id
-                    ? seat.reservation_id
-                    : reservationRef.id;
-                  seatData.is_reserved = true;
-                }
-              }
 
               transaction.set(seatRef, seatData);
             });

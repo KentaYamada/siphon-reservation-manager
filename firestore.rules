@@ -26,6 +26,10 @@ service cloud.firestore {
       }
 
       match /reservations/{reservationId} {
+        allow get: if hasId(reservationId);
+      }
+
+      match /reservations/{reservationId} {
           allow update, delete: if hasId(reservationId);
       }
 

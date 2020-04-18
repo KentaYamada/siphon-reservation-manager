@@ -9,15 +9,15 @@ service cloud.firestore {
           return id != null;
       }
 
-      match /business_days {
+      match /business_days/{document} {
           allow list, create: if isAuth();
       }
 
       match /business_days/{businessDayId} {
-          allow update, delete: if isAuth() && hasId();
+          allow update, delete: if isAuth() && hasId(businessDayId);
       }
 
-      match /reservations {
+      match /reservations/{document} {
           allow list: if isAuth();
       }
 
@@ -29,16 +29,16 @@ service cloud.firestore {
           allow update, delete: if hasId(reservationId);
       }
 
-      match /reservation_seats {
+      match /reservation_seats/{document} {
           allow list, create, delete: if true;
       }
 
-      match /timezones {
+      match /timezones/{document} {
           allow list, create: if isAuth();
       }
 
       match /timezones/{timezoneId} {
-          allow update, delete: if isAuth() && hasId();
+          allow update, delete: if isAuth() && hasId(timezoneId);
       }
   }
 }

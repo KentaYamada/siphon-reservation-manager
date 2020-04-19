@@ -13,10 +13,10 @@ export default Vue.extend({
     let selectedColor = "";
 
     if (this.reservationSeat.is_selected) {
-      selectedColor = "is-selected";
+      selectedColor = "selected";
     } else {
       if (this.reservationSeat.is_reserved) {
-        selectedColor = "is-reserved";
+        selectedColor = "reserved";
       }
     }
 

@@ -21,7 +21,7 @@ service cloud.firestore {
           allow list: if isAuth();
       }
 
-      match /reservations {
+      match /reservations/{document} {
           allow create: if true;
       }
 

@@ -35,11 +35,25 @@
         <div class="field">
             <label class="label">空席状況</label>
             <div v-if="hasReservationSeats">
-                <small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small>
+                <p><small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small></p>
+                <p><small>※ テーブルは2名席です。</small></p>
+
+                <h5 class="status-title">座席表の見方</h5>
+                <div class="reservation-status">
+                    <small>
+                        <span class="status"></span>空席
+                    </small>
+                    <small>
+                        <span class="status selected"></span>予約中
+                    </small>
+                    <small>
+                        <span class="status reserved"></span>予約不可
+                    </small>
+                </div>
+
                 <selectable-reservation-seat-list
                     :reservationSeats="reservation.reservation_seats"
                     v-if="!!reservation.reservation_seats"/>
-                <small>※ テーブルは2名席です。</small>
             </div>
             <div v-if="!hasReservationSeats">
                 <p>予約日・予約時間を選択してください</p>

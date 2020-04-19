@@ -1,33 +1,52 @@
-// テーブルの大きさ
-$vertical-table-height: 80px;
-$vertical-table-width: 30px;
+.seat {
+    display: inline-block;
+    margin-right: 12px;
 
-.reservation-seat {
-    border: 1px solid #aaa;
-    width: $vertical-table-width;
-    height: $vertical-table-height;
-    position: absolute;
-    top: 20px;
+    .chair {
+        border: solid 1px #aaa;
+        border-radius: 4px;
+        background-color: #fff;
+        margin-left: 3px;
+        width: 24px;
+        height: 6px;
+    }
+    .desk {
+        border: solid 1px #aaa;
+        border-radius: 2px;
+        background-color: #fff;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        width: 32px;
+        height: 48px;
+        text-align: center;
+    }
 
-    &.is-reserved {
-        background-color: #bbb;
+
+    &.selected {
+        .chair,
+        .desk {
+            background-color: #debf9f;
+            color: #fff;
+        }
     }
-    &.is-selected {
-        background-color: red;
+    &.reserved {
+        .chair,
+        .desk {
+            border: 1px solid #aaa;
+            background-color: #ccc;
+        }
     }
-    &.no1 {
-        left: 40px;
-    }
-    &.no2 {
-        left: 90px;
-    }
-    &.no3 {
-        left: 140px;
-    }
-    &.no4 {
-        left: 190px;
-    }
-    &.no5 {
-        left: 240px;
+}
+
+// For mobile
+@media screen and (max-width: 768px) {
+    .seat {
+        .chair {
+            width: 20px;
+        }
+        .desk {
+            width: 26px;
+            height: 42px;
+        }
     }
 }

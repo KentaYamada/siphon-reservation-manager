@@ -20,10 +20,13 @@
                 <td>{{ reservation.mail }}</td>
             </tr>
             <tr>
-                <th>座席</th>
-                <td>
+                <th>メモ</th>
+                <td>{{ reservation.comment }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h5 class="status-title">座席</h5>
                     <div class="reservation-status">
-                        <p class="status-title">座席表の見方</p>
                         <small>
                             <span class="status"></span>空席
                         </small>
@@ -38,10 +41,6 @@
                         :reservationSeats="reservation.reservation_seats"
                         v-if="!!reservation"/>
                 </td>
-            </tr>
-            <tr>
-                <th>メモ</th>
-                <td>{{ reservation.comment }}</td>
             </tr>
         </tbody>
     </table>

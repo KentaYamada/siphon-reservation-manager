@@ -58,3 +58,10 @@
         }
     }
 }
+
+// For mobile
+@media screen and (max-width: 768px) {
+    .seat {
+        margin-right: 8px;
+    }
+}

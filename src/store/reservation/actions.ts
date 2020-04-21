@@ -340,16 +340,11 @@ const actions: ActionTree<ReservationState, RootState> = {
           .collection(RESERVATION_SEATS_COLLECTION)
           .where("reservation_id", "==", id);
 
-        query.get().then(querySnapshot => {
+        return query.get().then(querySnapshot => {
           querySnapshot.forEach(doc => {
             const updateData = {
               is_reserved: false,
-              reservation_id: null,
-              reservation_date: null,
-              reservation_date_id: null,
-              reservation_start_time: null,
-              reservation_end_time: null,
-              reservation_time_id: ""
+              reservation_id: null
             };
             transaction.update(doc.ref, updateData);
           });

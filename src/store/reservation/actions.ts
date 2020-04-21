@@ -334,15 +334,21 @@ const actions: ActionTree<ReservationState, RootState> = {
           return Promise.reject("reservation not found");
         }
 
+        transaction.delete(reservationRef);
+
         const query = db
           .collection(RESERVATION_SEATS_COLLECTION)
           .where("reservation_id", "==", id);
 
-        query.get().then(querySnapshot => {
-          querySnapshot.forEach(doc => transaction.delete(doc.ref));
+        return query.get().then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            const updateData = {
+              is_reserved: false,
+              reservation_id: null
+            };
+            transaction.update(doc.ref, updateData);
+          });
         });
-
-        transaction.delete(reservationRef);
       });
     });
 

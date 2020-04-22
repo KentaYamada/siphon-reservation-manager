@@ -33,13 +33,7 @@ const getters: GetterTree<TimezoneState, RootState> = {
    * @returns Timezone[]
    */
   [GET_RESERVABLE_TIMEZONES]: (state: TimezoneState): Timezone[] => {
-    const today = new Date();
-    const timezones = _.filter(state.timezones, (timezone: Timezone) => {
-      const diffTime = timezone.start_time.getHours() - today.getHours();
-      return diffTime > 0;
-    });
-
-    return timezones;
+    return state.timezones;
   },
 
   /**

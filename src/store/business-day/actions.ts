@@ -6,6 +6,7 @@ import { BusinessDay } from "@/entity/business-day";
 // plugin
 import firebase from "@/plugins/firebase";
 import moment from "moment";
+import _ from "lodash";
 
 // store
 import { RootState } from "@/store";
@@ -21,8 +22,8 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    */
   [FETCH]: async ({ commit }) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const items: BusinessDay[] = [];
-    // todo: sort > business_date desc
+    let items: BusinessDay[] = [];
+
     const $promise = collection.get().then(query => {
       query.forEach(doc => {
         const businessDate = doc.data().business_date.toDate();
@@ -34,6 +35,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
         items.push(item);
       });
 
+      items = _.orderBy(items, ["business_date"], ["desc"]);
       commit(SET_ITEMS, items);
     });
 

@@ -6,6 +6,7 @@ import { Timezone } from "@/entity/timezone";
 // plugin
 import firebase from "@/plugins/firebase";
 import moment from "moment";
+import _ from "lodash";
 
 // store
 import { RootState } from "@/store";
@@ -27,9 +28,8 @@ const actions: ActionTree<TimezoneState, RootState> = {
    */
   [FETCH]: async ({ commit }) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const items: Timezone[] = [];
+    let items: Timezone[] = [];
 
-    // todo: sort
     const $promise = collection.get().then(query => {
       query.forEach(doc => {
         const data = doc.data();
@@ -45,6 +45,9 @@ const actions: ActionTree<TimezoneState, RootState> = {
         items.push(item);
       });
 
+      items = _.sortBy(items, (item: Timezone) => {
+        return item.start_time.getHours();
+      });
       commit(SET_ITEMS, items);
     });
 

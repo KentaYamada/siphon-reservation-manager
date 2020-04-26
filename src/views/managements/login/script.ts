@@ -1,5 +1,8 @@
 import Vue from "vue";
 import { mapActions } from "vuex";
+import { ToastConfig } from "buefy/types/components";
+
+// store
 import { SIGN_IN } from "@/store/constant";
 
 export default Vue.extend({
@@ -9,9 +12,15 @@ export default Vue.extend({
     /**
      * サインイン
      */
-    onClickLogin(): void {
-      // this.signIn();
-      console.log("run");
+    onClickSignIn(): void {
+      this.signIn().then(() => {
+        const toastConfig: ToastConfig = {
+          message: "ログインしました",
+          type: "is-success"
+        };
+        this.$buefy.toast.open(toastConfig);
+        this.$router.push({ name: "reservation-list" });
+      });
     }
   }
 });

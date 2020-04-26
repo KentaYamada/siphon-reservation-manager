@@ -13,14 +13,22 @@ export default Vue.extend({
      * サインイン
      */
     onClickSignIn(): void {
-      this.signIn().then(() => {
-        const toastConfig: ToastConfig = {
-          message: "ログインしました",
-          type: "is-success"
-        };
-        this.$buefy.toast.open(toastConfig);
-        this.$router.push({ name: "reservation-list" });
-      });
+      this.signIn()
+        .then(() => {
+          const toastConfig: ToastConfig = {
+            message: "ログインしました",
+            type: "is-success"
+          };
+          this.$buefy.toast.open(toastConfig);
+          this.$router.push({ name: "reservation-list" });
+        })
+        .catch(() => {
+          const toastConfig: ToastConfig = {
+            message: "ログイン失敗しました",
+            type: "is-danger"
+          };
+          this.$buefy.toast.open(toastConfig);
+        });
     }
   }
 });

@@ -1,27 +1,20 @@
-.icon-container {
-    text-align: center;
+// todo: background image
+// #app {
+//     background-image: url("../../..//assets/bg_f02.jpg");
+//     background-repeat: no-repeat;
+//     background-size: contain;
+//     background-position: center;
+// }
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 
-    .icon {
-        background-color: #999;
-        border: 1px solid #ddd;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
+    .sub-title {
+        margin-top: 0.4rem;
     }
-}
-.main-title {
-    font-size: 24px;
-    font-weight: 700;
-}
-.sub-title {
-    font-size: 16px;
-    font-weight: 500;
-}
-.main-title,
-.sub-title {
-    text-align: center;
-}
-.actions {
-    margin-top: 12px;
-    text-align: center;
+    .title, .subtitle {
+        font-family: cursive;
+    }
 }

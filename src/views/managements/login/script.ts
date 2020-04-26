@@ -9,8 +9,9 @@ export default Vue.extend({
     /**
      * サインイン
      */
-    onClickSignIn(): void {
-      this.signIn();
+    onClickLogin(): void {
+      // this.signIn();
+      console.log("run");
     }
   }
 });

@@ -1,20 +1,24 @@
 import { Module } from "vuex";
 import { RootState } from "@/store";
 import actions from "@/store/auth/actions";
+import mutations from "@/store/auth/mutations";
+import getters from "@/store/auth/getters";
 
 export interface AuthState {
-  token: string;
+  is_signin: boolean;
 }
 
 const state: AuthState = {
-  token: ""
+  is_signin: false
 };
 
 const namespaced = true;
 const module: Module<AuthState, RootState> = {
   namespaced,
   state,
-  actions
+  actions,
+  mutations,
+  getters
 };
 
 export default module;

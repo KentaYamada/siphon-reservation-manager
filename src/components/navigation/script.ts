@@ -1,4 +1,6 @@
 import Vue from "vue";
+import { ToastConfig } from "buefy/types/components";
+import { mapActions } from "vuex";
 
 // entity
 import { Navigation } from "@/entity/navigation";
@@ -18,6 +20,9 @@ import {
   FORBIDDEN_URL,
   NOTFOUND_URL
 } from "@/router/url";
+
+// store
+import { SIGN_OUT } from "@/store/constant";
 
 /**
  * ナビゲーションメニュー取得
@@ -127,11 +132,26 @@ const getNavigations = (isDevMode: boolean, isAdmin: boolean): Navigation[] => {
 export default Vue.extend({
   template: "<navigation/>",
   methods: {
+    ...mapActions("auth", [SIGN_OUT]),
+
     toggleNavigation(): void {
       this.isShowNav = !this.isShowNav;
     },
+
     onCloseNavigation(): void {
       this.isShowNav = false;
+    },
+
+    onClickSignOut(): void {
+      this.signOut().then(() => {
+        const toastConfig: ToastConfig = {
+          message: "ログアウトしました",
+          type: "is-success"
+        };
+
+        this.$buefy.toast.open(toastConfig);
+        this.$router.push({ name: "login" });
+      });
     }
   },
   data() {

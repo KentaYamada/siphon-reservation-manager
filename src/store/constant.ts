@@ -22,6 +22,8 @@ export const SIGN_IN = "signIn";
 
 export const SIGN_OUT = "signOut";
 
+export const IS_SIGNED_IN = "isSignedIn";
+
 // Reservation actions
 export const CANCEL = "cancel";
 

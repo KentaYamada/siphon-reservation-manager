@@ -28,7 +28,10 @@ export default Vue.extend({
      */
     updateSearchOptions(options: ReservationSearchOption): void {
       this.$data.options = options;
-      this.fetch(options);
+
+      if (options.reservation_date_id !== "") {
+        this.fetch(options);
+      }
     }
   },
   data() {
@@ -40,8 +43,5 @@ export default Vue.extend({
     return {
       options: options
     };
-  },
-  mounted() {
-    this.fetch(this.options);
   }
 });

@@ -35,6 +35,9 @@ import Shop from "@/views/managements/shop/Shop.vue";
 import Forbidden from "@/views/forbidden/Forbidden.vue";
 import NotFound from "@/views/notfound/NotFound.vue";
 
+// store
+import store from "@/store";
+
 Vue.use(VueRouter);
 
 const routes: RouteConfig[] = [
@@ -89,16 +92,25 @@ const routes: RouteConfig[] = [
   {
     path: MANAGEMENT_RESERVATION_LIST_URL,
     name: "reservation-list",
+    meta: {
+      requireAuth: true
+    },
     component: ReservationList
   },
   {
     path: MANAGEMENT_RESERVATION_ALL_RESERVED,
     name: "reservation-all-reserved",
+    meta: {
+      requireAuth: true
+    },
     component: ReservationAllReserved
   },
   {
     path: SHOP_SETTING_URL,
     name: "shop",
+    meta: {
+      requireAuth: true
+    },
     component: Shop
   },
   {
@@ -122,6 +134,22 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach((to: Route, from: Route, next: Function) => {
+  const requireAuth = to.matched.some(record => record.meta.requireAuth);
+  const isSignedIn = store.getters['auth/isSignedIn'];
+
+  if (requireAuth) {
+    if (isSignedIn) {
+      next();
+    } else {
+      next(MANAGEMENT_LOGIN_URL);
+    }
+  } else {
+    next();
+  }
+
 });
 
 export default router;

@@ -1,7 +1,7 @@
 import { ActionTree } from "vuex";
 
 // plugin
-import * as firebase from "firebase";
+import firebase from "firebase";
 
 // strore
 import { RootState } from "@/store";
@@ -19,8 +19,7 @@ const actions: ActionTree<AuthState, RootState> = {
       .auth()
       .signInWithPopup(provider)
       .then(response => {
-        console.log(response);
-        commit(SET_ITEM, response.credential.accessToken);
+        commit(SET_ITEM, true);
       });
 
     return await promise$;
@@ -34,7 +33,7 @@ const actions: ActionTree<AuthState, RootState> = {
       .auth()
       .signOut()
       .then(() => {
-        commit(SET_ITEM, "");
+        commit(SET_ITEM, true);
       });
   }
 };

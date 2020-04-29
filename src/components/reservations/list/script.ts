@@ -7,8 +7,14 @@ import { Reservation } from "@/entity/reservation";
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 import { formatReserver } from "@/filters/format-reserver";
 
+// component
+import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
+
 export default Vue.extend({
   template: "<reservation-list/>",
+  components: {
+    ReservationListItem
+  },
   props: {
     reservations: {
       required: true,

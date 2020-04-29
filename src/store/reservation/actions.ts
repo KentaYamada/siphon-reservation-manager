@@ -35,10 +35,16 @@ const actions: ActionTree<ReservationState, RootState> = {
    */
   [FETCH]: async ({ commit }, options: ReservationSearchOption) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const $promise = collection.get().then(query => {
+    const query = collection.where(
+      "reservation_date_id",
+      "==",
+      options.reservation_date_id
+    );
+
+    const $promise = query.get().then(querySnapshot => {
       let items: Reservation[] = [];
 
-      query.forEach(doc => {
+      querySnapshot.forEach(doc => {
         const data = doc.data();
         const item: Reservation = {
           id: doc.id,
@@ -58,14 +64,7 @@ const actions: ActionTree<ReservationState, RootState> = {
         items.push(item);
       });
 
-      if (options.reservation_date_id) {
-        // 予約日
-        items = _.filter(items, (item: Reservation) => {
-          return item.reservation_date_id === options.reservation_date_id;
-        });
-      }
-
-      if (options.reservation_time_id) {
+      if (options.reservation_time_id !== "") {
         // 予約時間
         items = _.filter(items, (item: Reservation) => {
           return item.reservation_time_id === options.reservation_time_id;

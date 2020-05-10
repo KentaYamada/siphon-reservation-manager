@@ -9,6 +9,7 @@ import {
   RESERVATION_EDITED_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
+  RESERVATION_RESEND_MAIL_URL,
   RESERVED_MESSAGE_URL,
   MANAGEMENT_RESERVATION_ALL_RESERVED,
   MANAGEMENT_RESERVATION_LIST_URL,
@@ -26,6 +27,7 @@ import ReservationEditedMessage from "@/views/reservations/edited-message/Reserv
 import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
 import ReservationList from "@/views/reservations/list/ReservationList.vue";
 import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
+import ReservationResendMail from "@/views/reservations/resend-mail/ReservationResendMail.vue";
 
 // Management
 import Login from "@/views/managements/login/Login.vue";
@@ -90,6 +92,11 @@ const routes: RouteConfig[] = [
     component: ReservationCanceledMessage
   },
   {
+    path: RESERVATION_RESEND_MAIL_URL,
+    name: "reservation-resend-mail",
+    component: ReservationResendMail
+  },
+  {
     path: MANAGEMENT_RESERVATION_LIST_URL,
     name: "reservation-list",
     meta: {
@@ -138,7 +145,7 @@ const router = new VueRouter({
 
 router.beforeEach((to: Route, from: Route, next: Function) => {
   const requireAuth = to.matched.some(record => record.meta.requireAuth);
-  const isSignedIn = store.getters['auth/isSignedIn'];
+  const isSignedIn = store.getters["auth/isSignedIn"];
 
   if (requireAuth) {
     if (isSignedIn) {
@@ -149,7 +156,6 @@ router.beforeEach((to: Route, from: Route, next: Function) => {
   } else {
     next();
   }
-
 });
 
 export default router;

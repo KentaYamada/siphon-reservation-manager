@@ -7,6 +7,12 @@ import { INITIALIZE, FETCH } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-resend-mail-form/>",
+  props: {
+    validations: {
+      required: true,
+      type: Object
+    }
+  },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"]),

@@ -7,9 +7,20 @@ import ReservationResendMailForm from "@/components/reservations/form/resend-mai
 // store
 import { CAN_SEND_MAIL, SEND_MAIL } from "@/store/constant";
 
+// plugin
+import { required, email } from "vuelidate/lib/validators";
+
 export default Vue.extend({
   components: {
     ReservationResendMailForm
+  },
+  validations: {
+    reservationResendMail: {
+      mail: {
+        required,
+        email
+      }
+    }
   },
   computed: {
     ...mapState("reservationResendMail", ["reservationResendMail"]),
@@ -19,8 +30,15 @@ export default Vue.extend({
   methods: {
     ...mapActions("reservationResendMail", [SEND_MAIL]),
 
+    /**
+     * メール送信
+     */
     handleSendMail(): void {
-      this.sendMail(this.reservationResendMail);
+      this.$v.$touch();
+
+      if (!this.$v.$invalid) {
+        this.sendMail(this.reservationResendMail);
+      }
     }
   }
 });

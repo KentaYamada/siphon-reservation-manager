@@ -7,4 +7,5 @@ export interface ReservationResendMail {
   reservation_time_id: string;
   reserver_name: string;
   tel: string;
+  mail: string;
 }

@@ -1,12 +1,6 @@
 <form>
     <div class="field">
-        <label class="label">予約ID</label>
-        <div class="control">
-            <input type="text" class="input" v-model.trim="reservationResendMail.reservation_id">
-        </div>
-    </div>
-    <div class="field">
-        <label class="label">予約日<small>(予約時間とセットで記入してください)</small></label>
+        <label class="label">予約日時</label>
         <b-select v-model="reservationResendMail.reservation_date_id">
             <option v-for="d in businessDays" :key="d.id" :value="d.id">
                 {{ d.text }}
@@ -14,14 +8,17 @@
         </b-select>
     </div>
     <div class="field">
-        <label class="label">
-            予約時間<small>(予約日とセットで記入してください)</small>
-        </label>
         <b-select v-model="reservationResendMail.reservation_time_id">
             <option v-for="t in timezones" :key="t.id" :value="t.id">
                 {{ t.text }}
             </option>
         </b-select>
+    </div>
+    <div class="field">
+        <label class="label">予約ID</label>
+        <div class="control">
+            <input type="text" class="input" v-model.trim="reservationResendMail.reservation_id">
+        </div>
     </div>
     <div class="field">
         <label class="label">お名前</label>
@@ -33,6 +30,26 @@
         <label class="label">電話番号</label>
         <div class="control">
             <input type="text" class="input" placeholder="例) 090-1234-5678" v-model.trim="reservationResendMail.tel">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">メールアドレス(必須)</label>
+        <div class="control">
+            <input type="text"
+                   class="input"
+                   placeholder="例) sweets.sukiko@email.com"
+                   :class="{ 'is-danger': validations.reservationResendMail.mail.$error }"
+                   v-model.trim="reservationResendMail.mail">
+            <div v-if="validations.reservationResendMail.mail.$error">
+                <small class="help is-danger"
+                       v-if="!validations.reservationResendMail.mail.required">
+                    メールアドレスは必須入力です。
+                </small>
+                <small class="help is-danger"
+                       v-if="!validations.reservationResendMail.mail.email">
+                    メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)。
+                </small>
+            </div>
         </div>
     </div>
 </form>

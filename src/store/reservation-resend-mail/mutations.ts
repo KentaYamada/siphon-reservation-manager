@@ -14,7 +14,8 @@ const mutations: MutationTree<ReservationResendMailState> = {
       reservation_date_id: "",
       reservation_time_id: "",
       reserver_name: "",
-      tel: ""
+      tel: "",
+      mail: ""
     } as ReservationResendMail;
   }
 };

@@ -12,6 +12,7 @@ import {
   RESERVATION_DETAIL_URL,
   RESERVATION_EDIT_URL,
   RESERVATION_EDITED_URL,
+  RESERVATION_RESEND_MAIL_URL,
   RESERVED_MESSAGE_URL,
   MANAGEMENT_RESERVATION_ALL_RESERVED,
   MANAGEMENT_LOGIN_URL,
@@ -62,6 +63,11 @@ const getNavigations = (isDevMode: boolean, isAdmin: boolean): Navigation[] => {
             name: "予約変更完了",
             url: RESERVATION_EDITED_URL,
             icon: "fa-calendar-check"
+          },
+          {
+            name: "予約確認メール再送",
+            url: RESERVATION_RESEND_MAIL_URL,
+            icon: "fa-paper-plane"
           },
           {
             name: "予約キャンセル完了",

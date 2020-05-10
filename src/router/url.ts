@@ -14,6 +14,8 @@ export const RESERVATION_EDITED_URL = "/reservations/edited";
 
 export const RESERVATION_ENTRY_URL = "/reservations/entry";
 
+export const RESERVATION_RESEND_MAIL_URL = "/reservations/resend";
+
 export const RESERVED_MESSAGE_URL = "/reservations/reserved";
 
 export const MANAGEMENT_RESERVATION_ALL_RESERVED =

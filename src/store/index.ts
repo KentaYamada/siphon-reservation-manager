@@ -5,6 +5,7 @@ import Vuex from "vuex";
 import auth from "@/store/auth";
 import businessDay from "@/store/business-day";
 import reservation from "@/store/reservation";
+import reservationResendMail from "@/store/reservation-resend-mail";
 import timezone from "@/store/timezone";
 
 export interface RootState {
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     auth,
     businessDay,
     reservation,
+    reservationResendMail,
     timezone
   }
 });

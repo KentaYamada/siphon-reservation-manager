@@ -21,7 +21,7 @@ export default Vue.extend({
     }),
     ...mapMutations("reservationResendMail", [INITIALIZE])
   },
-  created() {
+  mounted() {
     this.initialize();
 
     Promise.all([this.fetchBusinessDays, this.fetchBusinessDays]).catch(() => {

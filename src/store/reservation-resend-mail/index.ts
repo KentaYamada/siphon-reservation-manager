@@ -5,6 +5,7 @@ import { ReservationResendMail } from "@/entity/reservation-resend-mail";
 
 // store
 import { RootState } from "@/store";
+import actions from "@/store/reservation-resend-mail/actions";
 import getters from "@/store/reservation-resend-mail/getters";
 import mutations from "@/store/reservation-resend-mail/mutations";
 
@@ -19,6 +20,7 @@ const namespaced = true;
 const module: Module<ReservationResendMailState, RootState> = {
   namespaced,
   state,
+  actions,
   getters,
   mutations
 };

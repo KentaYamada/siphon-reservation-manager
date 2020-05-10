@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --mode development",
     "serve:db": "firebase serve --only firestore",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
     "deploy-dev": "vue-cli-service build --mode development && firebase deploy"
   },

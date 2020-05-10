@@ -47,6 +47,9 @@ export const SET_RESERVATION_DATE = "setReservationDate";
 
 export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
 
+// Reservation resend mail actions
+export const CAN_SEND_MAIL = "canSendMail";
+
 // Reservation seat actions
 export const GET_RESERVABLE_SEATS = "getReservableSeats";
 

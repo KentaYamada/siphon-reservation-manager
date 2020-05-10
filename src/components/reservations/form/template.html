@@ -36,6 +36,7 @@
             <label class="label">空席状況</label>
             <div v-if="hasReservationSeats">
                 <p><small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small></p>
+                <p><small>ご予約は空席をクリックしてください。</small></p>
                 <p><small>※ テーブルは2名席です。</small></p>
 
                 <h5 class="status-title">座席表の見方</h5>
@@ -72,7 +73,7 @@
             <div class="control">
                 <input type="text"
                        class="input"
-                       placeholder="例) Gamoyon 花子"
+                       placeholder="Gamoyon 花子"
                        v-model.trim="reservation.reserver_name"
                        :class="{ 'is-danger': validations.reservation.reserver_name.$error }">
                 <div v-if="validations.reservation.reserver_name.$error">
@@ -87,7 +88,7 @@
             <div class="control">
                 <input type="text"
                        class="input"
-                       placeholder="例) 090-1234-5678"
+                       placeholder="090-1234-5678"
                        v-model.trim="reservation.tel"
                        :class="{ 'is-danger': validations.reservation.tel.$error }">
                 <div v-if="validations.reservation.tel.$error">
@@ -103,7 +104,7 @@
             <div class="control">
                 <input type="text"
                        class="input"
-                       placeholder="例) cafedegamoyon@email.com"
+                       placeholder="sweets.sukiko@email.com"
                        v-model.trim="reservation.mail"
                        :class="{ 'is-danger': validations.reservation.mail.$error }">
                 <div v-if="validations.reservation.mail.$error">

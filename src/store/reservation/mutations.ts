@@ -36,7 +36,7 @@ const mutations: MutationTree<ReservationState> = {
       reservation_time_id: "",
       reserver_name: "",
       reservation_seats: [],
-      number_of_reservations: 0,
+      number_of_reservations: null,
       tel: "",
       mail: "",
       comment: ""

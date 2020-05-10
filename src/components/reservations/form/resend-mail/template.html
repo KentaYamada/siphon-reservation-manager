@@ -2,7 +2,7 @@
     <div class="field">
         <label class="label">予約ID</label>
         <div class="control">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model.trim="reservationResendMail.reservation_id">
         </div>
     </div>
     <div class="field">
@@ -20,13 +20,13 @@
     <div class="field">
         <label class="label">お名前</label>
         <div class="control">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model.trim="reservationResendMail.reserver_name">
         </div>
     </div>
     <div class="field">
         <label class="label">電話番号</label>
         <div class="control">
-            <input type="text" class="input" placeholder="例) 090-1234-5678">
+            <input type="text" class="input" placeholder="例) 090-1234-5678" v-model.trim="reservationResendMail.tel">
         </div>
     </div>
 </form>

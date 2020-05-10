@@ -6,5 +6,15 @@ import ReservationResendMailForm from "@/components/reservations/form/resend-mai
 export default Vue.extend({
   components: {
     ReservationResendMailForm
+  },
+  methods: {
+    handleSendMail(): void {
+      console.log("run");
+    }
+  },
+  data() {
+    return {
+      disableSendMail: true
+    };
   }
 });

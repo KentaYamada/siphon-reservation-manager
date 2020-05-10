@@ -14,11 +14,14 @@
             </div>
 
             <div class="page-content">
-                <reservation-resend-mail-form/>
+                <reservation-resend-mail-form />
             </div>
 
             <div class="page-footer">
-                <button type="button" class="button is-info">
+                <button type="button" 
+                        class="button is-info"
+                        :disabled="disableSendMail"
+                        @click="handleSendMail">
                     <i class="fas fa-paper-plane"></i>
                     <span class="button-label">送信</span>
                 </button>

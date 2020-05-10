@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
+    "serve:db": "firebase serve --only firestore",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
     "deploy-dev": "vue-cli-service build --mode development && firebase deploy"
   },
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@types/ismobilejs": "^1.0.1",
+    "@types/jest": "^24.0.19",
     "@types/lodash": "^4.14.149",
     "@types/moment": "^2.13.0",
     "@types/vuelidate": "^0.7.11",
@@ -34,10 +37,12 @@
     "@vue/cli-plugin-pwa": "^4.2.0",
     "@vue/cli-plugin-router": "^4.2.0",
     "@vue/cli-plugin-typescript": "^4.2.0",
+    "@vue/cli-plugin-unit-jest": "^4.3.1",
     "@vue/cli-plugin-vuex": "^4.2.0",
     "@vue/cli-service": "^4.2.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.1",
+    "@vue/test-utils": "1.0.0-beta.31",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^6.1.2",

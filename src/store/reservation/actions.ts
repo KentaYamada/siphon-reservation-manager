@@ -191,10 +191,11 @@ const actions: ActionTree<ReservationState, RootState> = {
             const data = doc.data();
             const isMyReservation = id === data.reservation_id;
             const isSelected = isMyReservation && data.is_reserved;
+            const isReserved = !isMyReservation && data.is_reserved;
             const item: ReservationSeat = {
               id: doc.id,
               seat_no: data.seat_no,
-              is_reserved: data.is_reserved,
+              is_reserved: isReserved,
               is_selected: isSelected,
               reservation_id: data.reservation_id,
               reservation_date: data.reservation_date.toDate(),

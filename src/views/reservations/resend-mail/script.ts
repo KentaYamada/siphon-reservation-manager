@@ -38,15 +38,24 @@ export default Vue.extend({
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.save(this.reservationResendMail).then(() => {
-          const toastConfig: ToastConfig = {
-            message: "メールの再送受け付けました。",
-            type: "is-success"
-          };
+        this.save(this.reservationResendMail)
+          .then(() => {
+            const toastConfig: ToastConfig = {
+              message: "メールの再送受付ました。",
+              type: "is-success"
+            };
 
-          this.$buefy.toast.open(toastConfig);
-          this.$router.push({ name: "reservation-resend-mail-accepted" });
-        });
+            this.$buefy.toast.open(toastConfig);
+            this.$router.push({ name: "reservation-resend-mail-accepted" });
+          })
+          .catch(() => {
+            const toastConfig: ToastConfig = {
+              message: "メールの再送受付できませんでした。",
+              type: "is-danger"
+            };
+
+            this.$buefy.toast.open(toastConfig);
+          });
       }
     }
   }

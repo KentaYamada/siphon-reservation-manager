@@ -43,7 +43,9 @@ export default Vue.extend({
             message: "メールの再送受け付けました。",
             type: "is-success"
           };
+
           this.$buefy.toast.open(toastConfig);
+          this.$router.push({ name: "reservation-resend-mail-accepted" });
         });
       }
     }

@@ -18,6 +18,8 @@ export const RESERVATION_RESEND_MAIL_URL = "/reservations/resend";
 
 export const RESERVED_MESSAGE_URL = "/reservations/reserved";
 
+export const RESERVATION_RESEND_MAIL_ACCEPTED = "/reservations/resend/accepted";
+
 export const MANAGEMENT_RESERVATION_ALL_RESERVED =
   "/managements/reservations/all_reserved";
 

@@ -68,7 +68,7 @@
     <div class="field">
         <label class="label">メールアドレス</label>
         <div class="control">
-            <input type="text" class="input" placeholder="例) cafedegamoyon@email.com"
+            <input type="text" class="input" placeholder="例) sweets.sukiko@email.com"
                    v-model.trim="reservation.mail"
                    :class="{ 'is-danger': validations.reservation.mail.$error }">
             <div v-if="validations.reservation.mail.$error">
@@ -78,7 +78,7 @@
                 </small>
                 <small class="help is-danger"
                        v-if="!validations.reservation.mail.email">
-                    メールアドレスの形式で入力してください(例: cafedegamoyon.email.com)。
+                    メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)。
                 </small>
             </div>
         </div>

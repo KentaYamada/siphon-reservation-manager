@@ -58,6 +58,10 @@
                        v-if="!validations.reservation.tel.required">
                     電話番号は必須入力です。
                 </small>
+                <small class="help is-danger"
+                       v-if="!validations.reservation.tel.tel">
+                    不正な電話番号です。
+                </small>
             </div>
         </div>
     </div>

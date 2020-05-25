@@ -1,17 +1,21 @@
 import { GetterTree } from "vuex";
 
-// strore
+// store
 import { RootState } from "@/store";
 import { AuthState } from "@/store/auth";
-import { IS_SIGNED_IN } from "@/store/constant";
+import { IS_ADMIN, IS_SIGNED_IN } from "@/store/constant";
 
 const getters: GetterTree<AuthState, RootState> = {
-    /**
-     * ログイン済かどうか
-     */
-    [IS_SIGNED_IN]: (state: AuthState): boolean => {
-        return state.is_signin;
-    }
+  /**
+   * 管理者かどうか
+   */
+  [IS_ADMIN]: (state: AuthState): boolean => {
+    return process.env.NODE_ENV === "development" || state.is_signin;
+  },
+
+  [IS_SIGNED_IN]: (state: AuthState): boolean => {
+    return state.is_signin;
+  }
 };
 
 export default getters;

@@ -22,7 +22,11 @@ export const SIGN_IN = "signIn";
 
 export const SIGN_OUT = "signOut";
 
+export const IS_ADMIN = "isAdmin";
+
 export const IS_SIGNED_IN = "isSignedIn";
+
+export const GET_NAVIGATIONS = "getNavigations";
 
 // Reservation actions
 export const CANCEL = "cancel";

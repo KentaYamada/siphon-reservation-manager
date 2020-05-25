@@ -1,4 +1,4 @@
-<div class="navbar is-dark" role="navigation" aria-label="main navigation" v-if="isShow">
+<div class="navbar is-dark" role="navigation" aria-label="main navigation" v-if="isAdmin">
     <div class="navbar-brand">
         <router-link :to="{ path: '/' }" class="navbar-item">
             <i class="fas fa-mug-hot"></i>
@@ -37,7 +37,9 @@
 
         <div class="navbar-end">
             <div class="navbar-item">
-                <button class="button is-inverted" @click="onClickSignOut()">
+                <button class="button is-inverted"
+                        v-if="isSignedIn"
+                        @click="onClickSignOut()">
                     ログアウト
                 </button>
             </div>

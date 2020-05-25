@@ -19,6 +19,7 @@ import {
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
   SAVE,
+  SAVE_ALL_RESERVATION,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_SEATS
@@ -315,6 +316,64 @@ const actions: ActionTree<ReservationState, RootState> = {
 
       return $transaction;
     });
+  },
+
+  /**
+   * 貸切データ登録
+   */
+  [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
+    const db = firebase.firestore();
+    const reservations = db.collection(COLLECTION_NAME);
+
+    // 予約データが無いかチェック
+    const query = reservations
+      .where("reservation_date_id", "==", reservation.reservation_date_id)
+      .where("reservation_time_id", "==", reservation.reservation_time_id);
+    const hasItem = await query.get().then(querySnapshot => { return !querySnapshot.empty; });
+
+    if (hasItem) {
+      return Promise.reject();
+    }
+
+    const transaction = await db.runTransaction(async transaction => {
+      const reservationRef = reservations.doc();
+      const reservationData = {
+        reservation_date: reservation.reservation_date,
+        reservation_date_id: reservation.reservation_date_id,
+        reservation_start_time: reservation.reservation_start_time,
+        reservation_end_time: reservation.reservation_end_time,
+        reservation_time_id: reservation.reservation_time_id,
+        reserver_name: reservation.reserver_name,
+        number_of_reservations: reservation.number_of_reservations,
+        tel: reservation.tel,
+        mail: reservation.mail,
+        comment: reservation.comment
+      };
+
+      transaction.set(reservationRef, reservationData);
+
+      const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
+
+      _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
+        const seatRef = reservationSeats.doc();
+        const seatData = {
+          seat_no: seat.seat_no,
+          is_reserved: true,
+          reservation_id: reservationRef.id,
+          reservation_date: reservation.reservation_date,
+          reservation_date_id: reservation.reservation_date_id,
+          reservation_start_time: reservation.reservation_start_time,
+          reservation_end_time: reservation.reservation_end_time,
+          reservation_time_id: reservation.reservation_time_id
+        };
+
+        transaction.set(seatRef, seatData);
+      });
+
+      return reservationRef.id;
+    });
+
+    return transaction;
   },
 
   /**

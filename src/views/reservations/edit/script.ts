@@ -3,11 +3,14 @@ import { mapActions, mapState } from "vuex";
 import { ToastConfig } from "buefy/types/components";
 import { required, email } from "vuelidate/lib/validators";
 
-// store
-import { FETCH_BY_ID, SAVE } from "@/store/constant";
-
 // component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
+
+// plugin
+import { tel } from "@/plugins/validate";
+
+// store
+import { FETCH_BY_ID, SAVE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -31,7 +34,8 @@ export default Vue.extend({
         required
       },
       tel: {
-        required
+        required,
+        tel
       },
       mail: {
         required,

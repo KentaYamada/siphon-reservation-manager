@@ -30,7 +30,8 @@ export default Vue.extend({
   mounted() {
     this.initialize();
 
-    Promise.all([this.fetchBusinessDays, this.fetchBusinessDays]).catch(() => {
+    const promises = [this.fetchBusinessDays(), this.fetchTimezones()];
+    Promise.all(promises).catch(() => {
       const toastConfig: ToastConfig = {
         message: "データの取得に失敗しました",
         type: "is-danger"

@@ -1,11 +1,12 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
 
 // components
 import ReservationResendMailForm from "@/components/reservations/form/resend-mail/ReservationResendMailForm.vue";
 
 // store
-import { CAN_SEND_MAIL, SEND_MAIL } from "@/store/constant";
+import { CAN_SEND_MAIL, SAVE } from "@/store/constant";
 
 // plugin
 import { required, email } from "vuelidate/lib/validators";
@@ -28,7 +29,7 @@ export default Vue.extend({
   },
 
   methods: {
-    ...mapActions("reservationResendMail", [SEND_MAIL]),
+    ...mapActions("reservationResendMail", [SAVE]),
 
     /**
      * メール送信
@@ -37,7 +38,24 @@ export default Vue.extend({
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.sendMail(this.reservationResendMail);
+        this.save(this.reservationResendMail)
+          .then(() => {
+            const toastConfig: ToastConfig = {
+              message: "メールの再送受付ました。",
+              type: "is-success"
+            };
+
+            this.$buefy.toast.open(toastConfig);
+            this.$router.push({ name: "reservation-resend-mail-accepted" });
+          })
+          .catch(() => {
+            const toastConfig: ToastConfig = {
+              message: "メールの再送受付できませんでした。",
+              type: "is-danger"
+            };
+
+            this.$buefy.toast.open(toastConfig);
+          });
       }
     }
   }

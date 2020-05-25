@@ -11,6 +11,7 @@ import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-op
 // plugin
 import _ from "lodash";
 import { required, email } from "vuelidate/lib/validators";
+import { tel } from "@/plugins/validate";
 
 // store
 import {
@@ -37,7 +38,8 @@ export default Vue.extend({
         required
       },
       tel: {
-        required
+        required,
+        tel
       },
       mail: {
         required,

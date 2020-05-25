@@ -15,14 +15,12 @@ const actions: ActionTree<AuthState, RootState> = {
    */
   [SIGN_IN]: async ({ commit }) => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    const promise$ = firebase
+    return await firebase
       .auth()
       .signInWithPopup(provider)
-      .then(response => {
+      .then(() => {
         commit(SET_ITEM, true);
       });
-
-    return await promise$;
   },
 
   /**
@@ -33,7 +31,7 @@ const actions: ActionTree<AuthState, RootState> = {
       .auth()
       .signOut()
       .then(() => {
-        commit(SET_ITEM, true);
+        commit(SET_ITEM, false);
       });
   }
 };

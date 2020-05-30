@@ -10,6 +10,7 @@ import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-op
 
 // plugin
 import _ from "lodash";
+import firebase from "@/plugins/firebase";
 import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
 
@@ -65,6 +66,9 @@ export default Vue.extend({
         this.isSaving = true;
         this.save(this.reservation)
           .then(newId => {
+            const sendMail = firebase.functions().httpsCallable("sendMail");
+            sendMail().then(res => console.log(res)).catch(error => console.error(error));
+
             const toastConfig: ToastConfig = {
               message: "予約しました。",
               type: "is-success"

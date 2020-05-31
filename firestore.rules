@@ -41,6 +41,10 @@ service cloud.firestore {
           allow list, create, delete: if true;
       }
 
+      match /reservation_seats/{id} {
+          allow update: if true;
+      }
+
       match /timezones/{document} {
           allow list, create: if isAuth();
       }

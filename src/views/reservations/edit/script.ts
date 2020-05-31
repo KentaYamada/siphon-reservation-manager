@@ -1,16 +1,22 @@
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import { ToastConfig } from "buefy/types/components";
-import { required, email } from "vuelidate/lib/validators";
 
 // component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 
+// entity
+import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
+
 // plugin
 import { tel } from "@/plugins/validate";
+import { required, email } from "vuelidate/lib/validators";
 
 // store
 import { FETCH_BY_ID, SAVE } from "@/store/constant";
+
+// utility
+import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   components: {
@@ -59,6 +65,8 @@ export default Vue.extend({
         this.isSaving = true;
         this.save(this.reservation)
           .then(() => {
+            this.__sendEmail(this.id);
+
             const toastConfig: ToastConfig = {
               message: "予約変更しました。",
               type: "is-success"
@@ -78,6 +86,26 @@ export default Vue.extend({
             this.isSaving = false;
           });
       }
+    },
+
+    /**
+     * 予約完了通知メール送信
+     * @param id
+     */
+    __sendEmail(id: string): void {
+      const href = this.$router.resolve({
+        name: "reservation-detail",
+        params: {
+          id: id
+        }
+      }).href;
+      const redirectUrl = `${location.origin}${href}`;
+      sendEmail(
+        this.reservation,
+        id,
+        redirectUrl,
+        EMAIL_MESSAGE_TEMPLATES.EDITED
+      );
     }
   },
   data() {

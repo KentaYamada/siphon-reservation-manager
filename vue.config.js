@@ -1,5 +1,11 @@
 "use strict";
 
+/**
+ * Vue CLI
+ * See: https://cli.vuejs.org/config/
+ * PWA
+ * See: https://cli.vuejs.org/core-plugins/pwa.html 
+ */
 module.exports = {
   pages: {
     index: {

@@ -15,11 +15,12 @@ const mailTransport = nodemailer.createTransport({
   }
 });
 
-exports.sendMail = functions.https.onRequest((request, response) => {
+exports.sendMail = functions.https.onRequest((request, response: functions.Response) => {
   return cors(request, response, () => {
     const message = {
       from: `Cafe de Gamoyon <${config.gmail.email}>`,
       to: request.body.data.destination,
+      bcc: config.gmail.email,
       subject: request.body.data.subject,
       text: request.body.data.message
     };
@@ -29,7 +30,13 @@ exports.sendMail = functions.https.onRequest((request, response) => {
 
     return mailTransport
       .sendMail(message)
-      .then(res => console.log(res))
-      .catch(error => console.error(error));
+      .then(res => {
+        console.log(res);
+        return response.status(200).json({ message: "Send email" });
+      })
+      .catch(error => {
+        console.error(error);
+        return response.status(500).json({ message: "Failed send email" });
+      });
   });
 });

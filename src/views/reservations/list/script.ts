@@ -1,8 +1,8 @@
 import Vue from "vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 
 // store
-import { FETCH, HAS_ITEMS } from "@/store/constant";
+import { FETCH, HAS_ITEMS, SET_ITEMS } from "@/store/constant";
 
 // entity
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
@@ -22,6 +22,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("reservation", [FETCH]),
+    ...mapMutations("reservation", [SET_ITEMS]),
 
     /**
      * 検索パラメータ更新イベント
@@ -43,5 +44,8 @@ export default Vue.extend({
     return {
       options: options
     };
+  },
+  mounted() {
+    this.setItems([]);
   }
 });

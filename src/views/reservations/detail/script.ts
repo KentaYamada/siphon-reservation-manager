@@ -5,8 +5,14 @@ import { DialogConfig, ToastConfig } from "buefy/types/components";
 // component
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
 
+// entity
+import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
+
 // store
 import { CANCEL, FETCH_BY_ID } from "@/store/constant";
+
+// utility
+import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   components: {
@@ -44,6 +50,8 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.id)
             .then(() => {
+              this.__sendEmail(this.id);
+
               const toastConfig: ToastConfig = {
                 message: "予約キャンセルしました",
                 type: "is-danger"
@@ -80,6 +88,23 @@ export default Vue.extend({
         name: "reservation-edit",
         params: { id: this.id }
       });
+    },
+
+    /**
+     * 予約キャンセル完了通知メール送信
+     * @param id
+     */
+    __sendEmail(id: string): void {
+      const href = this.$router.resolve({
+        path: "/"
+      }).href;
+      const redirectUrl = `${location.origin}${href}`;
+      sendEmail(
+        this.reservation,
+        id,
+        redirectUrl,
+        EMAIL_MESSAGE_TEMPLATES.CANCELED
+      );
     }
   },
   mounted() {

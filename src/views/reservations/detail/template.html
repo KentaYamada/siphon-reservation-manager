@@ -8,7 +8,9 @@
                         予約確認
                     </h4>
 
-                    <h4 class="reserver-name">{{ reservation.reserver_name }} 様</h4>
+                    <h4 class="reserver-name" v-if="!!reservation">
+                        {{ reservation.reserver_name }} 様
+                    </h4>
                     <p>予約内容は以下の通りです。</p>
                 </div>
                 <div class="page-content">

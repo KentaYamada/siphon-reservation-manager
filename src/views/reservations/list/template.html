@@ -14,7 +14,8 @@
                 <div class="divider"></div>
                 <reservation-list
                     :reservations="reservations"
-                    :hasItems="hasItems" />
+                    :hasItems="hasItems"
+                    @delete-succeeded="reFetch()"/>
             </div>
         </div>
     </div>

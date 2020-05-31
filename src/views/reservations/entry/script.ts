@@ -7,6 +7,7 @@ import ReservationForm from "@/components/reservations/form/ReservationForm.vue"
 
 // entity
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
+import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 
 // plugin
 import _ from "lodash";
@@ -21,6 +22,9 @@ import {
   RESET_RESERVATION_SEATS,
   SAVE
 } from "@/store/constant";
+
+// utility
+import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   components: {
@@ -64,7 +68,9 @@ export default Vue.extend({
       if (!this.$v.$invalid) {
         this.isSaving = true;
         this.save(this.reservation)
-          .then(newId => {
+          .then((newId: string) => {
+            this.__sendEmail(newId);
+
             const toastConfig: ToastConfig = {
               message: "予約しました。",
               type: "is-success"
@@ -117,6 +123,26 @@ export default Vue.extend({
       } else {
         this.resetReservationSeats();
       }
+    },
+
+    /**
+     * 予約完了通知メール送信
+     * @param id
+     */
+    __sendEmail(id: string): void {
+      const href = this.$router.resolve({
+        name: "reservation-detail",
+        params: {
+          id: id
+        }
+      }).href;
+      const redirectUrl = `${location.origin}${href}`;
+      sendEmail(
+        this.reservation,
+        id,
+        redirectUrl,
+        EMAIL_MESSAGE_TEMPLATES.CREATED
+      );
     }
   },
   data() {

@@ -28,5 +28,10 @@ export default Vue.extend({
   filters: {
     formatReservationDatetime,
     formatReserver
+  },
+  methods: {
+    handleDeleteSucceeded() {
+      this.$emit("delete-succeeded");
+    }
   }
 });

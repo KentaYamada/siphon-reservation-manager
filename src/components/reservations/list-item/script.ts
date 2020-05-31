@@ -4,6 +4,7 @@ import { DialogConfig, ToastConfig } from "buefy/types/components";
 
 // entity
 import { Reservation } from "@/entity/reservation";
+import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 
 // filter
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
@@ -11,6 +12,9 @@ import { formatReserver } from "@/filters/format-reserver";
 
 // store
 import { CANCEL } from "@/store/constant";
+
+// utility
+import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   template: "<reservation-list-item/>",
@@ -44,12 +48,15 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.reservation.id)
             .then(() => {
+              this.__sendEmail(this.reservation.id as string);
+
               const toastConfig: ToastConfig = {
                 message: "予約取消しました",
                 type: "is-danger"
               };
 
               this.$buefy.toast.open(toastConfig);
+              this.$emit("delete-succeeded");
             })
             .catch(error => {
               const toastConfig: ToastConfig = {
@@ -64,6 +71,23 @@ export default Vue.extend({
       };
 
       this.$buefy.dialog.confirm(dialogConfig);
+    },
+
+    /**
+     * 予約キャンセル完了通知メール送信
+     * @param id
+     */
+    __sendEmail(id: string): void {
+      const href = this.$router.resolve({
+        path: "/"
+      }).href;
+      const redirectUrl = `${location.origin}${href}`;
+      sendEmail(
+        this.reservation,
+        id,
+        redirectUrl,
+        EMAIL_MESSAGE_TEMPLATES.CANCELED
+      );
     }
   }
 });

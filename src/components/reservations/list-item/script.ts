@@ -56,6 +56,7 @@ export default Vue.extend({
               };
 
               this.$buefy.toast.open(toastConfig);
+              this.$emit("delete-succeeded");
             })
             .catch(error => {
               const toastConfig: ToastConfig = {

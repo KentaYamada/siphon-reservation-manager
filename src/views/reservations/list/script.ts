@@ -33,6 +33,10 @@ export default Vue.extend({
       if (options.reservation_date_id !== "") {
         this.fetch(options);
       }
+    },
+
+    reFetch(): void {
+      this.fetch(this.options);
     }
   },
   data() {

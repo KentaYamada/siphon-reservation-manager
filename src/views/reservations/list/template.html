@@ -1,0 +1,22 @@
+<div class="columns is-desktop is-centered">
+    <div class="column is-three-fifths">
+        <div class="container">
+            <div class="box">
+                <h4 class="title">
+                    <i class="fas fa-calendar-check"></i>
+                    予約状況
+                </h4>
+                <div class="search-form-container">
+                    <reservation-search-form
+                        :searchOptions="options"
+                        @update-search-options="updateSearchOptions" />
+                </div>
+                <div class="divider"></div>
+                <reservation-list
+                    :reservations="reservations"
+                    :hasItems="hasItems"
+                    @delete-succeeded="reFetch()"/>
+            </div>
+        </div>
+    </div>
+</div>

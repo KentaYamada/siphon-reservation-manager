@@ -1,0 +1,35 @@
+<div class="columns is-desktop is-centered">
+    <div class="column is-half">
+        <div class="container">
+            <div class="box">
+                <div class="page-header">
+                    <h4 class="title is-size-3">
+                        <i class="fas fa-calendar-alt"></i>
+                        予約変更
+                    </h4>
+
+                    <p class="attention">
+                        新型コロナウイルス感染予防の為、しばらくの間、席数を減らして営業致します。<br>
+                        ご理解の程、よろしくお願いいたします。
+                    </p>
+                </div>
+
+                <div class="page-content">
+                    <reservation-form :reservation="reservation"
+                                      :validations="$v"
+                                      v-if="!!reservation" />
+                </div>
+
+                <div class="form-actions">
+                    <button type="button"
+                            class="button is-info"
+                            :disabled="isSaving"
+                            @click="onClickSave()">
+                        <i class="fas fa-edit"></i>
+                        <span>変更</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

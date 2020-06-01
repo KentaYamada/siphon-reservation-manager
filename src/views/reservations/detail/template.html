@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="columns is-centered is-desktop">
+        <div class="column is-half">
+            <div class="box">
+                <div class="page-header">
+                    <h4 class="title">
+                        <i class="fas fa-calendar-alt"></i>
+                        予約確認
+                    </h4>
+
+                    <h4 class="reserver-name" v-if="!!reservation">
+                        {{ reservation.reserver_name }} 様
+                    </h4>
+                    <p>予約内容は以下の通りです。</p>
+                </div>
+                <div class="page-content">
+                    <reservation-detail-content :reservation="reservation" v-if="!!reservation"/>
+                </div>
+                <div class="page-footer">
+                    <div class="buttons is-right">
+                        <button type="button"
+                                class="button is-danger is-inverted"
+                                @click="confirmCancel()">
+                            <i class="fas fa-times"></i>
+                            取消
+                        </button>
+                        <button type="button"
+                                class="button is-info is-inverted"
+                                @click="onClickEdit()">
+                            <i class="fas fa-edit"></i>
+                            変更
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

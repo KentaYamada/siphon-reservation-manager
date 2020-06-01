@@ -1,0 +1,21 @@
+.room {
+    border: 1px solid #aaa;
+    margin-left: 22px;
+    margin-bottom: 10px;
+    padding: 20px;
+    height: 120px;
+    position: relative;
+
+    .entrance {
+        border: 1px solid #aaa;
+        border-bottom-left-radius: 24px;
+        width: 24px;
+        height: 36px;
+        position: absolute;
+        top: -1px;
+        left: -24px;
+    }
+    .seats {
+        margin-top: 24px;
+    }
+}

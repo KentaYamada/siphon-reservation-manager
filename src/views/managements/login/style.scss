@@ -1,0 +1,20 @@
+// todo: background image
+// #app {
+//     background-image: url("../../..//assets/bg_f02.jpg");
+//     background-repeat: no-repeat;
+//     background-size: contain;
+//     background-position: center;
+// }
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .sub-title {
+        margin-top: 0.4rem;
+    }
+    .title, .subtitle {
+        font-family: cursive;
+    }
+}

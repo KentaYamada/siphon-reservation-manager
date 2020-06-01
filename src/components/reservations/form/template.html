@@ -1,0 +1,131 @@
+<div class="reservation-form-container">
+    <form>
+        <div class="field">
+            <label class="label">予約日</label>
+            <b-select placeholder="予約日"
+                      v-model="reservation.reservation_date_id"
+                      @input="onChangeBusinessDay($event)">
+                <option v-for="d in businessDays" :key="d.id" :value="d.id">
+                    {{ d.text }}
+                </option>
+            </b-select>
+            <div v-if="validations.reservation.reservation_date.$error">
+                <small class="help is-danger"
+                       v-if="!validations.reservation.reservation_date.required">
+                    予約日を選択してください。
+                </small>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">予約時間</label>
+            <b-select placeholder="予約時間"
+                      v-model="reservation.reservation_time_id"
+                      @input="onChangeTimezone($event)">
+                <option v-for="t in timezones" :key="t.id" :value="t.id">
+                    {{ t.text }}
+                </option>
+            </b-select>
+            <div v-if="validations.reservation.reservation_start_time.$error">
+                <small class="help is-danger"
+                    v-if="!validations.reservation.reservation_start_time.required">
+                    予約時間を選択してください。
+                </small>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">空席状況</label>
+            <div v-if="hasReservationSeats">
+                <p><small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small></p>
+                <p><small>ご予約は空席をクリックしてください。</small></p>
+                <p><small>※ テーブルは2名席です。</small></p>
+
+                <h5 class="status-title">座席表の見方</h5>
+                <div class="reservation-status">
+                    <small>
+                        <span class="status"></span>空席
+                    </small>
+                    <small>
+                        <span class="status selected"></span>予約中
+                    </small>
+                    <small>
+                        <span class="status reserved"></span>予約不可
+                    </small>
+                </div>
+
+                <selectable-reservation-seat-list
+                    :reservationSeats="reservation.reservation_seats"
+                    v-if="!!reservation.reservation_seats"/>
+            </div>
+            <div v-if="!hasReservationSeats">
+                <p>予約日・予約時間を選択してください</p>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">予約人数</label>
+            <div class="control">
+                <input type="number"
+                       class="input has-text-right"
+                       v-model.number="reservation.number_of_reservations">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">お名前</label>
+            <div class="control">
+                <input type="text"
+                       class="input"
+                       placeholder="Gamoyon 花子"
+                       v-model.trim="reservation.reserver_name"
+                       :class="{ 'is-danger': validations.reservation.reserver_name.$error }">
+                <div v-if="validations.reservation.reserver_name.$error">
+                    <small class="help is-danger" v-if="!validations.reservation.reserver_name.required">
+                        名前は必須入力です。
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">電話番号</label>
+            <div class="control">
+                <input type="text"
+                       class="input"
+                       placeholder="090-1234-5678"
+                       v-model.trim="reservation.tel"
+                       :class="{ 'is-danger': validations.reservation.tel.$error }">
+                <div v-if="validations.reservation.tel.$error">
+                    <small class="help is-danger"
+                           v-if="!validations.reservation.tel.required">
+                        電話番号は必須入力です。
+                    </small>
+                    <small class="help is-danger"
+                           v-if="!validations.reservation.tel.tel">
+                        不正な電話番号です。
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">メールアドレス</label>
+            <div class="control">
+                <input type="text"
+                       class="input"
+                       placeholder="sweets.sukiko@email.com"
+                       v-model.trim="reservation.mail"
+                       :class="{ 'is-danger': validations.reservation.mail.$error }">
+                <div v-if="validations.reservation.mail.$error">
+                    <small class="help is-danger"
+                           v-if="!validations.reservation.mail.required">
+                        メールアドレスは必須入力です。
+                    </small>
+                    <small class="help is-danger"
+                           v-if="!validations.reservation.mail.email">
+                        メールアドレスの形式で入力してください(例: cafedegamoyon.email.com)。
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">備考</label>
+            <textarea class="textarea" placeholder="お店への伝達事項などあれば記入してください(例: 卵アレルギーがあります)" v-model="reservation.comment"></textarea>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,59 @@
+<div class="reservation-search-form">
+    <!-- For PC -->
+    <div class="is-hidden-mobile">
+        <div class="field is-grouped">
+            <b-select placeholder="予約日"
+                      v-model="searchOptions.reservation_date_id"
+                      icon="calendar">
+                <option v-for="d in businessDays" :key="d.id" :value="d.id">
+                    {{ d.text }}
+                </option>
+            </b-select>
+            <div class="control">
+                <b-select v-model="searchOptions.reservation_time_id"
+                          placeholder="時間帯を選択してください"
+                          icon="clock">
+                    <option v-for="t in timezones" :key="t.id" :value="t.id">
+                        {{ t.text }}
+                    </option>
+                </b-select>
+            </div>
+            <div class="control">
+                <button type="button" class="button is-info" @click="handleSearch()">
+                    <i class="fas fa-search"></i>
+                    <span>検索</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- For mobile -->
+    <div class="is-hidden-tablet">
+        <div class="field">
+            <label class="label">予約日</label>
+            <b-select placeholder="予約日"
+                      v-model="searchOptions.reservation_date_id"
+                      icon="calendar">
+                <option v-for="d in businessDays" :key="d.id" :value="d.id">
+                    {{ d.text }}
+                </option>
+            </b-select>
+        </div>
+        <div class="field">
+            <label class="label">時間帯</label>
+            <b-select v-model="searchOptions.reservation_time_id" icon="clock" placeholder="時間帯を選択してください">
+                <option v-for="t in timezones" :key="t.id" :value="t.id">
+                    {{ t.text }}
+                </option>
+            </b-select>
+        </div>
+        <div class="field is-grouped is-grouped-right">
+            <div class="control">
+                <button type="button" class="button is-info" @click="handleSearch()">
+                    <i class="fas fa-search"></i>
+                    <span>検索</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

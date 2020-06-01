@@ -1,0 +1,20 @@
+.reserved-message-container {
+    text-align: center;
+
+    .main-title {
+        font-size: 42px;
+        font-weight: 700;
+    }
+    .reservation-detail-link-container {
+        margin-top: 24px;
+
+        .link-button {
+            font-size: 18px;
+            font-weight: 500;
+
+            .link-text {
+                margin-left: 4px;
+            }
+        }
+    }
+}

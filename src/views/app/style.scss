@@ -1,0 +1,17 @@
+#app {
+    width: 100vw;
+    background-color: #f5f6f7;
+
+    .navigation {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+        .navigation-item {
+            margin-top: 12px;
+            margin-bottom: 12px;
+            margin-left: 8px;
+            margin-right: 8px;
+        }
+    }
+}

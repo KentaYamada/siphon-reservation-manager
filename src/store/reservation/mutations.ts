@@ -47,7 +47,8 @@ const mutations: MutationTree<ReservationState> = {
 
   [INITIALIZE_RESERVATION_SEATS]: (state: ReservationState): void => {
     if (state.reservation) {
-      const seatNo = [1, 2, 3, 4, 5];
+      // const seatNo = [1, 2, 3, 4, 5];
+      const seatNo = [1, 2, 3, 4];
       const items: ReservationSeat[] = [];
 
       _.each(seatNo, (no: number) => {

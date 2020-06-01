@@ -110,6 +110,13 @@ export default Vue.extend({
     },
 
     /**
+     * データ読込完了通知イベント
+     */
+    onDataLoaded(): void {
+      this.isLoading = false;
+    },
+
+    /**
      * 予約座席情報取得
      */
     __fetchReservationSeats(): void {
@@ -153,6 +160,7 @@ export default Vue.extend({
     };
     return {
       isSaving: false,
+      isLoading: true,
       seatSeachOption: seatSeachOption
     };
   },

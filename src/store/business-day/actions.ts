@@ -35,7 +35,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
         items.push(item);
       });
 
-      items = _.orderBy(items, ["business_date"], ["desc"]);
+      items = _.orderBy(items, ["business_date"], ["asc"]);
       commit(SET_ITEMS, items);
     });
 

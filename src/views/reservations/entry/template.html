@@ -25,6 +25,7 @@
                                       v-if="!!reservation"
                                       @update-reservation-date="onUpdateReservationDate"
                                       @update-reservation-time="onUpdateReservationTime"
+                                      @data-loaded="onDataLoaded"
                                       />
                 </div>
 
@@ -40,4 +41,6 @@
             </div>
         </div>
     </div>
+
+    <b-loading :active.sync="isLoading"></b-loading>
 </div>

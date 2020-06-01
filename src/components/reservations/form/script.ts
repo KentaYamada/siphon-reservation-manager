@@ -75,12 +75,16 @@ export default Vue.extend({
   mounted() {
     const promises = [this.fetchTimezones(), this.fetchBusinessDays()];
 
-    Promise.all(promises).catch(() => {
-      const toastConfig: ToastConfig = {
-        message: "データの初期化に失敗しました。",
-        type: "is-danger"
-      };
-      this.$buefy.toast.open(toastConfig);
-    });
+    Promise.all(promises)
+      .then(() => {
+        this.$emit("data-loaded");
+      })
+      .catch(() => {
+        const toastConfig: ToastConfig = {
+          message: "データの初期化に失敗しました。",
+          type: "is-danger"
+        };
+        this.$buefy.toast.open(toastConfig);
+      });
   }
 });

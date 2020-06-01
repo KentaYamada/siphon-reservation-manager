@@ -89,6 +89,13 @@ export default Vue.extend({
     },
 
     /**
+     * データ読込完了通知イベント
+     */
+    onDataLoaded(): void {
+      this.isLoading = false;
+    },
+
+    /**
      * 予約完了通知メール送信
      * @param id
      */
@@ -110,7 +117,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      isSaving: false
+      isSaving: false,
+      isLoading: true
     };
   },
   mounted() {

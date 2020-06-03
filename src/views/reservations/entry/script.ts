@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import { ToastConfig } from "buefy/types/components";
 
 // component
@@ -19,6 +19,7 @@ import {
   FETCH_RESERVATION_SEATS,
   INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
+  HAS_SELECTED_SEATS,
   RESET_RESERVATION_SEATS,
   SAVE
 } from "@/store/constant";
@@ -52,7 +53,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("reservation", ["reservation"])
+    ...mapState("reservation", ["reservation"]),
+    ...mapGetters("reservation", [HAS_SELECTED_SEATS])
   },
   methods: {
     ...mapActions("reservation", [SAVE, FETCH_RESERVATION_SEATS]),
@@ -65,7 +67,7 @@ export default Vue.extend({
     onClickSave(): void {
       this.$v.$touch();
 
-      if (!this.$v.$invalid) {
+      if (!this.$v.$invalid && this.hasSelectedSeats) {
         this.isSaving = true;
         this.save(this.reservation)
           .then((newId: string) => {
@@ -88,6 +90,12 @@ export default Vue.extend({
           .finally(() => {
             this.isSaving = false;
           });
+      } else {
+        const toastConfig: ToastConfig = {
+          message: "入力内容に誤りがあります。エラーメッセージを確認してください。",
+          type: "is-danger"
+        };
+        this.$buefy.toast.open(toastConfig);
       }
     },
 

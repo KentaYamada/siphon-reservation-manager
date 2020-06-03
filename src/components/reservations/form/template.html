@@ -56,6 +56,9 @@
                     :reservationSeats="reservation.reservation_seats"
                     v-if="!!reservation.reservation_seats"/>
             </div>
+            <div v-if="hasReservationSeats && !hasSelectedSeats" class="no-seat-selection-message">
+                <p class="has-text-danger">座席を選択してください</p>
+            </div>
             <div v-if="!hasReservationSeats">
                 <p>予約日・予約時間を選択してください</p>
             </div>

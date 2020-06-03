@@ -11,7 +11,8 @@ import { RootState } from "@/store";
 import {
   GET_RESERVABLE_PEOPLE,
   HAS_ITEMS,
-  HAS_RESERVATION_SEATS
+  HAS_RESERVATION_SEATS,
+  HAS_SELECTED_SEATS
 } from "@/store/constant";
 import {
   MAX_NUMBER_OF_RESERVATIONS,
@@ -65,6 +66,21 @@ const getters: GetterTree<ReservationState, RootState> = {
     }
 
     return state.reservation.reservation_seats.length > 0;
+  },
+
+  [HAS_SELECTED_SEATS]: (state: ReservationState): boolean => {
+    if (!state.reservation) {
+      return false;
+    }
+
+    const selectedSeats = _.filter(
+      state.reservation.reservation_seats,
+      (seat: ReservationSeat) => {
+        return seat.is_selected;
+      }
+    );
+
+    return selectedSeats.length > 0;
   }
 };
 

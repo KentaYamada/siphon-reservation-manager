@@ -8,7 +8,8 @@
     "build": "vue-cli-service build --mode production",
     "test:unit": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
-    "deploy-dev": "vue-cli-service build --mode development && firebase deploy"
+    "deploy-dev": "vue-cli-service build --mode development && firebase deploy",
+    "build:dev": "vue-cli-service build --mode development"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",

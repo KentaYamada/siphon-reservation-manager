@@ -92,11 +92,11 @@
             </div>
         </div>
         <div class="field">
-            <label class="label">電話番号</label>
+            <label class="label">電話番号 (ハイフンなし)</label>
             <div class="control">
                 <input type="text"
                        class="input"
-                       placeholder="090-1234-5678"
+                       placeholder="09012345678"
                        v-model.trim="reservation.tel"
                        :class="{ 'is-danger': validations.reservation.tel.$error }">
                 <div v-if="validations.reservation.tel.$error">

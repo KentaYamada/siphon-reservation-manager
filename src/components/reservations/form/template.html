@@ -56,6 +56,9 @@
                     :reservationSeats="reservation.reservation_seats"
                     v-if="!!reservation.reservation_seats"/>
             </div>
+            <div v-if="hasReservationSeats && !hasSelectedSeats" class="no-seat-selection-message">
+                <p class="has-text-danger">座席を選択してください</p>
+            </div>
             <div v-if="!hasReservationSeats">
                 <p>予約日・予約時間を選択してください</p>
             </div>
@@ -66,6 +69,11 @@
                 <input type="number"
                        class="input has-text-right"
                        v-model.number="reservation.number_of_reservations">
+                <div v-if="validations.reservation.number_of_reservations.$error">
+                    <small class="help is-danger" v-if="!validations.reservation.number_of_reservations.required">
+                        予約人数は必須入力です。
+                    </small>
+                </div>
             </div>
         </div>
         <div class="field">
@@ -84,11 +92,11 @@
             </div>
         </div>
         <div class="field">
-            <label class="label">電話番号</label>
+            <label class="label">電話番号 (ハイフンなし)</label>
             <div class="control">
                 <input type="text"
                        class="input"
-                       placeholder="090-1234-5678"
+                       placeholder="09012345678"
                        v-model.trim="reservation.tel"
                        :class="{ 'is-danger': validations.reservation.tel.$error }">
                 <div v-if="validations.reservation.tel.$error">

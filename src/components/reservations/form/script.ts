@@ -15,6 +15,7 @@ import {
   GET_RESERVABLE_PEOPLE,
   GET_RESERVABLE_TIMEZONES,
   HAS_RESERVATION_SEATS,
+  HAS_SELECTED_SEATS,
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
@@ -41,7 +42,8 @@ export default Vue.extend({
     }),
     ...mapGetters("reservation", [
       GET_RESERVABLE_PEOPLE,
-      HAS_RESERVATION_SEATS
+      HAS_RESERVATION_SEATS,
+      HAS_SELECTED_SEATS
     ]),
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES,

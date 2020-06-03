@@ -48,7 +48,29 @@ export default Vue.extend({
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES,
       getTimezoneById: GET_BY_ID
-    })
+    }),
+
+    /**
+     * 座席選択を促すメッセージを表示するかどうか
+     */
+    visibleSelectionSeatMessage(): boolean {
+      // 予約座席データあり & 予約可能数が1以上 & 座席未選択
+      // todo: gettersに寄せる
+      return (
+        this.hasReservationSeats &&
+        this.getReservablePeople !== 0 &&
+        !this.hasSelectedSeats
+      );
+    },
+
+    /**
+     * 予約座席が満席であることをメッセージ表示するかどうか
+     */
+    visibleFullOfSeatsMessage(): boolean {
+      // 予約座席データあり & 予約可能数が1以上 & 座席未選択
+      // todo: gettersに寄せる
+      return this.hasReservationSeats && this.getReservablePeople === 0;
+    }
   },
   methods: {
     ...mapActions("businessDay", {

@@ -39,6 +39,9 @@ export default Vue.extend({
       reserver_name: {
         required
       },
+      number_of_reservations: {
+        required
+      },
       tel: {
         required,
         tel

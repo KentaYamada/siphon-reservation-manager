@@ -42,6 +42,9 @@ export default Vue.extend({
       reserver_name: {
         required
       },
+      number_of_reservations: {
+        required
+      },
       tel: {
         required,
         tel
@@ -92,7 +95,8 @@ export default Vue.extend({
           });
       } else {
         const toastConfig: ToastConfig = {
-          message: "入力内容に誤りがあります。エラーメッセージを確認してください。",
+          message:
+            "入力内容に誤りがあります。エラーメッセージを確認してください。",
           type: "is-danger"
         };
         this.$buefy.toast.open(toastConfig);

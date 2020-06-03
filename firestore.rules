@@ -22,7 +22,7 @@ service cloud.firestore {
       }
 
       match /reservations/{document} {
-          allow create: if true;
+          allow create, delete: if true;
       }
 
       match /reservations/{reservationId} {

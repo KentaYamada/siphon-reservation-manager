@@ -56,8 +56,15 @@
                     :reservationSeats="reservation.reservation_seats"
                     v-if="!!reservation.reservation_seats"/>
             </div>
-            <div v-if="hasReservationSeats && !hasSelectedSeats" class="no-seat-selection-message">
+            <div v-if="visibleSelectionSeatMessage" class="no-seat-selection-message">
                 <p class="has-text-danger">座席を選択してください</p>
+            </div>
+            <div v-if="visibleFullOfSeatsMessage" class="no-seat-selection-message">
+                <small class="has-text-danger">
+                    指定した予約日時がただいま満席となっております。<br>
+                    予約日時を再選択してご予約ください。<br>
+                    ※ご指定の日時でキャンセルが出た場合はご予約いただけます。時間をおいてアクセスしてください。
+                </small>
             </div>
             <div v-if="!hasReservationSeats">
                 <p>予約日・予約時間を選択してください</p>

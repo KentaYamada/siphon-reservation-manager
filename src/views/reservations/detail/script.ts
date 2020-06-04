@@ -35,15 +35,15 @@ export default Vue.extend({
      */
     confirmCancel(): void {
       const message = `
-        <p>予約を取消しますか？</p>
-        <small>取消後の予約は、再度予約登録してください。</small>
+        <p>予約をキャンセルしますか？</p>
+        <small>※キャンセルした後の差し戻しはできません。</small>
       `;
       const config: DialogConfig = {
         type: "is-danger",
-        title: "予約取消",
+        title: "予約キャンセル",
         message: message,
-        confirmText: "取消",
-        cancelText: "キャンセル",
+        confirmText: "キャンセル",
+        cancelText: "閉じる",
         hasIcon: true,
         iconPack: "fas",
         icon: "exclamation-circle",

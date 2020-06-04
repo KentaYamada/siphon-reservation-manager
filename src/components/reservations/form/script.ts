@@ -11,6 +11,7 @@ import { Reservation } from "@/entity/reservation";
 // store
 import {
   FETCH,
+  FETCH_BUSINESS_DATE_AFTER_TODAY,
   GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
   GET_RESERVABLE_TIMEZONES,
@@ -73,9 +74,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH
-    }),
+    ...mapActions("businessDay", [FETCH_BUSINESS_DATE_AFTER_TODAY]),
     ...mapActions("timezone", {
       fetchTimezones: FETCH
     }),
@@ -97,7 +96,10 @@ export default Vue.extend({
     }
   },
   mounted() {
-    const promises = [this.fetchTimezones(), this.fetchBusinessDays()];
+    const promises = [
+      this.fetchTimezones(),
+      this.fetchBusinessDateAfterToday()
+    ];
 
     Promise.all(promises)
       .then(() => {

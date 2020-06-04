@@ -10,7 +10,13 @@ import _ from "lodash";
 
 // store
 import { RootState } from "@/store";
-import { DELETE, FETCH, SAVE, SET_ITEMS } from "@/store/constant";
+import {
+  DELETE,
+  FETCH,
+  FETCH_BUSINESS_DATE_AFTER_TODAY,
+  SAVE,
+  SET_ITEMS
+} from "@/store/constant";
 import { BusinessDayState } from "@/store/business-day";
 
 // firestore collection name
@@ -40,6 +46,34 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     });
 
     return await $promise;
+  },
+
+  /**
+   * アクセス日以降の営業日を取得
+   */
+  [FETCH_BUSINESS_DATE_AFTER_TODAY]: async ({ commit }) => {
+    const today = moment().toDate();
+    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    const query = collection
+      .where("business_date", ">=", today)
+      .orderBy("business_date", "asc");
+
+    return await query.get().then(querySnapshot => {
+      const items: BusinessDay[] = [];
+
+      querySnapshot.forEach(doc => {
+        const businessDate = doc.data().business_date.toDate();
+        const item: BusinessDay = {
+          id: doc.id,
+          text: moment(businessDate).format("YYYY年MM月DD日"),
+          business_date: businessDate
+        };
+
+        items.push(item);
+      });
+
+      commit(SET_ITEMS, items);
+    });
   },
 
   /**

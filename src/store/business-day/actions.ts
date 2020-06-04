@@ -28,24 +28,24 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    */
   [FETCH]: async ({ commit }) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    let items: BusinessDay[] = [];
+    const query = collection.orderBy("business_date", "asc");
 
-    const $promise = collection.get().then(query => {
-      query.forEach(doc => {
+    return await query.get().then(querySnapshot => {
+      const items: BusinessDay[] = [];
+
+      querySnapshot.forEach(doc => {
         const businessDate = doc.data().business_date.toDate();
         const item: BusinessDay = {
           id: doc.id,
           text: moment(businessDate).format("YYYY年MM月DD日"),
           business_date: businessDate
         };
+
         items.push(item);
       });
 
-      items = _.orderBy(items, ["business_date"], ["asc"]);
       commit(SET_ITEMS, items);
     });
-
-    return await $promise;
   },
 
   /**

@@ -107,10 +107,19 @@ export default Vue.extend({
       );
     }
   },
+  data() {
+    return {
+      isLoading: true
+    };
+  },
   mounted() {
-    this.fetchById(this.id).catch(error => {
-      console.error(error);
-      this.$router.push({ name: "notfound" });
-    });
+    this.fetchById(this.id)
+      .catch(error => {
+        console.error(error);
+        this.$router.push({ name: "notfound" });
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 });

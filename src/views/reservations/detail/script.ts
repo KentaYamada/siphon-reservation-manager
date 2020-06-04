@@ -107,10 +107,24 @@ export default Vue.extend({
       );
     }
   },
+  data() {
+    return {
+      isLoading: true
+    };
+  },
   mounted() {
-    this.fetchById(this.id).catch(error => {
-      console.error(error);
-      this.$router.push({ name: "notfound" });
-    });
+    this.fetchById(this.id)
+      .catch(() => {
+        const toastConfig: ToastConfig = {
+          message:
+            "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
+          type: "is-danger"
+        };
+        this.$buefy.toast.open(toastConfig);
+        this.$router.push({ name: "notfound" });
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 });

@@ -28,6 +28,9 @@ export const IS_SIGNED_IN = "isSignedIn";
 
 export const GET_NAVIGATIONS = "getNavigations";
 
+// Business day actions
+export const FETCH_BUSINESS_DATE_AFTER_TODAY = "fetchBusinessDateAfterToday";
+
 // Reservation actions
 export const CANCEL = "cancel";
 

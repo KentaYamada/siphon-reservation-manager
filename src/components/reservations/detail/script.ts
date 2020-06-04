@@ -43,6 +43,9 @@ export default Vue.extend({
       }
 
       return `${reservationDate} ${startTime} - ${endTime}`;
+    },
+    reserverName(): string {
+      return `${this.reservation.reserver_name}様 (${this.reservation.number_of_reservations}名)`;
     }
   }
 });

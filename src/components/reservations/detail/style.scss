@@ -1,4 +1,17 @@
 .reservation-detail-content {
+    .reserver-name {
+        margin-top: 1.4rem;
+        margin-bottom: 0.8rem;
+    }
+    .item {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 12px;
+        padding-bottom: 4px;
+
+        .item-label {
+            font-size: 1.20rem;
+        }
+    }
     .status-title {
         font-weight: 700;
     }

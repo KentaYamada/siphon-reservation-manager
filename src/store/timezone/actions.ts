@@ -28,10 +28,11 @@ const actions: ActionTree<TimezoneState, RootState> = {
    */
   [FETCH]: async ({ commit }) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    let items: Timezone[] = [];
 
-    const $promise = collection.get().then(query => {
-      query.forEach(doc => {
+    return await collection.get().then(querySnapshot => {
+      let items: Timezone[] = [];
+
+      querySnapshot.forEach(doc => {
         const data = doc.data();
         const startTime = moment(data.start_time.toDate()).format("HH:mm");
         const endTime = moment(data.end_time.toDate()).format("HH:mm");
@@ -48,10 +49,9 @@ const actions: ActionTree<TimezoneState, RootState> = {
       items = _.sortBy(items, (item: Timezone) => {
         return item.start_time.getHours();
       });
+
       commit(SET_ITEMS, items);
     });
-
-    return await $promise;
   },
 
   /**

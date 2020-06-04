@@ -6,7 +6,6 @@ import { BusinessDay } from "@/entity/business-day";
 // plugin
 import firebase from "@/plugins/firebase";
 import moment from "moment";
-import _ from "lodash";
 
 // store
 import { RootState } from "@/store";

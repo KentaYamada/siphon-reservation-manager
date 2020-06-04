@@ -1,5 +1,6 @@
 import Vue, { PropType } from "vue";
 import { mapActions, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
 
 // entity
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
@@ -32,7 +33,14 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.fetchTimezones();
-    this.fetchBusinessDays();
+    const promises = [this.fetchTimezones(), this.fetchBusinessDays()];
+
+    Promise.all(promises).catch(() => {
+      const toastConfig: ToastConfig = {
+        message: "データの読み込みに失敗しました。",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    });
   }
 });

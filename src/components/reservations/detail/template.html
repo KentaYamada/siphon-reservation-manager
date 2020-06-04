@@ -1,47 +1,36 @@
 <div class="reservation-detail-content">
-    <table class="table is-fullwidth">
-        <tbody>
-            <tr>
-                <th>予約日時</th>
-                <td>
-                    {{ reservationDateTime }}
-                </td>
-            </tr>
-            <tr>
-                <th>予約人数</th>
-                <td>{{ reservation.number_of_reservations }}名</td>
-            </tr>
-            <tr>
-                <th>TEL</th>
-                <td>{{ reservation.tel }}</td>
-            </tr>
-            <tr>
-                <th>メールアドレス</th>
-                <td>{{ reservation.mail }}</td>
-            </tr>
-            <tr>
-                <th>メモ</th>
-                <td>{{ reservation.comment }}</td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <h5 class="status-title">座席</h5>
-                    <div class="reservation-status">
-                        <small>
-                            <span class="status"></span>空席
-                        </small>
-                        <small>
-                            <span class="status selected"></span>予約中
-                        </small>
-                        <small>
-                            <span class="status reserved"></span>予約不可
-                        </small>
-                    </div>
-                    <reservation-seat-list
-                        :reservationSeats="reservation.reservation_seats"
-                        v-if="!!reservation"/>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <h4 class="title is-size-4">{{ reserverName }}</h4>
+    <div class="item">
+        <h5 class="item-label"><strong>予約日時</strong></h5>
+        <p>{{ reservationDateTime }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label"><strong>座席</strong></h5>
+        <div class="reservation-status">
+            <small>
+                <span class="status"></span>空席
+            </small>
+            <small>
+                <span class="status selected"></span>予約中
+            </small>
+            <small>
+                <span class="status reserved"></span>予約不可
+            </small>
+        </div>
+        <reservation-seat-list
+            :reservationSeats="reservation.reservation_seats"
+            v-if="!!reservation"/>
+    </div>
+    <div class="item">
+        <h5 class="item-label"><strong>TEL</strong></h5>
+        <p>{{ reservation.tel }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label"><strong>メールアドレス</strong></h5>
+        <p>{{ reservation.mail }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label"><strong>メモ</strong></h5>
+        <p>{{ reservation.comment }}</p>
+    </div>
 </div>

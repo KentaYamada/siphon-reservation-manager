@@ -7,17 +7,12 @@
                         <i class="fas fa-calendar-alt"></i>
                         予約確認
                     </h4>
-
-                    <h4 class="reserver-name" v-if="!!reservation">
-                        {{ reservation.reserver_name }} 様
-                    </h4>
-                    <p>予約内容は以下の通りです。</p>
                 </div>
                 <div class="page-content">
                     <reservation-detail-content :reservation="reservation" v-if="!!reservation"/>
                 </div>
                 <div class="page-footer">
-                    <div class="buttons is-right">
+                    <div class="buttons is-right is-hidden-touch">
                         <button type="button"
                                 class="button is-danger is-inverted"
                                 @click="confirmCancel()">
@@ -29,6 +24,20 @@
                                 @click="onClickEdit()">
                             <i class="fas fa-edit"></i>
                             予約内容を変更する
+                        </button>
+                    </div>
+                    <div class="is-hidden-desktop has-text-right">
+                        <button type="button"
+                                class="button is-info is-inverted"
+                                @click="onClickEdit()">
+                            <i class="fas fa-edit"></i>
+                            予約内容を変更する
+                        </button>
+                        <button type="button"
+                                class="button is-danger is-inverted"
+                                @click="confirmCancel()">
+                            <i class="fas fa-times"></i>
+                            予約をキャンセルする
                         </button>
                     </div>
                 </div>

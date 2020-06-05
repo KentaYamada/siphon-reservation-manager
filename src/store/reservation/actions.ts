@@ -51,7 +51,7 @@ const actions: ActionTree<ReservationState, RootState> = {
     }
 
     const $promise = query.get().then(querySnapshot => {
-      const items: Reservation[] = [];
+      let items: Reservation[] = [];
 
       querySnapshot.forEach(doc => {
         const data = doc.data();

@@ -36,14 +36,22 @@ const actions: ActionTree<ReservationState, RootState> = {
    */
   [FETCH]: async ({ commit }, options: ReservationSearchOption) => {
     const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const query = collection.where(
+    let query = collection.where(
       "reservation_date_id",
       "==",
       options.reservation_date_id
     );
 
+    if (options.reservation_time_id !== "") {
+      query = query.where(
+        "reservation_time_id",
+        "==",
+        options.reservation_time_id
+      );
+    }
+
     const $promise = query.get().then(querySnapshot => {
-      let items: Reservation[] = [];
+      const items: Reservation[] = [];
 
       querySnapshot.forEach(doc => {
         const data = doc.data();
@@ -64,13 +72,6 @@ const actions: ActionTree<ReservationState, RootState> = {
 
         items.push(item);
       });
-
-      if (options.reservation_time_id !== "") {
-        // 予約時間
-        items = _.filter(items, (item: Reservation) => {
-          return item.reservation_time_id === options.reservation_time_id;
-        });
-      }
 
       // sort
       items = _.orderBy(
@@ -321,7 +322,10 @@ const actions: ActionTree<ReservationState, RootState> = {
   /**
    * 貸切データ登録
    */
-  [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
+  [SAVE_ALL_RESERVATION]: async (
+    { commit },
+    reservation: Reservation
+  ): Promise<string> => {
     const db = firebase.firestore();
     const reservations = db.collection(COLLECTION_NAME);
 
@@ -329,7 +333,9 @@ const actions: ActionTree<ReservationState, RootState> = {
     const query = reservations
       .where("reservation_date_id", "==", reservation.reservation_date_id)
       .where("reservation_time_id", "==", reservation.reservation_time_id);
-    const hasItem = await query.get().then(querySnapshot => { return !querySnapshot.empty; });
+    const hasItem = await query.get().then(querySnapshot => {
+      return !querySnapshot.empty;
+    });
 
     if (hasItem) {
       return Promise.reject();

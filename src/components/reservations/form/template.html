@@ -101,7 +101,7 @@
         <div class="field">
             <label class="label">電話番号 (ハイフンなし)</label>
             <div class="control">
-                <input type="text"
+                <input type="tel"
                        class="input"
                        placeholder="09012345678"
                        v-model.trim="reservation.tel"
@@ -113,19 +113,22 @@
                     </small>
                     <small class="help is-danger"
                            v-if="!validations.reservation.tel.tel">
-                        不正な電話番号です。
+                        電話番号は半角数字で入力してください。
                     </small>
                 </div>
             </div>
         </div>
         <div class="field">
-            <label class="label">メールアドレス</label>
+            <label class="label">
+                メールアドレス
+            </label>
             <div class="control">
-                <input type="text"
+                <input type="mail"
                        class="input"
                        placeholder="sweets.sukiko@email.com"
                        v-model.trim="reservation.mail"
                        :class="{ 'is-danger': validations.reservation.mail.$error }">
+                <small>※入力したメールアドレスにお間違いがないか確認してください。</small>
                 <div v-if="validations.reservation.mail.$error">
                     <small class="help is-danger"
                            v-if="!validations.reservation.mail.required">
@@ -133,7 +136,7 @@
                     </small>
                     <small class="help is-danger"
                            v-if="!validations.reservation.mail.email">
-                        メールアドレスの形式で入力してください(例: cafedegamoyon.email.com)。
+                        メールアドレスの形式で入力してください(例: cafedegamoyon@email.com)。
                     </small>
                 </div>
             </div>

@@ -8,14 +8,11 @@
                         予約変更
                     </h4>
                     <p>Cafe de Gamoyonをご利用いただきありがとうございます。<p>
-                    <p>
-                        当店は営業時間内一部予約制となっております。<br>
-                        ご予約希望の方は以下の情報をご記入ください。<br>
-                    </p>
-                    <p>
-                    貸切などのご予約のご相談については、<a href="https://www.facebook.com/gamoyon4204/" class="sns-link" target="_blank"><i class="fab fa-facebook"></i>Facebookページ</a>または
+                    <p>このページでは、予約内容の変更を受け付けております。</p>
+                    <p><strong>予約変更後、メールにてお知らせいたします。</strong></p>
+                    <p class="contact-message">貸切などのご相談は、<a href="https://www.facebook.com/gamoyon4204/" class="sns-link" target="_blank"><i class="fab fa-facebook"></i>Facebookページ</a>または
                     <a href="https://www.instagram.com/cafedegamoyon/?hl=ja" class="sns-link" target="_blank"><i class="fab fa-instagram"></i>インスタグラム</a>
-                        からメッセージにてお問い合わせください。
+                        からお問い合わせください。
                     </p>
                 </div>
 
@@ -29,10 +26,10 @@
                 <div class="form-actions">
                     <button type="button"
                             class="button is-info"
-                            :disabled="isSaving"
+                            :disabled="disableEdit"
                             @click="onClickSave()">
                         <i class="fas fa-edit"></i>
-                        <span>変更</span>
+                        <span>予約内容を変更</span>
                     </button>
                 </div>
             </div>

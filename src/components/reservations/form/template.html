@@ -75,7 +75,8 @@
             <div class="control">
                 <input type="number"
                        class="input has-text-right"
-                       v-model.number="reservation.number_of_reservations">
+                       v-model.number="reservation.number_of_reservations"
+                       :class="{ 'is-danger': validations.reservation.number_of_reservations.$error }">
                 <div v-if="validations.reservation.number_of_reservations.$error">
                     <small class="help is-danger" v-if="!validations.reservation.number_of_reservations.required">
                         予約人数は必須入力です。

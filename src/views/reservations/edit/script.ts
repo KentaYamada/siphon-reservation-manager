@@ -54,7 +54,11 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("reservation", ["reservation"]),
-    ...mapGetters("reservation", [HAS_SELECTED_SEATS])
+    ...mapGetters("reservation", [HAS_SELECTED_SEATS]),
+
+    disableEdit(): boolean {
+      return this.isSaving || !this.isLoaded;
+    }
   },
   methods: {
     ...mapActions("reservation", [FETCH_BY_ID, SAVE]),
@@ -129,10 +133,26 @@ export default Vue.extend({
   data() {
     return {
       isSaving: false,
+      isLoaded: false,
       isLoading: true
     };
   },
   mounted() {
-    this.fetchById(this.id);
+    this.fetchById(this.id)
+      .then(() => {
+        this.isLoaded = true;
+      })
+      .catch(() => {
+        const toastConfig: ToastConfig = {
+          message: "予約データの取得に失敗しました。",
+          type: "is-danger"
+        };
+
+        this.$buefy.toast.open(toastConfig);
+        this.$router.push({ name: "notfound" });
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 });

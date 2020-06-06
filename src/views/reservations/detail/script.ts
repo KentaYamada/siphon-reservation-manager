@@ -35,14 +35,14 @@ export default Vue.extend({
      */
     confirmCancel(): void {
       const message = `
-        <p>予約をキャンセルしますか？</p>
-        <small>※キャンセルした後の差し戻しはできません。</small>
+        <p>予約を取り消しますか？</p>
+        <small>※取り消した後の予約はもとに戻せません。</small>
       `;
       const config: DialogConfig = {
         type: "is-danger",
-        title: "予約キャンセル",
+        title: "予約取り消し",
         message: message,
-        confirmText: "キャンセル",
+        confirmText: "取り消し",
         cancelText: "閉じる",
         hasIcon: true,
         iconPack: "fas",
@@ -53,7 +53,7 @@ export default Vue.extend({
               this.__sendEmail(this.id);
 
               const toastConfig: ToastConfig = {
-                message: "予約キャンセルしました",
+                message: "予約を取り消しました",
                 type: "is-danger"
               };
               this.$buefy.toast.open(toastConfig);
@@ -65,8 +65,8 @@ export default Vue.extend({
               console.error(error);
 
               const message = `
-                <p>予約のキャンセルに失敗しました</p>
-                <p>お手数ですが、時間を置いて再度キャンセルを実行してください</p>
+                <p>予約の取り消しに失敗しました</p>
+                <p>お手数ですが、時間をおいて再度実行してください</p>
               `;
               const toastConfig: ToastConfig = {
                 message: message,

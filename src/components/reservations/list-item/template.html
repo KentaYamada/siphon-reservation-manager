@@ -1,31 +1,38 @@
-<div class="list-item">
-    <h3 class="subtitle is-size-3">
-         <strong>{{ reservation.reserver_name | formatReserver(reservation.number_of_reservations) }}</strong>
-    </h3>
-    <div class="item">
-        <p><strong>予約日</strong></p>
-        <p>
-            {{ reservation.reservation_date | formatReservationDatetime(reservation.reservation_start_time, reservation.reservation_end_time) }}
+<div class="card">
+    <div class="card-content">
+        <p class="title">
+            <strong>
+                {{ reservation.reserver_name | formatReserver(reservation.number_of_reservations) }}
+            </strong>
         </p>
-    </div>
-    <div class="item">
-        <p><strong>電話番号</strong></p>
-        <p>{{ reservation.tel }}</p>
-    </div>
-    <div class="item">
-        <p><strong>メールアドレス</strong></p>
-        <p>{{ reservation.mail }}</p>
-    </div>
-    <div class="item">
-        <p><strong>メモ</strong></p>
-        <p>{{ reservation.comment }}</p>
-    </div>
-    <div class="buttons has-addons is-right">
-        <button type="button"
-                class="button is-danger is-inverted"
-                @click="onClickCancel()">
-            <i class="fas fa-times"></i>
-            キャンセル
-        </button>
+
+        <div class="content-wrapper">
+            <p><strong>予約日時</strong></p>
+            <p>{{ reservation.reservation_date | formatReservationDatetime(reservation.reservation_start_time, reservation.reservation_end_time) }}</p>
+        </div>
+
+        <div class="content-wrapper">
+            <p><strong>座席</strong></p>
+            <reservation-seat-list :reservationSeats="reservation.reservation_seats" v-if="!!reservation"/>
+        </div>
+
+        <div class="content-wrapper">
+            <p><strong>メモ</strong></p>
+            <p>{{ reservation.comment }}</p>
+        </div>
+        <div class="content-wrapper">
+            <p><strong>TEL</strong></p>
+            <p>{{ reservation.tel }}</p>
+        </div>
+        <div class="content-wrapper">
+            <p><strong>メールアドレス</strong></p>
+            <p><a href="mailto:sweets.sukiko@emai.com">{{ reservation.mail }}</a></p>
+        </div>
+
+        <div class="buttons has-addons is-right">
+            <button type="button" class="button is-danger is-inverted" @click="onClickCancel()">
+                <i class="fas fa-times"></i>予約取消
+            </button>
+        </div>
     </div>
 </div>

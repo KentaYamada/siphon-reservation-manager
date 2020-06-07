@@ -1,11 +1,9 @@
-.list-item {
-    .item {
-        margin-top: 12px;
-        margin-left: 4px;
-    }
-    .buttons {
-        .button {
-            padding-right: 0;
+.card {
+    margin-bottom: 12px;
+
+    .card-content {
+        .content-wrapper {
+            margin-bottom: 6px;
         }
     }
 }

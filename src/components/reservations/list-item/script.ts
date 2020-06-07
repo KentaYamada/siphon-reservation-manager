@@ -2,6 +2,9 @@ import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
 import { DialogConfig, ToastConfig } from "buefy/types/components";
 
+// component
+import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
+
 // entity
 import { Reservation } from "@/entity/reservation";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
@@ -18,6 +21,9 @@ import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   template: "<reservation-list-item/>",
+  components: {
+    ReservationSeatList
+  },
   props: {
     reservation: {
       required: true,
@@ -82,12 +88,7 @@ export default Vue.extend({
         path: "/"
       }).href;
       const redirectUrl = `${location.origin}${href}`;
-      sendEmail(
-        this.reservation,
-        id,
-        redirectUrl,
-        EMAIL_MESSAGE_TEMPLATES.CANCELED
-      );
+      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
     }
   }
 });

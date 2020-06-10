@@ -11,7 +11,7 @@
                 <div class="page-content">
                     <reservation-detail-content :reservation="reservation" v-if="!!reservation"/>
                 </div>
-                <div class="page-footer">
+                <div class="page-footer" v-if="visibleActions">
                     <div class="buttons is-right is-hidden-touch">
                         <button type="button"
                                 class="button is-danger is-inverted"

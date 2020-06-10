@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { DialogConfig, ToastConfig } from "buefy/types/components";
 
 // component
@@ -9,7 +9,7 @@ import ReservationDetailContent from "@/components/reservations/detail/Reservati
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 
 // store
-import { CANCEL, FETCH_BY_ID } from "@/store/constant";
+import { CANCEL, FETCH_BY_ID, VISIBLE_ACTIONS } from "@/store/constant";
 
 // utility
 import { sendEmail } from "@/utility/email-utility";
@@ -25,7 +25,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("reservation", ["reservation"])
+    ...mapState("reservation", ["reservation"]),
+    ...mapGetters("reservation", [VISIBLE_ACTIONS])
   },
   methods: {
     ...mapActions("reservation", [CANCEL, FETCH_BY_ID]),

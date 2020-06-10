@@ -1,4 +1,10 @@
 #app {
+    &.login-bg {
+        background-image: url("../../assets/bg_f02.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
     width: 100vw;
     background-color: #f5f6f7;
 

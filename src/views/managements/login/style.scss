@@ -1,15 +1,9 @@
-// todo: background image
-// #app {
-//     background-image: url("../../..//assets/bg_f02.jpg");
-//     background-repeat: no-repeat;
-//     background-size: contain;
-//     background-position: center;
-// }
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-repeat: no-repeat;
 
     .sub-title {
         margin-top: 0.4rem;

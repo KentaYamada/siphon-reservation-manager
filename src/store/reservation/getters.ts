@@ -5,6 +5,7 @@ import { ReservationSeat } from "@/entity/reservation-seat";
 
 // plugin
 import _ from "lodash";
+import moment from "moment";
 
 // store
 import { RootState } from "@/store";
@@ -12,12 +13,10 @@ import {
   GET_RESERVABLE_PEOPLE,
   HAS_ITEMS,
   HAS_RESERVATION_SEATS,
-  HAS_SELECTED_SEATS
+  HAS_SELECTED_SEATS,
+  VISIBLE_ACTIONS
 } from "@/store/constant";
-import {
-  MAX_NUMBER_OF_RESERVATIONS,
-  ReservationState
-} from "@/store/reservation";
+import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
 
 const getters: GetterTree<ReservationState, RootState> = {
   /**
@@ -73,14 +72,23 @@ const getters: GetterTree<ReservationState, RootState> = {
       return false;
     }
 
-    const selectedSeats = _.filter(
-      state.reservation.reservation_seats,
-      (seat: ReservationSeat) => {
-        return seat.is_selected;
-      }
-    );
+    const selectedSeats = _.filter(state.reservation.reservation_seats, (seat: ReservationSeat) => {
+      return seat.is_selected;
+    });
 
     return selectedSeats.length > 0;
+  },
+
+  [VISIBLE_ACTIONS]: (state: ReservationState): boolean => {
+    if (!state.reservation) {
+      return false;
+    }
+
+    const current = moment();
+    const reservationDate = moment(state.reservation.reservation_date as Date);
+    reservationDate.set({ hour: 10, minutes: 1, second: 0, millisecond: 0 });
+
+    return reservationDate.diff(current) > 0;
   }
 };
 

@@ -1,20 +1,21 @@
 import Vue, { PropType } from "vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { ToastConfig } from "buefy/types/components";
+
+// component
+import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
 
 // entity
 import { Reservation } from "@/entity/reservation";
 
 // store
-import {
-  FETCH,
-  FETCH_ALL_RESERVED_TIMEZONES,
-  GET_BY_ID,
-  SET_RESERVATION_DATE,
-  SET_RESERVATION_TIMEZONE
-} from "@/store/constant";
+import { CAN_RESERVED, FETCH, FETCH_BUSINESS_DATE_AFTER_TODAY, HAS_RESERVATION_SEATS } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-all-reserved-form/>",
+  components: {
+    ReservationSeatList
+  },
   props: {
     reservation: {
       required: true,
@@ -28,35 +29,39 @@ export default Vue.extend({
   computed: {
     ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"]),
-    ...mapGetters("businessDay", {
-      getBusinessDayById: GET_BY_ID
-    }),
-    ...mapGetters("timezone", {
-      getTimezoneById: GET_BY_ID
-    })
+    ...mapGetters("reservation", [CAN_RESERVED, HAS_RESERVATION_SEATS])
   },
   methods: {
-    ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH
-    }),
-    ...mapActions("timezone", [FETCH_ALL_RESERVED_TIMEZONES]),
-    ...mapMutations("reservation", [
-      SET_RESERVATION_DATE,
-      SET_RESERVATION_TIMEZONE
-    ]),
+    ...mapActions("businessDay", [FETCH_BUSINESS_DATE_AFTER_TODAY]),
+    ...mapActions("timezone", [FETCH]),
 
+    /**
+     * 予約日変更イベント
+     */
     onChangeBusinessDay(selectedId: string): void {
-      const businessDay = this.getBusinessDayById(selectedId);
-      this.setReservationDate(businessDay.business_date);
+      this.$emit("update-reservation-date", selectedId);
     },
 
+    /**
+     * 予約時間変更イベント
+     */
     onChangeTimezone(selectedId: string): void {
-      const timezone = this.getTimezoneById(selectedId);
-      this.setReservationTimezone(timezone);
+      this.$emit("update-reservation-time", selectedId);
     }
   },
   mounted() {
-    this.fetchAllReservedTimezones();
-    this.fetchBusinessDays();
+    const promises = [this.fetchBusinessDateAfterToday(), this.fetch()];
+
+    Promise.all(promises)
+      .then(() => {
+        this.$emit("data-loaded");
+      })
+      .catch(() => {
+        const toastConfig: ToastConfig = {
+          message: "データの初期化に失敗しました。",
+          type: "is-danger"
+        };
+        this.$buefy.toast.open(toastConfig);
+      });
   }
 });

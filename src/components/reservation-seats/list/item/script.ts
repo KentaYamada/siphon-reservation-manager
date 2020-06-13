@@ -9,20 +9,22 @@ export default Vue.extend({
       type: Object as PropType<ReservationSeat>
     }
   },
-  data() {
-    let selectedColor = "";
+  computed: {
+    seatColorCss(): string {
+      let selectedColor = "";
 
-    if (this.reservationSeat.is_selected) {
-      selectedColor = "selected";
-    } else {
-      if (this.reservationSeat.is_reserved) {
-        selectedColor = "reserved";
+      if (this.reservationSeat.is_selected) {
+        selectedColor = "selected";
+      } else {
+        if (this.reservationSeat.is_reserved) {
+          selectedColor = "reserved";
+        }
       }
-    }
 
-    return {
-      seatPositionCss: `no${this.reservationSeat.seat_no}`,
-      seatColorCss: selectedColor
-    };
+      return selectedColor;
+    },
+    seatPositionCss(): string {
+      return `no${this.reservationSeat.seat_no}`;
+    }
   }
 });

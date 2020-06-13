@@ -10,6 +10,7 @@ import moment from "moment";
 // store
 import { RootState } from "@/store";
 import {
+  CAN_RESERVED,
   GET_RESERVABLE_PEOPLE,
   HAS_ITEMS,
   HAS_RESERVATION_SEATS,
@@ -89,6 +90,18 @@ const getters: GetterTree<ReservationState, RootState> = {
     reservationDate.set({ hour: 10, minutes: 1, second: 0, millisecond: 0 });
 
     return reservationDate.diff(current) > 0;
+  },
+
+  [CAN_RESERVED]: (state: ReservationState): boolean => {
+    if (!state.reservation) {
+      return false;
+    }
+
+    const count = _.filter(state.reservation.reservation_seats, (seat: ReservationSeat) => {
+      return !seat.is_reserved;
+    });
+
+    return count.length === MAX_NUMBER_OF_RESERVATIONS / 2;
   }
 };
 

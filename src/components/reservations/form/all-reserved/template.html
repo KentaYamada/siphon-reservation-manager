@@ -41,6 +41,9 @@
                 </small>
             </div>
             <reservation-seat-list :reservationSeats="reservation.reservation_seats"/>
+            <small class="help is-danger" v-if="!canReserved">
+                先約データがある場合は、貸切予約できません
+            </small>
         </div>
         <div v-if="!hasReservationSeats">
             <p>予約日・予約時間を選択してください。</p>

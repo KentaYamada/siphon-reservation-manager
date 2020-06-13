@@ -9,7 +9,7 @@ import ReservationSeatList from "@/components/reservation-seats/list/Reservation
 import { Reservation } from "@/entity/reservation";
 
 // store
-import { FETCH, FETCH_BUSINESS_DATE_AFTER_TODAY, HAS_RESERVATION_SEATS } from "@/store/constant";
+import { CAN_RESERVED, FETCH, FETCH_BUSINESS_DATE_AFTER_TODAY, HAS_RESERVATION_SEATS } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-all-reserved-form/>",
@@ -29,7 +29,7 @@ export default Vue.extend({
   computed: {
     ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"]),
-    ...mapGetters("reservation", [HAS_RESERVATION_SEATS])
+    ...mapGetters("reservation", [CAN_RESERVED, HAS_RESERVATION_SEATS])
   },
   methods: {
     ...mapActions("businessDay", [FETCH_BUSINESS_DATE_AFTER_TODAY]),

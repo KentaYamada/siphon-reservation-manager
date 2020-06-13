@@ -14,6 +14,7 @@ import { tel } from "@/plugins/validate";
 
 // store
 import {
+  CAN_RESERVED,
   GET_BY_ID,
   FETCH_RESERVATION_SEATS,
   INITIALIZE,
@@ -54,6 +55,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("reservation", ["reservation"]),
+    ...mapGetters("reservation", [CAN_RESERVED]),
     ...mapGetters("businessDay", {
       getBusinessDayById: GET_BY_ID
     }),

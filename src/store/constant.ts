@@ -60,6 +60,8 @@ export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
 
 export const VISIBLE_ACTIONS = "visibleActions";
 
+export const CAN_RESERVED = "canReserved";
+
 // Reservation resend mail actions
 export const CAN_SEND_MAIL = "canSendMail";
 

@@ -21,7 +21,8 @@
 
                 <div class="page-footer">
                     <div class="buttons is-right">
-                        <button type="button" class="button is-info" @click="onClickSave()">
+                        <button type="button" class="button is-info"
+                                :disabled="!canReserved" @click="onClickSave()">
                             <i class="fas fa-calendar-check"></i>予約する
                         </button>
                     </div>

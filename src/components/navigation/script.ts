@@ -42,11 +42,11 @@ const getNavigations = (): Navigation[] => {
           url: MANAGEMENT_RESERVATION_LIST_URL,
           icon: "fa-list"
         },
-        {
-          name: "貸切設定",
-          url: MANAGEMENT_RESERVATION_ALL_RESERVED,
-          icon: "fa-calendar-check"
-        },
+        // {
+        //   name: "貸切設定",
+        //   url: MANAGEMENT_RESERVATION_ALL_RESERVED,
+        //   icon: "fa-calendar-check"
+        // },
         {
           name: "営業設定",
           url: SHOP_SETTING_URL,

@@ -2,7 +2,8 @@
     <div class="field">
         <label class="label">予約日</label>
         <b-select placeholder="予約日"
-                  v-model="reservation.reservation_date_id">
+                  v-model="reservation.reservation_date_id"
+                  @input="onChangeBusinessDay($event)">
             <option v-for="d in businessDays" :key="d.id" :value="d.id">{{ d.text }}</option>
         </b-select>
         <div v-if="validations.reservation.reservation_date.$error">
@@ -14,7 +15,8 @@
     <div class="field">
         <label class="label">予約時間</label>
         <b-select placeholder="予約時間"
-                  v-model="reservation.reservation_time_id">
+                  v-model="reservation.reservation_time_id"
+                  @input="onChangeTimezone($event)">
             <option v-for="t in timezones" :key="t.id" :value="t.id">{{ t.text }}</option>
         </b-select>
         <div v-if="validations.reservation.reservation_start_time.$error">
@@ -25,6 +27,24 @@
     </div>
     <div class="field">
         <label class="label">空席状況</label>
+        <div v-if="hasReservationSeats">
+            <h5 class="status-title">座席表の見方</h5>
+            <div class="reservation-status">
+                <small>
+                    <span class="status"></span>空席
+                </small>
+                <small>
+                    <span class="status selected"></span>予約中
+                </small>
+                <small>
+                    <span class="status reserved"></span>予約不可
+                </small>
+            </div>
+            <reservation-seat-list :reservationSeats="reservation.reservation_seats"/>
+        </div>
+        <div v-if="!hasReservationSeats">
+            <p>予約日・予約時間を選択してください。</p>
+        </div>
     </div>
     <div class="field">
         <div class="label">予約人数</div>

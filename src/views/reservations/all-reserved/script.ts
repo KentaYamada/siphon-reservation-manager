@@ -21,6 +21,7 @@ import {
   INITIALIZE_RESERVATION_SEATS,
   RESET_RESERVATION_SEATS,
   SAVE,
+  SAVE_ALL_RESERVATION,
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
@@ -61,10 +62,14 @@ export default Vue.extend({
     }),
     ...mapGetters("timezone", {
       getTimezoneById: GET_BY_ID
-    })
+    }),
+
+    canSave(): boolean {
+      return this.canReserved && !this.isSaving;
+    }
   },
   methods: {
-    ...mapActions("reservation", [FETCH_RESERVATION_SEATS, SAVE]),
+    ...mapActions("reservation", [FETCH_RESERVATION_SEATS, SAVE, SAVE_ALL_RESERVATION]),
     ...mapMutations("reservation", [
       INITIALIZE,
       INITIALIZE_RESERVATION_SEATS,
@@ -77,15 +82,37 @@ export default Vue.extend({
      * 保存イベント
      */
     onClickSave(): void {
+      const toastConfig: ToastConfig = {
+        message: "",
+        type: ""
+      };
+
+      this.isSaving = true;
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        // something
+        this.saveAllReservation(this.reservation)
+          .then((newId: string) => {
+            toastConfig.message = "貸切予約しました。";
+            toastConfig.type = "is-success";
+
+            this.$buefy.toast.open(toastConfig);
+            this.$router.push({ name: "reserved-message", params: { id: newId } });
+          })
+          .catch(() => {
+            toastConfig.message = "貸切予約の保存に失敗しました。";
+            toastConfig.type = "is-success";
+
+            this.$buefy.toast.open(toastConfig);
+          })
+          .finally(() => {
+            this.isSaving = false;
+          });
       } else {
-        const toastConfig: ToastConfig = {
-          message: "入力内容に誤りがあります。エラーメッセージを確認してください。",
-          type: "is-danger"
-        };
+        toastConfig.message = "入力内容に誤りがあります。エラーメッセージを確認してください。";
+        toastConfig.type = "is-danger";
+
+        this.isSaving = false;
         this.$buefy.toast.open(toastConfig);
       }
     },
@@ -140,6 +167,7 @@ export default Vue.extend({
 
     return {
       isLoading: true,
+      isSaving: false,
       searchOption: searchOption
     };
   },

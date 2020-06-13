@@ -1,11 +1,15 @@
 <form>
     <div class="field">
         <label class="label">予約日</label>
-        <b-select placeholder="予約日"></b-select>
+        <b-select placeholder="予約日">
+            <option v-for="d in businessDays" :key="d.id" :value="d.id">{{ d.text }}</option>
+        </b-select>
     </div>
     <div class="field">
         <label class="label">予約時間</label>
-        <b-select placeholder="予約時間"></b-select>
+        <b-select placeholder="予約時間">
+            <option v-for="t in timezones" :key="t.id" :value="t.id">{{ t.text }}</option>
+        </b-select>
     </div>
     <div class="field">
         <label class="label">空席状況</label>

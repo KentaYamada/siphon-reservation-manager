@@ -16,6 +16,16 @@ import {
 
 export default Vue.extend({
   template: "<reservation-all-reserved-form/>",
+  props: {
+    reservation: {
+      required: true,
+      type: Object as PropType<Reservation>
+    },
+    validations: {
+      required: true,
+      type: Object
+    }
+  },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"])

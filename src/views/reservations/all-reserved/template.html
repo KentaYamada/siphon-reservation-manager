@@ -11,18 +11,22 @@
 
                 <div class="page-content">
                     <reservation-all-reserved-form
-                        @data-loaded="onDataLoaded"
-                    />
+                        :reservation="reservation"
+                        :validations="$v"
+                        v-if="!!reservation"
+                        @data-loaded="onDataLoaded"/>
                 </div>
 
                 <div class="page-footer">
                     <div class="buttons is-right">
-                        <button type="button" class="button is-info">
+                        <button type="button" class="button is-info" @click="onClickSave()">
                             <i class="fas fa-calendar-check"></i>予約する
                         </button>
                     </div>
                 </div>
             </div>
+
+            <b-loading :active.sync="isLoading"></b-loading>
         </div>
     </div>
 </div>

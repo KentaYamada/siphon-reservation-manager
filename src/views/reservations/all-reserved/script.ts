@@ -129,7 +129,7 @@ export default Vue.extend({
      */
     onUpdateReservationDate(selectedId: string): void {
       const businessDay = this.getBusinessDayById(selectedId);
-      this.setReservationDate(businessDay);
+      this.setReservationDate(businessDay.business_date);
       this.searchOption.reservation_date_id = selectedId;
       this.__fetchReservationSeats();
     },

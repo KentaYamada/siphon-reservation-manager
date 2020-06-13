@@ -342,22 +342,18 @@ const actions: ActionTree<ReservationState, RootState> = {
    */
   [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
     const db = firebase.firestore();
-    const reservations = db.collection(COLLECTION_NAME);
+    const $transaction = db.runTransaction(async transaction => {
+      const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
+      const query = reservationSeats
+        .where("reservation_date_id", "==", reservation.reservation_date_id)
+        .where("reservation_time_id", "==", reservation.reservation_time_id);
+      const $promise = await query.get();
 
-    // 予約データが無いかチェック
-    const query = reservations
-      .where("reservation_date_id", "==", reservation.reservation_date_id)
-      .where("reservation_time_id", "==", reservation.reservation_time_id);
-    const hasItem = await query.get().then(querySnapshot => {
-      return !querySnapshot.empty;
-    });
+      if (!$promise.empty) {
+        return Promise.reject();
+      }
 
-    if (hasItem) {
-      return Promise.reject();
-    }
-
-    const transaction = await db.runTransaction(async transaction => {
-      const reservationRef = reservations.doc();
+      const reservationRef = db.collection(COLLECTION_NAME).doc();
       const reservationData = {
         reservation_date: reservation.reservation_date,
         reservation_date_id: reservation.reservation_date_id,
@@ -373,10 +369,8 @@ const actions: ActionTree<ReservationState, RootState> = {
 
       transaction.set(reservationRef, reservationData);
 
-      const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
-
       _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-        const seatRef = reservationSeats.doc();
+        const reservationSeatRef = reservationSeats.doc();
         const seatData = {
           seat_no: seat.seat_no,
           is_reserved: true,
@@ -388,13 +382,13 @@ const actions: ActionTree<ReservationState, RootState> = {
           reservation_time_id: reservation.reservation_time_id
         };
 
-        transaction.set(seatRef, seatData);
+        transaction.set(reservationSeatRef, seatData);
       });
 
       return reservationRef.id;
     });
 
-    return transaction;
+    return $transaction;
   },
 
   /**

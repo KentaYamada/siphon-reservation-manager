@@ -15,5 +15,15 @@ import { INITIALIZE, SAVE } from "@/store/constant";
 export default Vue.extend({
   components: {
     ReservationAllReservedForm
+  },
+  methods: {
+    onDataLoaded(): void {
+      this.isLoading = true;
+    }
+  },
+  data() {
+    return {
+      isLoading: false
+    };
   }
 });

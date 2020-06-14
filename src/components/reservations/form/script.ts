@@ -92,8 +92,6 @@ export default Vue.extend({
     },
 
     onChangeTimezone(selectedId: string): void {
-      const timezone = this.getTimezoneById(selectedId);
-      this.setReservationTimezone(timezone);
       this.$emit("update-reservation-time", selectedId);
     }
   },

@@ -17,11 +17,14 @@ import { tel } from "@/plugins/validate";
 // store
 import {
   FETCH_RESERVATION_SEATS,
+  GET_BY_ID,
   INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
   RESET_RESERVATION_SEATS,
-  SAVE
+  SAVE,
+  SET_RESERVATION_DATE,
+  SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
 
 // utility
@@ -57,11 +60,19 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("reservation", ["reservation"]),
-    ...mapGetters("reservation", [HAS_SELECTED_SEATS])
+    ...mapGetters("businessDay", { getBusinessDayById: GET_BY_ID }),
+    ...mapGetters("reservation", [HAS_SELECTED_SEATS]),
+    ...mapGetters("timezone", { getTimezoneById: GET_BY_ID })
   },
   methods: {
     ...mapActions("reservation", [SAVE, FETCH_RESERVATION_SEATS]),
-    ...mapMutations("reservation", [INITIALIZE, INITIALIZE_RESERVATION_SEATS, RESET_RESERVATION_SEATS]),
+    ...mapMutations("reservation", [
+      INITIALIZE,
+      INITIALIZE_RESERVATION_SEATS,
+      RESET_RESERVATION_SEATS,
+      SET_RESERVATION_DATE,
+      SET_RESERVATION_TIMEZONE
+    ]),
 
     onClickSave(): void {
       const toastConfig: ToastConfig = {
@@ -105,6 +116,8 @@ export default Vue.extend({
      * @param selectedId
      */
     onUpdateReservationDate(selectedId: string): void {
+      const businessDay = this.getBusinessDayById(selectedId);
+      this.setReservationDate(businessDay.business_date);
       this.seatSeachOption.reservation_date_id = selectedId;
       this.seatSeachOption.reservation_time_id = "";
       this.__fetchReservationSeats();
@@ -115,6 +128,8 @@ export default Vue.extend({
      * @param selectedId
      */
     onUpdateReservationTime(selectedId: string): void {
+      const timezone = this.getTimezoneById(selectedId);
+      this.setReservationTimezone(timezone);
       this.seatSeachOption.reservation_time_id = selectedId;
       this.__fetchReservationSeats();
     },

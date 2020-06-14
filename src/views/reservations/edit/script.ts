@@ -86,7 +86,7 @@ export default Vue.extend({
             this.$router.push({ name: "reservation-edited-message", params: { id: this.id } });
           })
           .catch(() => {
-            toastConfig.message = "予約の失敗に失敗しました。";
+            toastConfig.message = "予約の変更に失敗しました。";
             toastConfig.type = "is-danger";
 
             this.$buefy.toast.open(toastConfig);

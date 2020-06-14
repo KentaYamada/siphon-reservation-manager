@@ -117,53 +117,50 @@ const actions: ActionTree<ReservationState, RootState> = {
     return Promise.all([reservationsPromise, reservationSeatsPromise]);
   },
 
+  /**
+   * 予約座席データ取得
+   */
   [FETCH_RESERVATION_SEATS]: async ({ commit }, options: ReservationSeatSearchOption) => {
-    const collection = firebase.firestore().collection(RESERVATION_SEATS_COLLECTION);
-    const $promise = collection.get().then(query => {
-      let items: ReservationSeat[] = [];
+    let query = firebase
+      .firestore()
+      .collection(RESERVATION_SEATS_COLLECTION)
+      .orderBy("seat_no");
 
-      query.forEach(doc => {
-        const data = doc.data();
-        const item: ReservationSeat = {
-          id: doc.id,
-          seat_no: data.seat_no,
-          is_reserved: data.is_reserved,
-          is_selected: false,
-          reservation_id: data.reservation_id,
-          reservation_date: data.reservation_date.toDate(),
-          reservation_date_id: data.reservation_date_id,
-          reservation_start_time: data.reservation_start_time.toDate(),
-          reservation_end_time: data.reservation_end_time.toDate(),
-          reservation_time_id: data.reservation_time_id
-        };
+    if (options.reservation_id !== "") {
+      query = query.where("reservation_id", "==", options.reservation_id);
+    }
 
-        items.push(item);
-      });
+    if (options.reservation_date_id !== "") {
+      query = query.where("reservation_date_id", "==", options.reservation_date_id);
+    }
 
-      if (options.reservation_id) {
-        items = _.filter(items, (item: ReservationSeat) => {
-          return item.reservation_id === options.reservation_id;
-        });
-      }
+    if (options.reservation_time_id !== "") {
+      query = query.where("reservation_time_id", "==", options.reservation_time_id);
+    }
 
-      if (options.reservation_date_id) {
-        items = _.filter(items, (item: ReservationSeat) => {
-          return item.reservation_date_id === options.reservation_date_id;
-        });
-      }
+    const $promise = await query.get();
+    const items: ReservationSeat[] = [];
 
-      if (options.reservation_time_id) {
-        items = _.filter(items, (item: ReservationSeat) => {
-          return item.reservation_time_id === options.reservation_time_id;
-        });
-      }
-
-      items = _.orderBy(items, ["seat_no"], ["asc"]);
-
-      if (items.length > 0) {
-        commit(SET_RESERVATION_SEATS, items);
-      }
+    $promise.forEach(doc => {
+      const data = doc.data();
+      const item: ReservationSeat = {
+        id: doc.id,
+        seat_no: data.seat_no,
+        is_reserved: data.is_reserved,
+        is_selected: false,
+        reservation_id: data.reservation_id,
+        reservation_date: data.reservation_date.toDate(),
+        reservation_date_id: data.reservation_date_id,
+        reservation_start_time: data.reservation_start_time.toDate(),
+        reservation_end_time: data.reservation_end_time.toDate(),
+        reservation_time_id: data.reservation_time_id
+      };
+      items.push(item);
     });
+
+    if (items.length) {
+      commit(SET_RESERVATION_SEATS, items);
+    }
 
     return await $promise;
   },

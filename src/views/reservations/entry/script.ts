@@ -61,44 +61,41 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("reservation", [SAVE, FETCH_RESERVATION_SEATS]),
-    ...mapMutations("reservation", [
-      INITIALIZE,
-      INITIALIZE_RESERVATION_SEATS,
-      RESET_RESERVATION_SEATS
-    ]),
+    ...mapMutations("reservation", [INITIALIZE, INITIALIZE_RESERVATION_SEATS, RESET_RESERVATION_SEATS]),
 
     onClickSave(): void {
+      const toastConfig: ToastConfig = {
+        message: "",
+        type: ""
+      };
+
+      this.isSaving = true;
       this.$v.$touch();
 
       if (!this.$v.$invalid && this.hasSelectedSeats) {
-        this.isSaving = true;
         this.save(this.reservation)
           .then((newId: string) => {
-            this.__sendEmail(newId);
+            toastConfig.message = "予約しました。";
+            toastConfig.type = "is-success";
 
-            const toastConfig: ToastConfig = {
-              message: "予約しました。",
-              type: "is-success"
-            };
+            this.__sendEmail(newId);
             this.$buefy.toast.open(toastConfig);
-            this.$router.push({
-              name: "reserved-message",
-              params: { id: newId }
-            });
+            this.$router.push({ name: "reserved-message", params: { id: newId } });
           })
-          .catch(error => {
-            // todo: error handling
-            console.error(error);
+          .catch(() => {
+            toastConfig.message = "予約の登録に失敗しました。";
+            toastConfig.type = "is-success";
+
+            this.$buefy.toast.open(toastConfig);
           })
           .finally(() => {
             this.isSaving = false;
           });
       } else {
-        const toastConfig: ToastConfig = {
-          message:
-            "入力内容に誤りがあります。エラーメッセージを確認してください。",
-          type: "is-danger"
-        };
+        toastConfig.message = "入力内容に誤りがあります。エラーメッセージを確認してください。";
+        toastConfig.type = "is-danger";
+
+        this.isSaving = false;
         this.$buefy.toast.open(toastConfig);
       }
     },
@@ -133,8 +130,7 @@ export default Vue.extend({
      */
     __fetchReservationSeats(): void {
       const hasSearchOption =
-        !_.isEmpty(this.seatSeachOption.reservation_date_id) &&
-        !_.isEmpty(this.seatSeachOption.reservation_time_id);
+        !_.isEmpty(this.seatSeachOption.reservation_date_id) && !_.isEmpty(this.seatSeachOption.reservation_time_id);
 
       if (hasSearchOption) {
         this.initializeReservationSeats();
@@ -156,12 +152,7 @@ export default Vue.extend({
         }
       }).href;
       const redirectUrl = `${location.origin}${href}`;
-      sendEmail(
-        this.reservation,
-        id,
-        redirectUrl,
-        EMAIL_MESSAGE_TEMPLATES.CREATED
-      );
+      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CREATED);
     }
   },
   data() {

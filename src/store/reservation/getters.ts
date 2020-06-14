@@ -15,6 +15,7 @@ import {
   HAS_ITEMS,
   HAS_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
+  IS_FULL_OF_RESERVED,
   VISIBLE_ACTIONS
 } from "@/store/constant";
 import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
@@ -60,6 +61,11 @@ const getters: GetterTree<ReservationState, RootState> = {
     return state.reservations.length > 0;
   },
 
+  /**
+   * 予約座席データがあるかどうか
+   * @param state
+   * @returns boolean
+   */
   [HAS_RESERVATION_SEATS]: (state: ReservationState): boolean => {
     if (!state.reservation) {
       return false;
@@ -68,6 +74,11 @@ const getters: GetterTree<ReservationState, RootState> = {
     return state.reservation.reservation_seats.length > 0;
   },
 
+  /**
+   * 予約座席を選択したかどうか
+   * @param state
+   * @returns boolean
+   */
   [HAS_SELECTED_SEATS]: (state: ReservationState): boolean => {
     if (!state.reservation) {
       return false;
@@ -80,6 +91,11 @@ const getters: GetterTree<ReservationState, RootState> = {
     return selectedSeats.length > 0;
   },
 
+  /**
+   * 予約キャンセル、変更ができるかどうか
+   * @param state
+   * @returns boolean
+   */
   [VISIBLE_ACTIONS]: (state: ReservationState): boolean => {
     if (!state.reservation) {
       return false;
@@ -92,6 +108,11 @@ const getters: GetterTree<ReservationState, RootState> = {
     return reservationDate.diff(current) > 0;
   },
 
+  /**
+   * 貸切予約ができるかどうか
+   * @param state
+   * @returns boolean
+   */
   [CAN_RESERVED]: (state: ReservationState): boolean => {
     if (!state.reservation) {
       return false;
@@ -102,6 +123,23 @@ const getters: GetterTree<ReservationState, RootState> = {
     });
 
     return count.length === MAX_NUMBER_OF_RESERVATIONS / 2;
+  },
+
+  /**
+   * 予約が満席かどうか
+   * @param state
+   * @returns boolean
+   */
+  [IS_FULL_OF_RESERVED]: (state: ReservationState): boolean => {
+    if (!state.reservation) {
+      return false;
+    }
+
+    const reservedSeats = _.filter(state.reservation.reservation_seats, (seat: ReservationSeat) => {
+      return seat.is_reserved;
+    });
+
+    return reservedSeats.length >= MAX_NUMBER_OF_RESERVATIONS / 2;
   }
 };
 

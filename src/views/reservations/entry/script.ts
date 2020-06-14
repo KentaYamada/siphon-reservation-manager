@@ -95,7 +95,7 @@ export default Vue.extend({
           })
           .catch(() => {
             toastConfig.message = "予約の登録に失敗しました。";
-            toastConfig.type = "is-success";
+            toastConfig.type = "is-danger";
 
             this.$buefy.toast.open(toastConfig);
           })

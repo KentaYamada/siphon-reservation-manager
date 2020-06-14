@@ -158,7 +158,7 @@ const actions: ActionTree<ReservationState, RootState> = {
       items.push(item);
     });
 
-    if (items.length) {
+    if (items.length > 0) {
       commit(SET_RESERVATION_SEATS, items);
     }
 

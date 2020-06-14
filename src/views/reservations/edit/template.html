@@ -20,7 +20,9 @@
                     <reservation-form :reservation="reservation"
                                       :validations="$v"
                                       v-if="!!reservation"
-                                      @data-loaded="onDataLoaded"/>
+                                      @data-loaded="onDataLoaded"
+                                      @update-reservation-date="onUpdateReservationDate"
+                                      @update-reservation-time="onUpdateReservationTime"/>
                 </div>
 
                 <div class="form-actions">

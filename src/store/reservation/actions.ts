@@ -258,7 +258,10 @@ const actions: ActionTree<ReservationState, RootState> = {
     const $promise = await query.get();
 
     if (!$promise.empty) {
-      return Promise.reject();
+      return Promise.reject({
+        message: "選択した座席は予約されました。お手数ですが再選択してください。",
+        refetch_seats: true
+      });
     }
 
     const $transaction = db.runTransaction(async transaction => {

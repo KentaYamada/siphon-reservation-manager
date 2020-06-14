@@ -247,8 +247,6 @@ const actions: ActionTree<ReservationState, RootState> = {
    * @param reservation
    */
   [SAVE]: async ({ commit }, reservation: Reservation) => {
-    const db = firebase.firestore();
-    const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
     const selectedSeatNo: number[] = [];
 
     _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
@@ -257,84 +255,82 @@ const actions: ActionTree<ReservationState, RootState> = {
       }
     });
 
+    const db = firebase.firestore();
+    const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
     const query = reservationSeats
       .where("reservation_date", "==", reservation.reservation_date)
       .where("reservation_time_id", "==", reservation.reservation_time_id)
       .where("is_reserved", "==", true)
       .where("seat_no", "array-contains", selectedSeatNo);
+    const $promise = await query.get();
 
-    return await query.get().then(querySnapshot => {
-      if (!querySnapshot.empty) {
-        return Promise.reject();
+    if ($promise.empty) {
+      return Promise.reject();
+    }
+
+    const $transaction = db.runTransaction(async transaction => {
+      const reservations = db.collection(COLLECTION_NAME);
+      const reservationRef = reservation.id ? reservations.doc(reservation.id) : reservations.doc();
+      const reservationData = {
+        reservation_date: reservation.reservation_date,
+        reservation_date_id: reservation.reservation_date_id,
+        reservation_start_time: reservation.reservation_start_time,
+        reservation_end_time: reservation.reservation_end_time,
+        reservation_time_id: reservation.reservation_time_id,
+        reserver_name: reservation.reserver_name,
+        number_of_reservations: reservation.number_of_reservations,
+        tel: reservation.tel,
+        mail: reservation.mail,
+        comment: reservation.comment
+      };
+      const $hasReservation = await transaction.get(reservationRef);
+
+      if ($hasReservation.exists) {
+        transaction.update(reservationRef, reservationData);
+      } else {
+        transaction.set(reservationRef, reservationData);
       }
 
-      const $transaction = db.runTransaction(async transaction => {
-        const reservations = db.collection(COLLECTION_NAME);
-        const reservationRef = reservation.id ? reservations.doc(reservation.id) : reservations.doc();
+      const query = reservationSeats
+        .where("reservation_date", "==", reservation.reservation_date)
+        .where("reservation_time_id", "==", reservation.reservation_time_id);
+      const $reservationSeats = await query.get();
 
-        return await transaction.get(reservationRef).then(doc => {
-          const reservationData = {
-            reservation_date: reservation.reservation_date,
-            reservation_date_id: reservation.reservation_date_id,
-            reservation_start_time: reservation.reservation_start_time,
-            reservation_end_time: reservation.reservation_end_time,
-            reservation_time_id: reservation.reservation_time_id,
-            reserver_name: reservation.reserver_name,
-            number_of_reservations: reservation.number_of_reservations,
-            tel: reservation.tel,
-            mail: reservation.mail,
-            comment: reservation.comment
-          };
+      $reservationSeats.forEach(doc => transaction.delete(doc.ref));
 
-          if (doc.exists) {
-            transaction.update(reservationRef, reservationData);
-          } else {
-            transaction.set(reservationRef, reservationData);
+      _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
+        const seatRef = reservationSeats.doc();
+        let reservationId = null;
+        let isReserved = null;
+
+        if (seat.is_reserved) {
+          reservationId = seat.reservation_id;
+          isReserved = seat.is_reserved;
+        } else {
+          if (seat.is_selected) {
+            reservationId = seat.reservation_id ? seat.reservation_id : reservationRef.id;
+            isReserved = true;
           }
+        }
 
-          const query = reservationSeats
-            .where("reservation_date", "==", reservation.reservation_date)
-            .where("reservation_time_id", "==", reservation.reservation_time_id);
+        const seatData = {
+          seat_no: seat.seat_no,
+          is_reserved: isReserved,
+          reservation_id: reservationId,
+          reservation_date: reservation.reservation_date,
+          reservation_date_id: reservation.reservation_date_id,
+          reservation_start_time: reservation.reservation_start_time,
+          reservation_end_time: reservation.reservation_end_time,
+          reservation_time_id: reservation.reservation_time_id
+        };
 
-          return query.get().then(querySnapshot => {
-            querySnapshot.forEach(doc => transaction.delete(doc.ref));
-
-            _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-              let reservationId = null;
-              let isReserved = null;
-
-              if (seat.is_reserved) {
-                reservationId = seat.reservation_id;
-                isReserved = seat.is_reserved;
-              } else {
-                if (seat.is_selected) {
-                  reservationId = seat.reservation_id ? seat.reservation_id : reservationRef.id;
-                  isReserved = true;
-                }
-              }
-
-              const seatRef = reservationSeats.doc();
-              const seatData = {
-                seat_no: seat.seat_no,
-                is_reserved: isReserved,
-                reservation_id: reservationId,
-                reservation_date: reservation.reservation_date,
-                reservation_date_id: reservation.reservation_date_id,
-                reservation_start_time: reservation.reservation_start_time,
-                reservation_end_time: reservation.reservation_end_time,
-                reservation_time_id: reservation.reservation_time_id
-              };
-
-              transaction.set(seatRef, seatData);
-            });
-
-            return reservationRef.id;
-          });
-        });
+        transaction.set(seatRef, seatData);
       });
 
-      return $transaction;
+      return reservationRef.id;
     });
+
+    return $transaction;
   },
 
   /**

@@ -15,7 +15,8 @@ import {
   GET_RESERVABLE_PEOPLE,
   GET_RESERVABLE_TIMEZONES,
   HAS_RESERVATION_SEATS,
-  HAS_SELECTED_SEATS
+  HAS_SELECTED_SEATS,
+  IS_FULL_OF_RESERVED
 } from "@/store/constant";
 
 export default Vue.extend({
@@ -39,35 +40,35 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
-    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE, HAS_RESERVATION_SEATS, HAS_SELECTED_SEATS]),
+    ...mapGetters("reservation", [
+      GET_RESERVABLE_PEOPLE,
+      HAS_RESERVATION_SEATS,
+      HAS_SELECTED_SEATS,
+      IS_FULL_OF_RESERVED
+    ]),
     ...mapGetters("timezone", { timezones: GET_RESERVABLE_TIMEZONES }),
 
     /**
      * 座席選択を促すメッセージを表示するかどうか
      */
     visibleSelectionSeatMessage(): boolean {
-      // 予約座席データあり & 予約可能数が1以上 & 座席未選択
-      // todo: gettersに寄せる
-      return this.hasReservationSeats && this.getReservablePeople !== 0 && !this.hasSelectedSeats;
-    },
-
-    /**
-     * 予約座席が満席であることをメッセージ表示するかどうか
-     */
-    visibleFullOfSeatsMessage(): boolean {
-      // 予約座席データあり & 予約可能数が1以上 & 座席未選択
-      // todo: gettersに寄せる
-      return this.hasReservationSeats && this.getReservablePeople === 0;
+      return !this.isFullOfReserved && !this.hasSelectedSeats;
     }
   },
   methods: {
     ...mapActions("businessDay", [FETCH_BUSINESS_DATE_AFTER_TODAY]),
     ...mapActions("timezone", { fetchTimezones: FETCH }),
 
+    /**
+     * 予約日変更イベント
+     */
     onChangeBusinessDay(selectedId: string): void {
       this.$emit("update-reservation-date", selectedId);
     },
 
+    /**
+     * 予約時間変更イベント
+     */
     onChangeTimezone(selectedId: string): void {
       this.$emit("update-reservation-time", selectedId);
     }

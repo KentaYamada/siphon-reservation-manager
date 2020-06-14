@@ -37,6 +37,10 @@ export default Vue.extend({
     validations: {
       required: true,
       type: Object
+    },
+    isLoadingSeats: {
+      required: true,
+      type: Boolean
     }
   },
   computed: {

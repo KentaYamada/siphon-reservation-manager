@@ -147,12 +147,16 @@ export default Vue.extend({
     __fetchReservationSeats(): void {
       const hasSearchOption =
         !_.isEmpty(this.seatSeachOption.reservation_date_id) && !_.isEmpty(this.seatSeachOption.reservation_time_id);
+      this.isLoadingSeats = true;
 
       if (hasSearchOption) {
         this.initializeReservationSeats();
-        this.fetchReservationSeats(this.seatSeachOption);
+        this.fetchReservationSeats(this.seatSeachOption).finally(() => {
+          this.isLoadingSeats = false;
+        });
       } else {
         this.resetReservationSeats();
+        this.isLoadingSeats = false;
       }
     },
 
@@ -180,6 +184,7 @@ export default Vue.extend({
     return {
       isSaving: false,
       isLoading: true,
+      isLoadingSeats: false,
       seatSeachOption: seatSeachOption
     };
   },

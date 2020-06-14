@@ -121,25 +121,17 @@ const actions: ActionTree<ReservationState, RootState> = {
    * 予約座席データ取得
    */
   [FETCH_RESERVATION_SEATS]: async ({ commit }, options: ReservationSeatSearchOption) => {
-    let query = firebase
-      .firestore()
-      .collection(RESERVATION_SEATS_COLLECTION)
-      .orderBy("seat_no");
-
-    if (options.reservation_id !== "") {
-      query = query.where("reservation_id", "==", options.reservation_id);
+    if (options.reservation_date_id == "" || options.reservation_time_id == "") {
+      return Promise.reject();
     }
 
-    if (options.reservation_date_id !== "") {
-      query = query.where("reservation_date_id", "==", options.reservation_date_id);
-    }
-
-    if (options.reservation_time_id !== "") {
-      query = query.where("reservation_time_id", "==", options.reservation_time_id);
-    }
+    const collection = firebase.firestore().collection(RESERVATION_SEATS_COLLECTION);
+    const query = collection
+      .where("reservation_date_id", "==", options.reservation_date_id)
+      .where("reservation_time_id", "==", options.reservation_time_id);
 
     const $promise = await query.get();
-    const items: ReservationSeat[] = [];
+    let items: ReservationSeat[] = [];
 
     $promise.forEach(doc => {
       const data = doc.data();
@@ -159,6 +151,7 @@ const actions: ActionTree<ReservationState, RootState> = {
     });
 
     if (items.length > 0) {
+      items = _.orderBy(items, ["seat_no"], ["asc"]);
       commit(SET_RESERVATION_SEATS, items);
     }
 

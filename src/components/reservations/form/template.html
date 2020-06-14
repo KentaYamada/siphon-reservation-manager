@@ -10,8 +10,7 @@
                 </option>
             </b-select>
             <div v-if="validations.reservation.reservation_date.$error">
-                <small class="help is-danger"
-                       v-if="!validations.reservation.reservation_date.required">
+                <small class="help is-danger" v-if="!validations.reservation.reservation_date.required">
                     予約日を選択してください。
                 </small>
             </div>
@@ -29,8 +28,7 @@
                 </option>
             </b-select>
             <div v-if="validations.reservation.reservation_start_time.$error">
-                <small class="help is-danger"
-                    v-if="!validations.reservation.reservation_start_time.required">
+                <small class="help is-danger" v-if="!validations.reservation.reservation_start_time.required">
                     予約時間を選択してください。
                 </small>
             </div>
@@ -60,7 +58,7 @@
                     v-if="!!reservation.reservation_seats"/>
             </div>
             <div v-if="visibleSelectionSeatMessage" class="no-seat-selection-message">
-                <p class="has-text-danger">座席を選択してください</p>
+                <p class="has-text-danger">座席を選択してください。</p>
             </div>
             <div v-if="visibleFullOfSeatsMessage" class="no-seat-selection-message">
                 <small class="has-text-danger">
@@ -70,7 +68,7 @@
                 </small>
             </div>
             <div v-if="!hasReservationSeats">
-                <p>予約日・予約時間を選択してください</p>
+                <p>予約日・予約時間を選択してください。</p>
             </div>
         </div>
         <div class="field">
@@ -82,7 +80,7 @@
                        :class="{ 'is-danger': validations.reservation.number_of_reservations.$error }">
                 <div v-if="validations.reservation.number_of_reservations.$error">
                     <small class="help is-danger" v-if="!validations.reservation.number_of_reservations.required">
-                        予約人数は必須入力です。
+                        予約人数を入力してください。
                     </small>
                 </div>
             </div>
@@ -97,7 +95,7 @@
                        :class="{ 'is-danger': validations.reservation.reserver_name.$error }">
                 <div v-if="validations.reservation.reserver_name.$error">
                     <small class="help is-danger" v-if="!validations.reservation.reserver_name.required">
-                        名前は必須入力です。
+                        名前を入力してください。
                     </small>
                 </div>
             </div>
@@ -111,12 +109,10 @@
                        v-model.trim="reservation.tel"
                        :class="{ 'is-danger': validations.reservation.tel.$error }">
                 <div v-if="validations.reservation.tel.$error">
-                    <small class="help is-danger"
-                           v-if="!validations.reservation.tel.required">
-                        電話番号は必須入力です。
+                    <small class="help is-danger" v-if="!validations.reservation.tel.required">
+                        電話番号を入力してください。
                     </small>
-                    <small class="help is-danger"
-                           v-if="!validations.reservation.tel.tel">
+                    <small class="help is-danger" v-if="!validations.reservation.tel.tel">
                         電話番号は半角数字で入力してください。
                     </small>
                 </div>
@@ -134,12 +130,10 @@
                        :class="{ 'is-danger': validations.reservation.mail.$error }">
                 <small>※入力したメールアドレスにお間違いがないか確認してください。</small>
                 <div v-if="validations.reservation.mail.$error">
-                    <small class="help is-danger"
-                           v-if="!validations.reservation.mail.required">
-                        メールアドレスは必須入力です。
+                    <small class="help is-danger" v-if="!validations.reservation.mail.required">
+                        メールアドレスを入力してください。
                     </small>
-                    <small class="help is-danger"
-                           v-if="!validations.reservation.mail.email">
+                    <small class="help is-danger"  v-if="!validations.reservation.mail.email">
                         メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)。
                     </small>
                 </div>

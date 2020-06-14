@@ -52,7 +52,7 @@ export default Vue.extend({
      * 座席選択を促すメッセージを表示するかどうか
      */
     visibleSelectionSeatMessage(): boolean {
-      return !this.isFullOfReserved && !this.hasSelectedSeats;
+      return this.hasReservationSeats && !this.isFullOfReserved && !this.hasSelectedSeats;
     }
   },
   methods: {

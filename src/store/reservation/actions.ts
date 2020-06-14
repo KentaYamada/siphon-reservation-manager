@@ -251,10 +251,10 @@ const actions: ActionTree<ReservationState, RootState> = {
     const db = firebase.firestore();
     const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
     const query = reservationSeats
-      .where("reservation_date", "==", reservation.reservation_date)
+      .where("reservation_date_id", "==", reservation.reservation_date_id)
       .where("reservation_time_id", "==", reservation.reservation_time_id)
       .where("is_reserved", "==", true)
-      .where("seat_no", "array-contains", selectedSeatNo);
+      .where("seat_no", "in", selectedSeatNo);
     const $promise = await query.get();
 
     if (!$promise.empty) {

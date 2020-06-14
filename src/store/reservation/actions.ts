@@ -135,11 +135,14 @@ const actions: ActionTree<ReservationState, RootState> = {
 
     $promise.forEach(doc => {
       const data = doc.data();
+      const isMyReservation = options.reservation_id === data.reservation_id;
+      const isSelected = isMyReservation && data.is_reserved;
+      const isReserved = !isMyReservation && data.is_reserved;
       const item: ReservationSeat = {
         id: doc.id,
         seat_no: data.seat_no,
-        is_reserved: data.is_reserved,
-        is_selected: false,
+        is_reserved: isReserved,
+        is_selected: isSelected,
         reservation_id: data.reservation_id,
         reservation_date: data.reservation_date.toDate(),
         reservation_date_id: data.reservation_date_id,
@@ -276,6 +279,8 @@ const actions: ActionTree<ReservationState, RootState> = {
       const $hasReservation = await transaction.get(reservationRef);
 
       if ($hasReservation.exists) {
+        const reservedSeats = await reservationSeats.where("reservation_id", "==", reservation.id).get();
+        reservedSeats.forEach(doc => transaction.update(doc.ref, { is_reserved: false }));
         transaction.update(reservationRef, reservationData);
       } else {
         transaction.set(reservationRef, reservationData);

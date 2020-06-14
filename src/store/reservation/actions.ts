@@ -261,7 +261,7 @@ const actions: ActionTree<ReservationState, RootState> = {
       .where("seat_no", "array-contains", selectedSeatNo);
     const $promise = await query.get();
 
-    if ($promise.empty) {
+    if (!$promise.empty) {
       return Promise.reject();
     }
 

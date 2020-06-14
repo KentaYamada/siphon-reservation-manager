@@ -67,38 +67,38 @@ export default Vue.extend({
      *  予約変更イベント
      */
     onClickSave(): void {
+      const toastConfig: ToastConfig = {
+        message: "",
+        type: ""
+      };
+
+      this.isSaving = true;
       this.$v.$touch();
 
       if (!this.$v.$invalid && this.hasSelectedSeats) {
-        this.isSaving = true;
         this.save(this.reservation)
           .then(() => {
-            this.__sendEmail(this.id);
+            toastConfig.message = "予約変更しました。";
+            toastConfig.type = "is-success";
 
-            const toastConfig: ToastConfig = {
-              message: "予約変更しました。",
-              type: "is-success"
-            };
+            this.__sendEmail(this.id);
+            this.$buefy.toast.open(toastConfig);
+            this.$router.push({ name: "reservation-edited-message", params: { id: this.id } });
+          })
+          .catch(() => {
+            toastConfig.message = "予約の失敗に失敗しました。";
+            toastConfig.type = "is-danger";
 
             this.$buefy.toast.open(toastConfig);
-            this.$router.push({
-              name: "reservation-edited-message",
-              params: { id: this.id }
-            });
-          })
-          .catch(error => {
-            // todo: error handling
-            console.error(error);
           })
           .finally(() => {
             this.isSaving = false;
           });
       } else {
-        const toastConfig: ToastConfig = {
-          message:
-            "入力内容に誤りがあります。エラーメッセージを確認してください。",
-          type: "is-danger"
-        };
+        toastConfig.message = "入力内容に誤りがあります。エラーメッセージを確認してください。";
+        toastConfig.type = "is-danger";
+
+        this.isSaving = false;
         this.$buefy.toast.open(toastConfig);
       }
     },
@@ -122,12 +122,7 @@ export default Vue.extend({
         }
       }).href;
       const redirectUrl = `${location.origin}${href}`;
-      sendEmail(
-        this.reservation,
-        id,
-        redirectUrl,
-        EMAIL_MESSAGE_TEMPLATES.EDITED
-      );
+      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.EDITED);
     }
   },
   data() {

@@ -19,6 +19,7 @@
                 <div class="page-content">
                     <reservation-form :reservation="reservation"
                                       :validations="$v"
+                                      :isLoadingSeats="isLoadingSeats"
                                       v-if="!!reservation"
                                       @data-loaded="onDataLoaded"
                                       @update-reservation-date="onUpdateReservationDate"

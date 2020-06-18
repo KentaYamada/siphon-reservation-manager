@@ -253,13 +253,20 @@ const actions: ActionTree<ReservationState, RootState> = {
     const query = reservationSeats
       .where("reservation_date_id", "==", reservation.reservation_date_id)
       .where("reservation_time_id", "==", reservation.reservation_time_id)
-      .where("is_reserved", "==", true)
-      .where("seat_no", "in", selectedSeatNo);
+      .where("is_reserved", "==", true);
     const $promise = await query.get();
+    let hasReserved = false;
 
-    if (!$promise.empty) {
+    _.each($promise.docs, doc => {
+      if (doc.data().reservation_id !== reservation.id && _.includes(selectedSeatNo, doc.data().seat_no)) {
+        hasReserved = true;
+        return false;
+      }
+    });
+
+    if (hasReserved) {
       return Promise.reject({
-        message: "選択した座席は予約されました。お手数ですが再選択してください。",
+        message: "選択した座席は予約されています。お手数ですが再選択してください。",
         refetch_seats: true
       });
     }

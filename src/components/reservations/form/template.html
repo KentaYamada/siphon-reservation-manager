@@ -21,7 +21,10 @@
             <b-select placeholder="予約時間"
                       v-model="reservation.reservation_time_id"
                       @input="onChangeTimezone($event)">
-                <option v-for="t in timezones" :key="t.id" :value="t.id">
+                <!--<option v-for="t in timezones" :key="t.id" :value="t.id">
+                    {{ t.text }}
+                </option>-->
+                <option v-for="t in reservableTimezones" :key="t.id" :value="t.id">
                     {{ t.text }}
                 </option>
             </b-select>

@@ -74,7 +74,10 @@ const getters: GetterTree<TimezoneState, RootState> = {
         const item = _.find(timezones, (timezone: Timezone) => {
           return filterTimezone(timezone, business);
         });
-        filterdTimezones.push(item);
+
+        if (item) {
+          filterdTimezones.push(item);
+        }
       } else {
         timezones = _.reject(timezones, (timezone: Timezone) => {
           return filterTimezone(timezone, business);

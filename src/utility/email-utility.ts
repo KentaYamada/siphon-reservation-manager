@@ -43,6 +43,10 @@ Cafe de GAMOYONです
 ご予約の確認、変更、キャンセルはこちら
 ${redirectUrl}
 
+Cafe de GAMOYON
+大阪府大阪市城東区今福東2-9-19
+https://goo.gl/maps/X2NpTBBGJBamfPgw6
+
 最新情報をSNSでチェック！
 Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja
 Facebook: https://www.facebook.com/gamoyon4204/
@@ -61,6 +65,10 @@ Cafe de GAMOYONです
 
 再予約はこちらから
 ${redirectUrl}
+
+Cafe de GAMOYON
+大阪府大阪市城東区今福東2-9-19
+https://goo.gl/maps/X2NpTBBGJBamfPgw6
 
 最新情報をSNSでチェック！
 Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja

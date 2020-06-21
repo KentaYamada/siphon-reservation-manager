@@ -7,6 +7,7 @@ import SelectableReservationSeatList from "@/components/reservation-seats/select
 
 // entity
 import { Reservation } from "@/entity/reservation";
+import { Timezone } from "@/entity/timezone";
 
 // store
 import {
@@ -15,6 +16,7 @@ import {
   GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
   GET_RESERVABLE_TIMEZONES,
+  GET_TIMEZONES_BY_RESERVATION_DATE,
   HAS_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
   SET_RESERVATION_DATE,
@@ -41,15 +43,20 @@ export default Vue.extend({
     ...mapGetters("businessDay", {
       getBusinessDayById: GET_BY_ID
     }),
-    ...mapGetters("reservation", [
-      GET_RESERVABLE_PEOPLE,
-      HAS_RESERVATION_SEATS,
-      HAS_SELECTED_SEATS
-    ]),
+    ...mapGetters("reservation", [GET_RESERVABLE_PEOPLE, HAS_RESERVATION_SEATS, HAS_SELECTED_SEATS]),
     ...mapGetters("timezone", {
       timezones: GET_RESERVABLE_TIMEZONES,
+      getTimezonesByReservationDate: GET_TIMEZONES_BY_RESERVATION_DATE,
       getTimezoneById: GET_BY_ID
     }),
+
+    reservableTimezones(): Timezone[] {
+      if (this.reservation && this.reservation.reservation_date) {
+        return this.getTimezonesByReservationDate(this.reservation.reservation_date);
+      }
+
+      return this.timezones;
+    },
 
     /**
      * 座席選択を促すメッセージを表示するかどうか
@@ -57,11 +64,7 @@ export default Vue.extend({
     visibleSelectionSeatMessage(): boolean {
       // 予約座席データあり & 予約可能数が1以上 & 座席未選択
       // todo: gettersに寄せる
-      return (
-        this.hasReservationSeats &&
-        this.getReservablePeople !== 0 &&
-        !this.hasSelectedSeats
-      );
+      return this.hasReservationSeats && this.getReservablePeople !== 0 && !this.hasSelectedSeats;
     },
 
     /**
@@ -78,10 +81,7 @@ export default Vue.extend({
     ...mapActions("timezone", {
       fetchTimezones: FETCH
     }),
-    ...mapMutations("reservation", [
-      SET_RESERVATION_DATE,
-      SET_RESERVATION_TIMEZONE
-    ]),
+    ...mapMutations("reservation", [SET_RESERVATION_DATE, SET_RESERVATION_TIMEZONE]),
 
     onChangeBusinessDay(selectedId: string): void {
       const businessDay = this.getBusinessDayById(selectedId);
@@ -96,10 +96,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    const promises = [
-      this.fetchTimezones(),
-      this.fetchBusinessDateAfterToday()
-    ];
+    const promises = [this.fetchTimezones(), this.fetchBusinessDateAfterToday()];
 
     Promise.all(promises)
       .then(() => {

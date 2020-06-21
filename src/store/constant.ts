@@ -73,4 +73,6 @@ export const GET_RESERVABLE_SEATS = "getReservableSeats";
 // Timezone
 export const GET_RESERVABLE_TIMEZONES = "getReservableTimezones";
 
+export const GET_TIMEZONES_BY_RESERVATION_DATE = "getTimezonesByReservationDate";
+
 export const FETCH_ALL_RESERVED_TIMEZONES = "fetchAllReservedTimezones";

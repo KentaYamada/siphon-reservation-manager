@@ -1,6 +1,7 @@
 import { GetterTree } from "vuex";
 
 // entity
+import { TemporaryBusiness } from "@/entity/temporary-business";
 import { Timezone } from "@/entity/timezone";
 
 // plugin
@@ -11,6 +12,31 @@ import moment from "moment";
 import { RootState } from "@/store";
 import { GET_BY_ID, GET_RESERVABLE_TIMEZONES, GET_TIMEZONES_BY_RESERVATION_DATE, HAS_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
+
+const TEMPORARY_BUSINESSES: TemporaryBusiness[] = [
+  {
+    business_date: "2020-07-08",
+    start_hour: 11,
+    start_minutes: 0,
+    end_hour: 12,
+    end_minutes: 30
+  },
+  {
+    business_date: "2020-07-08",
+    start_hour: 13,
+    start_minutes: 0,
+    end_hour: 14,
+    end_minutes: 30
+  }
+];
+
+const filterTimezone = (timezone: Timezone, business: TemporaryBusiness): boolean => {
+  const isMatchStartHour = timezone.start_time.getHours() === business.start_hour;
+  const isMatchStartMinutes = timezone.start_time.getMinutes() === business.start_minutes;
+  const isMatchEndHours = timezone.end_time.getHours() === business.end_hour;
+  const isMatchEndMinutes = timezone.end_time.getMinutes() === business.end_minutes;
+  return isMatchStartHour && isMatchStartMinutes && isMatchEndHours && isMatchEndMinutes;
+};
 
 const getters: GetterTree<TimezoneState, RootState> = {
   /**
@@ -38,26 +64,29 @@ const getters: GetterTree<TimezoneState, RootState> = {
    */
   [GET_TIMEZONES_BY_RESERVATION_DATE]: (state: TimezoneState) => (reservationDate: Date): Timezone[] => {
     const target = moment(reservationDate, "YYYY-MM-DD");
-    const isSame = moment("2020-07-08").isSame(target);
+    let timezones: Timezone[] = _.clone(state.timezones);
+    const filterdTimezones: Timezone[] = [];
 
-    if (isSame) {
-      const timezones = _.filter(state.timezones, (timezone: Timezone) => {
-        const startHour = timezone.start_time.getHours();
-        const startMinutes = timezone.start_time.getMinutes();
-        const endHour = timezone.end_time.getHours();
-        const endMinutes = timezone.end_time.getMinutes();
+    _.each(TEMPORARY_BUSINESSES, (business: TemporaryBusiness) => {
+      const isSame = moment(business.business_date, "YYYY-MM-DD").isSame(target);
 
-        // 11:00 - 12:30 or 13:00 - 14:30の受付のみにする
-        return (
-          (startHour === 11 && startMinutes === 0 && endHour === 12 && endMinutes === 30) ||
-          (startHour === 13 && startMinutes === 0 && endHour === 14 && endMinutes === 30)
-        );
-      });
+      if (isSame) {
+        const item = _.find(timezones, (timezone: Timezone) => {
+          return filterTimezone(timezone, business);
+        });
+        filterdTimezones.push(item);
+      } else {
+        timezones = _.reject(timezones, (timezone: Timezone) => {
+          return filterTimezone(timezone, business);
+        });
+      }
+    });
 
-      return timezones;
+    if (filterdTimezones.length > 0) {
+      timezones = filterdTimezones;
     }
 
-    return state.timezones;
+    return timezones;
   },
 
   /**

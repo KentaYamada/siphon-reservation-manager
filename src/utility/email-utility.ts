@@ -12,15 +12,19 @@ Cafe de GAMOYONです
 ご予約ありがとうございます！
 ご来店お待ちしております
 
-ご連絡なく10分以上遅れますと、キャンセルになりますのでご注意ください
-
-当日のご連絡はインスタ、Facebookへメッセージお願いします
-
 ご予約確定後もメモ欄に追加入力可能です
 ケーキのお取り置きなどございましたら、前日までにご記入ください
 
+当日のご連絡はインスタ、Facebookへメッセージをお願いします
+
+ご連絡なく10分以上遅れられますと、キャンセルになりますのでご注意ください
+
 ご予約の確認、変更、キャンセルはこちら
 ${redirectUrl}
+
+Cafe de GAMOYON
+大阪府大阪市城東区今福東2-9-19
+https://goo.gl/maps/X2NpTBBGJBamfPgw6
 
 最新情報をSNSでチェック！
 Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja

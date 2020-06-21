@@ -5,14 +5,19 @@ import { Reservation } from "@/entity/reservation";
 // plugin
 import firebase from "@/plugins/firebase";
 
-const setReservationCreatedMessage = (
-  model: Reservation,
-  redirectUrl: string
-): string => {
+const setReservationCreatedMessage = (model: Reservation, redirectUrl: string): string => {
   const message = `${model.reserver_name} 様
 
-こんにちは。Cafe de GAMOYONです。
-ご予約承りました。当日のご来店お待ちしております！
+Cafe de GAMOYONです
+ご予約ありがとうございます！
+ご来店お待ちしております
+
+ご連絡なく10分以上遅れますと、キャンセルになりますのでご注意ください
+
+当日のご連絡はインスタ、Facebookへメッセージお願いします
+
+ご予約確定後もメモ欄に追加入力可能です
+ケーキのお取り置きなどございましたら、前日までにご記入ください
 
 ご予約の確認、変更、キャンセルはこちら
 ${redirectUrl}
@@ -25,14 +30,11 @@ Facebook: https://www.facebook.com/gamoyon4204/
   return message;
 };
 
-const setReservationEditedMessage = (
-  model: Reservation,
-  redirectUrl: string
-): string => {
+const setReservationEditedMessage = (model: Reservation, redirectUrl: string): string => {
   const message = `${model.reserver_name} 様
 
-こんにちは。Cafe de GAMOYONです。
-ご予約の変更承りました。
+Cafe de GAMOYONです
+ご予約の変更承りました
 
 ご予約の確認、変更、キャンセルはこちら
 ${redirectUrl}
@@ -45,14 +47,13 @@ Facebook: https://www.facebook.com/gamoyon4204/
   return message;
 };
 
-const setReservationCanceledMessage = (
-  model: Reservation,
-  redirectUrl: string
-): string => {
+const setReservationCanceledMessage = (model: Reservation, redirectUrl: string): string => {
   const message = `${model.reserver_name} 様
 
-こんにちは。Cafe de GAMOYONです。
-予約のキャンセルを承りました。またのご予約をお待ちしております。
+Cafe de GAMOYONです
+予約のキャンセルを承りました
+
+またのご予約をお待ちしております
 
 再予約はこちらから
 ${redirectUrl}

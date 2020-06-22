@@ -84,7 +84,7 @@ export default Vue.extend({
     onChangeBusinessDay(selectedId: string): void {
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
-      this.resertReservationTimezone();
+      this.resetReservationTimezone();
       this.$emit("update-reservation-date", selectedId);
     },
 

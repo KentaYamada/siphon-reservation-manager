@@ -50,7 +50,7 @@ export const IS_FULL_OF_RESERVED = "isFullOfReserved";
 
 export const RESET_RESERVATION_SEATS = "resetReservationSeats";
 
-export const RESET_RESERVATION_TIMEZONE = "resertReservationTimezone";
+export const RESET_RESERVATION_TIMEZONE = "resetReservationTimezone";
 
 export const SAVE_ALL_RESERVATION = "saveAllReservation";
 

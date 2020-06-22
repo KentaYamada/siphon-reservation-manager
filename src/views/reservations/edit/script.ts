@@ -135,6 +135,7 @@ export default Vue.extend({
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
       this.seatSeachOption.reservation_date_id = selectedId;
+      this.seatSeachOption.reservation_time_id = "";
       this.__fetchReservationSeats();
     },
 

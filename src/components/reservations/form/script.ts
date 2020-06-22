@@ -19,6 +19,7 @@ import {
   GET_TIMEZONES_BY_RESERVATION_DATE,
   HAS_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
+  RESET_RESERVATION_TIMEZONE,
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
@@ -81,11 +82,12 @@ export default Vue.extend({
     ...mapActions("timezone", {
       fetchTimezones: FETCH
     }),
-    ...mapMutations("reservation", [SET_RESERVATION_DATE, SET_RESERVATION_TIMEZONE]),
+    ...mapMutations("reservation", [RESET_RESERVATION_TIMEZONE, SET_RESERVATION_DATE, SET_RESERVATION_TIMEZONE]),
 
     onChangeBusinessDay(selectedId: string): void {
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
+      this.resertReservationTimezone();
       this.$emit("update-reservation-date", selectedId);
     },
 

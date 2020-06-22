@@ -48,6 +48,8 @@ export const INITIALIZE_RESERVATION_SEATS = "initializeReservationSeats";
 
 export const RESET_RESERVATION_SEATS = "resetReservationSeats";
 
+export const RESET_RESERVATION_TIMEZONE = "resertReservationTimezone";
+
 export const SAVE_ALL_RESERVATION = "saveAllReservation";
 
 export const SET_RESERVATION_SEAT = "setReservationSeat";

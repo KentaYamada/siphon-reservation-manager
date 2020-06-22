@@ -9,6 +9,8 @@ import ReservationSeatList from "@/components/reservation-seats/list/Reservation
 // entity
 import { Reservation } from "@/entity/reservation";
 
+import { nl2br } from "@/filters/nl2br";
+
 export default Vue.extend({
   template: "<reservation-detail-content/>",
   components: {
@@ -27,15 +29,11 @@ export default Vue.extend({
       let endTime = "";
 
       if (this.reservation.reservation_date) {
-        reservationDate = moment(this.reservation.reservation_date).format(
-          "YYYY年MM月DD日"
-        );
+        reservationDate = moment(this.reservation.reservation_date).format("YYYY年MM月DD日");
       }
 
       if (this.reservation.reservation_start_time) {
-        startTime = moment(this.reservation.reservation_start_time).format(
-          "HH:mm"
-        );
+        startTime = moment(this.reservation.reservation_start_time).format("HH:mm");
       }
 
       if (this.reservation.reservation_end_time) {
@@ -46,6 +44,9 @@ export default Vue.extend({
     },
     reserverName(): string {
       return `${this.reservation.reserver_name}様 (${this.reservation.number_of_reservations}名)`;
+    },
+    reservationComment(): string {
+      return nl2br(this.reservation.comment);
     }
   }
 });

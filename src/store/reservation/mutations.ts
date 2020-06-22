@@ -13,6 +13,7 @@ import {
   INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
   RESET_RESERVATION_SEATS,
+  RESET_RESERVATION_TIMEZONE,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_DATE,
@@ -98,10 +99,7 @@ const mutations: MutationTree<ReservationState> = {
   /**
    * 予約日更新
    */
-  [SET_RESERVATION_DATE]: (
-    state: ReservationState,
-    businessDay: Date
-  ): void => {
+  [SET_RESERVATION_DATE]: (state: ReservationState, businessDay: Date): void => {
     if (state.reservation) {
       state.reservation.reservation_date = businessDay;
     }
@@ -112,15 +110,8 @@ const mutations: MutationTree<ReservationState> = {
    * @param state
    * @param seat
    */
-  [SET_RESERVATION_SEAT]: (
-    state: ReservationState,
-    seat: ReservationSeat
-  ): void => {
-    if (
-      state.reservation &&
-      state.reservation.reservation_seats &&
-      state.reservation.reservation_seats.length > 0
-    ) {
+  [SET_RESERVATION_SEAT]: (state: ReservationState, seat: ReservationSeat): void => {
+    if (state.reservation && state.reservation.reservation_seats && state.reservation.reservation_seats.length > 0) {
       _.each(state.reservation.reservation_seats, (item: ReservationSeat) => {
         if (item.seat_no === seat.seat_no) {
           item.id = seat.id;
@@ -142,10 +133,7 @@ const mutations: MutationTree<ReservationState> = {
    * @param state
    * @param seat
    */
-  [SET_RESERVATION_SEATS]: (
-    state: ReservationState,
-    seats: ReservationSeat[]
-  ): void => {
+  [SET_RESERVATION_SEATS]: (state: ReservationState, seats: ReservationSeat[]): void => {
     if (state.reservation) {
       state.reservation.reservation_seats = seats;
     }
@@ -154,13 +142,21 @@ const mutations: MutationTree<ReservationState> = {
   /**
    * 予約時間帯更新
    */
-  [SET_RESERVATION_TIMEZONE]: (
-    state: ReservationState,
-    timezone: Timezone
-  ): void => {
+  [SET_RESERVATION_TIMEZONE]: (state: ReservationState, timezone: Timezone): void => {
     if (state.reservation) {
       state.reservation.reservation_start_time = timezone.start_time;
       state.reservation.reservation_end_time = timezone.end_time;
+    }
+  },
+
+  /**
+   * 予約時間帯リセット
+   */
+  [RESET_RESERVATION_TIMEZONE]: (state: ReservationState): void => {
+    if (state.reservation) {
+      state.reservation.reservation_start_time = null;
+      state.reservation.reservation_end_time = null;
+      state.reservation.reservation_time_id = "";
     }
   }
 };

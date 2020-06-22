@@ -41,7 +41,6 @@ export default Vue.extend({
       `;
       const config: DialogConfig = {
         type: "is-danger",
-        title: "予約取り消し",
         message: message,
         confirmText: "取り消し",
         cancelText: "閉じる",

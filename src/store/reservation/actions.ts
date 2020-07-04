@@ -290,7 +290,9 @@ const actions: ActionTree<ReservationState, RootState> = {
 
       if ($hasReservation.exists) {
         const reservedSeats = await reservationSeats.where("reservation_id", "==", reservation.id).get();
-        reservedSeats.forEach(doc => transaction.update(doc.ref, { is_reserved: false }));
+        reservedSeats.forEach(doc => {
+          transaction.update(doc.ref, { reservation_id: null, is_reserved: false });
+        });
         transaction.update(reservationRef, reservationData);
       } else {
         transaction.set(reservationRef, reservationData);

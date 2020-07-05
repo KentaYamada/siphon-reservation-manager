@@ -18,8 +18,8 @@ const actions: ActionTree<AuthState, RootState> = {
     return await firebase
       .auth()
       .signInWithPopup(provider)
-      .then(() => {
-        commit(SET_ITEM, true);
+      .then((result: firebase.auth.UserCredential) => {
+        commit(SET_ITEM, result.user);
       });
   },
 
@@ -31,7 +31,7 @@ const actions: ActionTree<AuthState, RootState> = {
       .auth()
       .signOut()
       .then(() => {
-        commit(SET_ITEM, false);
+        commit(SET_ITEM, null);
       });
   }
 };

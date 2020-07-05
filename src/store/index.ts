@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 // store
 import auth from "@/store/auth";
@@ -15,11 +16,19 @@ export interface RootState {
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  strict: true,
   modules: {
     auth,
     businessDay,
     reservation,
     reservationResendMail,
     timezone
-  }
+  },
+  plugins: [
+    createPersistedState({
+      key: "ReservationAppAuth",
+      paths: ["auth.auth_user"],
+      storage: window.localStorage
+    })
+  ]
 });

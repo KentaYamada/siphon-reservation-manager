@@ -27,7 +27,7 @@ export default new Vuex.Store({
   plugins: [
     createPersistedState({
       key: "ReservationAppAuth",
-      paths: ["auth.is_signin"],
+      paths: ["auth.auth_user"],
       storage: window.localStorage
     })
   ]

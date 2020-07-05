@@ -4,12 +4,16 @@ import actions from "@/store/auth/actions";
 import mutations from "@/store/auth/mutations";
 import getters from "@/store/auth/getters";
 
+import firebase from "firebase";
+
 export interface AuthState {
-  is_signin: boolean;
+  is_signed_in: boolean;
+  auth_user: firebase.UserInfo | null;
 }
 
 const state: AuthState = {
-  is_signin: false
+  is_signed_in: false,
+  auth_user: null
 };
 
 const namespaced = true;

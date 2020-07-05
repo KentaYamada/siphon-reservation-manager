@@ -1,5 +1,8 @@
 import { GetterTree } from "vuex";
 
+// plugin
+import _ from "lodash";
+
 // store
 import { RootState } from "@/store";
 import { AuthState } from "@/store/auth";
@@ -10,11 +13,11 @@ const getters: GetterTree<AuthState, RootState> = {
    * 管理者かどうか
    */
   [IS_ADMIN]: (state: AuthState): boolean => {
-    return process.env.NODE_ENV === "development" || state.is_signin;
+    return process.env.NODE_ENV === "development" || !_.isNil(state.auth_user);
   },
 
   [IS_SIGNED_IN]: (state: AuthState): boolean => {
-    return state.is_signin;
+    return !_.isNil(state.auth_user);
   }
 };
 

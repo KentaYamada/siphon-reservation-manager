@@ -54,14 +54,13 @@ export default Vue.extend({
     handleClicDelete(): void {
       const period = timePeriod(this.timezone.start_time, this.timezone.end_time);
       const message = `
-            <p>「${period}」を削除しますか？</p>
-            <small>誤って削除した場合、再度データを登録してください。</small>`;
+            <p><strong>予約時間: ${period}</strong>を削除しますか？</p>
+            <small>誤って削除した場合、再度登録してください。</small>`;
       const config: BDialogConfig = {
-        title: "予約時間帯削除",
         type: "is-danger",
         message: message,
-        confirmText: "削除",
-        cancelText: "キャンセル",
+        confirmText: "はい",
+        cancelText: "いいえ",
         hasIcon: true,
         iconPack: "fas",
         icon: "exclamation-circle",

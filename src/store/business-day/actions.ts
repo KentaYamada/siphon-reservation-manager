@@ -5,7 +5,11 @@ import { BusinessDay } from "@/entity/business-day";
 
 // plugin
 import firebase from "@/plugins/firebase";
+import _ from "lodash";
 import moment from "moment";
+
+// service
+import { BusinessDayService } from "@/services/firestore/business-day-service";
 
 // store
 import { RootState } from "@/store";
@@ -20,51 +24,49 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    * 営業日一覧取得
    */
   [FETCH]: async ({ commit }) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const query = collection.orderBy("business_date", "asc");
+    const service = new BusinessDayService();
+    const promise$ = await service.fetch();
+    const businessDays: Array<BusinessDay> = [];
 
-    return await query.get().then(querySnapshot => {
-      const items: BusinessDay[] = [];
+    promise$.forEach(doc => {
+      // todo: generics entity
+      const data = doc.data();
+      const businessDay: BusinessDay = {
+        id: doc.id,
+        text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
+        business_date: data.business_date.toDate()
+      };
 
-      querySnapshot.forEach(doc => {
-        const businessDate = doc.data().business_date.toDate();
-        const item: BusinessDay = {
-          id: doc.id,
-          text: moment(businessDate).format("YYYY年MM月DD日"),
-          business_date: businessDate
-        };
-
-        items.push(item);
-      });
-
-      commit(SET_ITEMS, items);
+      businessDays.push(businessDay);
     });
+
+    commit(SET_ITEMS, businessDays);
+
+    return promise$;
   },
 
   /**
    * アクセス日以降の営業日を取得
    */
   [FETCH_BUSINESS_DATE_AFTER_TODAY]: async ({ commit }) => {
-    const today = moment().toDate();
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const query = collection.where("business_date", ">=", today).orderBy("business_date", "asc");
+    const service = new BusinessDayService();
+    const promise$ = await service.fetchByAfterToday();
+    const businessDays: Array<BusinessDay> = [];
 
-    return await query.get().then(querySnapshot => {
-      const items: BusinessDay[] = [];
+    promise$.forEach(doc => {
+      const data = doc.data();
+      const businessDay: BusinessDay = {
+        id: doc.data().id,
+        text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
+        business_date: data.business_date.toDate()
+      };
 
-      querySnapshot.forEach(doc => {
-        const businessDate = doc.data().business_date.toDate();
-        const item: BusinessDay = {
-          id: doc.id,
-          text: moment(businessDate).format("YYYY年MM月DD日"),
-          business_date: businessDate
-        };
-
-        items.push(item);
-      });
-
-      commit(SET_ITEMS, items);
+      businessDays.push(businessDay);
     });
+
+    commit(SET_ITEMS, businessDays);
+
+    return promise$;
   },
 
   /**
@@ -72,19 +74,16 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    * @param businessDay
    */
   [SAVE]: async ({ commit }, businessDay: BusinessDay) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const requestBody = {
-      business_date: businessDay.business_date
-    };
-    let $promise = null;
+    const service = new BusinessDayService();
+    let promise$ = null;
 
-    if (businessDay.id) {
-      $promise = collection.doc(businessDay.id).set(requestBody);
+    if (_.isNil(businessDay.id)) {
+      promise$ = service.add(businessDay);
     } else {
-      $promise = collection.add(requestBody);
+      promise$ = service.edit(businessDay);
     }
 
-    return await $promise;
+    return await promise$;
   },
 
   /**
@@ -92,8 +91,8 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    * @param id
    */
   [DELETE]: async ({ commit }, id: string) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    return await collection.doc(id).delete();
+    const service = new BusinessDayService();
+    return await service.delete(id);
   }
 };
 

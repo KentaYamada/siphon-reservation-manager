@@ -4,99 +4,101 @@ import { ActionTree } from "vuex";
 import { Timezone } from "@/entity/timezone";
 
 // plugin
-import firebase from "@/plugins/firebase";
 import moment from "moment";
 import _ from "lodash";
+
+// firestore service
+import { TimezoneService } from "@/services/firestore/timezones/timezone-service";
 
 // store
 import { RootState } from "@/store";
 import { DELETE, FETCH, FETCH_ALL_RESERVED_TIMEZONES, SAVE, SET_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
 
-// firestore collection name
-const COLLECTION_NAME = "timezones";
-
 const actions: ActionTree<TimezoneState, RootState> = {
   /**
    * 予約時間帯取得
    */
   [FETCH]: async ({ commit }) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
+    let timezones: Array<Timezone> = [];
+    const service = new TimezoneService();
+    const promise$ = await service.fetch();
 
-    return await collection.get().then(querySnapshot => {
-      let items: Timezone[] = [];
+    promise$.forEach(doc => {
+      // todo: generics entity
+      const data = doc.data();
+      const period = `${moment(data.start_time.toDate()).format("HH:mm")} - 
+        ${moment(data.end_time.toDate()).format("HH:mm")}`;
+      let isDefaultSelect = false;
 
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        const startTime = moment(data.start_time.toDate()).format("HH:mm");
-        const endTime = moment(data.end_time.toDate()).format("HH:mm");
-        const item: Timezone = {
-          id: doc.id,
-          text: `${startTime} - ${endTime}`,
-          start_time: data.start_time.toDate(),
-          end_time: data.end_time.toDate()
-        };
+      if (!_.isNil(data.is_default_select)) {
+        isDefaultSelect = data.is_default_select;
+      }
 
-        items.push(item);
-      });
-
-      items = _.sortBy(items, (item: Timezone) => {
-        return item.start_time.getHours();
-      });
-
-      commit(SET_ITEMS, items);
+      const timezone: Timezone = {
+        id: doc.id,
+        // todo: replace filter
+        text: period,
+        start_time: data.start_time.toDate(),
+        end_time: data.end_time.toDate(),
+        is_default_select: isDefaultSelect
+      };
+      timezones.push(timezone);
     });
+
+    timezones = _.sortBy(timezones, (timezone: Timezone) => {
+      return timezone.start_time.getHours();
+    });
+
+    commit(SET_ITEMS, timezones);
+
+    return promise$;
   },
 
   /**
    * 予約時間帯取得
    */
-  [FETCH_ALL_RESERVED_TIMEZONES]: async ({ commit }) => {
-    //todo: 貸切可能な時間を問い合わせ
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const items: Timezone[] = [];
+  // [FETCH_ALL_RESERVED_TIMEZONES]: async ({ commit }) => {
+  //   const collection = firebase.firestore().collection(COLLECTION_NAME);
+  //   const items: Timezone[] = [];
 
-    // todo: sort
-    const $promise = collection.get().then(query => {
-      query.forEach(doc => {
-        const data = doc.data();
-        const startTime = moment(data.start_time.toDate()).format("HH:mm");
-        const endTime = moment(data.end_time.toDate()).format("HH:mm");
-        const item: Timezone = {
-          id: doc.id,
-          text: `${startTime} - ${endTime}`,
-          start_time: data.start_time.toDate(),
-          end_time: data.end_time.toDate()
-        };
+  //   // todo: sort
+  //   const $promise = collection.get().then(query => {
+  //     query.forEach(doc => {
+  //       const data = doc.data();
+  //       const startTime = moment(data.start_time.toDate()).format("HH:mm");
+  //       const endTime = moment(data.end_time.toDate()).format("HH:mm");
+  //       const item: Timezone = {
+  //         id: doc.id,
+  //         text: `${startTime} - ${endTime}`,
+  //         start_time: data.start_time.toDate(),
+  //         end_time: data.end_time.toDate()
+  //       };
 
-        items.push(item);
-      });
+  //       items.push(item);
+  //     });
 
-      commit(SET_ITEMS, items);
-    });
+  //     commit(SET_ITEMS, items);
+  //   });
 
-    return await $promise;
-  },
+  //   return await $promise;
+  // },
 
   /**
    * 予約時間帯取得
    * @param timezone
    */
   [SAVE]: async ({ commit }, timezone: Timezone) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    const requestBody = {
-      start_time: timezone.start_time,
-      end_time: timezone.end_time
-    };
-    let $promise = null;
+    const service = new TimezoneService();
+    let promise$ = null;
 
-    if (timezone.id) {
-      $promise = collection.doc(timezone.id).set(requestBody);
+    if (_.isEmpty(timezone.id)) {
+      promise$ = service.add(timezone);
     } else {
-      $promise = collection.add(requestBody);
+      promise$ = service.edit(timezone);
     }
 
-    return await $promise;
+    return await promise$;
   },
 
   /**
@@ -104,8 +106,8 @@ const actions: ActionTree<TimezoneState, RootState> = {
    * @param id
    */
   [DELETE]: async ({ commit }, id: string) => {
-    const collection = firebase.firestore().collection(COLLECTION_NAME);
-    return await collection.doc(id).delete();
+    const service = new TimezoneService();
+    return await service.delete(id);
   }
 };
 

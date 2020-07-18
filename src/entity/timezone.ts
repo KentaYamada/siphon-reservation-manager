@@ -6,4 +6,5 @@ export interface Timezone {
   text: string;
   start_time: Date;
   end_time: Date;
+  is_default_select: boolean;
 }

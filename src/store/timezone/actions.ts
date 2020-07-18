@@ -8,7 +8,7 @@ import moment from "moment";
 import _ from "lodash";
 
 // firestore service
-import { TimezoneService } from "@/services/firestore/timezones/timezone-service";
+import { TimezoneService } from "@/services/firestore/timezone-service";
 
 // store
 import { RootState } from "@/store";

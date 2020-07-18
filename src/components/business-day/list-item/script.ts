@@ -1,6 +1,7 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
 import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
+import _ from "lodash";
 
 // component
 import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
@@ -29,13 +30,14 @@ export default Vue.extend({
      * 営業日編集
      */
     handleClickEdit(): void {
+      const model = _.clone(this.businessDay);
       const config: ModalConfig = {
         parent: this,
         component: BusinessDayForm,
         hasModalCard: true,
         scroll: "keep",
         props: {
-          businessDay: this.businessDay
+          businessDay: model
         },
         events: {
           "save-success": () => {
@@ -53,14 +55,13 @@ export default Vue.extend({
     handleClicDelete(): void {
       const businessDay = formatDateJp(this.businessDay.business_date);
       const message = `
-        <p>「${businessDay}」を削除しますか？</p>
-        <small>誤って削除した場合、再度データを登録してください。</small>`;
+        <p><strong>営業日: ${businessDay}</strong>を削除しますか？</p>
+        <small>誤って削除した場合、再度登録してください。</small>`;
       const config: DialogConfig = {
-        title: "営業日削除",
         type: "is-danger",
         message: message,
-        confirmText: "削除",
-        cancelText: "キャンセル",
+        confirmText: "はい",
+        cancelText: "いいえ",
         hasIcon: true,
         iconPack: "fas",
         icon: "exclamation-circle",

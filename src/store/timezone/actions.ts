@@ -59,7 +59,7 @@ const actions: ActionTree<TimezoneState, RootState> = {
     const service = new TimezoneService();
     let promise$ = null;
 
-    if (_.isEmpty(timezone.id)) {
+    if (_.isNil(timezone.id)) {
       promise$ = service.add(timezone);
     } else {
       promise$ = service.edit(timezone);

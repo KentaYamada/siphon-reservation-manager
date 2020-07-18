@@ -38,7 +38,6 @@ export default Vue.extend({
      */
     handleShowTimezoneDialog(): void {
       const timezone: Timezone = {
-        text: "",
         start_time: new Date(),
         end_time: new Date(),
         is_default_select: false

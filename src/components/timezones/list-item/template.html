@@ -1,6 +1,6 @@
 <div class="list-item">
     <div class="timezone">
-        {{ timezone.text }}
+        {{ timezone.start_time | timePeriod(timezone.end_time) }}
     </div>
     <div class="buttons">
         <button type="button"

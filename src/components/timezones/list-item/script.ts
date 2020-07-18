@@ -9,6 +9,9 @@ import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
 // entity
 import { Timezone } from "@/entity/timezone";
 
+// filter
+import { timePeriod } from "@/filters/time-period";
+
 // store
 import { DELETE } from "@/store/constant";
 
@@ -49,8 +52,9 @@ export default Vue.extend({
      * 予約時間帯削除
      */
     handleClicDelete(): void {
+      const period = timePeriod(this.timezone.start_time, this.timezone.end_time);
       const message = `
-            <p>「${this.timezone.text}」を削除しますか？</p>
+            <p>「${period}」を削除しますか？</p>
             <small>誤って削除した場合、再度データを登録してください。</small>`;
       const config: DialogConfig = {
         title: "予約時間帯削除",
@@ -74,5 +78,8 @@ export default Vue.extend({
 
       this.$buefy.dialog.confirm(config);
     }
+  },
+  filters: {
+    timePeriod
   }
 });

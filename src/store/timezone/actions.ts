@@ -12,7 +12,7 @@ import { TimezoneService } from "@/services/firestore/timezones/timezone-service
 
 // store
 import { RootState } from "@/store";
-import { DELETE, FETCH, FETCH_ALL_RESERVED_TIMEZONES, SAVE, SET_ITEMS } from "@/store/constant";
+import { DELETE, FETCH, SAVE, SET_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
 
 const actions: ActionTree<TimezoneState, RootState> = {
@@ -27,8 +27,6 @@ const actions: ActionTree<TimezoneState, RootState> = {
     promise$.forEach(doc => {
       // todo: generics entity
       const data = doc.data();
-      const period = `${moment(data.start_time.toDate()).format("HH:mm")} - 
-        ${moment(data.end_time.toDate()).format("HH:mm")}`;
       let isDefaultSelect = false;
 
       if (!_.isNil(data.is_default_select)) {
@@ -37,8 +35,6 @@ const actions: ActionTree<TimezoneState, RootState> = {
 
       const timezone: Timezone = {
         id: doc.id,
-        // todo: replace filter
-        text: period,
         start_time: data.start_time.toDate(),
         end_time: data.end_time.toDate(),
         is_default_select: isDefaultSelect

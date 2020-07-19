@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { ModalConfig, ToastConfig } from "buefy/types/components";
 
 // component
@@ -12,22 +12,25 @@ import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
 import { BusinessDay } from "@/entity/business-day";
 import { Timezone } from "@/entity/timezone";
 
+// plugin
+import _ from "lodash";
+
 // store
-import { FETCH } from "@/store/constant";
+import { FETCH, FETCH_SELECTABLE_TIMEZONES, INITIALIZE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
     BusinessDayList,
     TimezoneList
   },
-  data() {
-    return {
-      showMenuButton: false
-    };
+  computed: {
+    ...mapState("businessDay", ["businessDay"])
   },
   methods: {
+    ...mapMutations("businessDay", [INITIALIZE]),
     ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH
+      fetchBusinessDays: FETCH,
+      fetchSelectableTimezones: FETCH_SELECTABLE_TIMEZONES
     }),
     ...mapActions("timezone", {
       fetchTimezones: FETCH
@@ -71,33 +74,33 @@ export default Vue.extend({
      * 営業日設定フォーム表示
      */
     handleShowBusinessDayForm(): void {
-      const businessDay: BusinessDay = {
-        text: "",
-        business_date: new Date()
-      };
-      const config: ModalConfig = {
-        parent: this,
-        component: BusinessDayForm,
-        hasModalCard: true,
-        scroll: "keep",
-        props: {
-          businessDay: businessDay
-        },
-        events: {
-          "save-success": () => {
-            const toastConfig: ToastConfig = {
-              message: "保存しました。",
-              type: "is-success"
-            };
+      this.initialize();
+      this.fetchSelectableTimezones().then(() => {
+        const businessDay: BusinessDay = _.clone(this.businessDay);
+        const config: ModalConfig = {
+          parent: this,
+          component: BusinessDayForm,
+          hasModalCard: true,
+          scroll: "keep",
+          props: {
+            businessDay: businessDay
+          },
+          events: {
+            "save-success": () => {
+              const toastConfig: ToastConfig = {
+                message: "保存しました。",
+                type: "is-success"
+              };
 
-            this.$buefy.toast.open(toastConfig);
-            this.showMenuButton = false;
-            this.fetchBusinessDays();
+              this.$buefy.toast.open(toastConfig);
+              this.showMenuButton = false;
+              this.fetchBusinessDays();
+            }
           }
-        }
-      };
+        };
 
-      this.$buefy.modal.open(config);
+        this.$buefy.modal.open(config);
+      });
     },
 
     /**
@@ -106,5 +109,10 @@ export default Vue.extend({
     toggleAddMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
     }
+  },
+  data() {
+    return {
+      showMenuButton: false
+    };
   }
 });

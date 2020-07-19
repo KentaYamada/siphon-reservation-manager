@@ -2,22 +2,28 @@ import { ActionTree } from "vuex";
 
 // entity
 import { BusinessDay } from "@/entity/business-day";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
 
 // plugin
-import firebase from "@/plugins/firebase";
 import _ from "lodash";
 import moment from "moment";
 
 // service
 import { BusinessDayService } from "@/services/firestore/business-day-service";
+import { TimezoneService } from "@/services/firestore/timezone-service";
 
 // store
 import { RootState } from "@/store";
-import { DELETE, FETCH, FETCH_BUSINESS_DATE_AFTER_TODAY, SAVE, SET_ITEMS } from "@/store/constant";
 import { BusinessDayState } from "@/store/business-day";
-
-// firestore collection name
-const COLLECTION_NAME = "business_days";
+import {
+  DELETE,
+  FETCH,
+  FETCH_BUSINESS_DATE_AFTER_TODAY,
+  FETCH_SELECTABLE_TIMEZONES,
+  SAVE,
+  SET_ITEMS,
+  SET_SELECTABLE_TIMEZONES
+} from "@/store/constant";
 
 const actions: ActionTree<BusinessDayState, RootState> = {
   /**
@@ -54,6 +60,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const businessDays: Array<BusinessDay> = [];
 
     promise$.forEach(doc => {
+      // todo: convert entity
       const data = doc.data();
       const businessDay: BusinessDay = {
         id: doc.data().id,
@@ -65,6 +72,41 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     });
 
     commit(SET_ITEMS, businessDays);
+
+    return promise$;
+  },
+
+  /**
+   * 選択可能な予約時間帯取得
+   */
+  [FETCH_SELECTABLE_TIMEZONES]: async ({ commit }) => {
+    const service = new TimezoneService();
+    const promise$ = await service.fetch();
+    let timezones: Array<SelectableTimezone> = [];
+
+    promise$.forEach(doc => {
+      const data = doc.data();
+      let selected = false;
+
+      if (!_.isNil(data.is_default_select)) {
+        selected = data.is_default_select;
+      }
+
+      const timezone: SelectableTimezone = {
+        id: doc.id,
+        start_time: data.start_time.toDate(),
+        end_time: data.end_time.toDate(),
+        selected: selected
+      };
+
+      timezones.push(timezone);
+    });
+
+    timezones = _.sortBy(timezones, (timezone: SelectableTimezone) => {
+      return timezone.start_time.getHours();
+    });
+
+    commit(SET_SELECTABLE_TIMEZONES, timezones);
 
     return promise$;
   },

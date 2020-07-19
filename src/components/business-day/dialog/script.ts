@@ -2,6 +2,9 @@ import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
 import { required } from "vuelidate/lib/validators";
 
+// components
+import SelectableTimezoneList from "@/components/timezones/selectable-list/SelectableTimezoneList.vue";
+
 // entity
 import { BusinessDay } from "@/entity/business-day";
 
@@ -9,6 +12,9 @@ import { BusinessDay } from "@/entity/business-day";
 import { SAVE } from "@/store/constant";
 
 export default Vue.extend({
+  components: {
+    SelectableTimezoneList
+  },
   props: {
     businessDay: {
       required: true,

@@ -1,0 +1,6 @@
+<div class="list">
+    <selectable-timezone-list-item :timezone="t" v-for="t in timezones" :key="t.id"/>
+    <div class="list-item" v-if="timezones.length < 1">
+        <p class="has-text-centered">表示できるデータがありません</p>
+    </div>
+</div>

@@ -6,18 +6,25 @@
         </p>
     </header>
     <section class="modal-card-body">
-        <div class="field">
-            <label class="label">営業日</label>
-            <div class="control">
-                <b-datepicker v-model="businessDay.business_date"></b-datepicker>
+        <form>
+            <div class="field">
+                <label class="label">営業日</label>
+                <div class="control">
+                    <b-datepicker v-model="businessDay.business_date"></b-datepicker>
+                </div>
+                <div v-if="$v.businessDay.business_date.$error">
+                    <small class="help is-danger"
+                           v-if="!$v.businessDay.business_date.required">
+                        営業日は必須入力です。
+                    </small>
+                </div>
             </div>
-            <div v-if="$v.businessDay.business_date.$error">
-                <small class="help is-danger"
-                       v-if="!$v.businessDay.business_date.required">
-                    営業日は必須入力です。
-                </small>
+
+            <div class="timezone-list-container">
+                <p>予約可能な時間をチェックしてください</p>
+                <selectable-timezone-list :timezones="businessDay.timezones" v-if="!!businessDay"/>
             </div>
-        </div>
+        </form>
     </section>
     <footer class="modal-card-foot buttons is-right">
         <button type="button" class="button" @click="$parent.close()">

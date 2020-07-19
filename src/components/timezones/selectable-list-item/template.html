@@ -1,0 +1,8 @@
+<div class="list-item">
+    <div>
+        <input class="checkbox" type="checkbox">
+    </div>
+    <div class="timezone">
+        {{ timezone.start_time | timePeriod(timezone.end_time) }}
+    </div>
+</div>

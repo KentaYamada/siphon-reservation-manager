@@ -16,7 +16,6 @@ export interface RootState {
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  strict: true,
   modules: {
     auth,
     businessDay,

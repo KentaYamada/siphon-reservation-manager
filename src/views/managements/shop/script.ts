@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { BModalConfig, BNoticeConfig } from "buefy/types/components";
 
 // component
@@ -12,22 +12,25 @@ import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
 import { BusinessDay } from "@/entity/business-day";
 import { Timezone } from "@/entity/timezone";
 
+// plugin
+import _ from "lodash";
+
 // store
-import { FETCH } from "@/store/constant";
+import { FETCH, FETCH_SELECTABLE_TIMEZONES, INITIALIZE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
     BusinessDayList,
     TimezoneList
   },
-  data() {
-    return {
-      showMenuButton: false
-    };
+  computed: {
+    ...mapState("businessDay", ["businessDay"])
   },
   methods: {
+    ...mapMutations("businessDay", [INITIALIZE]),
     ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH
+      fetchBusinessDays: FETCH,
+      fetchSelectableTimezones: FETCH_SELECTABLE_TIMEZONES
     }),
     ...mapActions("timezone", {
       fetchTimezones: FETCH
@@ -106,5 +109,10 @@ export default Vue.extend({
     toggleAddMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
     }
+  },
+  data() {
+    return {
+      showMenuButton: false
+    };
   }
 });

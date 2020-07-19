@@ -11,10 +11,12 @@ import mutations from "@/store/business-day/mutations";
 
 export interface BusinessDayState {
   businessDays: BusinessDay[];
+  businessDay: BusinessDay | null;
 }
 
 const state: BusinessDayState = {
-  businessDays: []
+  businessDays: [],
+  businessDay: null
 };
 const namespaced = true;
 const module: Module<BusinessDayState, RootState> = {

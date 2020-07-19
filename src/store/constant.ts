@@ -31,6 +31,10 @@ export const GET_NAVIGATIONS = "getNavigations";
 // Business day actions
 export const FETCH_BUSINESS_DATE_AFTER_TODAY = "fetchBusinessDateAfterToday";
 
+export const FETCH_SELECTABLE_TIMEZONES = "fetchSelectableTimezones";
+
+export const SET_SELECTABLE_TIMEZONES = "setSelectableTimezones";
+
 // Reservation actions
 export const CANCEL = "cancel";
 
@@ -78,5 +82,3 @@ export const GET_RESERVABLE_SEATS = "getReservableSeats";
 export const GET_RESERVABLE_TIMEZONES = "getReservableTimezones";
 
 export const GET_TIMEZONES_BY_RESERVATION_DATE = "getTimezonesByReservationDate";
-
-export const FETCH_ALL_RESERVED_TIMEZONES = "fetchAllReservedTimezones";

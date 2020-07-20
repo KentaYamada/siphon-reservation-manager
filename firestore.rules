@@ -11,6 +11,10 @@ service cloud.firestore {
 
       match /business_days/{document} {
           allow list, create: if isAuth();
+
+          match /timezones/{document} {
+            allow create: if isAuth();
+          }
       }
 
       match /business_days/{businessDayId} {

@@ -1,8 +1,6 @@
 <div class="list-item">
-    <div>
-        <input class="checkbox" type="checkbox">
-    </div>
-    <div class="timezone">
+    <label class="checkbox">
+        <input class="checkbox" type="checkbox" v-model="timezone.selected">
         {{ timezone.start_time | timePeriod(timezone.end_time) }}
-    </div>
+    </label>
 </div>

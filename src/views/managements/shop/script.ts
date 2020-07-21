@@ -3,7 +3,7 @@ import { mapActions, mapMutations, mapState } from "vuex";
 import { BModalConfig, BNoticeConfig } from "buefy/types/components";
 
 // component
-import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
+import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
 import BusinessDayList from "@/components/business-day/list/BusinessDayList.vue";
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
 import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
@@ -80,7 +80,7 @@ export default Vue.extend({
       };
       const config: BModalConfig = {
         parent: this,
-        component: BusinessDayForm,
+        component: BusinessDayDialog,
         hasModalCard: true,
         scroll: "keep",
         props: {

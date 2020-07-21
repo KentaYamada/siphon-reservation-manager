@@ -4,7 +4,7 @@ import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
 import _ from "lodash";
 
 // component
-import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
+import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
 
 // entity
 import { BusinessDay } from "@/entity/business-day";
@@ -33,7 +33,7 @@ export default Vue.extend({
       const model = _.clone(this.businessDay);
       const config: ModalConfig = {
         parent: this,
-        component: BusinessDayForm,
+        component: BusinessDayDialog,
         hasModalCard: true,
         scroll: "keep",
         props: {

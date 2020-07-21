@@ -3,7 +3,7 @@ import { mapActions, mapMutations, mapState } from "vuex";
 import { ModalConfig, ToastConfig } from "buefy/types/components";
 
 // component
-import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
+import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
 import BusinessDayList from "@/components/business-day/list/BusinessDayList.vue";
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
 import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
@@ -73,13 +73,13 @@ export default Vue.extend({
     /**
      * 営業日設定フォーム表示
      */
-    handleShowBusinessDayForm(): void {
+    handleShowBusinessDayDialog(): void {
       this.initialize();
       this.fetchSelectableTimezones().then(() => {
         const businessDay: BusinessDay = _.clone(this.businessDay);
         const config: ModalConfig = {
           parent: this,
-          component: BusinessDayForm,
+          component: BusinessDayDialog,
           hasModalCard: true,
           scroll: "keep",
           props: {

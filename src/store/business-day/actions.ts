@@ -31,24 +31,42 @@ const actions: ActionTree<BusinessDayState, RootState> = {
    */
   [FETCH]: async ({ commit }) => {
     const service = new BusinessDayService();
-    const promise$ = await service.fetch();
     const businessDays: Array<BusinessDay> = [];
+    const businessDaysDoc = await service.fetch();
 
-    promise$.forEach(doc => {
-      // todo: generics entity
-      const data = doc.data();
-      const businessDay: BusinessDay = {
+    businessDaysDoc.forEach(async doc => {
+      const timezonesDocs = await doc.ref.collection(service.subCollectionName).get();
+      const timezones: Array<SelectableTimezone> = [];
+
+      timezonesDocs.forEach(doc => {
+        if (!_.isNil(doc.data())) {
+          let isSelected = false;
+
+          if (!_.isNil(doc.data().is_selected)) {
+            isSelected = doc.data().is_selected;
+          }
+
+          timezones.push({
+            id: doc.id,
+            start_time: doc.data().start_time.toDate(),
+            end_time: doc.data().end_time.toDate(),
+            selected: isSelected
+          });
+        }
+      });
+
+      const businessDate = doc.data().business_date.toDate();
+      businessDays.push({
         id: doc.id,
-        text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
-        business_date: data.business_date.toDate()
-      };
-
-      businessDays.push(businessDay);
+        business_date: businessDate,
+        text: moment(businessDate).format("YYYY年MM月DD日"),
+        timezones: timezones
+      });
     });
 
     commit(SET_ITEMS, businessDays);
 
-    return promise$;
+    return businessDaysDoc;
   },
 
   /**

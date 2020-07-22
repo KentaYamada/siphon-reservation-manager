@@ -13,6 +13,10 @@ service cloud.firestore {
           allow list, create: if isAuth();
 
           match /timezones/{document} {
+          	allow list: if isAuth();
+          }
+          
+          match /timezones/{document} {
             allow create: if isAuth();
           }
       }

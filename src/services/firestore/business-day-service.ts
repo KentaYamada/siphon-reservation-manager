@@ -7,6 +7,11 @@ import { SelectableTimezone } from "@/entity/selectable-timezone";
 
 export class BusinessDayService {
   private readonly COLLECTION_NAME: string = "business_days";
+  private readonly SUB_COLLECTION_NAME: string = "timezones";
+
+  get subCollectionName(): string {
+    return this.SUB_COLLECTION_NAME;
+  }
 
   async add(businessDay: BusinessDay) {
     const collection = firebase.firestore().collection(this.COLLECTION_NAME);
@@ -64,7 +69,7 @@ export class BusinessDayService {
       .delete();
   }
 
-  fetch() {
+  async fetch() {
     const query = firebase
       .firestore()
       .collection(this.COLLECTION_NAME)

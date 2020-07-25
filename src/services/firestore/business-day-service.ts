@@ -40,21 +40,35 @@ export class BusinessDayService {
     return businessDayRef;
   }
 
-  edit(businessDay: BusinessDay) {
+  async edit(businessDay: BusinessDay) {
     if (_.isNil(businessDay) || _.isNil(businessDay.id)) {
       return Promise.reject();
     }
 
-    // todo: type safe
-    const requestBody = {
-      business_date: businessDay.business_date
-    };
+    const db = firebase.firestore();
+    const transaction = await db.runTransaction(async (transaction) => {
+      const businessDayRef = db.collection(this.COLLECTION_NAME).doc(businessDay.id);
+      const hasDoc = await transaction.get(businessDayRef);
 
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .doc(businessDay.id)
-      .set(requestBody);
+      if (!hasDoc.exists) {
+        return Promise.reject();
+      }
+
+      transaction.update(businessDayRef, {
+        business_date: businessDay.business_date
+      });
+
+      _.each(businessDay.timezones, async (timezone: SelectableTimezone) => {
+        const timezoneRef = businessDayRef.collection(this.SUB_COLLECTION_NAME).doc(timezone.id);
+        transaction.update(timezoneRef, {
+          selected: timezone.selected
+        });
+      });
+
+      return businessDayRef;
+    });
+
+    return transaction;
   }
 
   delete(id: string) {
@@ -62,18 +76,11 @@ export class BusinessDayService {
       return Promise.reject();
     }
 
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .doc(id)
-      .delete();
+    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).delete();
   }
 
   async fetch() {
-    const query = firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .orderBy("business_date", "asc");
+    const query = firebase.firestore().collection(this.COLLECTION_NAME).orderBy("business_date", "asc");
 
     return query.get();
   }

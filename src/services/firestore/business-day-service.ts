@@ -97,7 +97,7 @@ export class BusinessDayService {
   }
 
   async fetch() {
-    const query = firebase.firestore().collection(this.COLLECTION_NAME).orderBy("business_date", "asc");
+    const query = firebase.firestore().collection(this.COLLECTION_NAME).orderBy("business_date", "desc");
 
     return query.get();
   }

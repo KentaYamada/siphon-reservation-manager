@@ -1,18 +1,10 @@
 import { ActionTree } from "vuex";
-
-// entity
-import { BusinessDay } from "@/entity/business-day";
-import { SelectableTimezone } from "@/entity/selectable-timezone";
-
-// plugin
 import _ from "lodash";
 import moment from "moment";
-
-// service
+import { BusinessDay } from "@/entity/business-day";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { BusinessDayService } from "@/services/firestore/business-day-service";
 import { TimezoneService } from "@/services/firestore/timezone-service";
-
-// store
 import { RootState } from "@/store";
 import { BusinessDayState } from "@/store/business-day";
 import {
@@ -34,16 +26,16 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const businessDays: Array<BusinessDay> = [];
     const businessDaysDoc = await service.fetch();
 
-    businessDaysDoc.forEach(async doc => {
+    businessDaysDoc.forEach(async (doc) => {
       const timezonesDocs = await doc.ref.collection(service.subCollectionName).get();
-      const timezones: Array<SelectableTimezone> = [];
+      let timezones: Array<SelectableTimezone> = [];
 
-      timezonesDocs.forEach(doc => {
+      timezonesDocs.forEach((doc) => {
         if (!_.isNil(doc.data())) {
           let isSelected = false;
 
-          if (!_.isNil(doc.data().is_selected)) {
-            isSelected = doc.data().is_selected;
+          if (!_.isNil(doc.data().selected)) {
+            isSelected = doc.data().selected;
           }
 
           timezones.push({
@@ -53,6 +45,9 @@ const actions: ActionTree<BusinessDayState, RootState> = {
             selected: isSelected
           });
         }
+      });
+      timezones = _.sortBy(timezones, (timezone: SelectableTimezone) => {
+        return timezone.start_time.getHours();
       });
 
       const businessDate = doc.data().business_date.toDate();
@@ -77,7 +72,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const promise$ = await service.fetchByAfterToday();
     const businessDays: Array<BusinessDay> = [];
 
-    promise$.forEach(doc => {
+    promise$.forEach((doc) => {
       // todo: convert entity
       const data = doc.data();
       const businessDay: BusinessDay = {
@@ -102,7 +97,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const promise$ = await service.fetch();
     let timezones: Array<SelectableTimezone> = [];
 
-    promise$.forEach(doc => {
+    promise$.forEach((doc) => {
       const data = doc.data();
       let selected = false;
 

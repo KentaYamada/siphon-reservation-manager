@@ -6,13 +6,7 @@ import { BNoticeConfig } from "buefy/types/components";
 import { Navigation } from "@/entity/navigation";
 
 // routing
-import {
-  INDEX_URL,
-  MANAGEMENT_RESERVATION_ALL_RESERVED,
-  MANAGEMENT_RESERVATION_LIST_URL,
-  SHOP_SETTING_URL,
-  HELP_MAIL_UNREACHED
-} from "@/router/url";
+import { INDEX_URL, MANAGEMENT_RESERVATION_LIST_URL, SHOP_SETTING_URL,HELP_MAIL_UNREACHED } from "@/router/url";
 
 // store
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";

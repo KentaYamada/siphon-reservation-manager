@@ -61,7 +61,7 @@ export default Vue.extend({
                 name: "reservation-canceled-message"
               });
             })
-            .catch(error => {
+            .catch((error) => {
               console.error(error);
 
               const message = `

@@ -93,7 +93,7 @@ export default Vue.extend({
             this.$buefy.toast.open(toastConfig);
             this.$router.push({ name: "reserved-message", params: { id: newId } });
           })
-          .catch(error => {
+          .catch((error) => {
             toastConfig.message = error.message ? error.message : "予約の登録に失敗しました。";
             toastConfig.type = "is-danger";
 

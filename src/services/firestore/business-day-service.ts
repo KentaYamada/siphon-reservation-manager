@@ -71,12 +71,29 @@ export class BusinessDayService {
     return transaction;
   }
 
-  delete(id: string) {
+  async delete(id: string) {
     if (_.isEmpty(id)) {
       return Promise.reject();
     }
 
-    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).delete();
+    const db = firebase.firestore();
+    const transaction = db.runTransaction(async (transaction) => {
+      const businessDayRef = db.collection(this.COLLECTION_NAME).doc(id);
+      const hasDoc = await transaction.get(businessDayRef);
+
+      if (!hasDoc.exists) {
+        return Promise.reject();
+      }
+
+      const timezones = await businessDayRef.collection(this.subCollectionName).get();
+      timezones.forEach((doc) => {
+        transaction.delete(doc.ref);
+      });
+
+      transaction.delete(businessDayRef);
+    });
+
+    return transaction;
   }
 
   async fetch() {

@@ -1,17 +1,12 @@
 import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // entity
 import { Navigation } from "@/entity/navigation";
 
 // routing
-import {
-  INDEX_URL,
-  MANAGEMENT_RESERVATION_ALL_RESERVED,
-  MANAGEMENT_RESERVATION_LIST_URL,
-  SHOP_SETTING_URL
-} from "@/router/url";
+import { INDEX_URL, MANAGEMENT_RESERVATION_LIST_URL, SHOP_SETTING_URL } from "@/router/url";
 
 // store
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
@@ -77,7 +72,7 @@ export default Vue.extend({
 
     onClickSignOut(): void {
       this.signOut().then(() => {
-        const toastConfig: ToastConfig = {
+        const toastConfig: BNoticeConfig = {
           message: "ログアウトしました",
           type: "is-success"
         };

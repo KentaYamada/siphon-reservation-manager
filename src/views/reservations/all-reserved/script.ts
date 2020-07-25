@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 import { required, email } from "vuelidate/lib/validators";
 
 // component
@@ -82,7 +82,7 @@ export default Vue.extend({
      * 保存イベント
      */
     onClickSave(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "",
         type: ""
       };
@@ -131,7 +131,7 @@ export default Vue.extend({
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
       this.searchOption.reservation_date_id = selectedId;
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
@@ -141,13 +141,13 @@ export default Vue.extend({
       const timezone = this.getTimezoneById(selectedId);
       this.setReservationTimezone(timezone);
       this.searchOption.reservation_time_id = selectedId;
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
      * 予約座席取得
      */
-    __fetchReservationSeats(): void {
+    _fetchReservationSeats(): void {
       const hasOption = this.searchOption.reservation_date_id !== "" && this.searchOption.reservation_time_id !== "";
 
       if (hasOption) {

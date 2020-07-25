@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
+import { BDialogConfig, BModalConfig } from "buefy/types/components";
 import _ from "lodash";
 
 // component
@@ -21,7 +21,7 @@ export default Vue.extend({
     businessDay: {
       required: true,
       type: Object as PropType<BusinessDay>
-    }
+    },
   },
   methods: {
     ...mapActions("businessDay", [DELETE]),
@@ -31,7 +31,7 @@ export default Vue.extend({
      */
     handleClickEdit(): void {
       const model = _.clone(this.businessDay);
-      const config: ModalConfig = {
+      const config: BModalConfig = {
         parent: this,
         component: BusinessDayDialog,
         hasModalCard: true,
@@ -57,7 +57,7 @@ export default Vue.extend({
       const message = `
         <p><strong>営業日: ${businessDay}</strong>を削除しますか？</p>
         <small>誤って削除した場合、再度登録してください。</small>`;
-      const config: DialogConfig = {
+      const config: BDialogConfig = {
         type: "is-danger",
         message: message,
         confirmText: "はい",
@@ -70,7 +70,7 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
+            .catch((error) => {
               // todo: error handling
             });
         }
@@ -81,5 +81,5 @@ export default Vue.extend({
   },
   filters: {
     formatDateJp
-  }
+  },
 });

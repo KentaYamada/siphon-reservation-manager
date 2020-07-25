@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // component
 import TimezoneListItem from "@/components/timezones/list-item/TimezoneListItem.vue";
@@ -25,7 +25,7 @@ export default Vue.extend({
      * list-item component callback function
      */
     itemDeleteSucceeded(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "削除しました。",
         type: "is-danger"
       };
@@ -38,7 +38,7 @@ export default Vue.extend({
      * list-item component callback function
      */
     itemEditSucceeded(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "保存しました。",
         type: "is-success"
       };

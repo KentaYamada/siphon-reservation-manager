@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // store
 import { SIGN_IN } from "@/store/constant";
@@ -15,7 +15,7 @@ export default Vue.extend({
     onClickSignIn(): void {
       this.signIn()
         .then(() => {
-          const toastConfig: ToastConfig = {
+          const toastConfig: BNoticeConfig = {
             message: "ログインしました",
             type: "is-success"
           };
@@ -23,7 +23,7 @@ export default Vue.extend({
           this.$router.push({ name: "reservation-list" });
         })
         .catch(() => {
-          const toastConfig: ToastConfig = {
+          const toastConfig: BNoticeConfig = {
             message: "ログイン失敗しました",
             type: "is-danger"
           };

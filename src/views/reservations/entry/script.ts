@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
@@ -75,7 +75,7 @@ export default Vue.extend({
     ]),
 
     onClickSave(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "",
         type: ""
       };
@@ -89,18 +89,18 @@ export default Vue.extend({
             toastConfig.message = "予約しました。";
             toastConfig.type = "is-success";
 
-            this.__sendEmail(newId);
+            this._sendEmail(newId);
             this.$buefy.toast.open(toastConfig);
             this.$router.push({ name: "reserved-message", params: { id: newId } });
           })
-          .catch(error => {
+          .catch((error) => {
             toastConfig.message = error.message ? error.message : "予約の登録に失敗しました。";
             toastConfig.type = "is-danger";
 
             this.$buefy.toast.open(toastConfig);
 
             if (error.refetch_seats) {
-              this.__fetchReservationSeats();
+              this._fetchReservationSeats();
             }
           })
           .finally(() => {
@@ -124,7 +124,7 @@ export default Vue.extend({
       this.setReservationDate(businessDay.business_date);
       this.seatSeachOption.reservation_date_id = selectedId;
       this.seatSeachOption.reservation_time_id = "";
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
@@ -135,7 +135,7 @@ export default Vue.extend({
       const timezone = this.getTimezoneById(selectedId);
       this.setReservationTimezone(timezone);
       this.seatSeachOption.reservation_time_id = selectedId;
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
@@ -148,7 +148,7 @@ export default Vue.extend({
     /**
      * 予約座席情報取得
      */
-    __fetchReservationSeats(): void {
+    _fetchReservationSeats(): void {
       const hasSearchOption =
         !_.isEmpty(this.seatSeachOption.reservation_date_id) && !_.isEmpty(this.seatSeachOption.reservation_time_id);
       this.isLoadingSeats = true;
@@ -168,7 +168,7 @@ export default Vue.extend({
      * 予約完了通知メール送信
      * @param id
      */
-    __sendEmail(id: string): void {
+    _sendEmail(id: string): void {
       const href = this.$router.resolve({
         name: "reservation-detail",
         params: {

@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { DialogConfig, ModalConfig } from "buefy/types/components";
+import { BDialogConfig, BModalConfig } from "buefy/types/components";
 import _ from "lodash";
 
 // components
@@ -31,7 +31,7 @@ export default Vue.extend({
      */
     handleShowTimezoneDialog(): void {
       const model = _.clone(this.timezone);
-      const config: ModalConfig = {
+      const config: BModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
@@ -56,7 +56,7 @@ export default Vue.extend({
       const message = `
             <p><strong>予約時間: ${period}</strong>を削除しますか？</p>
             <small>誤って削除した場合、再度登録してください。</small>`;
-      const config: DialogConfig = {
+      const config: BDialogConfig = {
         type: "is-danger",
         message: message,
         confirmText: "はい",
@@ -69,7 +69,7 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
+            .catch((error) => {
               // todo: error handling
             });
         }

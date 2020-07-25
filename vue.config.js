@@ -4,7 +4,7 @@
  * Vue CLI
  * See: https://cli.vuejs.org/config/
  * PWA
- * See: https://cli.vuejs.org/core-plugins/pwa.html 
+ * See: https://cli.vuejs.org/core-plugins/pwa.html
  */
 module.exports = {
   pages: {
@@ -21,10 +21,10 @@ module.exports = {
   },
   pwa: {
     iconPaths: {
-      favicon16:"images/icons/icon-16x16.png", 
-      favicon32:"images/icons/icon-32x32.png", 
+      favicon16: "images/icons/icon-16x16.png",
+      favicon32: "images/icons/icon-32x32.png",
       appleTouchIcon: "images/icons/icon-152x152.png",
-      msTitleImage:"images/icons/icon-144x144.png" 
+      msTitleImage: "images/icons/icon-144x144.png",
     }
   }
 };

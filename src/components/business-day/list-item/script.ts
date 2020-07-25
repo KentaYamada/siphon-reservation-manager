@@ -20,7 +20,7 @@ export default Vue.extend({
     businessDay: {
       required: true,
       type: Object as PropType<BusinessDay>
-    }
+    },
   },
   methods: {
     ...mapActions("businessDay", [DELETE]),
@@ -65,7 +65,7 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
+            .catch((error) => {
               // todo: error handling
             });
         }
@@ -76,5 +76,5 @@ export default Vue.extend({
   },
   filters: {
     formatDateJp
-  }
+  },
 });

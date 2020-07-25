@@ -73,7 +73,7 @@ export default Vue.extend({
               this.$buefy.toast.open(toastConfig);
               console.error(error);
             });
-        }
+        },
       };
 
       this.$buefy.dialog.confirm(dialogConfig);

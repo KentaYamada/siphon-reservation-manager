@@ -1,18 +1,15 @@
 import Vue, { PropType } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { required } from "vuelidate/lib/validators";
-
-// entity
+import _ from "lodash";
 import { Timezone } from "@/entity/timezone";
-
-// store
-import { SAVE } from "@/store/constant";
+import { FETCH_BY_ID, INITIALIZE, SAVE } from "@/store/constant";
 
 export default Vue.extend({
   props: {
-    timezone: {
-      required: true,
-      type: Object as PropType<Timezone>
+    id: {
+      required: false,
+      type: String
     }
   },
   validations: {
@@ -25,12 +22,15 @@ export default Vue.extend({
       }
     }
   },
+  computed: {
+    ...mapState("timezone", {
+      model: "timezone"
+    })
+  },
   methods: {
-    ...mapActions("timezone", [SAVE]),
+    ...mapActions("timezone", [FETCH_BY_ID, SAVE]),
+    ...mapMutations("timezone", [INITIALIZE]),
 
-    /**
-     * 予約時間帯保存
-     */
     handleClickSave(): void {
       this.$v.$touch();
 
@@ -52,7 +52,19 @@ export default Vue.extend({
   },
   data() {
     return {
-      isSaving: false
+      isSaving: false,
+      timezone: {} as Timezone
     };
+  },
+  mounted() {
+    this.initialize();
+
+    if (_.isNil(this.id)) {
+      this.timezone = _.clone(this.model);
+    } else {
+      this.fetchById(this.id).then(() => {
+        this.timezone = _.clone(this.model);
+      });
+    }
   }
 });

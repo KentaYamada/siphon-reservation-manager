@@ -30,14 +30,12 @@ export default Vue.extend({
      * 予約時間帯設定
      */
     handleShowTimezoneDialog(): void {
-      const model = _.clone(this.timezone);
       const config: BModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
-        scroll: "keep",
         props: {
-          timezone: model
+          id: this.timezone.id
         },
         events: {
           "save-success": () => {

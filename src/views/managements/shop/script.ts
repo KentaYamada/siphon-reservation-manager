@@ -1,5 +1,4 @@
 import Vue from "vue";
-import { mapMutations } from "vuex";
 import { BModalConfig, BNoticeConfig } from "buefy/types/components";
 import _ from "lodash";
 import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
@@ -7,7 +6,7 @@ import BusinessDayList from "@/components/business-day/list/BusinessDayList.vue"
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
 import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
 import { Timezone } from "@/entity/timezone";
-import { FETCH, FETCH_SELECTABLE_TIMEZONES, INITIALIZE } from "@/store/constant";
+import { FETCH_SELECTABLE_TIMEZONES, INITIALIZE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -15,22 +14,11 @@ export default Vue.extend({
     TimezoneList
   },
   methods: {
-    ...mapMutations("businessDay", [INITIALIZE]),
-
     handleShowTimezoneDialog(): void {
-      const timezone: Timezone = {
-        start_time: new Date(),
-        end_time: new Date(),
-        is_default_select: false
-      };
       const config: BModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
-        scroll: "keep",
-        props: {
-          timezone: timezone
-        },
         events: {
           "save-success": () => {
             const toastConfig: BNoticeConfig = {
@@ -74,11 +62,11 @@ export default Vue.extend({
       this.showMenuButton = !this.showMenuButton;
     },
 
-    fetchedBusinessDays() {
+    fetchedBusinessDays(): void {
       this.isRefetchBusinessDays = false;
     },
 
-    fetchedTimezones() {
+    fetchedTimezones(): void {
       this.isRefetchTimezones = false;
     }
   },

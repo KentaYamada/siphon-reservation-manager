@@ -20,7 +20,7 @@ export default Vue.extend({
     businessDay: {
       required: true,
       type: Object as PropType<BusinessDay>
-    },
+    }
   },
   methods: {
     ...mapActions("businessDay", [DELETE]),
@@ -34,6 +34,9 @@ export default Vue.extend({
         component: BusinessDayDialog,
         hasModalCard: true,
         scroll: "keep",
+        props: {
+          id: this.businessDay.id
+        },
         events: {
           "save-success": () => {
             this.$emit("edit-succeeded");
@@ -76,5 +79,5 @@ export default Vue.extend({
   },
   filters: {
     formatDateJp
-  },
+  }
 });

@@ -23,9 +23,6 @@ export default Vue.extend({
       fetchTimezones: FETCH
     }),
 
-    /**
-     * 予約時間帯設定ダイアログ表示
-     */
     handleShowTimezoneDialog(): void {
       const timezone: Timezone = {
         start_time: new Date(),
@@ -49,7 +46,7 @@ export default Vue.extend({
 
             this.$buefy.toast.open(toastConfig);
             this.showMenuButton = false;
-            this.fetchTimezones();
+            this.isRefetchTimezones = true;
           }
         }
       };
@@ -57,9 +54,6 @@ export default Vue.extend({
       this.$buefy.modal.open(config);
     },
 
-    /**
-     * 営業日設定フォーム表示
-     */
     handleShowBusinessDayDialog(): void {
       const config: BModalConfig = {
         parent: this,
@@ -83,21 +77,23 @@ export default Vue.extend({
       this.$buefy.modal.open(config);
     },
 
-    /**
-     * 追加メニューボタンのトグル
-     */
     toggleAddMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
     },
 
     updateIsRefetchBusinessDays() {
       this.isRefetchBusinessDays = false;
+    },
+
+    fetchedTimezones() {
+      this.isRefetchTimezones = false;
     }
   },
   data() {
     return {
       showMenuButton: false,
-      isRefetchBusinessDays: false
+      isRefetchBusinessDays: false,
+      isRefetchTimezones: false
     };
   }
 });

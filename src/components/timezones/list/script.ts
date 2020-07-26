@@ -1,11 +1,7 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
-
-// component
 import TimezoneListItem from "@/components/timezones/list-item/TimezoneListItem.vue";
-
-// store
 import { FETCH, HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
@@ -13,40 +9,70 @@ export default Vue.extend({
   components: {
     TimezoneListItem
   },
+  props: {
+    isRefetchList: {
+      required: true,
+      type: Boolean
+    }
+  },
+  watch: {
+    isRefetchList: function (newVal: boolean, oldVal: boolean) {
+      if (newVal) {
+        this._fetch();
+      }
+    }
+  },
   computed: {
     ...mapGetters("timezone", [HAS_ITEMS]),
-    ...mapState("timezone", ["timezones"])
+    ...mapState("timezone", ["timezones"]),
+
+    visibleEmptyItem(): boolean {
+      return !this.isLoading && !this.hasItems;
+    }
   },
   methods: {
     ...mapActions("timezone", [FETCH]),
 
-    /**
-     * 予約時間帯削除後イベント
-     * list-item component callback function
-     */
     itemDeleteSucceeded(): void {
       const toastConfig: BNoticeConfig = {
         message: "削除しました。",
         type: "is-danger"
       };
       this.$buefy.toast.open(toastConfig);
-      this.fetch();
+      this._fetch();
     },
 
-    /**
-     * 予約時間帯編集後イベント
-     * list-item component callback function
-     */
     itemEditSucceeded(): void {
       const toastConfig: BNoticeConfig = {
         message: "保存しました。",
         type: "is-success"
       };
       this.$buefy.toast.open(toastConfig);
-      this.fetch();
+      this._fetch();
+    },
+
+    _fetch(): void {
+      this.isLoading = true;
+      this.fetch()
+        .catch(() => {
+          const toastConfig: BNoticeConfig = {
+            message: "予約時間帯の取得に失敗しました",
+            type: "is-danger"
+          };
+          this.$buefy.toast.open(toastConfig);
+        })
+        .finally(() => {
+          this.isLoading = false;
+          this.$emit("fetched-timezones");
+        });
     }
   },
+  data() {
+    return {
+      isLoading: false
+    };
+  },
   mounted() {
-    this.fetch();
+    this._fetch();
   }
 });

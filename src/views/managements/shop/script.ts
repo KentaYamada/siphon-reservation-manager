@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapMutations } from "vuex";
 import { BModalConfig, BNoticeConfig } from "buefy/types/components";
 import _ from "lodash";
 import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
@@ -16,12 +16,6 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations("businessDay", [INITIALIZE]),
-    ...mapActions("businessDay", {
-      fetchSelectableTimezones: FETCH_SELECTABLE_TIMEZONES
-    }),
-    ...mapActions("timezone", {
-      fetchTimezones: FETCH
-    }),
 
     handleShowTimezoneDialog(): void {
       const timezone: Timezone = {
@@ -80,7 +74,7 @@ export default Vue.extend({
       this.showMenuButton = !this.showMenuButton;
     },
 
-    updateIsRefetchBusinessDays() {
+    fetchedBusinessDays() {
       this.isRefetchBusinessDays = false;
     },
 

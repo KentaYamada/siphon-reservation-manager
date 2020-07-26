@@ -63,7 +63,7 @@ export default Vue.extend({
         })
         .finally(() => {
           this.isLoading = false;
-          this.$emit("update-is-refetch-business-days");
+          this.$emit("fetched-business-days");
         });
     }
   },

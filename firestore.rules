@@ -87,12 +87,29 @@ service cloud.firestore {
         allow update: if true;
     }
 
+    // [GET] /timezones/{document}
     match /timezones/{document} {
-        allow list, create: if isAuth();
+        allow list: if isAuth();
     }
 
+    // [GET] /timezones/{timezoneId}
     match /timezones/{timezoneId} {
-        allow update, delete: if isAuth() && hasId(timezoneId);
+        allow get: if isAuth() && hasId(timezoneId);
+    }
+
+    // [POST] /timezones/{document}
+    match /timezones/{document} {
+        allow create: if isAuth();
+    }
+
+    // [PUT] /timezones/{timezoneId}
+    match /timezones/{timezoneId} {
+        allow update: if isAuth() && hasId(timezoneId);
+    }
+
+    // [DELETE] /timezones/{timezoneId}
+    match /timezones/{timezoneId} {
+        allow delete: if isAuth() && hasId(timezoneId);
     }
   }
 }

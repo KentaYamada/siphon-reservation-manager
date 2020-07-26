@@ -5,13 +5,10 @@ import { BusinessDay } from "@/entity/business-day";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 
 // store
-import { INITIALIZE, SET_ITEMS, SET_SELECTABLE_TIMEZONES } from "@/store/constant";
+import { INITIALIZE, SET_ITEM, SET_ITEMS, SET_SELECTABLE_TIMEZONES } from "@/store/constant";
 import { BusinessDayState } from "@/store/business-day";
 
 const mutations: MutationTree<BusinessDayState> = {
-  /**
-   * 営業日設定データ初期化
-   */
   [INITIALIZE]: (state: BusinessDayState): void => {
     state.businessDay = {
       text: "",
@@ -20,17 +17,14 @@ const mutations: MutationTree<BusinessDayState> = {
     } as BusinessDay;
   },
 
-  /**
-   * 営業日一覧データセット
-   * @param items
-   */
-  [SET_ITEMS]: (state: BusinessDayState, items: BusinessDay[]): void => {
+  [SET_ITEM]: (state: BusinessDayState, item: BusinessDay): void => {
+    state.businessDay = item;
+  },
+
+  [SET_ITEMS]: (state: BusinessDayState, items: Array<BusinessDay>): void => {
     state.businessDays = items;
   },
 
-  /**
-   * 選択可能な予約時間セット
-   */
   [SET_SELECTABLE_TIMEZONES]: (state: BusinessDayState, timezones: Array<SelectableTimezone>): void => {
     if (state.businessDay) {
       state.businessDay.timezones = timezones;

@@ -1,8 +1,12 @@
 .page-content {
+    .business-day-list-container {
+        margin-top: 1.0rem;
+    }
+    .timezone-list-container {
+        margin-top: 1.6rem;
+    }
     .business-day-list-container,
     .timezone-list-container {
-        margin-top: 1.0rem;
-
         .title {
             margin-bottom: 0.6rem;
         }

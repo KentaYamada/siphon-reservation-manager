@@ -59,7 +59,6 @@ export default Vue.extend({
         parent: this,
         component: BusinessDayDialog,
         hasModalCard: true,
-        scroll: "keep",
         events: {
           "save-success": () => {
             const toastConfig: BNoticeConfig = {

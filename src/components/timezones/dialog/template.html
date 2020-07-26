@@ -29,20 +29,21 @@
         <div class="field">
             <label class="checkbox">
                 <input class="checkbox" type="checkbox" v-model="timezone.is_default_select">
-                この時間帯を営業日設定で初期選択状態にする
+                営業日設定で初期選択にする
             </label>
         </div>
     </section>
     <footer class="modal-card-foot buttons is-right">
         <button type="button" class="button" @click="$parent.close()">
-            キャンセル
+            <i class="fas fa-times"></i>
+            閉じる
         </button>
         <button type="button"
                 class="button is-info"
                 :disabled="isSaving"
                 @click="handleClickSave()">
             <i class="fas fa-save"></i>
-            保存
+            設定内容を保存
         </button>
     </footer>
 </div>

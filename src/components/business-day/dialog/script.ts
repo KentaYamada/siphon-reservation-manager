@@ -5,6 +5,7 @@ import { BNoticeConfig } from "buefy/types/components";
 import _ from "lodash";
 import SelectableTimezoneList from "@/components/timezones/selectable-list/SelectableTimezoneList.vue";
 import { BusinessDay } from "@/entity/business-day";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { FETCH_BY_ID, FETCH_SELECTABLE_TIMEZONES, INITIALIZE, SAVE } from "@/store/constant";
 
 export default Vue.extend({
@@ -53,13 +54,25 @@ export default Vue.extend({
             this.$emit("close");
           });
       }
+    },
+
+    handleAllCheckTimezones(): void {
+      _.each(this.businessDay.timezones, (timezone: SelectableTimezone) => {
+        timezone.selected = true;
+      });
+    },
+
+    handleAllUnCheckTimezones(): void {
+      _.each(this.businessDay.timezones, (timezone: SelectableTimezone) => {
+        timezone.selected = false;
+      });
     }
   },
   data() {
     return {
       isLoading: false,
       isSaving: false,
-      businessDay: {}
+      businessDay: {} as BusinessDay
     };
   },
   mounted() {

@@ -24,7 +24,9 @@
                             <i class="fas fa-clock"></i>
                             予約時間帯
                         </h4>
-                        <timezone-list />
+                        <timezone-list 
+                            :is-refetch-list="isRefetchTimezones" 
+                            @fetched-timezones="fetchedTimezones" />
                     </div>
                 </div>
 

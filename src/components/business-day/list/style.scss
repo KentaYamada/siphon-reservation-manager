@@ -1,5 +1,9 @@
-.list {
-    max-height: 185px;
-    overflow-y: scroll;
-    -webkit-overflow-scroll: touch;
+.list-container {
+    position: relative;
+
+    .list {
+        max-height: 185px;
+        overflow-y: scroll;
+        -webkit-overflow-scroll: touch;
+    }
 }

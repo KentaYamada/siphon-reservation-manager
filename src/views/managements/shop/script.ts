@@ -17,7 +17,6 @@ export default Vue.extend({
   methods: {
     ...mapMutations("businessDay", [INITIALIZE]),
     ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH,
       fetchSelectableTimezones: FETCH_SELECTABLE_TIMEZONES
     }),
     ...mapActions("timezone", {
@@ -76,7 +75,7 @@ export default Vue.extend({
 
             this.$buefy.toast.open(toastConfig);
             this.showMenuButton = false;
-            this.fetchBusinessDays();
+            this.isRefetchBusinessDays = true;
           }
         }
       };
@@ -89,11 +88,16 @@ export default Vue.extend({
      */
     toggleAddMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
+    },
+
+    updateIsRefetchBusinessDays() {
+      this.isRefetchBusinessDays = false;
     }
   },
   data() {
     return {
-      showMenuButton: false
+      showMenuButton: false,
+      isRefetchBusinessDays: false
     };
   }
 });

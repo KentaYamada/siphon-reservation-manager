@@ -1,64 +1,98 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-      function isAuth() {
-          return true;
-      }
+    function isAuth() {
+        return true;
+    }
 
-      function hasId(id) {
-          return id != null;
-      }
+    function hasId(id) {
+        return id != null;
+    }
 
-      match /business_days/{document} {
-          allow list, create: if isAuth();
+    // [GET] /business_days/{document}
+    match /business_days/{document} {
+      allow list: if isAuth();
 
-          match /timezones/{document} {
-          	allow list: if isAuth();
-          }
-          
-          match /timezones/{document} {
-            allow create: if isAuth();
-          }
-      }
-
-      match /business_days/{businessDayId} {
-          allow update, delete: if isAuth() && hasId(businessDayId);
-      }
-
-      match /reservations/{document} {
-          allow list: if isAuth();
-      }
-
-      match /reservations/{document} {
-          allow create, delete: if true;
-      }
-
-      match /reservations/{reservationId} {
-        allow get: if hasId(reservationId);
-      }
-
-      match /reservations/{reservationId} {
-          allow update, delete: if hasId(reservationId);
-      }
-
-      match /reservation_resend_mails/{document} {
-          allow create: if true;
-      }
-
-      match /reservation_seats/{document} {
-          allow list, create, delete: if true;
-      }
-
-      match /reservation_seats/{id} {
-          allow update: if true;
-      }
-
+      // [GET] /business_days/{document}/timezones/{document}
       match /timezones/{document} {
-          allow list, create: if isAuth();
+        allow list: if isAuth();
       }
+    }
 
+    // [GET] /business_days/{businessDayId}
+    match /business_days/{businessDayId} {
+      allow get: if isAuth() && hasId(businessDayId);
+
+      // [GET] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{timezoneId} {
-          allow update, delete: if isAuth() && hasId(timezoneId);
+        allow get: if isAuth() && hasId(timezoneId);
       }
+    }
+
+    // [POST] /business_days/{document}
+    match /business_days/{document} {
+      allow create: if isAuth();
+
+      // [POST] /business_days/{document}/timezones/{document}
+      match /timezones/{document} {
+        allow create: if isAuth();
+      }
+    }
+
+    // [PUT] /business_days/{businessDayId}
+    match /business_days/{businessDayId} {
+      allow update: if isAuth() && hasId(businessDayId);
+
+      // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
+      match /timezones/{timezoneId} {
+        allow update: if isAuth() && hasId(timezoneId);
+      }
+    }
+
+    // [DELETE] /business_days/{businessDayId}
+    match /business_days/{businessDayId} {
+      allow delete: if isAuth() && hasId(businessDayId);
+
+      // [DELETE] /business_days/{businessDayId}/timezones/{timezoneId}
+      match /timezones/{timezoneId} {
+        allow delete: if isAuth() && hasId(timezoneId);
+      }
+    }
+
+    match /reservations/{document} {
+        allow list: if isAuth();
+    }
+
+    match /reservations/{document} {
+        allow create, delete: if true;
+    }
+
+    match /reservations/{reservationId} {
+      allow get: if hasId(reservationId);
+    }
+
+    match /reservations/{reservationId} {
+        allow update, delete: if hasId(reservationId);
+    }
+
+    match /reservation_resend_mails/{document} {
+        allow create: if true;
+    }
+
+    match /reservation_seats/{document} {
+        allow list, create, delete: if true;
+    }
+
+    match /reservation_seats/{id} {
+        allow update: if true;
+    }
+
+    match /timezones/{document} {
+        allow list, create: if isAuth();
+    }
+
+    match /timezones/{timezoneId} {
+        allow update, delete: if isAuth() && hasId(timezoneId);
+    }
   }
 }

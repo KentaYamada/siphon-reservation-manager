@@ -21,7 +21,7 @@ export default Vue.extend({
     businessDay: {
       required: true,
       type: Object as PropType<BusinessDay>
-    },
+    }
   },
   methods: {
     ...mapActions("businessDay", [DELETE]),
@@ -30,14 +30,13 @@ export default Vue.extend({
      * 営業日編集
      */
     handleClickEdit(): void {
-      const model = _.clone(this.businessDay);
       const config: BModalConfig = {
         parent: this,
         component: BusinessDayDialog,
         hasModalCard: true,
         scroll: "keep",
         props: {
-          businessDay: model
+          id: this.businessDay.id
         },
         events: {
           "save-success": () => {
@@ -81,5 +80,5 @@ export default Vue.extend({
   },
   filters: {
     formatDateJp
-  },
+  }
 });

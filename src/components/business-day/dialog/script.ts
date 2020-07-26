@@ -1,24 +1,20 @@
 import Vue, { PropType } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { required } from "vuelidate/lib/validators";
-
-// components
+import { BNoticeConfig } from "buefy/types/components";
+import _ from "lodash";
 import SelectableTimezoneList from "@/components/timezones/selectable-list/SelectableTimezoneList.vue";
-
-// entity
 import { BusinessDay } from "@/entity/business-day";
-
-// store
-import { SAVE } from "@/store/constant";
+import { FETCH_BY_ID, FETCH_SELECTABLE_TIMEZONES, INITIALIZE, SAVE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
     SelectableTimezoneList
   },
   props: {
-    businessDay: {
-      required: true,
-      type: Object as PropType<BusinessDay>
+    id: {
+      required: false,
+      type: String
     }
   },
   validations: {
@@ -28,8 +24,14 @@ export default Vue.extend({
       }
     }
   },
+  computed: {
+    ...mapState("businessDay", {
+      model: "businessDay"
+    })
+  },
   methods: {
-    ...mapActions("businessDay", [SAVE]),
+    ...mapActions("businessDay", [FETCH_BY_ID, FETCH_SELECTABLE_TIMEZONES, SAVE]),
+    ...mapMutations("businessDay", [INITIALIZE]),
 
     /**
      * 営業日保存
@@ -41,21 +43,50 @@ export default Vue.extend({
         this.isSaving = true;
         this.save(this.businessDay)
           .then(() => {
-            this.$emit("close");
             this.$emit("save-success");
           })
-          .catch(error => {
-            // todo: error handling
+          .catch((error) => {
+            this.$emit("save-failure", error);
           })
           .finally(() => {
             this.isSaving = false;
+            this.$emit("close");
           });
       }
     }
   },
   data() {
     return {
-      isSaving: false
+      isLoading: false,
+      isSaving: false,
+      businessDay: {}
     };
+  },
+  mounted() {
+    this.isLoading = true;
+    this.initialize();
+
+    let promise = null;
+
+    if (_.isNil(this.id)) {
+      promise = this.fetchSelectableTimezones();
+    } else {
+      promise = this.fetchById(this.id);
+    }
+
+    promise
+      .then(() => {
+        this.businessDay = _.clone(this.model);
+      })
+      .catch(() => {
+        const toastConfig: BNoticeConfig = {
+          message: "データの取得に失敗しました",
+          type: "is-danger"
+        };
+        this.$buefy.toast.open(toastConfig);
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
   }
 });

@@ -111,4 +111,12 @@ export class BusinessDayService {
 
     return query.get();
   }
+
+  async fetchById(id: string) {
+    if (_.isEmpty(id)) {
+      return Promise.reject();
+    }
+
+    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).get();
+  }
 }

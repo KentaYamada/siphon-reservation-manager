@@ -10,52 +10,27 @@ import { BusinessDayState } from "@/store/business-day";
 import {
   DELETE,
   FETCH,
+  FETCH_BY_ID,
   FETCH_BUSINESS_DATE_AFTER_TODAY,
   FETCH_SELECTABLE_TIMEZONES,
   SAVE,
+  SET_ITEM,
   SET_ITEMS,
   SET_SELECTABLE_TIMEZONES
 } from "@/store/constant";
 
 const actions: ActionTree<BusinessDayState, RootState> = {
-  /**
-   * 営業日一覧取得
-   */
   [FETCH]: async ({ commit }) => {
     const service = new BusinessDayService();
     const businessDays: Array<BusinessDay> = [];
     const businessDaysDoc = await service.fetch();
 
-    businessDaysDoc.forEach(async (doc) => {
-      const timezonesDocs = await doc.ref.collection(service.subCollectionName).get();
-      let timezones: Array<SelectableTimezone> = [];
-
-      timezonesDocs.forEach((doc) => {
-        if (!_.isNil(doc.data())) {
-          let isSelected = false;
-
-          if (!_.isNil(doc.data().selected)) {
-            isSelected = doc.data().selected;
-          }
-
-          timezones.push({
-            id: doc.id,
-            start_time: doc.data().start_time.toDate(),
-            end_time: doc.data().end_time.toDate(),
-            selected: isSelected
-          });
-        }
-      });
-      timezones = _.sortBy(timezones, (timezone: SelectableTimezone) => {
-        return timezone.start_time.getHours();
-      });
-
+    businessDaysDoc.forEach((doc) => {
       const businessDate = doc.data().business_date.toDate();
       businessDays.push({
         id: doc.id,
         business_date: businessDate,
-        text: moment(businessDate).format("YYYY年MM月DD日"),
-        timezones: timezones
+        text: moment(businessDate).format("YYYY年MM月DD日")
       });
     });
 
@@ -64,9 +39,6 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     return businessDaysDoc;
   },
 
-  /**
-   * アクセス日以降の営業日を取得
-   */
   [FETCH_BUSINESS_DATE_AFTER_TODAY]: async ({ commit }) => {
     const service = new BusinessDayService();
     const promise$ = await service.fetchByAfterToday();
@@ -89,9 +61,6 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     return promise$;
   },
 
-  /**
-   * 選択可能な予約時間帯取得
-   */
   [FETCH_SELECTABLE_TIMEZONES]: async ({ commit }) => {
     const service = new TimezoneService();
     const promise$ = await service.fetch();
@@ -124,10 +93,43 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     return promise$;
   },
 
-  /**
-   * 営業日保存
-   * @param businessDay
-   */
+  [FETCH_BY_ID]: async ({ commit }, id: string) => {
+    const service = new BusinessDayService();
+    const promise = await service.fetchById(id);
+
+    if (!promise.exists || _.isNil(promise.data())) {
+      return Promise.reject();
+    }
+
+    const timezoneRef = await promise.ref.collection(service.subCollectionName).get();
+    let timezones: Array<SelectableTimezone> = [];
+
+    timezoneRef.forEach((doc) => {
+      timezones.push({
+        id: doc.id,
+        start_time: doc.data().start_time.toDate(),
+        end_time: doc.data().end_time.toDate(),
+        selected: doc.data().selected
+      });
+    });
+
+    timezones = _.sortBy(timezones, (timezone: SelectableTimezone) => {
+      return timezone.start_time.getHours();
+    });
+
+    const businessDate = promise.data()?.business_date.toDate();
+    const businessDay: BusinessDay = {
+      id: promise.id,
+      business_date: businessDate,
+      text: moment(businessDate).format("YYYY年MM月DD日"),
+      timezones: timezones
+    };
+
+    commit(SET_ITEM, businessDay);
+
+    return promise;
+  },
+
   [SAVE]: async ({ commit }, businessDay: BusinessDay) => {
     const service = new BusinessDayService();
     let promise$ = null;
@@ -141,10 +143,6 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     return await promise$;
   },
 
-  /**
-   * 営業日削除
-   * @param id
-   */
   [DELETE]: async ({ commit }, id: string) => {
     const service = new BusinessDayService();
     return await service.delete(id);

@@ -1,31 +1,19 @@
 import { ActionTree } from "vuex";
-
-// entity
-import { Timezone } from "@/entity/timezone";
-
-// plugin
 import moment from "moment";
 import _ from "lodash";
-
-// firestore service
+import { Timezone } from "@/entity/timezone";
 import { TimezoneService } from "@/services/firestore/timezone-service";
-
-// store
 import { RootState } from "@/store";
-import { DELETE, FETCH, SAVE, SET_ITEMS } from "@/store/constant";
+import { DELETE, FETCH, FETCH_BY_ID, SAVE, SET_ITEM, SET_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
 
 const actions: ActionTree<TimezoneState, RootState> = {
-  /**
-   * 予約時間帯取得
-   */
   [FETCH]: async ({ commit }) => {
     let timezones: Array<Timezone> = [];
     const service = new TimezoneService();
     const promise$ = await service.fetch();
 
-    promise$.forEach(doc => {
-      // todo: generics entity
+    promise$.forEach((doc) => {
       const data = doc.data();
       let isDefaultSelect = false;
 
@@ -51,10 +39,32 @@ const actions: ActionTree<TimezoneState, RootState> = {
     return promise$;
   },
 
-  /**
-   * 予約時間帯保存
-   * @param timezone
-   */
+  [FETCH_BY_ID]: async ({ commit }, id: string) => {
+    const service = new TimezoneService();
+    const promise = await service.fetchById(id);
+
+    if (!promise.exists || _.isNil(promise.data())) {
+      return Promise.reject();
+    }
+
+    let isDefaultSelect = false;
+
+    if (!_.isNil(promise.data())) {
+      isDefaultSelect = promise.data()?.is_default_select;
+    }
+
+    const timezone: Timezone = {
+      id: promise.id,
+      start_time: promise.data()?.start_time.toDate(),
+      end_time: promise.data()?.end_time.toDate(),
+      is_default_select: isDefaultSelect
+    };
+
+    commit(SET_ITEM, timezone);
+
+    return promise;
+  },
+
   [SAVE]: async ({ commit }, timezone: Timezone) => {
     const service = new TimezoneService();
     let promise$ = null;
@@ -68,10 +78,6 @@ const actions: ActionTree<TimezoneState, RootState> = {
     return await promise$;
   },
 
-  /**
-   * 予約時間帯削除
-   * @param id
-   */
   [DELETE]: async ({ commit }, id: string) => {
     const service = new TimezoneService();
     return await service.delete(id);

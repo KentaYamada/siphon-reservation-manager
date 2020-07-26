@@ -20,10 +20,7 @@ export class TimezoneService {
       is_default_select: timezone.is_default_select
     };
 
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .add(requestBody);
+    return firebase.firestore().collection(this.COLLECTION_NAME).add(requestBody);
   }
 
   edit(timezone: Timezone) {
@@ -38,11 +35,7 @@ export class TimezoneService {
       is_default_select: timezone.is_default_select
     };
 
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .doc(timezone.id)
-      .set(requestBody);
+    return firebase.firestore().collection(this.COLLECTION_NAME).doc(timezone.id).set(requestBody);
   }
 
   delete(id: string) {
@@ -50,17 +43,18 @@ export class TimezoneService {
       return Promise.reject();
     }
 
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .doc(id)
-      .delete();
+    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).delete();
   }
 
   fetch() {
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .get();
+    return firebase.firestore().collection(this.COLLECTION_NAME).get();
+  }
+
+  fetchById(id: string) {
+    if (_.isEmpty(id)) {
+      return Promise.reject();
+    }
+
+    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).get();
   }
 }

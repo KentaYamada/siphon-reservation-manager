@@ -6,4 +6,3 @@ export interface ReservationSeatSearchOption {
   reservation_date_id: string;
   reservation_time_id: string;
 }
-

@@ -50,7 +50,7 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.id)
             .then(() => {
-              this.__sendEmail(this.id);
+              this._sendEmail(this.id);
 
               const toastConfig: ToastConfig = {
                 message: "予約を取り消しました",
@@ -94,17 +94,12 @@ export default Vue.extend({
      * 予約キャンセル完了通知メール送信
      * @param id
      */
-    __sendEmail(id: string): void {
+    _sendEmail(id: string): void {
       const href = this.$router.resolve({
         path: "/"
       }).href;
       const redirectUrl = `${location.origin}${href}`;
-      sendEmail(
-        this.reservation,
-        id,
-        redirectUrl,
-        EMAIL_MESSAGE_TEMPLATES.CANCELED
-      );
+      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
     }
   },
   data() {
@@ -116,8 +111,7 @@ export default Vue.extend({
     this.fetchById(this.id)
       .catch(() => {
         const toastConfig: ToastConfig = {
-          message:
-            "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
+          message: "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
           type: "is-danger"
         };
         this.$buefy.toast.open(toastConfig);

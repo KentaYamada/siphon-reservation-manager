@@ -54,7 +54,7 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.reservation.id)
             .then(() => {
-              this.__sendEmail(this.reservation.id as string);
+              this._sendEmail(this.reservation.id as string);
 
               const toastConfig: ToastConfig = {
                 message: "予約取消しました",
@@ -83,7 +83,7 @@ export default Vue.extend({
      * 予約キャンセル完了通知メール送信
      * @param id
      */
-    __sendEmail(id: string): void {
+    _sendEmail(id: string): void {
       const href = this.$router.resolve({
         path: "/"
       }).href;

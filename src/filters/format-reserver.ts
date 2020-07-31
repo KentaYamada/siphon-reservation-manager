@@ -5,10 +5,7 @@
  * @param numberOfReservations
  * @returns string
  */
-export const formatReserver = (
-  reserverName: string,
-  numberOfReservations: number
-): string => {
+export const formatReserver = (reserverName: string, numberOfReservations: number): string => {
   if (!reserverName || !numberOfReservations) {
     return "";
   }

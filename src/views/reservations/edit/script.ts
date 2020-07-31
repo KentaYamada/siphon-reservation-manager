@@ -101,7 +101,7 @@ export default Vue.extend({
             toastConfig.message = "予約変更しました。";
             toastConfig.type = "is-success";
 
-            this.__sendEmail(this.id);
+            this._sendEmail(this.id);
             this.$buefy.toast.open(toastConfig);
             this.$router.push({ name: "reservation-edited-message", params: { id: this.id } });
           })
@@ -112,7 +112,7 @@ export default Vue.extend({
             this.$buefy.toast.open(toastConfig);
 
             if (error.refetch_seats) {
-              this.__fetchReservationSeats();
+              this._fetchReservationSeats();
             }
           })
           .finally(() => {
@@ -136,7 +136,7 @@ export default Vue.extend({
       this.setReservationDate(businessDay.business_date);
       this.seatSeachOption.reservation_date_id = selectedId;
       this.seatSeachOption.reservation_time_id = "";
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
@@ -147,7 +147,7 @@ export default Vue.extend({
       const timezone = this.getTimezoneById(selectedId);
       this.setReservationTimezone(timezone);
       this.seatSeachOption.reservation_time_id = selectedId;
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
     /**
      * データ読込完了通知イベント
@@ -159,7 +159,7 @@ export default Vue.extend({
     /**
      * 予約座席情報取得
      */
-    __fetchReservationSeats(): void {
+    _fetchReservationSeats(): void {
       const hasSearchOption =
         !_.isEmpty(this.seatSeachOption.reservation_date_id) && !_.isEmpty(this.seatSeachOption.reservation_time_id);
       this.isLoadingSeats = true;
@@ -179,7 +179,7 @@ export default Vue.extend({
      * 予約完了通知メール送信
      * @param id
      */
-    __sendEmail(id: string): void {
+    _sendEmail(id: string): void {
       const href = this.$router.resolve({
         name: "reservation-detail",
         params: {

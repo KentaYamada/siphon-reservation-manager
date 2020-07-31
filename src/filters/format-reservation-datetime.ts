@@ -8,11 +8,7 @@ import moment from "moment";
  * @param endTime
  * @returns string
  */
-export const formatReservationDatetime = (
-  reservationDate: Date,
-  startTime: Date,
-  endTime: Date
-): string => {
+export const formatReservationDatetime = (reservationDate: Date, startTime: Date, endTime: Date): string => {
   const hasValue = reservationDate && startTime && endTime;
   let formatDateTime = "";
 

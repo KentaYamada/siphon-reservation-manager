@@ -16,9 +16,7 @@ const RESERVATION_RESEND_MAILS = "reservation_resend_mails";
 
 const actions: ActionTree<ReservationResendMailState, RootState> = {
   [SAVE]: async ({ commit }, model: ReservationResendMail) => {
-    const collection = firebase
-      .firestore()
-      .collection(RESERVATION_RESEND_MAILS);
+    const collection = firebase.firestore().collection(RESERVATION_RESEND_MAILS);
     const data = {
       reservation_id: model.reservation_id,
       reservation_date_id: model.reservation_date_id,

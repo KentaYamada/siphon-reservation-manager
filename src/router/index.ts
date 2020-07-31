@@ -150,7 +150,7 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to: Route, from: Route, next: Function) => {
+router.beforeEach((to: Route, from: Route, next) => {
   const requireAuth = to.matched.some(record => record.meta.requireAuth);
   const isSignedIn = store.getters["auth/isSignedIn"];
 

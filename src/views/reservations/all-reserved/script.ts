@@ -131,7 +131,7 @@ export default Vue.extend({
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
       this.searchOption.reservation_date_id = selectedId;
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
@@ -141,13 +141,13 @@ export default Vue.extend({
       const timezone = this.getTimezoneById(selectedId);
       this.setReservationTimezone(timezone);
       this.searchOption.reservation_time_id = selectedId;
-      this.__fetchReservationSeats();
+      this._fetchReservationSeats();
     },
 
     /**
      * 予約座席取得
      */
-    __fetchReservationSeats(): void {
+    _fetchReservationSeats(): void {
       const hasOption = this.searchOption.reservation_date_id !== "" && this.searchOption.reservation_time_id !== "";
 
       if (hasOption) {

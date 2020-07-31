@@ -10,13 +10,7 @@ import _ from "lodash";
 
 // store
 import { RootState } from "@/store";
-import {
-  DELETE,
-  FETCH,
-  FETCH_ALL_RESERVED_TIMEZONES,
-  SAVE,
-  SET_ITEMS
-} from "@/store/constant";
+import { DELETE, FETCH, FETCH_ALL_RESERVED_TIMEZONES, SAVE, SET_ITEMS } from "@/store/constant";
 import { TimezoneState } from "@/store/timezone";
 
 // firestore collection name

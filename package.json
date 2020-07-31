@@ -12,6 +12,7 @@
     "build:dev": "vue-cli-service build --mode development"
   },
   "dependencies": {
+    "@firebase/testing": "^0.20.9",
     "@fortawesome/fontawesome-free": "^5.14.0",
     "buefy": "^0.8.20",
     "core-js": "^3.6.5",

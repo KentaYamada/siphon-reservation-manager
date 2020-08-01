@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // components
 import ReservationResendMailForm from "@/components/reservations/form/resend-mail/ReservationResendMailForm.vue";
@@ -40,7 +40,7 @@ export default Vue.extend({
       if (!this.$v.$invalid) {
         this.save(this.reservationResendMail)
           .then(() => {
-            const toastConfig: ToastConfig = {
+            const toastConfig: BNoticeConfig = {
               message: "メールの再送受付ました。",
               type: "is-success"
             };
@@ -49,7 +49,7 @@ export default Vue.extend({
             this.$router.push({ name: "reservation-resend-mail-accepted" });
           })
           .catch(() => {
-            const toastConfig: ToastConfig = {
+            const toastConfig: BNoticeConfig = {
               message: "メールの再送受付できませんでした。",
               type: "is-danger"
             };

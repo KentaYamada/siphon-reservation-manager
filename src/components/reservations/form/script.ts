@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // component
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
@@ -108,7 +108,7 @@ export default Vue.extend({
         this.$emit("data-loaded");
       })
       .catch(() => {
-        const toastConfig: ToastConfig = {
+        const toastConfig: BNoticeConfig = {
           message: "データの初期化に失敗しました。",
           type: "is-danger"
         };

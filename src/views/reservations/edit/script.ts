@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
@@ -87,7 +87,7 @@ export default Vue.extend({
      *  予約変更イベント
      */
     onClickSave(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "",
         type: ""
       };
@@ -214,7 +214,7 @@ export default Vue.extend({
         this.seatSeachOption.reservation_time_id = this.reservation.reservation_time_id;
       })
       .catch(() => {
-        const toastConfig: ToastConfig = {
+        const toastConfig: BNoticeConfig = {
           message: "予約データの取得に失敗しました。",
           type: "is-danger"
         };

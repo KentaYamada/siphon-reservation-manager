@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // component
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
@@ -75,7 +75,7 @@ export default Vue.extend({
     ]),
 
     onClickSave(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "",
         type: ""
       };

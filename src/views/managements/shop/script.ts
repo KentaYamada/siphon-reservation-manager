@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions } from "vuex";
-import { ModalConfig, ToastConfig } from "buefy/types/components";
+import { BModalConfig, BNoticeConfig } from "buefy/types/components";
 
 // component
 import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
@@ -42,7 +42,7 @@ export default Vue.extend({
         start_time: new Date(),
         end_time: new Date()
       };
-      const config: ModalConfig = {
+      const config: BModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
@@ -52,7 +52,7 @@ export default Vue.extend({
         },
         events: {
           "save-success": () => {
-            const toastConfig: ToastConfig = {
+            const toastConfig: BNoticeConfig = {
               message: "保存しました。",
               type: "is-success"
             };
@@ -75,7 +75,7 @@ export default Vue.extend({
         text: "",
         business_date: new Date()
       };
-      const config: ModalConfig = {
+      const config: BModalConfig = {
         parent: this,
         component: BusinessDayForm,
         hasModalCard: true,
@@ -85,7 +85,7 @@ export default Vue.extend({
         },
         events: {
           "save-success": () => {
-            const toastConfig: ToastConfig = {
+            const toastConfig: BNoticeConfig = {
               message: "保存しました。",
               type: "is-success"
             };

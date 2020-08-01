@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 import { required, email } from "vuelidate/lib/validators";
 
 // component
@@ -82,7 +82,7 @@ export default Vue.extend({
      * 保存イベント
      */
     onClickSave(): void {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "",
         type: ""
       };

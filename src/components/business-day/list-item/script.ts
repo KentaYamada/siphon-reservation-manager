@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { DialogConfig, ModalConfig, ToastConfig } from "buefy/types/components";
+import { BDialogConfig, BModalConfig, BNoticeConfig } from "buefy/types/components";
 
 // component
 import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
@@ -29,7 +29,7 @@ export default Vue.extend({
      * 営業日編集
      */
     handleClickEdit(): void {
-      const config: ModalConfig = {
+      const config: BModalConfig = {
         parent: this,
         component: BusinessDayForm,
         hasModalCard: true,
@@ -55,7 +55,7 @@ export default Vue.extend({
       const message = `
         <p>「${businessDay}」を削除しますか？</p>
         <small>誤って削除した場合、再度データを登録してください。</small>`;
-      const config: DialogConfig = {
+      const config: BDialogConfig = {
         title: "営業日削除",
         type: "is-danger",
         message: message,

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { DialogConfig, ToastConfig } from "buefy/types/components";
+import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 
 // component
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
@@ -39,7 +39,7 @@ export default Vue.extend({
         <p>予約を取り消しますか？</p>
         <small>※取り消した後の予約はもとに戻せません。</small>
       `;
-      const config: DialogConfig = {
+      const config: BDialogConfig = {
         type: "is-danger",
         message: message,
         confirmText: "取り消し",
@@ -52,7 +52,7 @@ export default Vue.extend({
             .then(() => {
               this._sendEmail(this.id);
 
-              const toastConfig: ToastConfig = {
+              const toastConfig: BNoticeConfig = {
                 message: "予約を取り消しました",
                 type: "is-danger"
               };
@@ -68,7 +68,7 @@ export default Vue.extend({
                 <p>予約の取り消しに失敗しました</p>
                 <p>お手数ですが、時間をおいて再度実行してください</p>
               `;
-              const toastConfig: ToastConfig = {
+              const toastConfig: BNoticeConfig = {
                 message: message,
                 type: "is-danger"
               };
@@ -110,7 +110,7 @@ export default Vue.extend({
   mounted() {
     this.fetchById(this.id)
       .catch(() => {
-        const toastConfig: ToastConfig = {
+        const toastConfig: BNoticeConfig = {
           message: "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
           type: "is-danger"
         };

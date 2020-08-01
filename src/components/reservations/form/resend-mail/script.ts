@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapMutations, mapState } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // store
 import { INITIALIZE, FETCH } from "@/store/constant";
@@ -32,7 +32,7 @@ export default Vue.extend({
 
     const promises = [this.fetchBusinessDays(), this.fetchTimezones()];
     Promise.all(promises).catch(() => {
-      const toastConfig: ToastConfig = {
+      const toastConfig: BNoticeConfig = {
         message: "データの取得に失敗しました",
         type: "is-danger"
       };

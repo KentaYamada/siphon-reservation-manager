@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { DialogConfig, ToastConfig } from "buefy/types/components";
+import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 
 // component
 import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
@@ -42,7 +42,7 @@ export default Vue.extend({
             <p>予約を取消しますか？</p>
             <small>取消した予約は元に戻せません</small>
           `;
-      const dialogConfig: DialogConfig = {
+      const dialogConfig: BDialogConfig = {
         title: "予約取消",
         type: "is-danger",
         message: message,
@@ -56,7 +56,7 @@ export default Vue.extend({
             .then(() => {
               this._sendEmail(this.reservation.id as string);
 
-              const toastConfig: ToastConfig = {
+              const toastConfig: BNoticeConfig = {
                 message: "予約取消しました",
                 type: "is-danger"
               };
@@ -65,7 +65,7 @@ export default Vue.extend({
               this.$emit("delete-succeeded");
             })
             .catch(error => {
-              const toastConfig: ToastConfig = {
+              const toastConfig: BNoticeConfig = {
                 message: "予約の取消に失敗しました",
                 type: "is-danger"
               };

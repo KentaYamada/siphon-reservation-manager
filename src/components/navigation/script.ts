@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
-import { ToastConfig } from "buefy/types/components";
+import { BNoticeConfig } from "buefy/types/components";
 
 // entity
 import { Navigation } from "@/entity/navigation";
@@ -77,7 +77,7 @@ export default Vue.extend({
 
     onClickSignOut(): void {
       this.signOut().then(() => {
-        const toastConfig: ToastConfig = {
+        const toastConfig: BNoticeConfig = {
           message: "ログアウトしました",
           type: "is-success"
         };

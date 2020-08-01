@@ -6,18 +6,18 @@ export class ReservationSeatService {
   private readonly COLLECTION_NAME: string = "reservation_seats";
 
   fetch(option: ReservationSearchOption) {
-    if (_.isNil(option)) {
-      return Promise.reject();
-    }
-    if (_.isEmpty(option.reservation_date_id) || _.isEmpty(option.reservation_time_id)) {
+    if (_.isNil(option) || _.isEmpty(option.reservation_date_id)) {
       return Promise.reject();
     }
 
-    const query = firebase
+    let query = firebase
       .firestore()
       .collection(this.COLLECTION_NAME)
-      .where("reservation_date_id", "==", option.reservation_date_id)
-      .where("reservation_time_id", "==", option.reservation_time_id);
+      .where("reservation_date_id", "==", option.reservation_date_id);
+
+    if (!_.isEmpty(option.reservation_time_id)) {
+      query = query.where("reservation_time_id", "==", option.reservation_time_id);
+    }
 
     return query.get();
   }

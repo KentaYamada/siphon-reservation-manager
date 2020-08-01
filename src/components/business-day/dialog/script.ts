@@ -46,7 +46,7 @@ export default Vue.extend({
           .then(() => {
             this.$emit("save-success");
           })
-          .catch((error) => {
+          .catch(error => {
             this.$emit("save-failure", error);
           })
           .finally(() => {

@@ -1,21 +1,10 @@
 import Vue, { PropType } from "vue";
 import { mapActions, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
-
-// entity
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
-
-// store
 import { FETCH } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-search-form/>",
-  props: {
-    searchOptions: {
-      required: true,
-      type: Object as PropType<ReservationSearchOption>
-    }
-  },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
     ...mapState("timezone", ["timezones"])
@@ -28,19 +17,27 @@ export default Vue.extend({
       fetchTimezones: FETCH
     }),
 
+    handleChangeReservationDate(selectedId: string) {
+      this.$emit("update-reservation-date-id", selectedId);
+    },
+
+    handleChangeReservationTime(selectedId: string) {
+      this.$emit("update-reservation-time-id", selectedId);
+    },
+
     handleSearch(): void {
-      this.$emit("update-search-options", this.searchOptions);
+      this.$emit("search");
     }
   },
+  data() {
+    return {
+      reservationDateId: "",
+      reservationTimeId: ""
+    };
+  },
   mounted() {
-    const promises = [this.fetchTimezones(), this.fetchBusinessDays()];
-
-    Promise.all(promises).catch(() => {
-      const toastConfig: BNoticeConfig = {
-        message: "データの読み込みに失敗しました。",
-        type: "is-danger"
-      };
-      this.$buefy.toast.open(toastConfig);
+    Promise.all([this.fetchTimezones(), this.fetchBusinessDays()]).catch(() => {
+      this.$emit("load-search-data-failure");
     });
   }
 });

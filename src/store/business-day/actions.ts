@@ -25,7 +25,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const businessDays: Array<BusinessDay> = [];
     const businessDaysDoc = await service.fetch();
 
-    businessDaysDoc.forEach((doc) => {
+    businessDaysDoc.forEach(doc => {
       const businessDate = doc.data().business_date.toDate();
       businessDays.push({
         id: doc.id,
@@ -44,7 +44,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const promise$ = await service.fetchByAfterToday();
     const businessDays: Array<BusinessDay> = [];
 
-    promise$.forEach((doc) => {
+    promise$.forEach(doc => {
       // todo: convert entity
       const data = doc.data();
       const businessDay: BusinessDay = {
@@ -66,7 +66,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const promise$ = await service.fetch();
     let timezones: Array<SelectableTimezone> = [];
 
-    promise$.forEach((doc) => {
+    promise$.forEach(doc => {
       const data = doc.data();
       let selected = false;
 
@@ -104,7 +104,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const timezoneRef = await promise.ref.collection(service.subCollectionName).get();
     let timezones: Array<SelectableTimezone> = [];
 
-    timezoneRef.forEach((doc) => {
+    timezoneRef.forEach(doc => {
       timezones.push({
         id: doc.id,
         start_time: doc.data().start_time.toDate(),

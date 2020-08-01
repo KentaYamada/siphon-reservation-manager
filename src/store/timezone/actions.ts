@@ -13,7 +13,7 @@ const actions: ActionTree<TimezoneState, RootState> = {
     const service = new TimezoneService();
     const promise$ = await service.fetch();
 
-    promise$.forEach((doc) => {
+    promise$.forEach(doc => {
       const data = doc.data();
       let isDefaultSelect = false;
 

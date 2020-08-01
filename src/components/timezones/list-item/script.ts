@@ -67,7 +67,7 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch((error) => {
+            .catch(error => {
               // todo: error handling
             });
         }

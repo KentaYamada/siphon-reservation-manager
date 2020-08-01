@@ -61,7 +61,7 @@ export default Vue.extend({
       mail: {
         required,
         email
-      },
+      }
     }
   },
   computed: {
@@ -105,7 +105,7 @@ export default Vue.extend({
             this.$buefy.toast.open(toastConfig);
             this.$router.push({ name: "reservation-edited-message", params: { id: this.id } });
           })
-          .catch((error) => {
+          .catch(error => {
             toastConfig.message = error.message ? error.message : "予約の登録に失敗しました。";
             toastConfig.type = "is-danger";
 
@@ -185,7 +185,7 @@ export default Vue.extend({
         name: "reservation-detail",
         params: {
           id: id
-        },
+        }
       }).href;
       const redirectUrl = `${location.origin}${href}`;
       sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.EDITED);

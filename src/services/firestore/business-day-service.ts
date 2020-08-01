@@ -46,7 +46,7 @@ export class BusinessDayService {
     }
 
     const db = firebase.firestore();
-    const transaction = await db.runTransaction(async (transaction) => {
+    const transaction = await db.runTransaction(async transaction => {
       const businessDayRef = db.collection(this.COLLECTION_NAME).doc(businessDay.id);
       const hasDoc = await transaction.get(businessDayRef);
 
@@ -77,7 +77,7 @@ export class BusinessDayService {
     }
 
     const db = firebase.firestore();
-    const transaction = db.runTransaction(async (transaction) => {
+    const transaction = db.runTransaction(async transaction => {
       const businessDayRef = db.collection(this.COLLECTION_NAME).doc(id);
       const hasDoc = await transaction.get(businessDayRef);
 
@@ -86,7 +86,7 @@ export class BusinessDayService {
       }
 
       const timezones = await businessDayRef.collection(this.subCollectionName).get();
-      timezones.forEach((doc) => {
+      timezones.forEach(doc => {
         transaction.delete(doc.ref);
       });
 

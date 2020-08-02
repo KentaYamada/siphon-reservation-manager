@@ -63,34 +63,23 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
   [FETCH_SELECTABLE_TIMEZONES]: async ({ commit }) => {
     const service = new TimezoneService();
-    const promise$ = await service.fetch();
-    let timezones: Array<SelectableTimezone> = [];
-
-    promise$.forEach(doc => {
-      const data = doc.data();
-      let selected = false;
-
-      if (!_.isNil(data.is_default_select)) {
-        selected = data.is_default_select;
-      }
-
-      const timezone: SelectableTimezone = {
-        id: doc.id,
-        start_time: data.start_time.toDate(),
-        end_time: data.end_time.toDate(),
-        selected: selected
-      };
-
-      timezones.push(timezone);
-    });
-
-    timezones = _.sortBy(timezones, (timezone: SelectableTimezone) => {
-      return timezone.start_time.getHours();
-    });
+    const timezonesRef = await service.fetch();
+    const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
+      .map(doc => {
+        const selected = _.isNil(doc.data().is_default_select) ? false : doc.data()?.is_default_select;
+        return {
+          id: doc.id,
+          start_time: doc.data()?.start_time.toDate(),
+          end_time: doc.data()?.end_time.toDate(),
+          selected: selected
+        } as SelectableTimezone;
+      })
+      .sortBy((t: SelectableTimezone) => t.start_time.getTime())
+      .value();
 
     commit(SET_SELECTABLE_TIMEZONES, timezones);
 
-    return promise$;
+    return timezonesRef;
   },
 
   [FETCH_BY_ID]: async ({ commit }, id: string) => {

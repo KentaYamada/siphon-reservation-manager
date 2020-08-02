@@ -26,7 +26,7 @@ export class BusinessDayService {
 
     const batch = firebase.firestore().batch();
     _.each(businessDay.timezones, (timezone: SelectableTimezone) => {
-      const timezoneRef = businessDayRef.collection("timezones").doc();
+      const timezoneRef = businessDayRef.collection("timezones").doc(timezone.id);
 
       batch.set(timezoneRef, {
         start_time: timezone.start_time,
@@ -86,10 +86,7 @@ export class BusinessDayService {
       }
 
       const timezones = await businessDayRef.collection(this.subCollectionName).get();
-      timezones.forEach(doc => {
-        transaction.delete(doc.ref);
-      });
-
+      timezones.forEach(doc => transaction.delete(doc.ref));
       transaction.delete(businessDayRef);
     });
 

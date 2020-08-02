@@ -84,31 +84,27 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
   [FETCH_BY_ID]: async ({ commit }, id: string) => {
     const service = new BusinessDayService();
-    const promise = await service.fetchById(id);
+    const businessDayRef = await service.fetchById(id);
 
-    if (!promise.exists || _.isNil(promise.data())) {
+    if (!businessDayRef.exists || _.isNil(businessDayRef.data())) {
       return Promise.reject();
     }
 
-    const timezoneRef = await promise.ref.collection(service.subCollectionName).get();
-    let timezones: Array<SelectableTimezone> = [];
-
-    timezoneRef.forEach(doc => {
-      timezones.push({
-        id: doc.id,
-        start_time: doc.data().start_time.toDate(),
-        end_time: doc.data().end_time.toDate(),
-        selected: doc.data().selected
-      });
-    });
-
-    timezones = _.sortBy(timezones, (timezone: SelectableTimezone) => {
-      return timezone.start_time.getHours();
-    });
-
-    const businessDate = promise.data()?.business_date.toDate();
+    const timezonesRef = await businessDayRef.ref.collection(service.subCollectionName).get();
+    const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
+      .map(doc => {
+        return {
+          id: doc.id,
+          start_time: doc.data().start_time.toDate(),
+          end_time: doc.data().end_time.toDate(),
+          selected: doc.data().selected
+        } as SelectableTimezone;
+      })
+      .sortBy((t: SelectableTimezone) => t.start_time.getHours())
+      .value();
+    const businessDate = businessDayRef.data()?.business_date.toDate();
     const businessDay: BusinessDay = {
-      id: promise.id,
+      id: businessDayRef.id,
       business_date: businessDate,
       text: moment(businessDate).format("YYYY年MM月DD日"),
       timezones: timezones
@@ -116,7 +112,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
     commit(SET_ITEM, businessDay);
 
-    return promise;
+    return businessDayRef;
   },
 
   [SAVE]: async ({ commit }, businessDay: BusinessDay) => {

@@ -33,6 +33,8 @@ export const FETCH_BUSINESS_DATE_AFTER_TODAY = "fetchBusinessDateAfterToday";
 
 export const FETCH_SELECTABLE_TIMEZONES = "fetchSelectableTimezones";
 
+export const GET_SELECTABLE_TIMEZONES = "getSelectableTimezones";
+
 export const SET_SELECTABLE_TIMEZONES = "setSelectableTimezones";
 
 // Reservation actions

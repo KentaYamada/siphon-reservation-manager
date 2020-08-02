@@ -1,41 +1,46 @@
 import Vue from "vue";
-import { mapActions, mapState } from "vuex";
-import { FETCH } from "@/store/constant";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
+import { ReservationSearchOption } from "@/entity/reservation-search-option";
+import { FETCH, FETCH_BUSINESS_DATE_AFTER_TODAY, GET_SELECTABLE_TIMEZONES } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-search-form/>",
   computed: {
     ...mapState("businessDay", ["businessDays"]),
-    ...mapState("timezone", ["timezones"])
+    ...mapGetters("businessDay", {
+      getSelectableTimezones: GET_SELECTABLE_TIMEZONES
+    }),
+
+    timezones(): Array<SelectableTimezone> {
+      return this.getSelectableTimezones(this.option.reservation_date_id);
+    }
   },
   methods: {
     ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH
-    }),
-    ...mapActions("timezone", {
-      fetchTimezones: FETCH
+      fetch: FETCH_BUSINESS_DATE_AFTER_TODAY
     }),
 
-    handleChangeReservationDate(selectedId: string) {
-      this.$emit("update-reservation-date-id", selectedId);
-    },
-
-    handleChangeReservationTime(selectedId: string) {
-      this.$emit("update-reservation-time-id", selectedId);
+    handleChangeReservationDate() {
+      this.option.reservation_time_id = "";
     },
 
     handleSearch(): void {
-      this.$emit("search");
+      this.$emit("search", this.option);
     }
   },
   data() {
+    const option: ReservationSearchOption = {
+      reservation_date_id: "",
+      reservation_time_id: ""
+    };
+
     return {
-      reservationDateId: "",
-      reservationTimeId: ""
+      option: option
     };
   },
   mounted() {
-    Promise.all([this.fetchTimezones(), this.fetchBusinessDays()]).catch(() => {
+    this.fetch().catch(() => {
       this.$emit("load-search-data-failure");
     });
   }

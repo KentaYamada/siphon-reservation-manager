@@ -15,9 +15,8 @@
                             :search-option="option"
                             :is-loading="isLoading"
                             @load-search-data-failure="handleLoadSearchDataFailure"
-                            @search="handleSearch"
-                            @update-reservation-date-id="handleUpdateReservationDateId"
-                            @update-reservation-time-id="handleUpdateReservationTimeId" />
+                            @search="handleSearch">
+                        </reservation-search-form>
                     </div>
                     <div class="divider"></div>
                     <div class="list-container">
@@ -25,7 +24,8 @@
                             :search-option="option"
                             :is-loading="isLoading"
                             @load-succeeded="handleLoadSucceeded"
-                            @load-failure="handleLoadFailure"/>
+                            @load-failure="handleLoadFailure">
+                        </reservation-list>
                         <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
                     </div>
                 </div>

@@ -10,15 +10,8 @@ export default Vue.extend({
     ReservationSearchForm
   },
   methods: {
-    handleUpdateReservationDateId(reservationDateId: string): void {
-      this.$data.option.reservation_date_id = reservationDateId;
-    },
-
-    handleUpdateReservationTimeId(reservationTimeId: string): void {
-      this.$data.option.reservation_time_id = reservationTimeId;
-    },
-
-    handleSearch(): void {
+    handleSearch(option: ReservationSearchOption): void {
+      this.option = option;
       this.isLoading = true;
     },
 

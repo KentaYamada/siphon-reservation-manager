@@ -41,16 +41,28 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
   [FETCH_BUSINESS_DATE_AFTER_TODAY]: async ({ commit }) => {
     const service = new BusinessDayService();
-    const promise$ = await service.fetchByAfterToday();
+    const businessDaysRef = await service.fetchByAfterToday();
     const businessDays: Array<BusinessDay> = [];
 
-    promise$.forEach(doc => {
-      // todo: convert entity
+    businessDaysRef.forEach(async doc => {
+      const timezonesRef = await doc.ref.collection(service.subCollectionName).where("selected", "==", true).get();
+      const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
+        .map(doc => {
+          return {
+            id: doc.id,
+            start_time: doc.data()?.start_time.toDate(),
+            end_time: doc.data()?.end_time.toDate(),
+            selected: doc.data()?.selected
+          } as SelectableTimezone;
+        })
+        .sortBy((t: SelectableTimezone) => t.start_time.getHours())
+        .value();
       const data = doc.data();
       const businessDay: BusinessDay = {
-        id: doc.data().id,
+        id: doc.id,
         text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
-        business_date: data.business_date.toDate()
+        business_date: data.business_date.toDate(),
+        timezones: timezones
       };
 
       businessDays.push(businessDay);
@@ -58,7 +70,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
     commit(SET_ITEMS, businessDays);
 
-    return promise$;
+    return businessDaysRef;
   },
 
   [FETCH_SELECTABLE_TIMEZONES]: async ({ commit }) => {

@@ -7,7 +7,7 @@
                       v-model="option.reservation_date_id"
                       @input="handleChangeReservationDate()">
                 <option v-for="d in businessDays" :key="d.id" :value="d.id">
-                    {{ d.text }}
+                    {{ d.business_date | formatDateJp }}
                 </option>
             </b-select>
             <div class="control">
@@ -15,7 +15,7 @@
                           icon="clock"
                           v-model="option.reservation_time_id">
                     <option v-for="t in timezones" :key="t.id" :value="t.id">
-                        {{ t.text }}
+                        {{ t.start_time | timePeriod(t.end_time) }}
                     </option>
                 </b-select>
             </div>
@@ -37,7 +37,7 @@
                       v-model="option.reservation_date_id"
                       @input="handleChangeReservationDate()">
                 <option v-for="d in businessDays" :key="d.id" :value="d.id">
-                    {{ d.text }}
+                    {{ d.business_date | formatDateJp }}
                 </option>
             </b-select>
         </div>
@@ -47,7 +47,7 @@
                       icon="clock"
                       v-model="option.reservation_time_id">
                 <option v-for="t in timezones" :key="t.id" :value="t.id">
-                    {{ t.text }}
+                    {{ t.start_time | timePeriod(t.end_time) }}
                 </option>
             </b-select>
         </div>

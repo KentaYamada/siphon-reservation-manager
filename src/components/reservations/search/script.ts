@@ -1,6 +1,5 @@
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 import { mapActions, mapState } from "vuex";
-import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { FETCH } from "@/store/constant";
 
 export default Vue.extend({

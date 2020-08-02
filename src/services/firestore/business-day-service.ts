@@ -86,10 +86,7 @@ export class BusinessDayService {
       }
 
       const timezones = await businessDayRef.collection(this.subCollectionName).get();
-      timezones.forEach(doc => {
-        transaction.delete(doc.ref);
-      });
-
+      timezones.forEach(doc => transaction.delete(doc.ref));
       transaction.delete(businessDayRef);
     });
 

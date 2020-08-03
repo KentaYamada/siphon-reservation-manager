@@ -74,12 +74,12 @@ export default Vue.extend({
     ...mapGetters("businessDay", {
       getSelectedTimezone: GET_SELECTED_TIMEZONE
     }),
-    ...mapGetters("reservation", [
-      GET_RESERVABLE_PEOPLE,
-      HAS_RESERVATION_SEATS,
-      HAS_SELECTED_SEATS,
-      IS_FULL_OF_RESERVED
-    ]),
+    ...mapGetters("reservation", {
+      getReservablePeople: GET_RESERVABLE_PEOPLE,
+      hasReservationSeats: HAS_RESERVATION_SEATS,
+      hasSelectedSeats: HAS_SELECTED_SEATS,
+      isFullOfReserved: IS_FULL_OF_RESERVED
+    }),
 
     timezones(): Array<SelectableTimezone> {
       return this.getSelectableTimezones(this.reservation.reservation_date_id);

@@ -32,6 +32,15 @@ export default Vue.extend({
       this.$buefy.toast.open(toastConfig);
     },
 
+    handleLoadReservationSeatsFailure(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約座席データの取得に失敗しました。時間をおいてアクセスしてください。",
+        type: "is-danger"
+      };
+
+      this.$buefy.toast.open(toastConfig);
+    },
+
     handleSaving(): void {
       this.isProgressing = true;
     },

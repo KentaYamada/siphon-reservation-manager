@@ -1,17 +1,14 @@
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
 import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
 import _ from "lodash";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
-import { Reservation } from "@/entity/reservation";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
 import { timePeriod } from "@/filters/time-period";
 import {
-  FETCH,
   FETCH_BUSINESS_DATE_AFTER_TODAY,
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
@@ -19,7 +16,7 @@ import {
   GET_RESERVABLE_PEOPLE,
   GET_RESERVABLE_TIMEZONES,
   GET_SELECTABLE_TIMEZONES,
-  GET_TIMEZONES_BY_RESERVATION_DATE,
+  GET_SELECTED_TIMEZONE,
   HAS_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
   INITIALIZE,
@@ -75,16 +72,15 @@ export default Vue.extend({
       getBusinessDayById: GET_BY_ID,
       getSelectableTimezones: GET_SELECTABLE_TIMEZONES
     }),
+    ...mapGetters("businessDay", {
+      getSelectedTimezone: GET_SELECTED_TIMEZONE
+    }),
     ...mapGetters("reservation", [
       GET_RESERVABLE_PEOPLE,
       HAS_RESERVATION_SEATS,
       HAS_SELECTED_SEATS,
       IS_FULL_OF_RESERVED
     ]),
-    ...mapGetters("timezone", {
-      timezones: GET_RESERVABLE_TIMEZONES,
-      getTimezoneById: GET_BY_ID
-    }),
 
     timezones(): Array<SelectableTimezone> {
       return this.getSelectableTimezones(this.reservation.reservation_date_id);
@@ -118,12 +114,14 @@ export default Vue.extend({
       this.resetReservationTimezone();
       this.option.reservation_date_id = selectedId;
       this.option.reservation_time_id = "";
+      this._fetchReservationSeats();
     },
 
     handleUpdateReservationTimezone(selectedId: string): void {
-      const timezone = this.getTimezoneById(selectedId);
+      const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
       this.setReservationTimezone(timezone);
       this.option.reservation_time_id = selectedId;
+      this._fetchReservationSeats();
     },
 
     handleSave(): void {
@@ -143,14 +141,18 @@ export default Vue.extend({
     },
 
     _fetchReservationSeats(): void {
-      const hasSearchOption =
-        !_.isEmpty(this.option.reservation_date_id) && !_.isEmpty(this.option.reservation_time_id);
+      this.isLoadingSeats = true;
+      this.resetReservationSeats();
 
-      if (hasSearchOption) {
+      if (!_.isEmpty(this.option.reservation_date_id) && !_.isEmpty(this.option.reservation_time_id)) {
         this.initializeReservationSeats();
-        this.fetchReservationSeats(this.option);
-      } else {
-        this.resetReservationSeats();
+        this.fetchReservationSeats(this.option)
+          .catch(() => {
+            this.$emit("load-reservation-seats-failure");
+          })
+          .finally(() => {
+            this.isLoadingSeats = false;
+          });
       }
     }
   },

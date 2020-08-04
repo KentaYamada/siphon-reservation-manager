@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { mapState } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
@@ -90,6 +90,7 @@ export default Vue.extend({
         }
       }).href;
       const redirectUrl = `${location.origin}${href}`;
+      // todo: cloud functions triggerを使ってメール配信する
       sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CREATED);
     }
   },

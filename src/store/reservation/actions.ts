@@ -4,7 +4,6 @@ import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import _ from "lodash";
-import firebase from "@/plugins/firebase";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import { ReservationSeatService } from "@/services/firestore/reservation-seat-service";
 import { RootState } from "@/store";
@@ -20,10 +19,6 @@ import {
   SET_ITEMS,
   SET_RESERVATION_SEATS
 } from "@/store/constant";
-
-// firestore collection name
-const COLLECTION_NAME = "reservations";
-const RESERVATION_SEATS_COLLECTION = "reservation_seats";
 
 const actions: ActionTree<ReservationState, RootState> = {
   [FETCH]: async ({ commit }, option: ReservationSearchOption) => {
@@ -186,54 +181,8 @@ const actions: ActionTree<ReservationState, RootState> = {
   },
 
   [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
-    const db = firebase.firestore();
-    const $transaction = db.runTransaction(async transaction => {
-      const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
-      const query = reservationSeats
-        .where("reservation_date_id", "==", reservation.reservation_date_id)
-        .where("reservation_time_id", "==", reservation.reservation_time_id);
-      const $promise = await query.get();
-
-      if (!$promise.empty) {
-        return Promise.reject();
-      }
-
-      const reservationRef = db.collection(COLLECTION_NAME).doc();
-      const reservationData = {
-        reservation_date: reservation.reservation_date,
-        reservation_date_id: reservation.reservation_date_id,
-        reservation_start_time: reservation.reservation_start_time,
-        reservation_end_time: reservation.reservation_end_time,
-        reservation_time_id: reservation.reservation_time_id,
-        reserver_name: reservation.reserver_name,
-        number_of_reservations: reservation.number_of_reservations,
-        tel: reservation.tel,
-        mail: reservation.mail,
-        comment: reservation.comment
-      };
-
-      transaction.set(reservationRef, reservationData);
-
-      _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-        const reservationSeatRef = reservationSeats.doc();
-        const seatData = {
-          seat_no: seat.seat_no,
-          is_reserved: true,
-          reservation_id: reservationRef.id,
-          reservation_date: reservation.reservation_date,
-          reservation_date_id: reservation.reservation_date_id,
-          reservation_start_time: reservation.reservation_start_time,
-          reservation_end_time: reservation.reservation_end_time,
-          reservation_time_id: reservation.reservation_time_id
-        };
-
-        transaction.set(reservationSeatRef, seatData);
-      });
-
-      return reservationRef.id;
-    });
-
-    return $transaction;
+    const service = new ReservationService();
+    return service.saveAllReservation(reservation);
   },
 
   [CANCEL]: async ({ commit }, id: string) => {

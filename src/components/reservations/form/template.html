@@ -141,13 +141,13 @@
         <label class="label">備考</label>
         <textarea class="textarea" placeholder="お店への伝達事項などあれば記入してください(例: 卵アレルギーがあります)" v-model="reservation.comment"></textarea>
     </div>
-    <div class="has-text-right">
+    <div class="form-actions has-text-right">
         <button type="button"
                 class="button is-info"
                 :disabled="isSaving"
                 @click="handleSave()">
                 <i class="fas fa-calendar-check"></i>
-            <span>予約する</span>
+            {{ buttonText }}
         </button>
     </div>
 </form>

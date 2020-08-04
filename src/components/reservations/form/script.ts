@@ -87,6 +87,10 @@ export default Vue.extend({
 
     visibleSelectionSeatMessage(): boolean {
       return this.hasReservationSeats && !this.isFullOfReserved && !this.hasSelectedSeats;
+    },
+
+    buttonText(): string {
+      return _.isNil(this.id) ? "予約する" : "予約内容を変更する";
     }
   },
   methods: {

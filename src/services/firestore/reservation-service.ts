@@ -119,6 +119,35 @@ export class ReservationService {
     return transaction;
   }
 
+  async cancel(id: string) {
+    if (_.isEmpty(id)) {
+      return Promise.reject("Invalid argument: id");
+    }
+
+    const db = firebase.firestore();
+    const transaction = db.runTransaction(async transaction => {
+      const reservationRef = db.collection(this.COLLECTION_NAME).doc(id);
+      const existData = await transaction.get(reservationRef);
+
+      if (!existData.exists) {
+        return Promise.reject("Reservation not found");
+      }
+
+      const reservationSeatsRef = await db.collection(this.SUB_COLLECTION_NAME).where("reservation_id", "==", id).get();
+
+      reservationSeatsRef.forEach(doc => {
+        transaction.update(doc.ref, {
+          is_reserved: false,
+          reservation_id: null
+        });
+      });
+
+      transaction.delete(reservationRef);
+    });
+
+    return transaction;
+  }
+
   fetch(option: ReservationSearchOption) {
     if (_.isNil(option)) {
       return Promise.reject();

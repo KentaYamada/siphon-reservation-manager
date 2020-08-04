@@ -90,7 +90,7 @@ export default Vue.extend({
     },
 
     buttonText(): string {
-      return _.isNil(this.id) ? "予約する" : "予約内容を変更する";
+      return _.isEmpty(this.id) ? "予約する" : "予約内容を変更する";
     }
   },
   methods: {

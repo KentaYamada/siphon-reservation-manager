@@ -179,7 +179,7 @@ const actions: ActionTree<ReservationState, RootState> = {
   [SAVE]: async ({ commit }, reservation: Reservation) => {
     const service = new ReservationService();
     const promise = service.save(reservation);
-    
+
     promise.then(() => commit(SET_ITEM, reservation));
 
     return promise;
@@ -237,35 +237,8 @@ const actions: ActionTree<ReservationState, RootState> = {
   },
 
   [CANCEL]: async ({ commit }, id: string) => {
-    if (!id) {
-      return Promise.reject("not found");
-    }
-    const db = firebase.firestore();
-    const $transaction = db.runTransaction(async transaction => {
-      const reservationRef = db.collection(COLLECTION_NAME).doc(id);
-
-      return await transaction.get(reservationRef).then(doc => {
-        if (!doc.exists) {
-          return Promise.reject("reservation not found");
-        }
-
-        transaction.delete(reservationRef);
-
-        const query = db.collection(RESERVATION_SEATS_COLLECTION).where("reservation_id", "==", id);
-
-        return query.get().then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            const updateData = {
-              is_reserved: false,
-              reservation_id: null
-            };
-            transaction.update(doc.ref, updateData);
-          });
-        });
-      });
-    });
-
-    return await $transaction;
+    const service = new ReservationService();
+    return service.cancel(id);
   }
 };
 

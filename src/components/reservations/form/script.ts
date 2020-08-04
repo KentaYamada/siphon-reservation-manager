@@ -130,8 +130,8 @@ export default Vue.extend({
         this.$emit("validation-failure");
       } else {
         this.save(this.reservation)
-          .then(() => {
-            this.$emit("save-succeeded");
+          .then((id: string) => {
+            this.$emit("save-succeeded", id);
           })
           .catch(error => {
             this.$emit("save-failure", error);

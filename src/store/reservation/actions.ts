@@ -177,104 +177,12 @@ const actions: ActionTree<ReservationState, RootState> = {
   },
 
   [SAVE]: async ({ commit }, reservation: Reservation) => {
-    const selectedSeatNo: number[] = [];
+    const service = new ReservationService();
+    const promise = service.save(reservation);
+    
+    promise.then(() => commit(SET_ITEM, reservation));
 
-    _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-      if (seat.is_selected) {
-        selectedSeatNo.push(seat.seat_no);
-      }
-    });
-
-    const db = firebase.firestore();
-    const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
-    const query = reservationSeats
-      .where("reservation_date_id", "==", reservation.reservation_date_id)
-      .where("reservation_time_id", "==", reservation.reservation_time_id)
-      .where("is_reserved", "==", true);
-    const $promise = await query.get();
-    let hasReserved = false;
-
-    _.each($promise.docs, doc => {
-      if (doc.data().reservation_id !== reservation.id && _.includes(selectedSeatNo, doc.data().seat_no)) {
-        hasReserved = true;
-        return false;
-      }
-    });
-
-    if (hasReserved) {
-      return Promise.reject({
-        message: "選択した座席は予約されています。お手数ですが再選択してください。",
-        refetch_seats: true
-      });
-    }
-
-    const $transaction = db.runTransaction(async transaction => {
-      const reservations = db.collection(COLLECTION_NAME);
-      const reservationRef = reservation.id ? reservations.doc(reservation.id) : reservations.doc();
-      const reservationData = {
-        reservation_date: reservation.reservation_date,
-        reservation_date_id: reservation.reservation_date_id,
-        reservation_start_time: reservation.reservation_start_time,
-        reservation_end_time: reservation.reservation_end_time,
-        reservation_time_id: reservation.reservation_time_id,
-        reserver_name: reservation.reserver_name,
-        number_of_reservations: reservation.number_of_reservations,
-        tel: reservation.tel,
-        mail: reservation.mail,
-        comment: reservation.comment
-      };
-      const $hasReservation = await transaction.get(reservationRef);
-
-      if ($hasReservation.exists) {
-        const reservedSeats = await reservationSeats.where("reservation_id", "==", reservation.id).get();
-        reservedSeats.forEach(doc => {
-          transaction.update(doc.ref, { reservation_id: null, is_reserved: false });
-        });
-        transaction.update(reservationRef, reservationData);
-      } else {
-        transaction.set(reservationRef, reservationData);
-      }
-
-      const query = reservationSeats
-        .where("reservation_date", "==", reservation.reservation_date)
-        .where("reservation_time_id", "==", reservation.reservation_time_id);
-      const $reservationSeats = await query.get();
-
-      $reservationSeats.forEach(doc => transaction.delete(doc.ref));
-
-      _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-        const seatRef = reservationSeats.doc();
-        let reservationId = null;
-        let isReserved = null;
-
-        if (seat.is_reserved) {
-          reservationId = seat.reservation_id;
-          isReserved = seat.is_reserved;
-        } else {
-          if (seat.is_selected) {
-            reservationId = seat.reservation_id ? seat.reservation_id : reservationRef.id;
-            isReserved = true;
-          }
-        }
-
-        const seatData = {
-          seat_no: seat.seat_no,
-          is_reserved: isReserved,
-          reservation_id: reservationId,
-          reservation_date: reservation.reservation_date,
-          reservation_date_id: reservation.reservation_date_id,
-          reservation_start_time: reservation.reservation_start_time,
-          reservation_end_time: reservation.reservation_end_time,
-          reservation_time_id: reservation.reservation_time_id
-        };
-
-        transaction.set(seatRef, seatData);
-      });
-
-      return reservationRef.id;
-    });
-
-    return $transaction;
+    return promise;
   },
 
   [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {

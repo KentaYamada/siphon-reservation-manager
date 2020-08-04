@@ -1,4 +1,4 @@
-<div class="reservation-detail-content">
+<div class="reservation-detail-content" v-if="!!reservation">
     <h4 class="title is-size-4 reserver-name">{{ reservation.reserver_name | reserverNameWithNumberOfPeople(reservation.number_of_reservations) }}</h4>
     <div class="item">
         <h5 class="item-label"><strong>予約日時</strong></h5>

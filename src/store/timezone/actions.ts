@@ -9,34 +9,30 @@ import { TimezoneState } from "@/store/timezone";
 
 const actions: ActionTree<TimezoneState, RootState> = {
   [FETCH]: async ({ commit }) => {
-    let timezones: Array<Timezone> = [];
     const service = new TimezoneService();
-    const promise$ = await service.fetch();
+    const timezonesRef = await service.fetch();
+    const timezones: Array<Timezone> = _.chain(timezonesRef.docs)
+      .map(doc => {
+        const data = doc.data();
+        let isDefaultSelect = false;
 
-    promise$.forEach(doc => {
-      const data = doc.data();
-      let isDefaultSelect = false;
+        if (!_.isNil(data.is_default_select)) {
+          isDefaultSelect = data.is_default_select;
+        }
 
-      if (!_.isNil(data.is_default_select)) {
-        isDefaultSelect = data.is_default_select;
-      }
-
-      const timezone: Timezone = {
-        id: doc.id,
-        start_time: data.start_time.toDate(),
-        end_time: data.end_time.toDate(),
-        is_default_select: isDefaultSelect
-      };
-      timezones.push(timezone);
-    });
-
-    timezones = _.sortBy(timezones, (timezone: Timezone) => {
-      return timezone.start_time.getHours();
-    });
+        return {
+          id: doc.id,
+          start_time: data.start_time.toDate(),
+          end_time: data.end_time.toDate(),
+          is_default_select: isDefaultSelect
+        } as Timezone;
+      })
+      .sortBy((t: Timezone) => t.start_time.getHours())
+      .value();
 
     commit(SET_ITEMS, timezones);
 
-    return promise$;
+    return timezonesRef;
   },
 
   [FETCH_BY_ID]: async ({ commit }, id: string) => {

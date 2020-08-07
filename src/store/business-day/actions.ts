@@ -46,28 +46,29 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const businessDays: Array<BusinessDay> = [];
 
     businessDaysRef.forEach(async doc => {
-      const timezonesRef = await doc.ref.collection(service.subCollectionName).where("selected", "==", true).get();
-      const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
-        .map(doc => {
-          return {
-            id: doc.id,
-            start_time: doc.data()?.start_time.toDate(),
-            end_time: doc.data()?.end_time.toDate(),
-            selected: doc.data()?.selected
-          } as SelectableTimezone;
-        })
-        .sortBy((t: SelectableTimezone) => t.start_time.getHours())
-        .value();
-      const data = doc.data();
-      const businessDay: BusinessDay = {
-        id: doc.id,
-        text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
-        business_date: data.business_date.toDate(),
-        is_pause: doc.data()?.is_pause,
-        timezones: timezones
-      };
-
-      businessDays.push(businessDay);
+      if (doc.data()?.is_pause !== true) {
+        const timezonesRef = await doc.ref.collection(service.subCollectionName).where("selected", "==", true).get();
+        const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
+          .map(doc => {
+            return {
+              id: doc.id,
+              start_time: doc.data()?.start_time.toDate(),
+              end_time: doc.data()?.end_time.toDate(),
+              selected: doc.data()?.selected
+            } as SelectableTimezone;
+          })
+          .sortBy((t: SelectableTimezone) => t.start_time.getHours())
+          .value();
+        const data = doc.data();
+        const businessDay: BusinessDay = {
+          id: doc.id,
+          text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
+          business_date: data.business_date.toDate(),
+          is_pause: doc.data()?.is_pause,
+          timezones: timezones
+        };
+        businessDays.push(businessDay);
+      }
     });
 
     commit(SET_ITEMS, businessDays);

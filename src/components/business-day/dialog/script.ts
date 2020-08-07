@@ -1,7 +1,6 @@
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 import { mapActions, mapMutations, mapState } from "vuex";
 import { required } from "vuelidate/lib/validators";
-import { BNoticeConfig } from "buefy/types/components";
 import _ from "lodash";
 import SelectableTimezoneList from "@/components/timezones/selectable-list/SelectableTimezoneList.vue";
 import { BusinessDay } from "@/entity/business-day";
@@ -34,24 +33,23 @@ export default Vue.extend({
     ...mapActions("businessDay", [FETCH_BY_ID, FETCH_SELECTABLE_TIMEZONES, SAVE]),
     ...mapMutations("businessDay", [INITIALIZE]),
 
-    /**
-     * 営業日保存
-     */
     handleClickSave(): void {
       this.$v.$touch();
 
-      if (!this.$v.$invalid) {
+      if (this.$v.$invalid) {
+        this.$emit("validation-failed");
+      } else {
         this.isSaving = true;
         this.save(this.businessDay)
           .then(() => {
-            this.$emit("save-success");
+            this.$emit("save-succeeded");
+            this.$emit("close");
           })
-          .catch(error => {
-            this.$emit("save-failure", error);
+          .catch(() => {
+            this.$emit("save-failed");
           })
           .finally(() => {
             this.isSaving = false;
-            this.$emit("close");
           });
       }
     },
@@ -92,11 +90,8 @@ export default Vue.extend({
         this.businessDay = _.clone(this.model);
       })
       .catch(() => {
-        const toastConfig: BNoticeConfig = {
-          message: "データの取得に失敗しました",
-          type: "is-danger"
-        };
-        this.$buefy.toast.open(toastConfig);
+        this.$emit("load-business-day-failed");
+        this.$emit("close");
       })
       .finally(() => {
         this.isLoading = false;

@@ -2,17 +2,9 @@ import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
 import { BDialogConfig, BModalConfig } from "buefy/types/components";
 import _ from "lodash";
-
-// components
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
-
-// entity
 import { Timezone } from "@/entity/timezone";
-
-// filter
 import { timePeriod } from "@/filters/time-period";
-
-// store
 import { DELETE } from "@/store/constant";
 
 export default Vue.extend({
@@ -26,9 +18,6 @@ export default Vue.extend({
   methods: {
     ...mapActions("timezone", [DELETE]),
 
-    /**
-     * 予約時間帯設定
-     */
     handleShowTimezoneDialog(): void {
       const config: BModalConfig = {
         parent: this,
@@ -38,17 +27,23 @@ export default Vue.extend({
           id: this.timezone.id
         },
         events: {
-          "save-success": () => {
-            this.$emit("edit-succeeded");
+          "load-timezone-failed": () => {
+            this.$emit("load-timezone-failed");
+          },
+          "save-succeeded": () => {
+            this.$emit("save-succeeded");
+          },
+          "save-failed": () => {
+            this.$emit("save-failed");
+          },
+          "validation-failed": () => {
+            this.$emit("validation-failed");
           }
         }
       };
-
       this.$buefy.modal.open(config);
     },
-    /**
-     * 予約時間帯削除
-     */
+
     handleClicDelete(): void {
       const period = timePeriod(this.timezone.start_time, this.timezone.end_time);
       const message = `
@@ -67,12 +62,11 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
-              // todo: error handling
+            .catch(() => {
+              this.$emit("delete-failed");
             });
         }
       };
-
       this.$buefy.dialog.confirm(config);
     }
   },

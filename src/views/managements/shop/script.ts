@@ -5,8 +5,6 @@ import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialo
 import BusinessDayList from "@/components/business-day/list/BusinessDayList.vue";
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
 import TimezoneList from "@/components/timezones/list/TimezoneList.vue";
-import { Timezone } from "@/entity/timezone";
-import { FETCH_SELECTABLE_TIMEZONES, INITIALIZE } from "@/store/constant";
 
 export default Vue.extend({
   components: {
@@ -14,26 +12,112 @@ export default Vue.extend({
     TimezoneList
   },
   methods: {
-    handleShowTimezoneDialog(): void {
-      const config: BModalConfig = {
-        parent: this,
-        component: TimezoneDialog,
-        hasModalCard: true,
-        events: {
-          "save-success": () => {
-            const toastConfig: BNoticeConfig = {
-              message: "保存しました。",
-              type: "is-success"
-            };
+    handleBusinessDaysLoaded(): void {
+      this.isCreatedBusinessDay = false;
+    },
 
-            this.$buefy.toast.open(toastConfig);
-            this.showMenuButton = false;
-            this.isRefetchTimezones = true;
-          }
-        }
+    handleTimezonesLoaded(): void {
+      this.isCreatedTimezone = false;
+    },
+
+    handleDeleteBusinessDaySucceeded(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "営業日を削除しました",
+        type: "is-success"
       };
+      this.$buefy.toast.open(toastConfig);
+    },
 
-      this.$buefy.modal.open(config);
+    handleDeleteBusinessDayFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "営業日の削除に失敗しました",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleDeleteTimezoneSucceeded(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯を削除しました",
+        type: "is-success"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleDeleteTimezoneFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯の削除に失敗しました",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleLoadBusinessDayFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "営業日の読み込みに失敗したため、設定画面が開けませんでした",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleLoadBusinessDaysFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "営業日一覧の取得に失敗しました",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleLoadTimezoneFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯の読み込みに失敗したため、設定画面が開けませんでした",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleLoadTimezonesFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯一覧の取得に失敗しました",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleSaveBusinessDaySucceeded(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "営業日を設定しました",
+        type: "is-success"
+      };
+      this.$buefy.toast.open(toastConfig);
+      this.isCreatedBusinessDay = true;
+      this.showMenuButton = false;
+    },
+
+    handleSaveBusinessDayFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "営業日を設定できませんでした",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleSaveTimezoneSuceeded(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯を設定しました",
+        type: "is-success"
+      };
+      this.$buefy.toast.open(toastConfig);
+      this.isCreatedTimezone = true;
+      this.showMenuButton = false;
+    },
+
+    handleSaveTimezoneFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯を設定できませんでした",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
     },
 
     handleShowBusinessDayDialog(): void {
@@ -42,39 +126,63 @@ export default Vue.extend({
         component: BusinessDayDialog,
         hasModalCard: true,
         events: {
-          "save-success": () => {
-            const toastConfig: BNoticeConfig = {
-              message: "保存しました。",
-              type: "is-success"
-            };
-
-            this.$buefy.toast.open(toastConfig);
-            this.showMenuButton = false;
-            this.isRefetchBusinessDays = true;
+          "load-business-day-failed": () => {
+            this.handleLoadBusinessDayFailed();
+          },
+          "save-succeeded": () => {
+            this.handleSaveBusinessDaySucceeded();
+          },
+          "save-failed": () => {
+            this.handleSaveBusinessDayFailed();
+          },
+          "validation-failed": () => {
+            this.handleValidationFailed();
           }
         }
       };
-
       this.$buefy.modal.open(config);
     },
 
-    toggleAddMenuButtons(): void {
+    handleShowTimezoneDialog(): void {
+      const modalConfig: BModalConfig = {
+        parent: this,
+        component: TimezoneDialog,
+        hasModalCard: true,
+        events: {
+          "load-timzeone-failed": () => {
+            this.handleLoadTimezoneFailed();
+          },
+          "save-succeeded": () => {
+            this.handleSaveTimezoneSuceeded();
+          },
+          "save-failed": () => {
+            this.handleSaveTimezoneFailed();
+          },
+          "validation-failed": () => {
+            this.handleValidationFailed();
+          }
+        }
+      };
+      this.$buefy.modal.open(modalConfig);
+    },
+
+    handleToggleMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
     },
 
-    fetchedBusinessDays(): void {
-      this.isRefetchBusinessDays = false;
-    },
-
-    fetchedTimezones(): void {
-      this.isRefetchTimezones = false;
+    handleValidationFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "入力内容に誤りがあります。エラーメッセージを確認してください。",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
     }
   },
   data() {
     return {
       showMenuButton: false,
-      isRefetchBusinessDays: false,
-      isRefetchTimezones: false
+      isCreatedBusinessDay: false,
+      isCreatedTimezone: false
     };
   }
 });

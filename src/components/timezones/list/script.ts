@@ -1,6 +1,5 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
 import TimezoneListItem from "@/components/timezones/list-item/TimezoneListItem.vue";
 import { FETCH, HAS_ITEMS } from "@/store/constant";
 
@@ -10,13 +9,13 @@ export default Vue.extend({
     TimezoneListItem
   },
   props: {
-    isRefetchList: {
+    isCreatedNewData: {
       required: true,
       type: Boolean
     }
   },
   watch: {
-    isRefetchList: function (newVal: boolean, oldVal: boolean) {
+    isCreatedNewData: function (newVal: boolean, oldVal: boolean) {
       if (newVal) {
         this._fetch();
       }
@@ -33,37 +32,41 @@ export default Vue.extend({
   methods: {
     ...mapActions("timezone", [FETCH]),
 
-    itemDeleteSucceeded(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "削除しました。",
-        type: "is-danger"
-      };
-      this.$buefy.toast.open(toastConfig);
+    handleDeleteSucceeded(): void {
+      this.$emit("delete-timezone-succeeded");
       this._fetch();
     },
 
-    itemEditSucceeded(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "保存しました。",
-        type: "is-success"
-      };
-      this.$buefy.toast.open(toastConfig);
+    handleDeleteFailed(): void {
+      this.$emit("delete-timezone-failed");
+    },
+
+    handleLoadDataFailed(): void {
+      this.$emit("load-timezone-failed");
+    },
+
+    handleSaveSucceeded(): void {
+      this.$emit("save-timezone-succeeded");
       this._fetch();
+    },
+
+    handleSaveFailed(): void {
+      this.$emit("save-timezone-failed");
+    },
+
+    handleValidationFailed(): void {
+      this.$emit("validation-failed");
     },
 
     _fetch(): void {
       this.isLoading = true;
       this.fetch()
         .catch(() => {
-          const toastConfig: BNoticeConfig = {
-            message: "予約時間帯の取得に失敗しました",
-            type: "is-danger"
-          };
-          this.$buefy.toast.open(toastConfig);
+          this.$emit("load-timezones-failed");
         })
         .finally(() => {
           this.isLoading = false;
-          this.$emit("fetched-timezones");
+          this.$emit("timezones-loaded");
         });
     }
   },

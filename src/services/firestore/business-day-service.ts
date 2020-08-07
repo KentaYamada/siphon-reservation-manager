@@ -22,7 +22,10 @@ export class BusinessDayService {
     }
 
     const businessDayRef = collection.doc();
-    businessDayRef.set({ business_date: businessDay.business_date });
+    businessDayRef.set({
+      business_date: businessDay.business_date,
+      is_pause: businessDay.is_pause
+    });
 
     const batch = firebase.firestore().batch();
     _.each(businessDay.timezones, (timezone: SelectableTimezone) => {
@@ -55,7 +58,8 @@ export class BusinessDayService {
       }
 
       transaction.update(businessDayRef, {
-        business_date: businessDay.business_date
+        business_date: businessDay.business_date,
+        is_pause: businessDay.is_pause
       });
 
       _.each(businessDay.timezones, async (timezone: SelectableTimezone) => {
@@ -100,13 +104,12 @@ export class BusinessDayService {
   }
 
   fetchByAfterToday() {
-    const query = firebase
+    return firebase
       .firestore()
       .collection(this.COLLECTION_NAME)
       .where("business_date", ">=", moment().toDate())
-      .orderBy("business_date", "desc");
-
-    return query.get();
+      .orderBy("business_date", "desc")
+      .get();
   }
 
   async fetchById(id: string) {

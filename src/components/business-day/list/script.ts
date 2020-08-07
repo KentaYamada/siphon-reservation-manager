@@ -1,26 +1,25 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
 import BusinessDayListItem from "@/components/business-day/list-item/BusinessDayListItem.vue";
 import { FETCH, HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
   template: "<business-day-list/>",
+  components: {
+    BusinessDayListItem
+  },
   props: {
-    refetchList: {
+    isCreatedNewData: {
       required: true,
       type: Boolean
     }
   },
   watch: {
-    refetchList: function (newVal: boolean, oldVal: boolean) {
+    isCreatedNewData: function (newVal: boolean, oldVal: boolean) {
       if (newVal) {
-        this.fetchBusinessDays();
+        this._fetch();
       }
     }
-  },
-  components: {
-    BusinessDayListItem
   },
   computed: {
     ...mapGetters("businessDay", [HAS_ITEMS]),
@@ -33,37 +32,41 @@ export default Vue.extend({
   methods: {
     ...mapActions("businessDay", [FETCH]),
 
-    itemDeleteSucceeded(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "削除しました。",
-        type: "is-danger"
-      };
-      this.$buefy.toast.open(toastConfig);
-      this.fetchBusinessDays();
+    handleDeleteSucceeded(): void {
+      this.$emit("delete-business-day-succeeded");
+      this._fetch();
     },
 
-    itemEditSucceeded(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "保存しました。",
-        type: "is-success"
-      };
-      this.$buefy.toast.open(toastConfig);
-      this.fetchBusinessDays();
+    handleDeleteFailed(): void {
+      this.$emit("delete-business-day-failed");
     },
 
-    fetchBusinessDays(): void {
+    handleLoadFailed(): void {
+      this.$emit("load-business-day-failed");
+    },
+
+    handleSaveSucceeded(): void {
+      this.$emit("save-business-day-succeeded");
+      this._fetch();
+    },
+
+    handleSaveFailed(): void {
+      this.$emit("save-business-day-failed");
+    },
+
+    handleValidationFailed(): void {
+      this.$emit("validation-failed");
+    },
+
+    _fetch(): void {
       this.isLoading = true;
       this.fetch()
         .catch(() => {
-          const toastConfig: BNoticeConfig = {
-            message: "営業日の取得に失敗しました。",
-            type: "is-danger"
-          };
-          this.$buefy.toast.open(toastConfig);
+          this.$emit("load-business-days-failed");
         })
         .finally(() => {
           this.isLoading = false;
-          this.$emit("fetched-business-days");
+          this.$emit("business-days-loaded");
         });
     }
   },
@@ -73,6 +76,6 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.fetchBusinessDays();
+    this._fetch();
   }
 });

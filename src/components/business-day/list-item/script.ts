@@ -1,17 +1,9 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { BDialogConfig, BModalConfig, BNoticeConfig } from "buefy/types/components";
-
-// component
+import { BDialogConfig, BModalConfig } from "buefy/types/components";
 import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
-
-// entity
 import { BusinessDay } from "@/entity/business-day";
-
-// filter
 import { formatDateJp } from "@/filters/format-date-jp";
-
-// store
 import { DELETE } from "@/store/constant";
 
 export default Vue.extend({
@@ -25,31 +17,32 @@ export default Vue.extend({
   methods: {
     ...mapActions("businessDay", [DELETE]),
 
-    /**
-     * 営業日編集
-     */
-    handleClickEdit(): void {
+    handleShowBusinessDayDialog(): void {
       const config: BModalConfig = {
         parent: this,
         component: BusinessDayDialog,
         hasModalCard: true,
-        scroll: "keep",
         props: {
           id: this.businessDay.id
         },
         events: {
-          "save-success": () => {
-            this.$emit("edit-succeeded");
+          "load-business-day-failed": () => {
+            this.$emit("load-business-day-failed");
+          },
+          "save-succeeded": () => {
+            this.$emit("save-succeeded");
+          },
+          "save-failed": () => {
+            this.$emit("save-failed");
+          },
+          "validation-failed": () => {
+            this.$emit("validation-failed");
           }
         }
       };
-
       this.$buefy.modal.open(config);
     },
 
-    /**
-     * 営業日削除
-     */
     handleClicDelete(): void {
       const businessDay = formatDateJp(this.businessDay.business_date);
       const message = `
@@ -68,12 +61,11 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
-              // todo: error handling
+            .catch(() => {
+              this.$emit("delete-failed");
             });
         }
       };
-
       this.$buefy.dialog.confirm(config);
     }
   },

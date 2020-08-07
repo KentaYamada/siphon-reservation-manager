@@ -46,8 +46,6 @@ const getters: GetterTree<BusinessDayState, RootState> = {
       return item.id === timezoneId;
     });
 
-    console.log(timezone);
-
     return _.isNil(timezone) ? null : timezone;
   },
 

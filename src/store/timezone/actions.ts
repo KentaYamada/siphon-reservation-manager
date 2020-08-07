@@ -1,5 +1,4 @@
 import { ActionTree } from "vuex";
-import moment from "moment";
 import _ from "lodash";
 import { Timezone } from "@/entity/timezone";
 import { TimezoneService } from "@/services/firestore/timezone-service";

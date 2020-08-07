@@ -1,10 +1,6 @@
 import { MutationTree } from "vuex";
-
-// entity
 import { BusinessDay } from "@/entity/business-day";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
-
-// store
 import { INITIALIZE, SET_ITEM, SET_ITEMS, SET_SELECTABLE_TIMEZONES } from "@/store/constant";
 import { BusinessDayState } from "@/store/business-day";
 

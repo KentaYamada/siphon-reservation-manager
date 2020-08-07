@@ -1,13 +1,6 @@
 import Vue from "vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-
-// store
-import { FETCH, HAS_ITEMS, SET_ITEMS } from "@/store/constant";
-
-// entity
+import { BNoticeConfig } from "buefy/types/components";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
-
-// component
 import ReservationList from "@/components/reservations/list/ReservationList.vue";
 import ReservationSearchForm from "@/components/reservations/search/ReservationSearchForm.vue";
 
@@ -16,40 +9,45 @@ export default Vue.extend({
     ReservationList,
     ReservationSearchForm
   },
-  computed: {
-    ...mapState("reservation", ["reservations"]),
-    ...mapGetters("reservation", [HAS_ITEMS])
-  },
   methods: {
-    ...mapActions("reservation", [FETCH]),
-    ...mapMutations("reservation", [SET_ITEMS]),
-
-    /**
-     * 検索パラメータ更新イベント
-     */
-    updateSearchOptions(options: ReservationSearchOption): void {
-      this.$data.options = options;
-
-      if (options.reservation_date_id !== "") {
-        this.fetch(options);
-      }
+    handleSearch(option: ReservationSearchOption): void {
+      this.option = option;
+      this.isLoading = true;
     },
 
-    reFetch(): void {
-      this.fetch(this.options);
+    handleLoadSucceeded(): void {
+      this.isLoading = false;
+    },
+
+    handleLoadFailure(): void {
+      this.isLoading = false;
+      const toastConfig: BNoticeConfig = {
+        message: "予約データの取得に失敗しました",
+        type: "is-danger"
+      };
+
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleLoadSearchDataFailure(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "データの初期化に失敗しました",
+        type: "is-danger"
+      };
+
+      // todo: redirect 503 page
+      this.$buefy.toast.open(toastConfig);
     }
   },
   data() {
-    const options: ReservationSearchOption = {
+    const option: ReservationSearchOption = {
       reservation_date_id: "",
       reservation_time_id: ""
     };
 
     return {
-      options: options
+      isLoading: false,
+      option: option
     };
-  },
-  mounted() {
-    this.setItems([]);
   }
 });

@@ -1,4 +1,4 @@
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 import { mapActions, mapMutations, mapState } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import _ from "lodash";
@@ -34,15 +34,17 @@ export default Vue.extend({
     handleClickSave(): void {
       this.$v.$touch();
 
-      if (!this.$v.$invalid) {
+      if (this.$v.$invalid) {
+        this.$emit("validation-failed");
+      } else {
         this.isSaving = true;
         this.save(this.timezone)
           .then(() => {
+            this.$emit("save-succeeded");
             this.$emit("close");
-            this.$emit("save-success");
           })
           .catch(() => {
-            // todo: error handling
+            this.$emit("save-failed");
           })
           .finally(() => {
             this.isSaving = false;
@@ -62,9 +64,14 @@ export default Vue.extend({
     if (_.isNil(this.id)) {
       this.timezone = _.clone(this.model);
     } else {
-      this.fetchById(this.id).then(() => {
-        this.timezone = _.clone(this.model);
-      });
+      this.fetchById(this.id)
+        .then(() => {
+          this.timezone = _.clone(this.model);
+        })
+        .catch(() => {
+          this.$emit("load-timezone-failed");
+          this.$emit("close");
+        });
     }
   }
 });

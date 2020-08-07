@@ -2,20 +2,33 @@
     <div class="column is-three-fifths">
         <div class="container">
             <div class="box">
-                <h4 class="title">
-                    <i class="fas fa-calendar-check"></i>
-                    予約状況
-                </h4>
-                <div class="search-form-container">
-                    <reservation-search-form
-                        :searchOptions="options"
-                        @update-search-options="updateSearchOptions" />
+                <div class="page-header">
+                    <h4 class="title">
+                        <i class="fas fa-calendar-check"></i>
+                        予約状況
+                    </h4>
                 </div>
-                <div class="divider"></div>
-                <reservation-list
-                    :reservations="reservations"
-                    :hasItems="hasItems"
-                    @delete-succeeded="reFetch()"/>
+
+                <div class="page-content">
+                    <div class="search-form-container">
+                        <reservation-search-form
+                            :search-option="option"
+                            :is-loading="isLoading"
+                            @load-search-data-failure="handleLoadSearchDataFailure"
+                            @search="handleSearch">
+                        </reservation-search-form>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="list-container">
+                        <reservation-list
+                            :search-option="option"
+                            :is-loading="isLoading"
+                            @load-succeeded="handleLoadSucceeded"
+                            @load-failure="handleLoadFailure">
+                        </reservation-list>
+                        <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,46 +1,53 @@
-import Vue, { PropType } from "vue";
-import { mapActions, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
-
-// entity
+import Vue from "vue";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
-
-// store
-import { FETCH } from "@/store/constant";
+import { formatDateJp } from "@/filters/format-date-jp";
+import { timePeriod } from "@/filters/time-period";
+import { FETCH_BUSINESS_DATE_AFTER_TODAY, GET_SELECTABLE_TIMEZONES } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-search-form/>",
-  props: {
-    searchOptions: {
-      required: true,
-      type: Object as PropType<ReservationSearchOption>
-    }
-  },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
-    ...mapState("timezone", ["timezones"])
+    ...mapGetters("businessDay", {
+      getSelectableTimezones: GET_SELECTABLE_TIMEZONES
+    }),
+
+    timezones(): Array<SelectableTimezone> {
+      return this.getSelectableTimezones(this.option.reservation_date_id);
+    }
   },
   methods: {
     ...mapActions("businessDay", {
-      fetchBusinessDays: FETCH
+      fetch: FETCH_BUSINESS_DATE_AFTER_TODAY
     }),
-    ...mapActions("timezone", {
-      fetchTimezones: FETCH
-    }),
+
+    handleChangeReservationDate() {
+      this.option.reservation_time_id = "";
+    },
 
     handleSearch(): void {
-      this.$emit("update-search-options", this.searchOptions);
+      this.$emit("search", this.option);
     }
   },
-  mounted() {
-    const promises = [this.fetchTimezones(), this.fetchBusinessDays()];
+  filters: {
+    formatDateJp,
+    timePeriod
+  },
+  data() {
+    const option: ReservationSearchOption = {
+      reservation_date_id: "",
+      reservation_time_id: ""
+    };
 
-    Promise.all(promises).catch(() => {
-      const toastConfig: BNoticeConfig = {
-        message: "データの読み込みに失敗しました。",
-        type: "is-danger"
-      };
-      this.$buefy.toast.open(toastConfig);
+    return {
+      option: option
+    };
+  },
+  mounted() {
+    this.fetch().catch(() => {
+      this.$emit("load-search-data-failure");
     });
   }
 });

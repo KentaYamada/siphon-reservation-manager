@@ -16,8 +16,16 @@
                             営業日
                         </h4>
                         <business-day-list 
-                            :refetch-list="isRefetchBusinessDays"
-                            @fetched-business-days="fetchedBusinessDays"/>
+                            :is-created-new-data="isCreatedBusinessDay"
+                            @delete-business-day-succeeded="handleDeleteBusinessDaySucceeded"
+                            @delete-business-day-failed="handleDeleteBusinessDayFailed"
+                            @business-days-loaded="handleBusinessDaysLoaded"
+                            @load-business-day-failed="handleLoadBusinessDayFailed"
+                            @load-business-days-failed="handleLoadBusinessDaysFailed"
+                            @save-business-day-succeeded="handleSaveBusinessDaySucceeded"
+                            @save-business-day-failed="handleSaveBusinessDayFailed"
+                            @validation-failed="handleValidationFailed">
+                        </business-day-list>
                     </div>
                     <div class="timezone-list-container">
                         <h4 class="title is-size-5">
@@ -25,8 +33,16 @@
                             予約時間帯
                         </h4>
                         <timezone-list 
-                            :is-refetch-list="isRefetchTimezones" 
-                            @fetched-timezones="fetchedTimezones" />
+                            :is-created-new-data="isCreatedTimezone" 
+                            @delete-timezone-succeeded="handleDeleteTimezoneSucceeded"
+                            @delete-timezone-failed="handleDeleteTimezoneFailed"
+                            @load-timezones-failed="handleLoadTimezonesFailed"
+                            @load-timezone-failed="handleLoadTimezoneFailed"
+                            @save-timezone-succeeded="handleSaveTimezoneSuceeded"
+                            @save-timezone-failed="handleSaveTimezoneFailed"
+                            @timezones-loaded="handleTimezonesLoaded"
+                            @validation-failed="handleValidationFailed">
+                        </timezone-list>
                     </div>
                 </div>
 
@@ -58,7 +74,7 @@
 
                 <button type="button"
                         class="fixed-button menu-button"
-                        @click="toggleAddMenuButtons()">
+                        @click="handleToggleMenuButtons()">
                     <i class="fas fa-plus plus-icon"></i>
                 </button>
             </div>

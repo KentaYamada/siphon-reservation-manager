@@ -4,7 +4,6 @@ import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import _ from "lodash";
-import firebase from "@/plugins/firebase";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import { ReservationSeatService } from "@/services/firestore/reservation-seat-service";
 import { RootState } from "@/store";
@@ -21,75 +20,51 @@ import {
   SET_RESERVATION_SEATS
 } from "@/store/constant";
 
-// firestore collection name
-const COLLECTION_NAME = "reservations";
-const RESERVATION_SEATS_COLLECTION = "reservation_seats";
-
 const actions: ActionTree<ReservationState, RootState> = {
-  /**
-   * 予約一覧取得
-   * @param options
-   */
-  [FETCH]: async ({ commit }, options: ReservationSearchOption) => {
-    const db = firebase.firestore();
+  [FETCH]: async ({ commit }, option: ReservationSearchOption) => {
+    const reservationService = new ReservationService();
+    const reservationRef = await reservationService.fetch(option);
+    const reservations: Array<Reservation> = _.chain(reservationRef.docs)
+      .map(doc => {
+        return {
+          id: doc.id,
+          reservation_date: doc.data()?.reservation_date.toDate(),
+          reservation_date_id: doc.data()?.reservation_date_id,
+          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
+          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
+          reservation_time_id: doc.data()?.reservation_time_id,
+          reserver_name: doc.data()?.reserver_name,
+          reservation_seats: [],
+          number_of_reservations: doc.data()?.number_of_reservations,
+          tel: doc.data()?.tel,
+          mail: doc.data()?.mail,
+          comment: doc.data()?.comment
+        } as Reservation;
+      })
+      .orderBy("reservation_date_id", "asc")
+      .value();
 
-    let reservationsQuery = db
-      .collection(COLLECTION_NAME)
-      .where("reservation_date_id", "==", options.reservation_date_id);
-    let reservationSeatsQuery = db
-      .collection(RESERVATION_SEATS_COLLECTION)
-      .where("reservation_date_id", "==", options.reservation_date_id);
+    const reservationSeatService = new ReservationSeatService();
+    const reservationSeatRef = await reservationSeatService.fetch(option);
+    const seats: Array<ReservationSeat> = _.chain(reservationSeatRef.docs)
+      .map(doc => {
+        return {
+          id: doc.id,
+          seat_no: doc.data()?.seat_no,
+          is_reserved: doc.data()?.is_reserved,
+          is_selected: false,
+          reservation_id: doc.data()?.reservation_id,
+          reservation_date: doc.data()?.reservation_date.toDate(),
+          reservation_date_id: doc.data()?.reservation_date_id,
+          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
+          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
+          reservation_time_id: doc.data()?.reservation_time_id
+        } as ReservationSeat;
+      })
+      .orderBy("seat_no", "asc")
+      .value();
 
-    if (options.reservation_time_id !== "") {
-      reservationsQuery = reservationsQuery.where("reservation_time_id", "==", options.reservation_time_id);
-      reservationSeatsQuery = reservationSeatsQuery.where("reservation_time_id", "==", options.reservation_time_id);
-    }
-
-    let items: Reservation[] = [];
-    let seats: ReservationSeat[] = [];
-    const reservationsPromise = await reservationsQuery.get();
-    const reservationSeatsPromise = await reservationSeatsQuery.get();
-
-    reservationsPromise.forEach(doc => {
-      const data = doc.data();
-      const item: Reservation = {
-        id: doc.id,
-        reservation_date: data.reservation_date.toDate(),
-        reservation_date_id: data.reservation_date_id,
-        reservation_start_time: data.reservation_start_time.toDate(),
-        reservation_end_time: data.reservation_end_time.toDate(),
-        reservation_time_id: data.reservation_time_id,
-        reserver_name: data.reserver_name,
-        reservation_seats: [],
-        number_of_reservations: data.number_of_reservations,
-        tel: data.tel,
-        mail: data.mail,
-        comment: data.comment
-      };
-      items.push(item);
-    });
-
-    reservationSeatsPromise.forEach(doc => {
-      const data = doc.data();
-      const seat: ReservationSeat = {
-        id: doc.id,
-        seat_no: data.seat_no,
-        is_reserved: data.is_reserved,
-        is_selected: false,
-        reservation_id: data.reservation_id,
-        reservation_date: data.reservation_date.toDate(),
-        reservation_date_id: data.reservation_date_id,
-        reservation_start_time: data.reservation_start_time.toDate(),
-        reservation_end_time: data.reservation_end_time.toDate(),
-        reservation_time_id: data.reservation_time_id
-      };
-      seats.push(seat);
-    });
-
-    items = _.orderBy(items, ["reservation_date_id", "reservation_time_id"]);
-    seats = _.orderBy(seats, ["reservation_date_id", "reservation_time_id", "seat_no"]);
-
-    _.each(items, (item: Reservation) => {
+    _.each(reservations, (item: Reservation) => {
       item.reservation_seats = _.chain(seats)
         .cloneDeep()
         .filter((seat: ReservationSeat) => {
@@ -100,67 +75,45 @@ const actions: ActionTree<ReservationState, RootState> = {
         })
         .each((seat: ReservationSeat) => {
           const isMyReservation = item.id === seat.reservation_id;
-          const isSelected = isMyReservation && seat.is_reserved;
-          const isReserved = !isMyReservation && seat.is_reserved;
-          seat.is_reserved = isReserved;
-          seat.is_selected = isSelected;
+          seat.is_reserved = !isMyReservation && seat.is_reserved;
+          seat.is_selected = isMyReservation && seat.is_reserved;
         })
         .value();
     });
 
-    commit(SET_ITEMS, items);
+    commit(SET_ITEMS, reservations);
 
-    return Promise.all([reservationsPromise, reservationSeatsPromise]);
+    return Promise.all([reservationSeatRef, reservationSeatRef]);
   },
 
-  /**
-   * 予約座席データ取得
-   */
-  [FETCH_RESERVATION_SEATS]: async ({ commit }, options: ReservationSeatSearchOption) => {
-    if (options.reservation_date_id == "" || options.reservation_time_id == "") {
-      return Promise.reject();
+  [FETCH_RESERVATION_SEATS]: async ({ commit }, searchOption: ReservationSeatSearchOption) => {
+    const reservationSeatService = new ReservationSeatService();
+    const reservationSeatsRef = await reservationSeatService.fetch(searchOption);
+
+    if (!reservationSeatsRef.empty) {
+      const seats: Array<ReservationSeat> = _.chain(reservationSeatsRef.docs)
+        .map(doc => {
+          const isMyReservation = searchOption.reservation_id === doc.data()?.reservation_id;
+          return {
+            id: doc.id,
+            seat_no: doc.data()?.seat_no,
+            is_reserved: !isMyReservation && doc.data()?.is_reserved,
+            is_selected: isMyReservation && doc.data()?.is_reserved,
+            reservation_id: doc.data()?.reservation_id,
+            reservation_date: doc.data()?.reservation_date.toDate(),
+            reservation_date_id: doc.data()?.reservation_date_id,
+            reservation_start_time: doc.data()?.reservation_start_time.toDate(),
+            reservation_end_time: doc.data()?.reservation_end_time.toDate(),
+            reservation_time_id: doc.data()?.reservation_time_id
+          } as ReservationSeat;
+        })
+        .orderBy("seat_no", "asc")
+        .value();
+
+      commit(SET_RESERVATION_SEATS, seats);
     }
-
-    const collection = firebase.firestore().collection(RESERVATION_SEATS_COLLECTION);
-    const query = collection
-      .where("reservation_date_id", "==", options.reservation_date_id)
-      .where("reservation_time_id", "==", options.reservation_time_id);
-
-    const $promise = await query.get();
-    let items: ReservationSeat[] = [];
-
-    $promise.forEach(doc => {
-      const data = doc.data();
-      const isMyReservation = options.reservation_id === data.reservation_id;
-      const isSelected = isMyReservation && data.is_reserved;
-      const isReserved = !isMyReservation && data.is_reserved;
-      const item: ReservationSeat = {
-        id: doc.id,
-        seat_no: data.seat_no,
-        is_reserved: isReserved,
-        is_selected: isSelected,
-        reservation_id: data.reservation_id,
-        reservation_date: data.reservation_date.toDate(),
-        reservation_date_id: data.reservation_date_id,
-        reservation_start_time: data.reservation_start_time.toDate(),
-        reservation_end_time: data.reservation_end_time.toDate(),
-        reservation_time_id: data.reservation_time_id
-      };
-      items.push(item);
-    });
-
-    if (items.length > 0) {
-      items = _.orderBy(items, ["seat_no"], ["asc"]);
-      commit(SET_RESERVATION_SEATS, items);
-    }
-
-    return await $promise;
   },
 
-  /**
-   * 予約情報取得
-   * @param id
-   */
   [FETCH_BY_ID]: async ({ commit }, id: string) => {
     const reservationService = new ReservationService();
     const reservationRef = await reservationService.fetchById(id);
@@ -214,201 +167,27 @@ const actions: ActionTree<ReservationState, RootState> = {
     };
 
     commit(SET_ITEM, reservation);
+
+    return Promise.all([reservationRef, reservationSeatsRef]);
   },
 
-  /**
-   * 予約登録
-   * @param reservation
-   */
   [SAVE]: async ({ commit }, reservation: Reservation) => {
-    const selectedSeatNo: number[] = [];
+    const service = new ReservationService();
+    const promise = service.save(reservation);
 
-    _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-      if (seat.is_selected) {
-        selectedSeatNo.push(seat.seat_no);
-      }
-    });
+    promise.then(() => commit(SET_ITEM, reservation));
 
-    const db = firebase.firestore();
-    const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
-    const query = reservationSeats
-      .where("reservation_date_id", "==", reservation.reservation_date_id)
-      .where("reservation_time_id", "==", reservation.reservation_time_id)
-      .where("is_reserved", "==", true);
-    const $promise = await query.get();
-    let hasReserved = false;
-
-    _.each($promise.docs, doc => {
-      if (doc.data().reservation_id !== reservation.id && _.includes(selectedSeatNo, doc.data().seat_no)) {
-        hasReserved = true;
-        return false;
-      }
-    });
-
-    if (hasReserved) {
-      return Promise.reject({
-        message: "選択した座席は予約されています。お手数ですが再選択してください。",
-        refetch_seats: true
-      });
-    }
-
-    const $transaction = db.runTransaction(async transaction => {
-      const reservations = db.collection(COLLECTION_NAME);
-      const reservationRef = reservation.id ? reservations.doc(reservation.id) : reservations.doc();
-      const reservationData = {
-        reservation_date: reservation.reservation_date,
-        reservation_date_id: reservation.reservation_date_id,
-        reservation_start_time: reservation.reservation_start_time,
-        reservation_end_time: reservation.reservation_end_time,
-        reservation_time_id: reservation.reservation_time_id,
-        reserver_name: reservation.reserver_name,
-        number_of_reservations: reservation.number_of_reservations,
-        tel: reservation.tel,
-        mail: reservation.mail,
-        comment: reservation.comment
-      };
-      const $hasReservation = await transaction.get(reservationRef);
-
-      if ($hasReservation.exists) {
-        const reservedSeats = await reservationSeats.where("reservation_id", "==", reservation.id).get();
-        reservedSeats.forEach(doc => {
-          transaction.update(doc.ref, { reservation_id: null, is_reserved: false });
-        });
-        transaction.update(reservationRef, reservationData);
-      } else {
-        transaction.set(reservationRef, reservationData);
-      }
-
-      const query = reservationSeats
-        .where("reservation_date", "==", reservation.reservation_date)
-        .where("reservation_time_id", "==", reservation.reservation_time_id);
-      const $reservationSeats = await query.get();
-
-      $reservationSeats.forEach(doc => transaction.delete(doc.ref));
-
-      _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-        const seatRef = reservationSeats.doc();
-        let reservationId = null;
-        let isReserved = null;
-
-        if (seat.is_reserved) {
-          reservationId = seat.reservation_id;
-          isReserved = seat.is_reserved;
-        } else {
-          if (seat.is_selected) {
-            reservationId = seat.reservation_id ? seat.reservation_id : reservationRef.id;
-            isReserved = true;
-          }
-        }
-
-        const seatData = {
-          seat_no: seat.seat_no,
-          is_reserved: isReserved,
-          reservation_id: reservationId,
-          reservation_date: reservation.reservation_date,
-          reservation_date_id: reservation.reservation_date_id,
-          reservation_start_time: reservation.reservation_start_time,
-          reservation_end_time: reservation.reservation_end_time,
-          reservation_time_id: reservation.reservation_time_id
-        };
-
-        transaction.set(seatRef, seatData);
-      });
-
-      return reservationRef.id;
-    });
-
-    return $transaction;
+    return promise;
   },
 
-  /**
-   * 貸切データ登録
-   */
   [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
-    const db = firebase.firestore();
-    const $transaction = db.runTransaction(async transaction => {
-      const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
-      const query = reservationSeats
-        .where("reservation_date_id", "==", reservation.reservation_date_id)
-        .where("reservation_time_id", "==", reservation.reservation_time_id);
-      const $promise = await query.get();
-
-      if (!$promise.empty) {
-        return Promise.reject();
-      }
-
-      const reservationRef = db.collection(COLLECTION_NAME).doc();
-      const reservationData = {
-        reservation_date: reservation.reservation_date,
-        reservation_date_id: reservation.reservation_date_id,
-        reservation_start_time: reservation.reservation_start_time,
-        reservation_end_time: reservation.reservation_end_time,
-        reservation_time_id: reservation.reservation_time_id,
-        reserver_name: reservation.reserver_name,
-        number_of_reservations: reservation.number_of_reservations,
-        tel: reservation.tel,
-        mail: reservation.mail,
-        comment: reservation.comment
-      };
-
-      transaction.set(reservationRef, reservationData);
-
-      _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-        const reservationSeatRef = reservationSeats.doc();
-        const seatData = {
-          seat_no: seat.seat_no,
-          is_reserved: true,
-          reservation_id: reservationRef.id,
-          reservation_date: reservation.reservation_date,
-          reservation_date_id: reservation.reservation_date_id,
-          reservation_start_time: reservation.reservation_start_time,
-          reservation_end_time: reservation.reservation_end_time,
-          reservation_time_id: reservation.reservation_time_id
-        };
-
-        transaction.set(reservationSeatRef, seatData);
-      });
-
-      return reservationRef.id;
-    });
-
-    return $transaction;
+    const service = new ReservationService();
+    return service.saveAllReservation(reservation);
   },
 
-  /**
-   * 予約取消
-   * @param id
-   */
   [CANCEL]: async ({ commit }, id: string) => {
-    if (!id) {
-      return Promise.reject("not found");
-    }
-    const db = firebase.firestore();
-    const $transaction = db.runTransaction(async transaction => {
-      const reservationRef = db.collection(COLLECTION_NAME).doc(id);
-
-      return await transaction.get(reservationRef).then(doc => {
-        if (!doc.exists) {
-          return Promise.reject("reservation not found");
-        }
-
-        transaction.delete(reservationRef);
-
-        const query = db.collection(RESERVATION_SEATS_COLLECTION).where("reservation_id", "==", id);
-
-        return query.get().then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            const updateData = {
-              is_reserved: false,
-              reservation_id: null
-            };
-            transaction.update(doc.ref, updateData);
-          });
-        });
-      });
-    });
-
-    return await $transaction;
+    const service = new ReservationService();
+    return service.cancel(id);
   }
 };
 

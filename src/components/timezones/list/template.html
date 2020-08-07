@@ -4,8 +4,13 @@
             v-for="timezone in timezones"
             :key="timezone.id"
             :timezone="timezone"
-            @delete-succeeded="itemDeleteSucceeded"
-            @edit-succeeded="itemEditSucceeded" />
+            @delete-succeeded="handleDeleteSucceeded"
+            @delete-failed="handleDeleteFailed"
+            @load-timezone-failed="handleLoadDataFailed"
+            @save-succeeded="handleSaveSucceeded"
+            @save-failed="handleSaveFailed"
+            @validation-failed="handleValidationFailed">
+        </timezone-list-item>
         <div class="list-item" v-if="visibleEmptyItem">
             <p class="has-text-centered">表示できるデータがありません</p>
         </div>

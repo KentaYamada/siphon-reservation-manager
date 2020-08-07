@@ -1,25 +1,28 @@
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
-
-// component
+import { required, email } from "vuelidate/lib/validators";
+import { tel } from "@/plugins/validate";
+import _ from "lodash";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
-
-// entity
-import { Reservation } from "@/entity/reservation";
-import { Timezone } from "@/entity/timezone";
-
-// store
+import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
+import { formatDateJp } from "@/filters/format-date-jp";
+import { timePeriod } from "@/filters/time-period";
 import {
-  FETCH,
   FETCH_BUSINESS_DATE_AFTER_TODAY,
+  FETCH_BY_ID,
+  FETCH_RESERVATION_SEATS,
   GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
-  GET_RESERVABLE_TIMEZONES,
-  GET_TIMEZONES_BY_RESERVATION_DATE,
+  GET_SELECTABLE_TIMEZONES,
+  GET_SELECTED_TIMEZONE,
   HAS_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
+  INITIALIZE,
+  INITIALIZE_RESERVATION_SEATS,
   RESET_RESERVATION_TIMEZONE,
+  RESET_RESERVATION_SEATS,
+  SAVE,
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE,
   IS_FULL_OF_RESERVED
@@ -31,88 +34,165 @@ export default Vue.extend({
     SelectableReservationSeatList
   },
   props: {
+    id: {
+      required: false,
+      type: String,
+      default: ""
+    }
+  },
+  validations: {
     reservation: {
-      required: true,
-      type: Object as PropType<Reservation>
-    },
-    validations: {
-      required: true,
-      type: Object
-    },
-    isLoadingSeats: {
-      required: true,
-      type: Boolean
+      reservation_date: {
+        required
+      },
+      reservation_start_time: {
+        required
+      },
+      reserver_name: {
+        required
+      },
+      number_of_reservations: {
+        required
+      },
+      tel: {
+        required,
+        tel
+      },
+      mail: {
+        required,
+        email
+      }
     }
   },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
+    ...mapState("reservation", ["reservation"]),
     ...mapGetters("businessDay", {
-      getBusinessDayById: GET_BY_ID
+      getBusinessDayById: GET_BY_ID,
+      getSelectableTimezones: GET_SELECTABLE_TIMEZONES
     }),
-    ...mapGetters("reservation", [
-      GET_RESERVABLE_PEOPLE,
-      HAS_RESERVATION_SEATS,
-      HAS_SELECTED_SEATS,
-      IS_FULL_OF_RESERVED
-    ]),
-    ...mapGetters("timezone", {
-      timezones: GET_RESERVABLE_TIMEZONES,
-      getTimezonesByReservationDate: GET_TIMEZONES_BY_RESERVATION_DATE,
-      getTimezoneById: GET_BY_ID
+    ...mapGetters("businessDay", {
+      getSelectedTimezone: GET_SELECTED_TIMEZONE
+    }),
+    ...mapGetters("reservation", {
+      getReservablePeople: GET_RESERVABLE_PEOPLE,
+      hasReservationSeats: HAS_RESERVATION_SEATS,
+      hasSelectedSeats: HAS_SELECTED_SEATS,
+      isFullOfReserved: IS_FULL_OF_RESERVED
     }),
 
-    reservableTimezones(): Timezone[] {
-      if (this.reservation && this.reservation.reservation_date) {
-        return this.getTimezonesByReservationDate(this.reservation.reservation_date);
-      }
-
-      return this.timezones;
+    timezones(): Array<SelectableTimezone> {
+      return this.getSelectableTimezones(this.reservation.reservation_date_id);
     },
 
-    /**
-     * 座席選択を促すメッセージを表示するかどうか
-     */
     visibleSelectionSeatMessage(): boolean {
       return this.hasReservationSeats && !this.isFullOfReserved && !this.hasSelectedSeats;
+    },
+
+    buttonText(): string {
+      return _.isEmpty(this.id) ? "予約する" : "予約内容を変更する";
     }
   },
   methods: {
-    ...mapActions("businessDay", [FETCH_BUSINESS_DATE_AFTER_TODAY]),
-    ...mapActions("timezone", {
-      fetchTimezones: FETCH
+    ...mapActions("businessDay", {
+      fetchBusinessDateAfterToday: FETCH_BUSINESS_DATE_AFTER_TODAY
     }),
-    ...mapMutations("reservation", [RESET_RESERVATION_TIMEZONE, SET_RESERVATION_DATE, SET_RESERVATION_TIMEZONE]),
+    ...mapActions("reservation", {
+      fetchById: FETCH_BY_ID,
+      fetchReservationSeats: FETCH_RESERVATION_SEATS,
+      save: SAVE
+    }),
+    ...mapMutations("reservation", {
+      initialize: INITIALIZE,
+      initializeReservationSeats: INITIALIZE_RESERVATION_SEATS,
+      resetReservationSeats: RESET_RESERVATION_SEATS,
+      resetReservationTimezone: RESET_RESERVATION_TIMEZONE,
+      setReservationDate: SET_RESERVATION_DATE,
+      setReservationTimezone: SET_RESERVATION_TIMEZONE
+    }),
 
-    /**
-     * 予約日変更イベント
-     */
-    onChangeBusinessDay(selectedId: string): void {
+    handleUpdateReservationDate(selectedId: string): void {
       const businessDay = this.getBusinessDayById(selectedId);
       this.setReservationDate(businessDay.business_date);
       this.resetReservationTimezone();
-      this.$emit("update-reservation-date", selectedId);
+      this.option.reservation_date_id = selectedId;
+      this.option.reservation_time_id = "";
+      this._fetchReservationSeats();
     },
 
-    /**
-     * 予約時間変更イベント
-     */
-    onChangeTimezone(selectedId: string): void {
-      this.$emit("update-reservation-time", selectedId);
+    handleUpdateReservationTimezone(selectedId: string): void {
+      const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
+      this.setReservationTimezone(timezone);
+      this.option.reservation_time_id = selectedId;
+      this._fetchReservationSeats();
+    },
+
+    handleSave(): void {
+      this.$v.$touch();
+
+      if (this.$v.$invalid) {
+        this.$emit("validation-failure");
+      } else {
+        this.save(this.reservation)
+          .then((id: string) => {
+            this.$emit("save-succeeded", id);
+          })
+          .catch(error => {
+            this.$emit("save-failure", error);
+          });
+      }
+    },
+
+    _fetchReservationSeats(): void {
+      this.isLoadingSeats = true;
+      this.resetReservationSeats();
+
+      if (!_.isEmpty(this.option.reservation_date_id) && !_.isEmpty(this.option.reservation_time_id)) {
+        this.initializeReservationSeats();
+        this.fetchReservationSeats(this.option)
+          .catch(() => {
+            this.$emit("load-reservation-seats-failure");
+          })
+          .finally(() => {
+            this.isLoadingSeats = false;
+          });
+      }
     }
   },
+  filters: {
+    formatDateJp,
+    timePeriod
+  },
+  data() {
+    const option: ReservationSeatSearchOption = {
+      reservation_id: "",
+      reservation_date_id: "",
+      reservation_time_id: ""
+    };
+
+    return {
+      isLoadingSeats: false,
+      isSaving: false,
+      option: option
+    };
+  },
+  created() {
+    this.initialize();
+    this.$emit("initializing");
+  },
   mounted() {
-    const promises = [this.fetchTimezones(), this.fetchBusinessDateAfterToday()];
+    const promises = [this.fetchBusinessDateAfterToday()];
+
+    if (!_.isEmpty(this.id)) {
+      promises.push(this.fetchById(this.id));
+    }
 
     Promise.all(promises)
       .then(() => {
-        this.$emit("data-loaded");
+        this.$emit("initialized");
       })
       .catch(() => {
-        const toastConfig: BNoticeConfig = {
-          message: "データの初期化に失敗しました。",
-          type: "is-danger"
-        };
-        this.$buefy.toast.open(toastConfig);
+        this.$emit("initialize-failure");
       });
   }
 });

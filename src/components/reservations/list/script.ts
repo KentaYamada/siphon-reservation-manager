@@ -1,8 +1,7 @@
 import Vue, { PropType } from "vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import _ from "lodash";
 import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
-import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { FETCH, HAS_ITEMS } from "@/store/constant";
 

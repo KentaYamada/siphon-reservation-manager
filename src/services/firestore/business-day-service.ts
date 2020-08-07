@@ -104,13 +104,12 @@ export class BusinessDayService {
   }
 
   fetchByAfterToday() {
-    const query = firebase
+    return firebase
       .firestore()
       .collection(this.COLLECTION_NAME)
       .where("business_date", ">=", moment().toDate())
-      .orderBy("business_date", "desc");
-
-    return query.get();
+      .orderBy("business_date", "desc")
+      .get();
   }
 
   async fetchById(id: string) {

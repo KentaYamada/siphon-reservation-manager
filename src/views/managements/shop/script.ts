@@ -166,6 +166,14 @@ export default Vue.extend({
       this.$buefy.modal.open(modalConfig);
     },
 
+    handleSyncSelectableTimezonesFailed(): void {
+      const toastConfig: BNoticeConfig = {
+        message: "予約時間帯を反映することができませんでした",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(toastConfig);
+    },
+
     handleToggleMenuButtons(): void {
       this.showMenuButton = !this.showMenuButton;
     },

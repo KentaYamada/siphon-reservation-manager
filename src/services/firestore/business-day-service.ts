@@ -62,11 +62,23 @@ export class BusinessDayService {
         is_pause: businessDay.is_pause
       });
 
+      const timezonesRef = businessDayRef.collection(this.SUB_COLLECTION_NAME);
+      const existTimezones = await timezonesRef.get();
+
       _.each(businessDay.timezones, async (timezone: SelectableTimezone) => {
-        const timezoneRef = businessDayRef.collection(this.SUB_COLLECTION_NAME).doc(timezone.id);
-        transaction.update(timezoneRef, {
-          selected: timezone.selected
-        });
+        const timezoneRef = timezonesRef.doc(timezone.id);
+
+        if (existTimezones.empty) {
+          transaction.set(timezoneRef, {
+            start_time: timezone.start_time,
+            end_time: timezone.end_time,
+            selected: timezone.selected
+          });
+        } else {
+          transaction.update(timezoneRef, {
+            selected: timezone.selected
+          });
+        }
       });
 
       return businessDayRef;

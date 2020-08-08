@@ -35,6 +35,9 @@ export default Vue.extend({
           "save-failed": () => {
             this.$emit("save-failed");
           },
+          "sync-selectable-timezones-failed": () => {
+            this.$emit("sync-selectable-timezones-failed");
+          },
           "validation-failed": () => {
             this.$emit("validation-failed");
           }

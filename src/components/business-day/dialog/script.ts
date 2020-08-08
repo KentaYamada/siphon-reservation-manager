@@ -27,7 +27,15 @@ export default Vue.extend({
   computed: {
     ...mapState("businessDay", {
       model: "businessDay"
-    })
+    }),
+
+    availableSyncSelectableTimezones(): boolean {
+      if (_.isNil(this.businessDay) || _.isNil(this.businessDay.timezones)) {
+        return false;
+      }
+
+      return this.businessDay.timezones.length > 0;
+    }
   },
   methods: {
     ...mapActions("businessDay", [FETCH_BY_ID, FETCH_SELECTABLE_TIMEZONES, SAVE]),
@@ -52,6 +60,20 @@ export default Vue.extend({
             this.isSaving = false;
           });
       }
+    },
+
+    handleSyncSelectableTimezones(): void {
+      this.isLoading = true;
+      this.fetchSelectableTimezones()
+        .then(() => {
+          this.businessDay.timezones = _.clone(this.model.timezones);
+        })
+        .catch(() => {
+          this.$emit("sync-selectable-timezones-failed");
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
 
     handleAllCheckTimezones(): void {

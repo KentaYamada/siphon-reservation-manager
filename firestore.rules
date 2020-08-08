@@ -44,6 +44,9 @@ service cloud.firestore {
       allow update: if isAuth() && hasId(businessDayId);
 
       // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
+      match /timezones/{document} {
+        allow create: if isAuth() ;
+      }
       match /timezones/{timezoneId} {
         allow update: if isAuth() && hasId(timezoneId);
       }

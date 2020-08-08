@@ -54,6 +54,10 @@ export default Vue.extend({
       this.$emit("save-business-day-failed");
     },
 
+    handleSyncSelectableTimezonesFailed(): void {
+      this.$emit("sync-selectable-timezones-failed");
+    },
+
     handleValidationFailed(): void {
       this.$emit("validation-failed");
     },

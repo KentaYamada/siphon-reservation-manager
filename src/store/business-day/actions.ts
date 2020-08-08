@@ -118,11 +118,17 @@ const actions: ActionTree<BusinessDayState, RootState> = {
       .sortBy((t: SelectableTimezone) => t.start_time.getHours())
       .value();
     const businessDate = businessDayRef.data()?.business_date.toDate();
+    let isPause = false;
+
+    if (!_.isNil(businessDayRef.data()?.is_pause)) {
+      isPause = businessDayRef.data()?.is_pause;
+    }
+
     const businessDay: BusinessDay = {
       id: businessDayRef.id,
       business_date: businessDate,
       text: moment(businessDate).format("YYYY年MM月DD日"),
-      is_pause: businessDayRef.data()?.is_pause,
+      is_pause: isPause,
       timezones: timezones
     };
 

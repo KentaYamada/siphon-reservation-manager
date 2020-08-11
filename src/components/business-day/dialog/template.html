@@ -10,7 +10,7 @@
             <div class="field">
                 <label class="label">営業日</label>
                 <div class="control">
-                    <b-datepicker v-model="businessDay.business_date"></b-datepicker>
+                    <b-datepicker :min-date="minDate" v-model="businessDay.business_date"></b-datepicker>
                 </div>
                 <div v-if="$v.businessDay.business_date.$error">
                     <small class="help is-danger"

@@ -90,9 +90,10 @@ export default Vue.extend({
   },
   data() {
     return {
+      businessDay: {} as BusinessDay,
       isLoading: false,
       isSaving: false,
-      businessDay: {} as BusinessDay
+      minDate: new Date()
     };
   },
   mounted() {

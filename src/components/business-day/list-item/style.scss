@@ -1,14 +1,6 @@
 .list-item {
-    display: flex;
-    justify-content: space-between;
-
     .is-pause {
-        .fas {
-            margin-right: 6px;
-        }
-    }
-    .business-date,
-    .is-pause {
-        line-height: 38px;
+        font-size: 14px;
+        line-height: 25px;
     }
 }

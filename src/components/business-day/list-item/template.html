@@ -1,13 +1,9 @@
 <div class="list-item">
-    <div class="business-date">
-        {{ businessDay.business_date | formatDateJp }}
-    </div>
-    <div class="is-pause">
-        <p class="has-text-danger has-text-weight-bold" v-if="businessDay.is_pause">
-            <i class="fas fa-store-alt-slash"></i>休止中
-        </p>
-    </div>
-    <div class="buttons">
+    <p>{{ businessDay.business_date | formatDateJp }}</p>
+    <p class="has-text-danger is-pause" v-if="businessDay.is_pause">
+        <i class="fas fa-store-alt-slash"></i>休止中
+    </p>
+    <div class="buttons is-right">
         <button type="button" class="button is-info is-outlined" @click="handleShowBusinessDayDialog()">
             <i class="fas fa-edit"></i>
             <span class="is-hidden-mobile">編集</span>

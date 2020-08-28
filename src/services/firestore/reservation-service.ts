@@ -78,38 +78,35 @@ export class ReservationService {
         });
       } else {
         _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-          const savedSeat = _.find(reservationSeatsRef.docs, doc => {
+          const seatRef = _.find(reservationSeatsRef.docs, doc => {
             return seat.seat_no === doc.data()?.seat_no;
           });
 
-          if (_.isNil(savedSeat)) {
-            // continue loop
-            return;
+          if (_.isNil(seatRef)) {
+            return Promise.reject();
           }
 
           // todo: type safe
-          const seatData: any = {
-            seat_no: seat.seat_no
-          };
+          const seatData: any = {};
 
-          if (_.isNil(savedSeat.data().reservation_id) && seat.is_selected) {
+          if (_.isNil(seatRef.data()?.reservation_id) && seat.is_selected) {
             seatData.reservation_id = reservationRef.id;
             seatData.is_reserved = true;
-            seatData.reservation_id = seat.reservation_id;
             seatData.reservation_date = reservation.reservation_date;
             seatData.reservation_date_id = reservation.reservation_date_id;
+            seatData.reservation_time_id = reservation.reservation_time_id;
             seatData.reservation_start_time = reservation.reservation_start_time;
             seatData.reservation_end_time = reservation.reservation_end_time;
-            seatData.reservation_time_id = reservation.reservation_time_id;
           }
 
-          const isMyReservation = seat.reservation_id === savedSeat.data()?.reservation_id;
+          const isMyReservation = seatRef.data()?.reservation_id === reservationRef.id;
+
           if (isMyReservation && !seat.is_selected) {
             seatData.is_reserved = false;
             seatData.reservation_id = null;
           }
 
-          transaction.update(savedSeat.ref, seatData);
+          transaction.update(seatRef.ref, seatData);
         });
       }
 

@@ -44,6 +44,14 @@ export class ReservationService {
 
       if (existData.exists) {
         transaction.update(reservationRef, reservationData);
+
+        const reservedSeatsRef = await db
+          .collection(this.SUB_COLLECTION_NAME)
+          .where("reservation_id", "==", reservationRef.id)
+          .get();
+        reservedSeatsRef.forEach(doc => {
+          transaction.update(doc.ref, { reservation_id: null, is_reserved: false });
+        });
       } else {
         transaction.set(reservationRef, reservationData);
       }

@@ -29,7 +29,6 @@ const actions: ActionTree<TimezoneState, RootState> = {
       })
       .orderBy((t: Timezone) => moment(t.start_time).format("HHmmss"))
       .value();
-    console.log(timezones);
 
     commit(SET_ITEMS, timezones);
 

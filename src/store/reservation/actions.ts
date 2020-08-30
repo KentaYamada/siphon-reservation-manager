@@ -74,9 +74,9 @@ const actions: ActionTree<ReservationState, RootState> = {
           );
         })
         .each((seat: ReservationSeat) => {
-          const isMyReservation = item.id === seat.reservation_id;
-          seat.is_reserved = !isMyReservation && seat.is_reserved;
-          seat.is_selected = isMyReservation && seat.is_reserved;
+          if (item.id === seat.reservation_id) {
+            seat.is_selected = true;
+          }
         })
         .value();
     });

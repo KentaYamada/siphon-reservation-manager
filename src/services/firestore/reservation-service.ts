@@ -61,7 +61,7 @@ export class ReservationService {
           const seatData: any = {
             seat_no: seat.seat_no,
             is_reserved: false,
-            reservation_id: "",
+            reservation_id: null,
             reservation_date: reservation.reservation_date,
             reservation_date_id: reservation.reservation_date_id,
             reservation_start_time: reservation.reservation_start_time,
@@ -89,7 +89,7 @@ export class ReservationService {
           // todo: type safe
           const seatData: any = {};
 
-          if (_.isNil(seatRef.data()?.reservation_id) && seat.is_selected) {
+          if (_.isEmpty(seatRef.data().reservation_id) && seat.is_selected) {
             seatData.reservation_id = reservationRef.id;
             seatData.is_reserved = true;
             seatData.reservation_date = reservation.reservation_date;
@@ -180,7 +180,7 @@ export class ReservationService {
       const reservationRef = db.collection(this.COLLECTION_NAME).doc(id);
       const existData = await transaction.get(reservationRef);
 
-      if (existData.exists) {
+      if (!existData.exists) {
         return Promise.reject("Reservation not found");
       }
 

@@ -120,7 +120,7 @@ export class BusinessDayService {
       .firestore()
       .collection(this.COLLECTION_NAME)
       .where("business_date", ">=", moment().toDate())
-      .orderBy("business_date", "desc")
+      .orderBy("business_date", "asc")
       .get();
   }
 

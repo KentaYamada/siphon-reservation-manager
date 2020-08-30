@@ -1,5 +1,6 @@
 import { ActionTree } from "vuex";
 import _ from "lodash";
+import moment from "moment";
 import { Timezone } from "@/entity/timezone";
 import { TimezoneService } from "@/services/firestore/timezone-service";
 import { RootState } from "@/store";
@@ -26,8 +27,9 @@ const actions: ActionTree<TimezoneState, RootState> = {
           is_default_select: isDefaultSelect
         } as Timezone;
       })
-      .sortBy((t: Timezone) => t.start_time.getHours())
+      .orderBy((t: Timezone) => moment(t.start_time).format("HHmmss"))
       .value();
+    console.log(timezones);
 
     commit(SET_ITEMS, timezones);
 

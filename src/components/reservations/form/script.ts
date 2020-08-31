@@ -194,6 +194,7 @@ export default Vue.extend({
     Promise.all(promises)
       .then(() => {
         // todo: refactoring
+        this.option.reservation_id = this.id;
         this.option.reservation_date_id = this.reservation.reservation_date_id;
         this.option.reservation_time_id = this.reservation.reservation_time_id;
         this.$emit("initialized");

@@ -130,7 +130,7 @@ export default Vue.extend({
     handleSave(): void {
       this.$v.$touch();
 
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || !this.hasSelectedSeats) {
         this.$emit("validation-failure");
       } else {
         this.save(this.reservation)
@@ -139,6 +139,10 @@ export default Vue.extend({
           })
           .catch(error => {
             this.$emit("save-failure", error);
+
+            if (error.refetch_seats) {
+              this._fetchReservationSeats();
+            }
           });
       }
     },

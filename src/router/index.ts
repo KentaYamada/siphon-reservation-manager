@@ -16,7 +16,8 @@ import {
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
-  FORBIDDEN_URL
+  FORBIDDEN_URL,
+  HELP_MAIL_UNREACHED
 } from "@/router/url";
 
 // Reservation
@@ -34,6 +35,9 @@ import ReservationResendMailAccepted from "@/views/reservations/resend-mail-acce
 // Management
 import Login from "@/views/managements/login/Login.vue";
 import Shop from "@/views/managements/shop/Shop.vue";
+
+// Help
+import HelpMailUnreached from "@/views/helps/mail-unreached/HelpMailUnreached.vue";
 
 // Other
 import Forbidden from "@/views/forbidden/Forbidden.vue";
@@ -136,6 +140,11 @@ const routes: RouteConfig[] = [
     path: FORBIDDEN_URL,
     name: "forbidden",
     component: Forbidden
+  },
+  {
+    path: HELP_MAIL_UNREACHED,
+    name: "help-mail-unreached",
+    component: HelpMailUnreached
   },
   {
     path: "*",

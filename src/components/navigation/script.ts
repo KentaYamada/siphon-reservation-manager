@@ -10,7 +10,8 @@ import {
   INDEX_URL,
   MANAGEMENT_RESERVATION_ALL_RESERVED,
   MANAGEMENT_RESERVATION_LIST_URL,
-  SHOP_SETTING_URL
+  SHOP_SETTING_URL,
+  HELP_MAIL_UNREACHED
 } from "@/router/url";
 
 // store
@@ -51,6 +52,18 @@ const getNavigations = (): Navigation[] => {
           name: "営業設定",
           url: SHOP_SETTING_URL,
           icon: "fa-store"
+        }
+      ]
+    },
+    {
+      name: "トラブルシューティング",
+      url: "",
+      icon: "fa-question-circle",
+      children: [
+        {
+          name: "自動配信メール不着時の対応",
+          url: HELP_MAIL_UNREACHED,
+          icon: "fa-envelope"
         }
       ]
     }

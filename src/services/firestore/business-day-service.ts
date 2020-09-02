@@ -114,15 +114,6 @@ export class BusinessDayService {
       .firestore()
       .collection(this.COLLECTION_NAME)
       .where("business_date", ">=", moment().toDate())
-      .orderBy("business_date", "desc")
-      .get();
-  }
-
-  fetchByAfterToday() {
-    return firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .where("business_date", ">=", moment().toDate())
       .orderBy("business_date", "asc")
       .get();
   }

@@ -42,7 +42,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
   [FETCH_BUSINESS_DATE_AFTER_TODAY]: async ({ commit }) => {
     const service = new BusinessDayService();
-    const businessDaysRef = await service.fetchByAfterToday();
+    const businessDaysRef = await service.fetch();
     const businessDays: Array<BusinessDay> = [];
 
     businessDaysRef.forEach(async doc => {

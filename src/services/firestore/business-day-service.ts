@@ -109,10 +109,13 @@ export class BusinessDayService {
     return transaction;
   }
 
-  async fetch() {
-    const query = firebase.firestore().collection(this.COLLECTION_NAME).orderBy("business_date", "desc");
-
-    return query.get();
+  fetch() {
+    return firebase
+      .firestore()
+      .collection(this.COLLECTION_NAME)
+      .where("business_date", ">=", moment().toDate())
+      .orderBy("business_date", "desc")
+      .get();
   }
 
   fetchByAfterToday() {
@@ -124,7 +127,7 @@ export class BusinessDayService {
       .get();
   }
 
-  async fetchById(id: string) {
+  fetchById(id: string) {
     if (_.isEmpty(id)) {
       return Promise.reject();
     }

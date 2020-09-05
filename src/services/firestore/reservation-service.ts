@@ -95,23 +95,24 @@ export class ReservationService {
           }
 
           // todo: type safe
-          const seatData: any = {};
+          const seatData: any = {
+            reservation_date: reservation.reservation_date,
+            reservation_date_id: reservation.reservation_date_id,
+            reservation_time_id: reservation.reservation_time_id,
+            reservation_start_time: reservation.reservation_start_time,
+            reservation_end_time: reservation.reservation_end_time
+          };
 
           if (_.isEmpty(seatRef.data().reservation_id) && seat.is_selected) {
+            // 予約座席を追加
             seatData.reservation_id = reservationRef.id;
             seatData.is_reserved = true;
-            seatData.reservation_date = reservation.reservation_date;
-            seatData.reservation_date_id = reservation.reservation_date_id;
-            seatData.reservation_time_id = reservation.reservation_time_id;
-            seatData.reservation_start_time = reservation.reservation_start_time;
-            seatData.reservation_end_time = reservation.reservation_end_time;
           }
 
-          const isMyReservation = seatRef.data()?.reservation_id === reservationRef.id;
-
-          if (isMyReservation && !seat.is_selected) {
-            seatData.is_reserved = false;
-            seatData.reservation_id = null;
+          if (seatRef.data()?.reservation_id === reservationRef.id) {
+            // 自身の予約座席
+            seatData.is_reserved = seat.is_selected;
+            seatData.reservation_id = seat.is_selected ? seat.reservation_id : null;
           }
 
           transaction.update(seatRef.ref, seatData);

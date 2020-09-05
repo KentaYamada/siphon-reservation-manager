@@ -1,14 +1,9 @@
 import Vue, { PropType } from "vue";
-
-// entity
-import { Reservation } from "@/entity/reservation";
-
-// filter
-import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
-import { formatReserver } from "@/filters/format-reserver";
-
-// component
+import { mapActions, mapGetters, mapState } from "vuex";
+import _ from "lodash";
 import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
+import { ReservationSearchOption } from "@/entity/reservation-search-option";
+import { FETCH, HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-list/>",
@@ -16,22 +11,51 @@ export default Vue.extend({
     ReservationListItem
   },
   props: {
-    reservations: {
+    searchOption: {
       required: true,
-      type: Array as PropType<Reservation[]>
+      type: Object as PropType<ReservationSearchOption>
     },
-    hasItems: {
+    isLoading: {
       required: true,
       type: Boolean
     }
   },
-  filters: {
-    formatReservationDatetime,
-    formatReserver
+  computed: {
+    ...mapState("reservation", ["reservations"]),
+    ...mapGetters("reservation", {
+      hasItems: HAS_ITEMS
+    })
   },
   methods: {
+    ...mapActions("reservation", {
+      fetch: FETCH
+    }),
+
     handleDeleteSucceeded() {
-      this.$emit("delete-succeeded");
+      this._fetch();
+    },
+
+    _fetch() {
+      if (!_.isEmpty(this.searchOption.reservation_date_id)) {
+        this.fetch(this.searchOption)
+          .then(() => {
+            this.$emit("load-succeeded");
+          })
+          .catch(() => {
+            this.$emit("load-failure");
+          });
+      }
     }
+  },
+  watch: {
+    // todo: watchをトリガーにするのか見直し
+    isLoading: function (newVal: boolean, oldVal: boolean): void {
+      if (newVal) {
+        this._fetch();
+      }
+    }
+  },
+  mounted() {
+    this._fetch();
   }
 });

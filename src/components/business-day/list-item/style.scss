@@ -1,8 +1,6 @@
 .list-item {
-    display: flex;
-    justify-content: space-between;
-
-    .business-date {
-        line-height: 38px;
+    .is-pause {
+        font-size: 14px;
+        line-height: 25px;
     }
 }

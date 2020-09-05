@@ -1,14 +1,8 @@
 import { MutationTree } from "vuex";
-
-// entity
+import _ from "lodash";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
-import { Timezone } from "@/entity/timezone";
-
-// plugin
-import _ from "lodash";
-
-// store
+import { SelectableTimezone } from "@/entity/selectable-timezone";
 import {
   INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
@@ -21,13 +15,9 @@ import {
   SET_RESERVATION_SEATS,
   SET_RESERVATION_TIMEZONE
 } from "@/store/constant";
-import { ReservationState } from "@/store/reservation";
+import { ReservationState, MAX_NUMBER_OF_RESERVATIONS } from "@/store/reservation";
 
 const mutations: MutationTree<ReservationState> = {
-  /**
-   * 予約データ初期化
-   * @param state
-   */
   [INITIALIZE]: (state: ReservationState): void => {
     const reservation: Reservation = {
       reservation_date: null,
@@ -48,27 +38,21 @@ const mutations: MutationTree<ReservationState> = {
 
   [INITIALIZE_RESERVATION_SEATS]: (state: ReservationState): void => {
     if (state.reservation) {
-      // const seatNo = [1, 2, 3, 4, 5];
-      const seatNo = [1, 2, 3, 4];
-      const items: ReservationSeat[] = [];
-
-      _.each(seatNo, (no: number) => {
-        const item: ReservationSeat = {
-          seat_no: no,
-          is_reserved: false,
-          is_selected: false,
-          reservation_id: "",
-          reservation_date: null,
-          reservation_date_id: "",
-          reservation_start_time: null,
-          reservation_end_time: null,
-          reservation_time_id: ""
-        };
-
-        items.push(item);
-      });
-
-      state.reservation.reservation_seats = items;
+      state.reservation.reservation_seats = _.chain(_.range(MAX_NUMBER_OF_RESERVATIONS / 2))
+        .map(no => {
+          return {
+            seat_no: no + 1,
+            is_reserved: false,
+            is_selected: false,
+            reservation_id: "",
+            reservation_date: null,
+            reservation_date_id: "",
+            reservation_start_time: null,
+            reservation_end_time: null,
+            reservation_time_id: ""
+          } as ReservationSeat;
+        })
+        .value();
     }
   },
 
@@ -78,38 +62,20 @@ const mutations: MutationTree<ReservationState> = {
     }
   },
 
-  /**
-   * 予約データセット
-   * @param state
-   * @param item
-   */
   [SET_ITEM]: (state: ReservationState, item: Reservation): void => {
     state.reservation = item;
   },
 
-  /**
-   * 予約一覧データセット
-   * @param state
-   * @param items
-   */
   [SET_ITEMS]: (state: ReservationState, items: Reservation[]): void => {
     state.reservations = items;
   },
 
-  /**
-   * 予約日更新
-   */
   [SET_RESERVATION_DATE]: (state: ReservationState, businessDay: Date): void => {
     if (state.reservation) {
       state.reservation.reservation_date = businessDay;
     }
   },
 
-  /**
-   * 予約座席更新
-   * @param state
-   * @param seat
-   */
   [SET_RESERVATION_SEAT]: (state: ReservationState, seat: ReservationSeat): void => {
     if (state.reservation && state.reservation.reservation_seats && state.reservation.reservation_seats.length > 0) {
       _.each(state.reservation.reservation_seats, (item: ReservationSeat) => {
@@ -128,30 +94,19 @@ const mutations: MutationTree<ReservationState> = {
     }
   },
 
-  /**
-   * 予約座席更新
-   * @param state
-   * @param seat
-   */
   [SET_RESERVATION_SEATS]: (state: ReservationState, seats: ReservationSeat[]): void => {
     if (state.reservation) {
       state.reservation.reservation_seats = seats;
     }
   },
 
-  /**
-   * 予約時間帯更新
-   */
-  [SET_RESERVATION_TIMEZONE]: (state: ReservationState, timezone: Timezone): void => {
+  [SET_RESERVATION_TIMEZONE]: (state: ReservationState, timezone: SelectableTimezone): void => {
     if (state.reservation) {
       state.reservation.reservation_start_time = timezone.start_time;
       state.reservation.reservation_end_time = timezone.end_time;
     }
   },
 
-  /**
-   * 予約時間帯リセット
-   */
   [RESET_RESERVATION_TIMEZONE]: (state: ReservationState): void => {
     if (state.reservation) {
       state.reservation.reservation_start_time = null;

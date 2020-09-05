@@ -18,27 +18,20 @@
                 </div>
 
                 <div class="page-content">
-                    <reservation-form :reservation="reservation"
-                                      :validations="$v"
-                                      :isLoadingSeats="isLoadingSeats"
-                                      v-if="!!reservation"
-                                      @data-loaded="onDataLoaded"
-                                      @update-reservation-date="onUpdateReservationDate"
-                                      @update-reservation-time="onUpdateReservationTime"/>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button"
-                            class="button is-info"
-                            :disabled="disableEdit"
-                            @click="onClickSave()">
-                        <i class="fas fa-edit"></i>
-                        <span>予約内容を変更</span>
-                    </button>
+                    <reservation-form :id="id"
+                                      @initializing="handleInitializing"
+                                      @initialized="handleInitialized"
+                                      @initialize-failure="handleInitializeFailure"
+                                      @load-reservation-seats-failure="handleLoadReservationSeatsFailure"
+                                      @saving="handleSaving"
+                                      @save-succeeded="handleSaveSuceeded"
+                                      @save-failure="handleSaveFailure"
+                                      @validation-failure="handleValidationFailure">
+                    </reservation-form>
                 </div>
             </div>
         </div>
     </div>
 
-    <b-loading :active.sync="isLoading"></b-loading>
+    <b-loading :active.sync="isProgressing"></b-loading>
 </div>

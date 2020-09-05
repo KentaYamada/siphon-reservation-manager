@@ -1,11 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
-
-// component
 import TimezoneListItem from "@/components/timezones/list-item/TimezoneListItem.vue";
-
-// store
 import { FETCH, HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
@@ -13,40 +8,78 @@ export default Vue.extend({
   components: {
     TimezoneListItem
   },
+  props: {
+    isCreatedNewData: {
+      required: true,
+      type: Boolean
+    }
+  },
+  watch: {
+    isCreatedNewData: function (newVal: boolean, oldVal: boolean) {
+      if (newVal) {
+        this._fetch();
+      }
+    }
+  },
   computed: {
     ...mapGetters("timezone", [HAS_ITEMS]),
-    ...mapState("timezone", ["timezones"])
+    ...mapState("timezone", ["timezones"]),
+
+    visibleEmptyItem(): boolean {
+      return !this.isLoading && !this.hasItems;
+    }
   },
   methods: {
     ...mapActions("timezone", [FETCH]),
 
-    /**
-     * 予約時間帯削除後イベント
-     * list-item component callback function
-     */
-    itemDeleteSucceeded(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "削除しました。",
-        type: "is-danger"
-      };
-      this.$buefy.toast.open(toastConfig);
-      this.fetch();
+    handleDeleteSucceeded(): void {
+      this.$emit("delete-timezone-succeeded");
+      this._fetch();
     },
 
-    /**
-     * 予約時間帯編集後イベント
-     * list-item component callback function
-     */
-    itemEditSucceeded(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "保存しました。",
-        type: "is-success"
-      };
-      this.$buefy.toast.open(toastConfig);
-      this.fetch();
+    handleDeleteFailed(): void {
+      this.$emit("delete-timezone-failed");
+    },
+
+    handleLoadDataFailed(): void {
+      this.$emit("load-timezone-failed");
+    },
+
+    handleSaveSucceeded(): void {
+      this.$emit("save-timezone-succeeded");
+      this._fetch();
+    },
+
+    handleSaveFailed(): void {
+      this.$emit("save-timezone-failed");
+    },
+
+    handleSyncSelectableTimezonesFailed(): void {
+      this.$emit("sync-selectable-timezones-failed");
+    },
+
+    handleValidationFailed(): void {
+      this.$emit("validation-failed");
+    },
+
+    _fetch(): void {
+      this.isLoading = true;
+      this.fetch()
+        .catch(() => {
+          this.$emit("load-timezones-failed");
+        })
+        .finally(() => {
+          this.isLoading = false;
+          this.$emit("timezones-loaded");
+        });
     }
   },
+  data() {
+    return {
+      isLoading: false
+    };
+  },
   mounted() {
-    this.fetch();
+    this._fetch();
   }
 });

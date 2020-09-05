@@ -1,17 +1,9 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { BDialogConfig, BModalConfig, BNoticeConfig } from "buefy/types/components";
-
-// component
-import BusinessDayForm from "@/components/business-day/dialog/BusinessDayForm.vue";
-
-// entity
+import { BDialogConfig, BModalConfig } from "buefy/types/components";
+import BusinessDayDialog from "@/components/business-day/dialog/BusinessDayDialog.vue";
 import { BusinessDay } from "@/entity/business-day";
-
-// filter
 import { formatDateJp } from "@/filters/format-date-jp";
-
-// store
 import { DELETE } from "@/store/constant";
 
 export default Vue.extend({
@@ -25,42 +17,45 @@ export default Vue.extend({
   methods: {
     ...mapActions("businessDay", [DELETE]),
 
-    /**
-     * 営業日編集
-     */
-    handleClickEdit(): void {
+    handleShowBusinessDayDialog(): void {
       const config: BModalConfig = {
         parent: this,
-        component: BusinessDayForm,
+        component: BusinessDayDialog,
         hasModalCard: true,
-        scroll: "keep",
         props: {
-          businessDay: this.businessDay
+          id: this.businessDay.id
         },
         events: {
-          "save-success": () => {
-            this.$emit("edit-succeeded");
+          "load-business-day-failed": () => {
+            this.$emit("load-business-day-failed");
+          },
+          "save-succeeded": () => {
+            this.$emit("save-succeeded");
+          },
+          "save-failed": () => {
+            this.$emit("save-failed");
+          },
+          "sync-selectable-timezones-failed": () => {
+            this.$emit("sync-selectable-timezones-failed");
+          },
+          "validation-failed": () => {
+            this.$emit("validation-failed");
           }
         }
       };
-
       this.$buefy.modal.open(config);
     },
 
-    /**
-     * 営業日削除
-     */
     handleClicDelete(): void {
       const businessDay = formatDateJp(this.businessDay.business_date);
       const message = `
-        <p>「${businessDay}」を削除しますか？</p>
-        <small>誤って削除した場合、再度データを登録してください。</small>`;
+        <p><strong>営業日: ${businessDay}</strong>を削除しますか？</p>
+        <small>誤って削除した場合、再度登録してください。</small>`;
       const config: BDialogConfig = {
-        title: "営業日削除",
         type: "is-danger",
         message: message,
-        confirmText: "削除",
-        cancelText: "キャンセル",
+        confirmText: "はい",
+        cancelText: "いいえ",
         hasIcon: true,
         iconPack: "fas",
         icon: "exclamation-circle",
@@ -69,12 +64,11 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
-              // todo: error handling
+            .catch(() => {
+              this.$emit("delete-failed");
             });
         }
       };
-
       this.$buefy.dialog.confirm(config);
     }
   },

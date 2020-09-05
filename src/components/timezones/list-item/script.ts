@@ -2,14 +2,9 @@ import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
 import { BDialogConfig, BModalConfig } from "buefy/types/components";
 import _ from "lodash";
-
-// components
 import TimezoneDialog from "@/components/timezones/dialog/TimezoneDialog.vue";
-
-// entity
 import { Timezone } from "@/entity/timezone";
-
-// store
+import { timePeriod } from "@/filters/time-period";
 import { DELETE } from "@/store/constant";
 
 export default Vue.extend({
@@ -23,41 +18,42 @@ export default Vue.extend({
   methods: {
     ...mapActions("timezone", [DELETE]),
 
-    /**
-     * 予約時間帯設定
-     */
     handleShowTimezoneDialog(): void {
-      const model = _.clone(this.timezone);
       const config: BModalConfig = {
         parent: this,
         component: TimezoneDialog,
         hasModalCard: true,
-        scroll: "keep",
         props: {
-          timezone: model
+          id: this.timezone.id
         },
         events: {
-          "save-success": () => {
-            this.$emit("edit-succeeded");
+          "load-timezone-failed": () => {
+            this.$emit("load-timezone-failed");
+          },
+          "save-succeeded": () => {
+            this.$emit("save-succeeded");
+          },
+          "save-failed": () => {
+            this.$emit("save-failed");
+          },
+          "validation-failed": () => {
+            this.$emit("validation-failed");
           }
         }
       };
-
       this.$buefy.modal.open(config);
     },
-    /**
-     * 予約時間帯削除
-     */
+
     handleClicDelete(): void {
+      const period = timePeriod(this.timezone.start_time, this.timezone.end_time);
       const message = `
-            <p>「${this.timezone.text}」を削除しますか？</p>
-            <small>誤って削除した場合、再度データを登録してください。</small>`;
+            <p><strong>予約時間: ${period}</strong>を削除しますか？</p>
+            <small>誤って削除した場合、再度登録してください。</small>`;
       const config: BDialogConfig = {
-        title: "予約時間帯削除",
         type: "is-danger",
         message: message,
-        confirmText: "削除",
-        cancelText: "キャンセル",
+        confirmText: "はい",
+        cancelText: "いいえ",
         hasIcon: true,
         iconPack: "fas",
         icon: "exclamation-circle",
@@ -66,13 +62,15 @@ export default Vue.extend({
             .then(() => {
               this.$emit("delete-succeeded");
             })
-            .catch(error => {
-              // todo: error handling
+            .catch(() => {
+              this.$emit("delete-failed");
             });
         }
       };
-
       this.$buefy.dialog.confirm(config);
     }
+  },
+  filters: {
+    timePeriod
   }
 });

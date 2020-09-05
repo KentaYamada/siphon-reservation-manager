@@ -1,19 +1,31 @@
 import { MutationTree } from "vuex";
-
-// entity
 import { BusinessDay } from "@/entity/business-day";
-
-// store
-import { SET_ITEMS } from "@/store/constant";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
+import { INITIALIZE, SET_ITEM, SET_ITEMS, SET_SELECTABLE_TIMEZONES } from "@/store/constant";
 import { BusinessDayState } from "@/store/business-day";
 
 const mutations: MutationTree<BusinessDayState> = {
-  /**
-   * 営業日一覧データセット
-   * @param items
-   */
-  [SET_ITEMS]: (state: BusinessDayState, items: BusinessDay[]): void => {
+  [INITIALIZE]: (state: BusinessDayState): void => {
+    state.businessDay = {
+      text: "",
+      business_date: new Date(),
+      is_pause: false,
+      timezones: []
+    } as BusinessDay;
+  },
+
+  [SET_ITEM]: (state: BusinessDayState, item: BusinessDay): void => {
+    state.businessDay = item;
+  },
+
+  [SET_ITEMS]: (state: BusinessDayState, items: Array<BusinessDay>): void => {
     state.businessDays = items;
+  },
+
+  [SET_SELECTABLE_TIMEZONES]: (state: BusinessDayState, timezones: Array<SelectableTimezone>): void => {
+    if (state.businessDay) {
+      state.businessDay.timezones = timezones;
+    }
   }
 };
 

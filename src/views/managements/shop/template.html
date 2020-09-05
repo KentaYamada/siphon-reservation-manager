@@ -15,14 +15,35 @@
                             <i class="fas fa-calendar-day"></i>
                             営業日
                         </h4>
-                        <business-day-list/>
+                        <business-day-list 
+                            :is-created-new-data="isCreatedBusinessDay"
+                            @delete-business-day-succeeded="handleDeleteBusinessDaySucceeded"
+                            @delete-business-day-failed="handleDeleteBusinessDayFailed"
+                            @business-days-loaded="handleBusinessDaysLoaded"
+                            @load-business-day-failed="handleLoadBusinessDayFailed"
+                            @load-business-days-failed="handleLoadBusinessDaysFailed"
+                            @save-business-day-succeeded="handleSaveBusinessDaySucceeded"
+                            @save-business-day-failed="handleSaveBusinessDayFailed"
+                            @sync-selectable-timezones-failed="handleSyncSelectableTimezonesFailed"
+                            @validation-failed="handleValidationFailed">
+                        </business-day-list>
                     </div>
                     <div class="timezone-list-container">
                         <h4 class="title is-size-5">
                             <i class="fas fa-clock"></i>
                             予約時間帯
                         </h4>
-                        <timezone-list />
+                        <timezone-list 
+                            :is-created-new-data="isCreatedTimezone" 
+                            @delete-timezone-succeeded="handleDeleteTimezoneSucceeded"
+                            @delete-timezone-failed="handleDeleteTimezoneFailed"
+                            @load-timezones-failed="handleLoadTimezonesFailed"
+                            @load-timezone-failed="handleLoadTimezoneFailed"
+                            @save-timezone-succeeded="handleSaveTimezoneSuceeded"
+                            @save-timezone-failed="handleSaveTimezoneFailed"
+                            @timezones-loaded="handleTimezonesLoaded"
+                            @validation-failed="handleValidationFailed">
+                        </timezone-list>
                     </div>
                 </div>
 
@@ -34,7 +55,7 @@
                            :class="{ 'is-hidden': !showMenuButton }">
                     <button type="button"
                             class="fixed-button business-day-add-button"
-                            @click="handleShowBusinessDayForm()">
+                            @click="handleShowBusinessDayDialog()">
                         <i class="fas fa-calendar-day button-icon"></i>
                     </button>
                 </b-tooltip>
@@ -54,7 +75,7 @@
 
                 <button type="button"
                         class="fixed-button menu-button"
-                        @click="toggleAddMenuButtons()">
+                        @click="handleToggleMenuButtons()">
                     <i class="fas fa-plus plus-icon"></i>
                 </button>
             </div>

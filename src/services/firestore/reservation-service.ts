@@ -96,6 +96,7 @@ export class ReservationService {
 
           // todo: type safe
           const seatData: any = {
+            seat_no: seat.seat_no,
             reservation_date: reservation.reservation_date,
             reservation_date_id: reservation.reservation_date_id,
             reservation_time_id: reservation.reservation_time_id,

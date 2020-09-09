@@ -24,7 +24,8 @@ export class BusinessDayService {
     const businessDayRef = collection.doc();
     businessDayRef.set({
       business_date: businessDay.business_date,
-      is_pause: businessDay.is_pause
+      is_pause: businessDay.is_pause,
+      published_datetime: businessDay.published_datetime
     });
 
     const batch = firebase.firestore().batch();

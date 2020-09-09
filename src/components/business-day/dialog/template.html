@@ -10,7 +10,7 @@
             <div class="field">
                 <label class="label">営業日</label>
                 <div class="control">
-                    <b-datepicker :min-date="minDate" v-model="businessDay.business_date"></b-datepicker>
+                    <b-datepicker icon="calendar-day" :min-date="minDate" v-model="businessDay.business_date"></b-datepicker>
                 </div>
                 <div v-if="$v.businessDay.business_date.$error">
                     <small class="help is-danger"
@@ -18,6 +18,14 @@
                         営業日は必須入力です。
                     </small>
                 </div>
+            </div>
+
+            <div class="field">
+                <label class="label">公開日時</label>
+                <div class="control">
+                    <b-datetimepicker icon="clock" :min-datetime="minDate" v-model="businessDay.published_datetime"></b-datetimepicker>
+                </div>
+                <p class="help is-danger">公開日時が空白の場合、予約フォームの予約日に表示されません</p>
             </div>
 
             <div class="field">

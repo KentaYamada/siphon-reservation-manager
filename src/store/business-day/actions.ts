@@ -31,6 +31,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
         id: doc.id,
         business_date: businessDate,
         text: moment(businessDate).format("YYYY年MM月DD日"),
+        published_datetime: null,
         is_pause: doc.data()?.is_pause
       });
     });
@@ -65,6 +66,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
           text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
           business_date: data.business_date.toDate(),
           is_pause: doc.data()?.is_pause,
+          published_datetime: null,
           timezones: timezones
         };
         businessDays.push(businessDay);
@@ -129,6 +131,7 @@ const actions: ActionTree<BusinessDayState, RootState> = {
       business_date: businessDate,
       text: moment(businessDate).format("YYYY年MM月DD日"),
       is_pause: isPause,
+      published_datetime: businessDayRef.data()?.published_datetime.toDate(),
       timezones: timezones
     };
 

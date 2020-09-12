@@ -1,38 +1,75 @@
-<div class="card">
-    <div class="card-content">
-        <p class="title">
-            <strong>
-                {{ reservation.reserver_name | formatReserver(reservation.number_of_reservations) }}
-            </strong>
-        </p>
+<div class="reservation-list-item">
+    <h2 class="reservation-datetime">2020年09月13日 11:00〜12:00</h2>
+    <div class="card">
+        <div class="card-content">
+            <p class="reserver">ガモヨン太郎様 (2名)</p>
+            <p>座席番号: 1</p>
+            <p>ぶどうジュレ楽しみにしています！</p>
+            <div class="buttons is-right">
+                <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog()">
+                    <i class="fas fa-address-card"></i>
+                    連絡先を表示
+                </button>
+                <button type="button" class="button is-danger is-inverted">
+                    <i class="fas fa-times"></i>
+                    予約を取消
+                </button>
+            </div>
+        </div>
+    </div>
 
-        <div class="content-wrapper">
-            <p><strong>予約日時</strong></p>
-            <p>{{ reservation.reservation_date | formatReservationDatetime(reservation.reservation_start_time, reservation.reservation_end_time) }}</p>
+    <div class="card">
+        <div class="card-content">
+            <p class="reserver">ガモヨン太郎様 (2名)</p>
+            <p>座席番号: 2</p>
+            <p>ぶどうジュレ楽しみにしています！</p>
+            <div class="buttons is-right">
+                <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog()">
+                    <i class="fas fa-address-card"></i>
+                    連絡先を表示
+                </button>
+                <button type="button" class="button is-danger is-inverted">
+                    <i class="fas fa-times"></i>
+                    予約を取消
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="content-wrapper">
-            <p><strong>座席</strong></p>
-            <reservation-seat-list :reservationSeats="reservation.reservation_seats" v-if="!!reservation"/>
+    <h2 class="reservation-datetime">2020年09月13日 12:30〜13:30</h2>
+    <div class="card">
+        <div class="card-content">
+            <p class="reserver">ガモヨン太郎様 (2名)</p>
+            <p>座席番号: 1</p>
+            <p>ぶどうジュレ楽しみにしています！</p>
+            <div class="buttons is-right">
+                <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog()">
+                    <i class="fas fa-address-card"></i>
+                    連絡先を表示
+                </button>
+                <button type="button" class="button is-danger is-inverted">
+                    <i class="fas fa-times"></i>
+                    予約を取消
+                </button>
+            </div>
         </div>
+    </div>
 
-        <div class="content-wrapper">
-            <p><strong>メモ</strong></p>
-            <p>{{ reservation.comment }}</p>
-        </div>
-        <div class="content-wrapper">
-            <p><strong>TEL</strong></p>
-            <p>{{ reservation.tel }}</p>
-        </div>
-        <div class="content-wrapper">
-            <p><strong>メールアドレス</strong></p>
-            <p><a :href="'mailto:'+reservation.mail">{{ reservation.mail }}</a></p>
-        </div>
-
-        <div class="buttons has-addons is-right">
-            <button type="button" class="button is-danger is-inverted" @click="onClickCancel()">
-                <i class="fas fa-times"></i>予約取消
-            </button>
+    <div class="card">
+        <div class="card-content">
+            <p class="reserver">ガモヨン太郎様 (2名)</p>
+            <p>座席番号: 2</p>
+            <p>ぶどうジュレ楽しみにしています！</p>
+            <div class="buttons is-right">
+                <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog()">
+                    <i class="fas fa-address-card"></i>
+                    連絡先を表示
+                </button>
+                <button type="button" class="button is-danger is-inverted">
+                    <i class="fas fa-times"></i>
+                    予約を取消
+                </button>
+            </div>
         </div>
     </div>
 </div>

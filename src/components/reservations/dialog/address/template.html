@@ -1,0 +1,28 @@
+<div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">
+            <i class="fas fa-address-card"></i>連絡先
+        </p>
+    </header>
+
+    <section class="modal-card-body">
+        <div class="item">
+            <h4><i class="fas fa-user"></i>お名前</h4>
+            <p>ガモヨン太郎様</p>
+        </div>
+        <div class="item">
+            <h4><i class="fas fa-envelope"></i>メールアドレス</h4>
+            <p><a href="">gamoyon@email.com</a></p>
+        </div>
+        <div class="item">
+            <h4><i class="fas fa-phone"></i>電話番号</h4>
+            <p>09012345678</p>
+        </div>
+    </section>
+
+    <footer class="modal-card-foot">
+            <button class="button is-inverted" @click="$parent.close()">
+                <i class="fas fa-times"></i>閉じる
+            </button>
+    </footer>
+</div>

@@ -1,9 +1,16 @@
+.reservation-datetime {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
 .card {
-    margin-bottom: 12px;
-
-    .card-content {
-        .content-wrapper {
-            margin-bottom: 6px;
-        }
-    }
+    margin-bottom: 18px;
+}
+.reserver {
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+.fas {
+    margin-right: 4px;
 }

@@ -140,9 +140,9 @@ const actions: ActionTree<BusinessDayState, RootState> = {
 
     const businessDay: BusinessDay = {
       id: businessDayRef.id,
-      business_date: businessDayRef.data().business_date.toDate(),
-      is_pause: businessDayRef.data().is_pause,
-      published_datetime: businessDayRef.data().published_datetime?.toDate() ?? null
+      business_date: businessDayRef.data()?.business_date.toDate(),
+      is_pause: businessDayRef.data()?.is_pause,
+      published_datetime: businessDayRef.data()?.published_datetime?.toDate() ?? null
     };
     const timezonesRef = await businessDayRef.ref.collection(service.subCollectionName).get();
 

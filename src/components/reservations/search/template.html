@@ -14,6 +14,7 @@
                 <b-select placeholder="時間帯を選択してください"
                           icon="clock"
                           v-model="option.reservation_time_id">
+                    <option value=""></option>
                     <option v-for="t in timezones" :key="t.id" :value="t.id">
                         {{ t.start_time | timePeriod(t.end_time) }}
                     </option>
@@ -36,6 +37,7 @@
                       icon="calendar"
                       v-model="option.reservation_date_id"
                       @input="handleChangeReservationDate()">
+                <option value=""></option>
                 <option v-for="d in businessDays" :key="d.id" :value="d.id">
                     {{ d.business_date | formatDateJp }}
                 </option>

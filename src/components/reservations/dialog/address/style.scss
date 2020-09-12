@@ -3,6 +3,10 @@
 }
 .item {
     margin-bottom: 8px;
+
+    .button {
+        padding-left: 0;
+    }
 }
 .modal-card-foot {
     justify-content: flex-end;

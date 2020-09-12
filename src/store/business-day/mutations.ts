@@ -10,6 +10,7 @@ const mutations: MutationTree<BusinessDayState> = {
       text: "",
       business_date: new Date(),
       is_pause: false,
+      published_datetime: null,
       timezones: []
     } as BusinessDay;
   },

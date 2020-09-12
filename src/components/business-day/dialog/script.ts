@@ -1,4 +1,5 @@
 import Vue from "vue";
+import moment from "moment";
 import { mapActions, mapMutations, mapState } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import _ from "lodash";
@@ -89,11 +90,20 @@ export default Vue.extend({
     }
   },
   data() {
+    const today = moment()
+      .set({
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0
+      })
+      .toDate();
+
     return {
       businessDay: {} as BusinessDay,
       isLoading: false,
       isSaving: false,
-      minDate: new Date()
+      minDate: today
     };
   },
   mounted() {

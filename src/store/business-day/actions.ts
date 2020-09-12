@@ -115,12 +115,11 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const timezonesRef = await service.fetch();
     const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
       .map(doc => {
-        const selected = _.isNil(doc.data().is_default_select) ? false : doc.data()?.is_default_select;
         return {
           id: doc.id,
-          start_time: doc.data()?.start_time.toDate(),
-          end_time: doc.data()?.end_time.toDate(),
-          selected: selected
+          start_time: doc.data().start_time.toDate(),
+          end_time: doc.data().end_time.toDate(),
+          selected: doc.data().is_default_select ?? false
         } as SelectableTimezone;
       })
       .sortBy((t: SelectableTimezone) => t.start_time.getTime())
@@ -139,8 +138,15 @@ const actions: ActionTree<BusinessDayState, RootState> = {
       return Promise.reject();
     }
 
+    const businessDay: BusinessDay = {
+      id: businessDayRef.id,
+      business_date: businessDayRef.data().business_date.toDate(),
+      is_pause: businessDayRef.data().is_pause,
+      published_datetime: businessDayRef.data().published_datetime?.toDate() ?? null
+    };
     const timezonesRef = await businessDayRef.ref.collection(service.subCollectionName).get();
-    const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
+
+    businessDay.timezones = _.chain(timezonesRef.docs)
       .map(doc => {
         return {
           id: doc.id,
@@ -151,25 +157,6 @@ const actions: ActionTree<BusinessDayState, RootState> = {
       })
       .sortBy((t: SelectableTimezone) => t.start_time.getHours())
       .value();
-    const businessDate = businessDayRef.data()?.business_date.toDate();
-
-    let isPause = false;
-    if (!_.isNil(businessDayRef.data()?.is_pause)) {
-      isPause = businessDayRef.data()?.is_pause;
-    }
-
-    let publishedDatetime = null;
-    if (!_.isNil(businessDayRef.data()?.published_datetime)) {
-      publishedDatetime = businessDayRef.data()?.published_datetime.toDate();
-    }
-
-    const businessDay: BusinessDay = {
-      id: businessDayRef.id,
-      business_date: businessDate,
-      is_pause: isPause,
-      published_datetime: publishedDatetime,
-      timezones: timezones
-    };
 
     commit(SET_ITEM, businessDay);
 

@@ -5,7 +5,6 @@ import { SelectableTimezone } from "@/entity/selectable-timezone";
  */
 export interface BusinessDay {
   id?: string;
-  text: string;
   business_date: Date;
   published_datetime: Date | null;
   is_pause: boolean;

@@ -60,7 +60,8 @@ export class BusinessDayService {
 
       transaction.update(businessDayRef, {
         business_date: businessDay.business_date,
-        is_pause: businessDay.is_pause
+        is_pause: businessDay.is_pause,
+        published_datetime: businessDay.published_datetime
       });
 
       const timezonesRef = businessDayRef.collection(this.SUB_COLLECTION_NAME);
@@ -111,11 +112,33 @@ export class BusinessDayService {
   }
 
   fetch() {
+    const today = moment()
+      .set({
+        hour: 0,
+        minutes: 0,
+        second: 0,
+        millisecond: 0
+      })
+      .toDate();
+    return firebase.firestore().collection(this.COLLECTION_NAME).orderBy("business_date", "asc").startAt(today).get();
+  }
+
+  fetchReservableBusinessDays() {
+    const today = moment()
+      .set({
+        hour: 0,
+        minutes: 0,
+        second: 0,
+        millisecond: 0
+      })
+      .toDate();
+
     return firebase
       .firestore()
       .collection(this.COLLECTION_NAME)
-      .where("business_date", ">=", moment().toDate())
+      .where("is_pause", "==", false)
       .orderBy("business_date", "asc")
+      .startAfter(today)
       .get();
   }
 

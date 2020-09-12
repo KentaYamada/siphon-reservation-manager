@@ -12,6 +12,7 @@ import {
   FETCH,
   FETCH_BY_ID,
   FETCH_BUSINESS_DATE_AFTER_TODAY,
+  FETCH_RESERVABLE_BUSINESS_DAYS,
   FETCH_SELECTABLE_TIMEZONES,
   SAVE,
   SET_ITEM,
@@ -22,23 +23,19 @@ import {
 const actions: ActionTree<BusinessDayState, RootState> = {
   [FETCH]: async ({ commit }) => {
     const service = new BusinessDayService();
-    const businessDays: Array<BusinessDay> = [];
-    const businessDaysDoc = await service.fetch();
-
-    businessDaysDoc.forEach(doc => {
-      const businessDate = doc.data().business_date.toDate();
-      businessDays.push({
+    const businessDaysRef = await service.fetch();
+    const businessDays: Array<BusinessDay> = businessDaysRef.docs.map(doc => {
+      return {
         id: doc.id,
-        business_date: businessDate,
-        text: moment(businessDate).format("YYYY年MM月DD日"),
-        published_datetime: null,
-        is_pause: doc.data()?.is_pause
-      });
+        business_date: doc.data().business_date.toDate(),
+        published_datetime: doc.data()?.published_datetime?.toDate() ?? null,
+        is_pause: doc.data().is_pause
+      } as BusinessDay;
     });
 
     commit(SET_ITEMS, businessDays);
 
-    return businessDaysDoc;
+    return businessDaysRef;
   },
 
   [FETCH_BUSINESS_DATE_AFTER_TODAY]: async ({ commit }) => {
@@ -46,32 +43,67 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const businessDaysRef = await service.fetch();
     const businessDays: Array<BusinessDay> = [];
 
-    businessDaysRef.forEach(async doc => {
-      if (doc.data()?.is_pause !== true) {
+    _.chain(businessDaysRef.docs)
+      .filter(doc => !doc.data().is_pause)
+      .each(async doc => {
+        const businessDay: BusinessDay = {
+          id: doc.id,
+          business_date: doc.data().business_date.toDate(),
+          is_pause: doc.data().is_pause,
+          published_datetime: doc.data().published_datetime?.toDate()
+        };
         const timezonesRef = await doc.ref.collection(service.subCollectionName).where("selected", "==", true).get();
-        const timezones: Array<SelectableTimezone> = _.chain(timezonesRef.docs)
+        businessDay.timezones = _.chain(timezonesRef.docs)
           .map(doc => {
             return {
               id: doc.id,
-              start_time: doc.data()?.start_time.toDate(),
-              end_time: doc.data()?.end_time.toDate(),
-              selected: doc.data()?.selected
+              start_time: doc.data().start_time.toDate(),
+              end_time: doc.data().end_time.toDate(),
+              selected: doc.data().selected
             } as SelectableTimezone;
           })
           .sortBy((t: SelectableTimezone) => t.start_time.getHours())
           .value();
-        const data = doc.data();
+
+        businessDays.push(businessDay);
+      })
+      .value();
+
+    commit(SET_ITEMS, businessDays);
+
+    return businessDaysRef;
+  },
+
+  [FETCH_RESERVABLE_BUSINESS_DAYS]: async ({ commit }) => {
+    const service = new BusinessDayService();
+    const businessDaysRef = await service.fetchReservableBusinessDays();
+    const businessDays: Array<BusinessDay> = [];
+
+    _.chain(businessDaysRef.docs)
+      .filter(doc => moment(new Date()).diff(moment(doc.data().published_datetime?.toDate())) > 0)
+      .each(async doc => {
         const businessDay: BusinessDay = {
           id: doc.id,
-          text: moment(data.business_date.toDate()).format("YYYY年MM月DD日"),
-          business_date: data.business_date.toDate(),
-          is_pause: doc.data()?.is_pause,
-          published_datetime: null,
-          timezones: timezones
+          business_date: doc.data().business_date.toDate(),
+          is_pause: doc.data().is_pause,
+          published_datetime: doc.data().published_datetime?.toDate()
         };
+        const timezonesRef = await doc.ref.collection(service.subCollectionName).where("selected", "==", true).get();
+        businessDay.timezones = _.chain(timezonesRef.docs)
+          .map(doc => {
+            return {
+              id: doc.id,
+              start_time: doc.data().start_time.toDate(),
+              end_time: doc.data().end_time.toDate(),
+              selected: doc.data().selected
+            } as SelectableTimezone;
+          })
+          .sortBy((t: SelectableTimezone) => t.start_time.getHours())
+          .value();
+
         businessDays.push(businessDay);
-      }
-    });
+      })
+      .value();
 
     commit(SET_ITEMS, businessDays);
 
@@ -120,18 +152,22 @@ const actions: ActionTree<BusinessDayState, RootState> = {
       .sortBy((t: SelectableTimezone) => t.start_time.getHours())
       .value();
     const businessDate = businessDayRef.data()?.business_date.toDate();
-    let isPause = false;
 
+    let isPause = false;
     if (!_.isNil(businessDayRef.data()?.is_pause)) {
       isPause = businessDayRef.data()?.is_pause;
+    }
+
+    let publishedDatetime = null;
+    if (!_.isNil(businessDayRef.data()?.published_datetime)) {
+      publishedDatetime = businessDayRef.data()?.published_datetime.toDate();
     }
 
     const businessDay: BusinessDay = {
       id: businessDayRef.id,
       business_date: businessDate,
-      text: moment(businessDate).format("YYYY年MM月DD日"),
       is_pause: isPause,
-      published_datetime: businessDayRef.data()?.published_datetime.toDate(),
+      published_datetime: publishedDatetime,
       timezones: timezones
     };
 

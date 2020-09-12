@@ -1,22 +1,13 @@
 import Vue, { PropType } from "vue";
 import { mapActions } from "vuex";
-import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
-
-// component
+import { BDialogConfig, BModalConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
-
-// entity
+import ReservationAddressDialog from "@/components/reservations/dialog/address/ReservationAddressDialog.vue";
 import { Reservation } from "@/entity/reservation";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
-
-// filter
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 import { formatReserver } from "@/filters/format-reserver";
-
-// store
 import { CANCEL } from "@/store/constant";
-
-// utility
 import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
@@ -36,6 +27,16 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("reservation", [CANCEL]),
+
+    handleShowAddressDialog(): void {
+      const config: BModalConfig = {
+        parent: this,
+        component: ReservationAddressDialog,
+        hasModalCard: true
+      };
+
+      this.$buefy.modal.open(config);
+    },
 
     onClickCancel(): void {
       const message = `

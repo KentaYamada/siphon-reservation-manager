@@ -200,7 +200,6 @@ export default Vue.extend({
         this.$emit("initialized");
       })
       .catch(error => {
-        console.error(error);
         this.$emit("initialize-failure");
       });
   }

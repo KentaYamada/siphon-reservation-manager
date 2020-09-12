@@ -199,7 +199,7 @@ export default Vue.extend({
         this.option.reservation_time_id = this.reservation.reservation_time_id;
         this.$emit("initialized");
       })
-      .catch(error => {
+      .catch(() => {
         this.$emit("initialize-failure");
       });
   }

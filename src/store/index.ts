@@ -1,11 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-
-// store
 import auth from "@/store/auth";
 import businessDay from "@/store/business-day";
 import reservation from "@/store/reservation";
+import reservationList from "@/store/reservation-list";
+import reservationResendMail from "@/store/reservation-resend-mail";
 import timezone from "@/store/timezone";
 
 export interface RootState {
@@ -19,6 +19,7 @@ export default new Vuex.Store({
     auth,
     businessDay,
     reservation,
+    reservationList,
     timezone
   },
   plugins: [

@@ -5,7 +5,6 @@ import auth from "@/store/auth";
 import businessDay from "@/store/business-day";
 import reservation from "@/store/reservation";
 import reservationList from "@/store/reservation-list";
-import reservationResendMail from "@/store/reservation-resend-mail";
 import timezone from "@/store/timezone";
 
 export interface RootState {

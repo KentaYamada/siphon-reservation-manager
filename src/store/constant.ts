@@ -72,11 +72,6 @@ export const VISIBLE_ACTIONS = "visibleActions";
 
 export const CAN_RESERVED = "canReserved";
 
-// Reservation resend mail actions
-export const CAN_SEND_MAIL = "canSendMail";
-
-export const SEND_MAIL = "sendMail";
-
 // Reservation seat actions
 export const GET_RESERVABLE_SEATS = "getReservableSeats";
 

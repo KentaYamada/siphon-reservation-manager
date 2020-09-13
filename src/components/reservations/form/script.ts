@@ -9,9 +9,9 @@ import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
 import { timePeriod } from "@/filters/time-period";
 import {
-  FETCH_BUSINESS_DATE_AFTER_TODAY,
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
+  FETCH_RESERVABLE_BUSINESS_DAYS,
   GET_BY_ID,
   GET_RESERVABLE_PEOPLE,
   GET_SELECTABLE_TIMEZONES,
@@ -95,7 +95,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("businessDay", {
-      fetchBusinessDateAfterToday: FETCH_BUSINESS_DATE_AFTER_TODAY
+      fetchReservableBusinessDays: FETCH_RESERVABLE_BUSINESS_DAYS
     }),
     ...mapActions("reservation", {
       fetchById: FETCH_BY_ID,
@@ -185,7 +185,7 @@ export default Vue.extend({
     this.$emit("initializing");
   },
   mounted() {
-    const promises = [this.fetchBusinessDateAfterToday()];
+    const promises = [this.fetchReservableBusinessDays()];
 
     if (!_.isEmpty(this.id)) {
       promises.push(this.fetchById(this.id));

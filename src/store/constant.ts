@@ -31,6 +31,8 @@ export const GET_NAVIGATIONS = "getNavigations";
 // Business day actions
 export const FETCH_BUSINESS_DATE_AFTER_TODAY = "fetchBusinessDateAfterToday";
 
+export const FETCH_RESERVABLE_BUSINESS_DAYS = "fetchReservableBusinessDays";
+
 export const FETCH_SELECTABLE_TIMEZONES = "fetchSelectableTimezones";
 
 export const GET_SELECTABLE_TIMEZONES = "getSelectableTimezones";

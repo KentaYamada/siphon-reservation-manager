@@ -1,9 +1,9 @@
 import Vue, { PropType } from "vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import _ from "lodash";
 import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
-import { FETCH, HAS_ITEMS } from "@/store/constant";
+import { FETCH, HAS_ITEMS, SET_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
   template: "<reservation-list/>",
@@ -29,6 +29,9 @@ export default Vue.extend({
   methods: {
     ...mapActions("reservation", {
       fetch: FETCH
+    }),
+    ...mapMutations("reservation", {
+      setItems: SET_ITEMS
     }),
 
     handleDeleteSucceeded() {
@@ -56,6 +59,7 @@ export default Vue.extend({
     }
   },
   mounted() {
+    this.setItems([]);
     this._fetch();
   }
 });

@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "business_days",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "is_pause",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "business_date",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

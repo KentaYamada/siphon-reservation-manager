@@ -52,8 +52,6 @@ export const HAS_RESERVATION_SEATS = "hasReservationSeats";
 
 export const HAS_SELECTED_SEATS = "hasSelectedSeats";
 
-export const INITIALIZE_ALL_RESERVED = "initializeAllReserved";
-
 export const INITIALIZE_RESERVATION_SEATS = "initializeReservationSeats";
 
 export const IS_FULL_OF_RESERVED = "isFullOfReserved";
@@ -61,8 +59,6 @@ export const IS_FULL_OF_RESERVED = "isFullOfReserved";
 export const RESET_RESERVATION_SEATS = "resetReservationSeats";
 
 export const RESET_RESERVATION_TIMEZONE = "resetReservationTimezone";
-
-export const SAVE_ALL_RESERVATION = "saveAllReservation";
 
 export const SET_RESERVATION_SEAT = "setReservationSeat";
 

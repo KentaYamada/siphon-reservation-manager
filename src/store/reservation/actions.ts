@@ -14,7 +14,6 @@ import {
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
   SAVE,
-  SAVE_ALL_RESERVATION,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_SEATS
@@ -178,11 +177,6 @@ const actions: ActionTree<ReservationState, RootState> = {
     promise.then(() => commit(SET_ITEM, reservation));
 
     return promise;
-  },
-
-  [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
-    const service = new ReservationService();
-    return service.saveAllReservation(reservation);
   },
 
   [CANCEL]: async ({ commit }, id: string) => {

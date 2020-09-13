@@ -1,10 +1,8 @@
 <div>
-    <reservation-list-item v-for="reservation in reservations"
-                           :reservation="reservation" 
-                           :key="reservation.id"
+    <reservation-list-item v-for="r in reservationList"
+                           :reservation="r" 
+                           :key="r.id"
                            @delete-succeeded="handleDeleteSucceeded()"
                            />
-    <div class="list-item" v-if="!hasItems">
-        <p class="has-text-centered">表示できるデータはありません</p>
-    </div>
+    <p class="has-text-centered" v-if="!hasItems">表示できるデータはありません</p>
 </div>

@@ -12,7 +12,6 @@ import {
   RESERVATION_RESEND_MAIL_URL,
   RESERVED_MESSAGE_URL,
   RESERVATION_RESEND_MAIL_ACCEPTED,
-  MANAGEMENT_RESERVATION_ALL_RESERVED,
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
@@ -21,7 +20,6 @@ import {
 } from "@/router/url";
 
 // Reservation
-import ReservationAllReserved from "@/views/reservations/all-reserved/ReservationAllReserved.vue";
 import ReservationCanceledMessage from "@/views/reservations/canceled-message/ReservationCanceledMessage.vue";
 import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
 import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
@@ -114,14 +112,6 @@ const routes: RouteConfig[] = [
       requireAuth: true
     },
     component: ReservationList
-  },
-  {
-    path: MANAGEMENT_RESERVATION_ALL_RESERVED,
-    name: "reservation-all-reserved",
-    meta: {
-      requireAuth: true
-    },
-    component: ReservationAllReserved
   },
   {
     path: SHOP_SETTING_URL,

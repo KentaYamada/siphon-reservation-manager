@@ -9,9 +9,7 @@ import {
   RESERVATION_EDITED_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
-  RESERVATION_RESEND_MAIL_URL,
   RESERVED_MESSAGE_URL,
-  RESERVATION_RESEND_MAIL_ACCEPTED,
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
@@ -27,8 +25,6 @@ import ReservationEditedMessage from "@/views/reservations/edited-message/Reserv
 import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
 import ReservationList from "@/views/reservations/list/ReservationList.vue";
 import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
-import ReservationResendMail from "@/views/reservations/resend-mail/ReservationResendMail.vue";
-import ReservationResendMailAccepted from "@/views/reservations/resend-mail-accepted/ReservationResendMailAccepted.vue";
 
 // Management
 import Login from "@/views/managements/login/Login.vue";
@@ -94,16 +90,6 @@ const routes: RouteConfig[] = [
     path: RESERVATION_CANCELED_URL,
     name: "reservation-canceled-message",
     component: ReservationCanceledMessage
-  },
-  {
-    path: RESERVATION_RESEND_MAIL_URL,
-    name: "reservation-resend-mail",
-    component: ReservationResendMail
-  },
-  {
-    path: RESERVATION_RESEND_MAIL_ACCEPTED,
-    name: "reservation-resend-mail-accepted",
-    component: ReservationResendMailAccepted
   },
   {
     path: MANAGEMENT_RESERVATION_LIST_URL,

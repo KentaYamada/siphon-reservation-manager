@@ -44,7 +44,6 @@ const actions: ActionTree<BusinessDayState, RootState> = {
     const businessDays: Array<BusinessDay> = [];
 
     _.chain(businessDaysRef.docs)
-      .filter(doc => !doc.data().is_pause)
       .each(async doc => {
         const businessDay: BusinessDay = {
           id: doc.id,

@@ -21,18 +21,28 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("reservation", ["reservations"]),
-    ...mapGetters("reservation", {
+    ...mapState("reservationList", ["reservationList"]),
+    ...mapGetters("reservationList", {
       hasItems: HAS_ITEMS
     })
+    // ...mapState("reservation", ["reservations"]),
+    // ...mapGetters("reservation", {
+    //   hasItems: HAS_ITEMS
+    // })
   },
   methods: {
-    ...mapActions("reservation", {
+    ...mapActions("reservationList", {
       fetch: FETCH
     }),
-    ...mapMutations("reservation", {
+    ...mapMutations("reservationList", {
       setItems: SET_ITEMS
     }),
+    // ...mapActions("reservation", {
+    //   fetch: FETCH
+    // }),
+    // ...mapMutations("reservation", {
+    //   setItems: SET_ITEMS
+    // }),
 
     handleDeleteSucceeded() {
       this._fetch();
@@ -44,7 +54,8 @@ export default Vue.extend({
           .then(() => {
             this.$emit("load-succeeded");
           })
-          .catch(() => {
+          .catch(error => {
+            console.error(error);
             this.$emit("load-failure");
           });
       }

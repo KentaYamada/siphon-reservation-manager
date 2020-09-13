@@ -8,15 +8,15 @@
     <section class="modal-card-body">
         <div class="item">
             <h4><i class="fas fa-user"></i>お名前</h4>
-            <p>ガモヨン太郎様</p>
+            <p>{{ seat.reserver_name }}</p>
         </div>
         <div class="item">
             <h4><i class="fas fa-envelope"></i>メールアドレス</h4>
-            <p><a class="button is-info is-inverted" href="mailto:gamoyon@email.com">gamoyon@email.com</a></p>
+            <p><a class="button is-info is-inverted" href="mailto:gamoyon@email.com">{{ seat.mail }}</a></p>
         </div>
         <div class="item">
             <h4><i class="fas fa-phone"></i>電話番号</h4>
-            <p>09012345678</p>
+            <p>{{ seat.tel }}</p>
         </div>
     </section>
 

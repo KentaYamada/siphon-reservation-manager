@@ -3,7 +3,8 @@ import { mapActions } from "vuex";
 import { BDialogConfig, BModalConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
 import ReservationAddressDialog from "@/components/reservations/dialog/address/ReservationAddressDialog.vue";
-import { Reservation } from "@/entity/reservation";
+import { ReservationList } from "@/entity/reservation-list";
+import { ReservationListSeat } from "@/entity/reservation-list-seat";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 import { formatReserver } from "@/filters/format-reserver";
@@ -18,7 +19,7 @@ export default Vue.extend({
   props: {
     reservation: {
       required: true,
-      type: Object as PropType<Reservation>
+      type: Object as PropType<ReservationList>
     }
   },
   filters: {
@@ -28,17 +29,20 @@ export default Vue.extend({
   methods: {
     ...mapActions("reservation", [CANCEL]),
 
-    handleShowAddressDialog(): void {
+    handleShowAddressDialog(seat: ReservationListSeat): void {
       const config: BModalConfig = {
         parent: this,
         component: ReservationAddressDialog,
-        hasModalCard: true
+        hasModalCard: true,
+        props: {
+          seat: seat
+        }
       };
 
       this.$buefy.modal.open(config);
     },
 
-    onClickCancel(): void {
+    handleCancel(): void {
       const message = `
             <p>予約を取消しますか？</p>
             <small>取消した予約は元に戻せません</small>

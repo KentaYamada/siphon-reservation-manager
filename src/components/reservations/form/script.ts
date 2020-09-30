@@ -133,6 +133,7 @@ export default Vue.extend({
       if (this.$v.$invalid || !this.hasSelectedSeats) {
         this.$emit("validation-failure");
       } else {
+        this.isSaving = true;
         this.save(this.reservation)
           .then((id: string) => {
             this.$emit("save-succeeded", id);
@@ -143,6 +144,9 @@ export default Vue.extend({
             if (error.refetch_seats) {
               this._fetchReservationSeats();
             }
+          })
+          .finally(() => {
+            this.isSaving = false;
           });
       }
     },

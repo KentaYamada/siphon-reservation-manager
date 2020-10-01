@@ -13,7 +13,7 @@ Cafe de GAMOYONです
 ご来店お待ちしております
 
 ご予約確定後もメモ欄に追加入力可能です
-ケーキのお取り置きなどございましたら、前日までにご記入ください
+スペシャルデザートのオーダー、内容変更は来店1週間前までにメモ欄までお願いします
 
 当日のご連絡はインスタ、Facebookへメッセージをお願いします
 
@@ -39,6 +39,7 @@ const setReservationEditedMessage = (model: Reservation, redirectUrl: string): s
 
 Cafe de GAMOYONです
 ご予約の変更承りました
+スペシャルデザートのオーダー、内容変更は来店1週間前までにメモ欄までお願いします
 
 ご予約の確認、変更、キャンセルはこちら
 ${redirectUrl}

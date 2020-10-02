@@ -1,7 +1,7 @@
 import { ActionTree } from "vuex";
 import _ from "lodash";
 import { ReservationList } from "@/entity/reservation-list";
-import { ReservationListSeat } from "@/entity/reservation-list-seat";
+import { Reserver } from "@/entity/reserver";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import { ReservationSeatService } from "@/services/firestore/reservation-seat-service";
@@ -33,7 +33,7 @@ const actions: ActionTree<ReservationListState, RootState> = {
           mail: "",
           tel: "",
           comment: ""
-        } as ReservationListSeat;
+        } as Reserver;
       })
       .each(doc => {
         const reservation = _.find(reservationRef.docs, d => d.id === doc.reservation_id);
@@ -69,7 +69,7 @@ const actions: ActionTree<ReservationListState, RootState> = {
         } as ReservationList;
       })
       .each(doc => {
-        doc.seats = _.filter(seats, (seat: ReservationListSeat) => {
+        doc.seats = _.filter(seats, (seat: Reserver) => {
           return (
             doc.reservation_date_id === seat.reservation_date_id && doc.reservation_time_id === seat.reservation_time_id
           );

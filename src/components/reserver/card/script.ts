@@ -4,7 +4,7 @@ import { BDialogConfig, BModalConfig, BNoticeConfig } from "buefy/types/componen
 import ReservationAddressDialog from "@/components/reservations/dialog/address/ReservationAddressDialog.vue";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 import { Reservation } from "@/entity/reservation";
-import { ReservationListSeat } from "@/entity/reservation-list-seat";
+import { Reserver } from "@/entity/reserver";
 import { formatReserver } from "@/filters/format-reserver";
 import { nl2br } from "@/filters/nl2br";
 import { CANCEL } from "@/store/constant";
@@ -15,7 +15,7 @@ export default Vue.extend({
   props: {
     reserver: {
       required: true,
-      type: Object as PropType<ReservationListSeat>
+      type: Object as PropType<Reserver>
     }
   },
   computed: {

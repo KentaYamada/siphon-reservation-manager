@@ -1,11 +1,11 @@
 import Vue, { PropType } from "vue";
-import { ReservationListSeat } from "@/entity/reservation-list-seat";
+import { Reserver } from "@/entity/reserver";
 
 export default Vue.extend({
   props: {
     reserver: {
       required: true,
-      type: Object as PropType<ReservationListSeat>
+      type: Object as PropType<Reserver>
     }
   }
 });

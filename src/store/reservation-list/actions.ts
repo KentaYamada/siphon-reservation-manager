@@ -13,128 +13,68 @@ const actions: ActionTree<ReservationListState, RootState> = {
   [FETCH]: async ({ commit }, option: ReservationSearchOption) => {
     const reservationService = new ReservationService();
     const reservationSeatService = new ReservationSeatService();
-    const reservationsRef = await reservationService.fetch(option);
-    const reservationSeatsRef = await reservationSeatService.fetch(option);
-    const items: Array<ReservationList> = [];
+    const reservationRef = await reservationService.fetch(option);
+    const reservationSeatRef = await reservationSeatService.fetch(option);
 
-    // 予約日時ごとのデータ作成
-    reservationsRef.forEach(doc => {
-      const data = doc.data();
-      const item: ReservationList = {
-        reservation_date: data.reservation_date?.toDate(),
-        reservation_date_id: data.reservation_date_id,
-        reservation_start_time: data.reservation_start_time?.toDate(),
-        reservation_end_time: data.reservation_end_time?.toDate(),
-        reservation_time_id: data.reservation_time_id,
-        seats: []
-      };
-      // 座席データごとのデータセット
-      item.seats = _.chain(reservationSeatsRef.docs)
-        .filter(doc => {
-          return (
-            // doc.data().reservation_date_id === currentReservationDateId &&
-            // doc.data().reservation_time_id === currentReservationTimeId
-            doc.data().reservation_date_id === data.reservation_date_id &&
-            doc.data().reservation_time_id === data.reservation_time_id
-          );
-        })
-        .map(doc => {
-          return {
-            seat_no: doc.data().seat_no,
-            reservation_id: doc.data().reservation_id,
-            reserver_name: "",
-            number_of_reservations: 0,
-            mail: "",
-            tel: "",
-            comment: ""
-          } as ReservationListSeat;
-        })
-        .orderBy(["seat_no"], ["asc"])
-        .value();
-
-      items.push(item);
-    });
-
-    // 座席ごとの予約データセット
-    _.each(items, (item: ReservationList) => {
-      _.each(item.seats, (seat: ReservationListSeat) => {
-        const myReservation = _.find(reservationsRef.docs, doc => doc.id === seat.reservation_id);
-
-        if (!_.isNil(myReservation)) {
-          seat.reserver_name = myReservation.data().reserver_name;
-          seat.number_of_reservations = myReservation.data().number_of_reservations;
-          seat.mail = myReservation.data().mail;
-          seat.tel = myReservation.data().tel;
-          seat.comment = myReservation.data().comment;
+    const seats = _.chain(reservationSeatRef.docs)
+      .filter(doc => doc.data().is_reserved)
+      .map(doc => {
+        return {
+          seat_no: doc.data().seat_no,
+          reservation_id: doc.data().reservation_id,
+          reserver_name: "",
+          reservation_date: doc.data()?.reservation_date.toDate(),
+          reservation_date_id: doc.data().reservation_date_id,
+          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
+          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
+          reservation_time_id: doc.data().reservation_time_id,
+          number_of_reservations: 0,
+          mail: "",
+          tel: "",
+          comment: ""
+        } as ReservationListSeat;
+      })
+      .each(doc => {
+        const reservation = _.find(reservationRef.docs, d => d.id === doc.reservation_id);
+        if (reservation) {
+          doc.reserver_name = reservation.data().reserver_name;
+          doc.number_of_reservations = reservation.data().number_of_reservations;
+          doc.mail = reservation.data().mail;
+          doc.tel = reservation.data().tel;
+          doc.comment = reservation.data().comment;
         }
-      });
-    });
+      })
+      .orderBy(["seat_no"], ["asc"])
+      .value();
+    console.log(seats);
 
-    // _.each(reservationsRef.docs, doc => {
-    //   const data = doc.data();
-    //   const isDiffReservationDate = currentReservationDateId !== data.reservation_date_id;
-    //   const isDiffReservationTime = !isDiffReservationDate && currentReservationTimeId !== data.reservation_time_id;
+    const reservations = _.chain(reservationRef.docs)
+      .groupBy(doc => doc.data()?.reservation_start_time.toDate())
+      .map(doc => {
+        return {
+          id: doc[0].id,
+          reservation_date: doc[0].data()?.reservation_date.toDate(),
+          reservation_date_id: doc[0].data().reservation_date_id,
+          reservation_start_time: doc[0].data()?.reservation_start_time.toDate(),
+          reservation_end_time: doc[0].data()?.reservation_end_time.toDate(),
+          reservation_time_id: doc[0].data().reservation_time_id,
+          seats: []
+        } as ReservationList;
+      })
+      .each(doc => {
+        doc.seats = _.filter(seats, (seat: ReservationListSeat) => {
+          return (
+            doc.reservation_date_id === seat.reservation_date_id && doc.reservation_time_id === seat.reservation_time_id
+          );
+        });
+      })
+      .orderBy(["reservation_start_time"], ["asc"])
+      .value();
+    console.log(reservations);
 
-    //   // if (!isDiffReservationDate || !isDiffReservationTime) {
-    //   //   return;
-    //   // }
+    commit(SET_ITEMS, reservations);
 
-    //   const item: ReservationList = {
-    //     reservation_date: data.reservation_date?.toDate(),
-    //     reservation_date_id: data.reservation_date_id,
-    //     reservation_start_time: data.reservation_start_time?.toDate(),
-    //     reservation_start_time_id: data.reservation_start_time_id,
-    //     reservation_end_time: data.reservation_end_time?.toDate(),
-    //     reservation_end_time_id: data.reservation_end_time_id,
-    //     seats: []
-    //   };
-
-    //   // 座席データごとのデータセット
-    //   item.seats = _.chain(reservationSeatsRef.docs)
-    //     .filter(doc => {
-    //       return (
-    //         doc.data().reservation_date_id === currentReservationDateId &&
-    //         doc.data().reservation_time_id === currentReservationTimeId
-    //       );
-    //     })
-    //     .map(doc => {
-    //       return {
-    //         seat_no: doc.data().seat_no,
-    //         reservation_id: doc.data().reservation_id,
-    //         reserver_name: "",
-    //         number_of_reservation: 0,
-    //         mail: "",
-    //         tel: "",
-    //         comment: ""
-    //       } as ReservationListSeat;
-    //     })
-    //     .orderBy(["seat_no"], ["asc"])
-    //     .value();
-
-    //   reservationList.push(item);
-    //   currentReservationDateId = data.reservation_date_id;
-    //   currentReservationTimeId = data.reservation_time_id;
-    // });
-
-    // 座席ごとの予約データセット
-    // _.each(reservationList, (item: ReservationList) => {
-    //   _.each(item.seats, (seat: ReservationListSeat) => {
-    //     const myReservation = _.find(reservationsRef.docs, doc => doc.id === seat.reservation_id);
-
-    //     if (!_.isNil(myReservation)) {
-    //       seat.reserver_name = myReservation.data().reserver_name;
-    //       seat.number_of_reservation = myReservation.data().number_of_reservation;
-    //       seat.mail = myReservation.data().mail;
-    //       seat.tel = myReservation.data().tel;
-    //       seat.comment = myReservation.data().comment;
-    //     }
-    //   });
-    // });
-    console.log(items);
-
-    commit(SET_ITEMS, items);
-
-    return Promise.all([reservationsRef, reservationSeatsRef]);
+    return Promise.all([reservationRef, reservationSeatRef]);
   }
 };
 

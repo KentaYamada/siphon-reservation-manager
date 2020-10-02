@@ -1,7 +1,7 @@
 /**
- * Reservation list seat entity
+ * Reserver list seat entity
  */
-export interface ReservationListSeat {
+export interface Reserver {
   seat_no: number;
   seat_nos: Array<number>;
   reservation_id: string;

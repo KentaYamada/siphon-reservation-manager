@@ -2,23 +2,8 @@
     <h2 class="reservation-datetime">
         {{ reservation.reservation_date | formatReservationDatetime(reservation.reservation_start_time, reservation.reservation_end_time) }}
     </h2>
-    <div class="card" v-for="seat in reservation.seats">
-        <div class="card-content">
-            <p>座席番号: {{ seat.seat_no }}</p>
-            <p class="reserver">
-                {{ seat.reserver_name | formatReserver(seat.number_of_reservations) }}
-            </p>
-            <p>{{ seat.comment }}</p>
-            <div class="buttons is-right">
-                <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog(seat)">
-                    <i class="fas fa-address-card"></i>
-                    連絡先を表示
-                </button>
-                <button type="button" class="button is-danger is-inverted" @click="handleCancel()">
-                    <i class="fas fa-times"></i>
-                    予約を取消
-                </button>
-            </div>
-        </div>
-    </div>
+    <reserver-card
+        :reserver="r"
+        v-for="r in reservation.seats">
+    </reserver-card>
 </div>

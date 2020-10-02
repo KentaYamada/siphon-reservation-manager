@@ -12,19 +12,17 @@
                 <div class="page-content">
                     <div class="search-form-container">
                         <reservation-search-form
-                            :search-option="option"
-                            :is-loading="isLoading"
-                            @load-search-data-failure="handleLoadSearchDataFailure"
+                            @initialize-failed="handleInitializeFailed"
                             @search="handleSearch">
                         </reservation-search-form>
                     </div>
                     <div class="divider"></div>
                     <div class="list-container">
                         <reservation-list
-                            :search-option="option"
-                            :is-loading="isLoading"
-                            @load-succeeded="handleLoadSucceeded"
-                            @load-failure="handleLoadFailure">
+                            :reservation-list="reservationList"
+                            @cancel-succeeded="handleCancelSucceeded()"
+                            @cancel-failed="handleCancelFailed()"
+                            v-if="!!reservationList">
                         </reservation-list>
                         <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
                     </div>

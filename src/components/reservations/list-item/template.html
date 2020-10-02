@@ -4,6 +4,9 @@
     </h2>
     <reserver-card
         :reserver="r"
+        :key="r.id"
+        @cancel-succeeded="handleCancelSucceeded()"
+        @cancel-failed="handleCancelFailed()"
         v-for="r in reservation.seats">
     </reserver-card>
 </div>

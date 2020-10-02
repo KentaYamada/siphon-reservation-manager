@@ -3,6 +3,7 @@
  */
 export interface ReservationListSeat {
   seat_no: number;
+  seat_nos: Array<number>;
   reservation_id: string;
   reserver_name: string;
   reservation_date: Date;

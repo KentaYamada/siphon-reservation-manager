@@ -6,6 +6,7 @@ import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 import { Reservation } from "@/entity/reservation";
 import { ReservationListSeat } from "@/entity/reservation-list-seat";
 import { formatReserver } from "@/filters/format-reserver";
+import { nl2br } from "@/filters/nl2br";
 import { CANCEL } from "@/store/constant";
 import { sendEmail } from "@/utility/email-utility";
 
@@ -15,6 +16,11 @@ export default Vue.extend({
     reserver: {
       required: true,
       type: Object as PropType<ReservationListSeat>
+    }
+  },
+  computed: {
+    comment(): string {
+      return nl2br(this.reserver.comment);
     }
   },
   methods: {

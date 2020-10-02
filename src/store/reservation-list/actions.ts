@@ -47,7 +47,7 @@ const actions: ActionTree<ReservationListState, RootState> = {
       })
       .groupBy(seat => seat.reservation_id)
       .map(seat => {
-        const seatNo = _.map(seat, "seat_no");
+        const seatNo = _.map(seat, "seat_no").sort();
         const mergedItem = _.merge({}, ...seat);
         mergedItem.seat_nos = seatNo;
         return mergedItem;

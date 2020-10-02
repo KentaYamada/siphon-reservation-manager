@@ -49,14 +49,24 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.reserver.reservation_id)
             .then(() => {
-              // const href = this.$router.resolve({ path: "/" }).href;
-              // const redirectUrl = `${location.origin}${href}`;
-              // const reservation: Reservation = {
-              //   id: this.reserver.id,
-              //   reserver_name: this.reserver.reserver_name
-              //
-              // };
-              // sendEmail(reservation, reservation.id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
+              const reservation: Reservation = {
+                id: this.reserver.reservation_id,
+                reservation_date: null,
+                reservation_date_id: "",
+                reservation_start_time: null,
+                reservation_end_time: null,
+                reservation_time_id: "",
+                reserver_name: this.reserver.reserver_name,
+                reservation_seats: [],
+                number_of_reservations: null,
+                tel: this.reserver.tel,
+                mail: this.reserver.mail,
+                comment: ""
+              };
+              const href = this.$router.resolve({ path: "/" }).href;
+              const redirectUrl = `${location.origin}${href}`;
+
+              sendEmail(reservation, reservation.id as string, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
 
               this.$emit("cancel-succeeded");
             })

@@ -21,6 +21,9 @@ export default Vue.extend({
   computed: {
     comment(): string {
       return nl2br(this.reserver.comment);
+    },
+    seatNo(): string {
+      return this.reserver.seat_nos.join(", ");
     }
   },
   methods: {

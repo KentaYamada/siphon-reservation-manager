@@ -21,6 +21,7 @@ const actions: ActionTree<ReservationListState, RootState> = {
       .map(doc => {
         return {
           seat_no: doc.data().seat_no,
+          seat_nos: [],
           reservation_id: doc.data().reservation_id,
           reserver_name: "",
           reservation_date: doc.data()?.reservation_date.toDate(),
@@ -44,9 +45,15 @@ const actions: ActionTree<ReservationListState, RootState> = {
           doc.comment = reservation.data().comment;
         }
       })
+      .groupBy(seat => seat.reservation_id)
+      .map(seat => {
+        const seatNo = _.map(seat, "seat_no");
+        const mergedItem = _.merge({}, ...seat);
+        mergedItem.seat_nos = seatNo;
+        return mergedItem;
+      })
       .orderBy(["seat_no"], ["asc"])
       .value();
-    console.log(seats);
 
     const reservations = _.chain(reservationRef.docs)
       .groupBy(doc => doc.data()?.reservation_start_time.toDate())
@@ -70,7 +77,6 @@ const actions: ActionTree<ReservationListState, RootState> = {
       })
       .orderBy(["reservation_start_time"], ["asc"])
       .value();
-    console.log(reservations);
 
     commit(SET_ITEMS, reservations);
 

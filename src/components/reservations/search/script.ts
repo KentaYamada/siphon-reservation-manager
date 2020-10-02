@@ -47,7 +47,7 @@ export default Vue.extend({
   },
   mounted() {
     this.fetch().catch(() => {
-      this.$emit("load-search-data-failure");
+      this.$emit("initialize-failed");
     });
   }
 });

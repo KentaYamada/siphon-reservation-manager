@@ -126,60 +126,6 @@ export class ReservationService {
     return transaction;
   }
 
-  // いるかも
-  async saveAllReservation(reservation: Reservation) {
-    return Promise.resolve("future implementation");
-    // vuex からロジックうつしておく
-    // const db = firebase.firestore();
-    // const $transaction = db.runTransaction(async transaction => {
-    //   const reservationSeats = db.collection(RESERVATION_SEATS_COLLECTION);
-    //   const query = reservationSeats
-    //     .where("reservation_date_id", "==", reservation.reservation_date_id)
-    //     .where("reservation_time_id", "==", reservation.reservation_time_id);
-    //   const $promise = await query.get();
-
-    //   if (!$promise.empty) {
-    //     return Promise.reject();
-    //   }
-
-    //   const reservationRef = db.collection(COLLECTION_NAME).doc();
-    //   const reservationData = {
-    //     reservation_date: reservation.reservation_date,
-    //     reservation_date_id: reservation.reservation_date_id,
-    //     reservation_start_time: reservation.reservation_start_time,
-    //     reservation_end_time: reservation.reservation_end_time,
-    //     reservation_time_id: reservation.reservation_time_id,
-    //     reserver_name: reservation.reserver_name,
-    //     number_of_reservations: reservation.number_of_reservations,
-    //     tel: reservation.tel,
-    //     mail: reservation.mail,
-    //     comment: reservation.comment
-    //   };
-
-    //   transaction.set(reservationRef, reservationData);
-
-    //   _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
-    //     const reservationSeatRef = reservationSeats.doc();
-    //     const seatData = {
-    //       seat_no: seat.seat_no,
-    //       is_reserved: true,
-    //       reservation_id: reservationRef.id,
-    //       reservation_date: reservation.reservation_date,
-    //       reservation_date_id: reservation.reservation_date_id,
-    //       reservation_start_time: reservation.reservation_start_time,
-    //       reservation_end_time: reservation.reservation_end_time,
-    //       reservation_time_id: reservation.reservation_time_id
-    //     };
-
-    //     transaction.set(reservationSeatRef, seatData);
-    //   });
-
-    //   return reservationRef.id;
-    // });
-
-    // return $transaction;
-  }
-
   async cancel(id: string) {
     if (_.isEmpty(id)) {
       return Promise.reject("Invalid argument: id");

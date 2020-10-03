@@ -1,19 +1,10 @@
 import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
-
-// entity
 import { Navigation } from "@/entity/navigation";
-
-// routing
-import { INDEX_URL, MANAGEMENT_RESERVATION_LIST_URL, SHOP_SETTING_URL,HELP_MAIL_UNREACHED } from "@/router/url";
-
-// store
+import { INDEX_URL, MANAGEMENT_RESERVATION_LIST_URL, SHOP_SETTING_URL, HELP_MAIL_UNREACHED } from "@/router/url";
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
 
-/**
- * ナビゲーションメニュー取得
- */
 const getNavigations = (): Navigation[] => {
   const navigations: Navigation[] = [
     {
@@ -37,11 +28,6 @@ const getNavigations = (): Navigation[] => {
           url: MANAGEMENT_RESERVATION_LIST_URL,
           icon: "fa-list"
         },
-        // {
-        //   name: "貸切設定",
-        //   url: MANAGEMENT_RESERVATION_ALL_RESERVED,
-        //   icon: "fa-calendar-check"
-        // },
         {
           name: "営業設定",
           url: SHOP_SETTING_URL,

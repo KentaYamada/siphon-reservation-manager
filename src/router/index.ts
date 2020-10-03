@@ -9,10 +9,7 @@ import {
   RESERVATION_EDITED_URL,
   RESERVATION_ENTRY_URL,
   RESERVATION_DETAIL_URL,
-  RESERVATION_RESEND_MAIL_URL,
   RESERVED_MESSAGE_URL,
-  RESERVATION_RESEND_MAIL_ACCEPTED,
-  MANAGEMENT_RESERVATION_ALL_RESERVED,
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
@@ -21,7 +18,6 @@ import {
 } from "@/router/url";
 
 // Reservation
-import ReservationAllReserved from "@/views/reservations/all-reserved/ReservationAllReserved.vue";
 import ReservationCanceledMessage from "@/views/reservations/canceled-message/ReservationCanceledMessage.vue";
 import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
 import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
@@ -29,8 +25,6 @@ import ReservationEditedMessage from "@/views/reservations/edited-message/Reserv
 import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
 import ReservationList from "@/views/reservations/list/ReservationList.vue";
 import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
-import ReservationResendMail from "@/views/reservations/resend-mail/ReservationResendMail.vue";
-import ReservationResendMailAccepted from "@/views/reservations/resend-mail-accepted/ReservationResendMailAccepted.vue";
 
 // Management
 import Login from "@/views/managements/login/Login.vue";
@@ -98,30 +92,12 @@ const routes: RouteConfig[] = [
     component: ReservationCanceledMessage
   },
   {
-    path: RESERVATION_RESEND_MAIL_URL,
-    name: "reservation-resend-mail",
-    component: ReservationResendMail
-  },
-  {
-    path: RESERVATION_RESEND_MAIL_ACCEPTED,
-    name: "reservation-resend-mail-accepted",
-    component: ReservationResendMailAccepted
-  },
-  {
     path: MANAGEMENT_RESERVATION_LIST_URL,
     name: "reservation-list",
     meta: {
       requireAuth: true
     },
     component: ReservationList
-  },
-  {
-    path: MANAGEMENT_RESERVATION_ALL_RESERVED,
-    name: "reservation-all-reserved",
-    meta: {
-      requireAuth: true
-    },
-    component: ReservationAllReserved
   },
   {
     path: SHOP_SETTING_URL,

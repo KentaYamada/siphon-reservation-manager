@@ -1,5 +1,5 @@
 <div class="list-container">
-    <div class="list">
+    <div class="panel">
         <business-day-list-item
             v-for="businessDay in businessDays"
             :key="businessDay.id"
@@ -12,7 +12,7 @@
             @sync-selectable-timezones-failed="handleSyncSelectableTimezonesFailed"
             @validation-failed="handleValidationFailed">
         </business-day-list-item>
-        <div class="list-item" v-if="visibleEmptyItem">
+        <div class="panel-block" v-if="visibleEmptyItem">
             <p class="has-text-centered">表示できるデータがありません</p>
         </div>
     </div>

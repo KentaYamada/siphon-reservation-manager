@@ -14,78 +14,12 @@ import {
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
   SAVE,
-  SAVE_ALL_RESERVATION,
   SET_ITEM,
   SET_ITEMS,
   SET_RESERVATION_SEATS
 } from "@/store/constant";
 
 const actions: ActionTree<ReservationState, RootState> = {
-  [FETCH]: async ({ commit }, option: ReservationSearchOption) => {
-    const reservationService = new ReservationService();
-    const reservationRef = await reservationService.fetch(option);
-    const reservations: Array<Reservation> = _.chain(reservationRef.docs)
-      .map(doc => {
-        return {
-          id: doc.id,
-          reservation_date: doc.data()?.reservation_date.toDate(),
-          reservation_date_id: doc.data()?.reservation_date_id,
-          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
-          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
-          reservation_time_id: doc.data()?.reservation_time_id,
-          reserver_name: doc.data()?.reserver_name,
-          reservation_seats: [],
-          number_of_reservations: doc.data()?.number_of_reservations,
-          tel: doc.data()?.tel,
-          mail: doc.data()?.mail,
-          comment: doc.data()?.comment
-        } as Reservation;
-      })
-      .orderBy("reservation_date_id", "asc")
-      .value();
-
-    const reservationSeatService = new ReservationSeatService();
-    const reservationSeatRef = await reservationSeatService.fetch(option);
-    const seats: Array<ReservationSeat> = _.chain(reservationSeatRef.docs)
-      .map(doc => {
-        return {
-          id: doc.id,
-          seat_no: doc.data()?.seat_no,
-          is_reserved: doc.data()?.is_reserved,
-          is_selected: false,
-          reservation_id: doc.data()?.reservation_id,
-          reservation_date: doc.data()?.reservation_date.toDate(),
-          reservation_date_id: doc.data()?.reservation_date_id,
-          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
-          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
-          reservation_time_id: doc.data()?.reservation_time_id
-        } as ReservationSeat;
-      })
-      .orderBy("seat_no", "asc")
-      .value();
-
-    _.each(reservations, (item: Reservation) => {
-      item.reservation_seats = _.chain(seats)
-        .cloneDeep()
-        .filter((seat: ReservationSeat) => {
-          return (
-            item.reservation_date_id === seat.reservation_date_id &&
-            item.reservation_time_id === seat.reservation_time_id
-          );
-        })
-        .each((seat: ReservationSeat) => {
-          if (item.id === seat.reservation_id) {
-            seat.is_selected = true;
-          }
-        })
-        .value();
-    });
-
-    commit(SET_ITEMS, reservations);
-
-    return Promise.all([reservationSeatRef, reservationSeatRef]);
-  },
-
   [FETCH_RESERVATION_SEATS]: async ({ commit }, searchOption: ReservationSeatSearchOption) => {
     const reservationSeatService = new ReservationSeatService();
     const reservationSeatsRef = await reservationSeatService.fetch(searchOption);
@@ -178,11 +112,6 @@ const actions: ActionTree<ReservationState, RootState> = {
     promise.then(() => commit(SET_ITEM, reservation));
 
     return promise;
-  },
-
-  [SAVE_ALL_RESERVATION]: async ({ commit }, reservation: Reservation): Promise<string> => {
-    const service = new ReservationService();
-    return service.saveAllReservation(reservation);
   },
 
   [CANCEL]: async ({ commit }, id: string) => {

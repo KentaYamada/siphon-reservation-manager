@@ -54,14 +54,35 @@ service cloud.firestore {
 
     // [PUT] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
-      allow update: if isAuth() && hasId(businessDayId);
+      allow update: if isAuth()
+                    && hasId(businessDayId)
+                    && (request.resource.data != null)
+                    && ("business_date" in request.resource.data)
+                    && ("published_datetime" in request.resource.data)
+                    && ("is_pause" in request.resource.data)
+                    && (request.resource.data.business_date != null)
+                    && (request.resource.data.is_pause != null);
 
       // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{document} {
-        allow create: if isAuth() ;
+        allow create: if isAuth()
+                      && (request.resource.data != null)
+                      && ("start_time" in request.resource.data)
+                      && ("end_time" in request.resource.data)
+                      && ("selected" in request.resource.data)
+                      && (request.resource.data.start_time != null)
+                      && (request.resource.data.end_time != null)
+                      && (request.resource.data.selected != null);
       }
       match /timezones/{timezoneId} {
-        allow update: if isAuth() && hasId(timezoneId);
+        allow update: if isAuth()
+                      && hasId(timezoneId)
+                      && ("start_time" in request.resource.data)
+                      && ("end_time" in request.resource.data)
+                      && ("selected" in request.resource.data)
+                      && (request.resource.data.start_time != null)
+                      && (request.resource.data.end_time != null)
+                      && (request.resource.data.selected != null);
       }
     }
 

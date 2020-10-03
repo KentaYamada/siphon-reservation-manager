@@ -9,6 +9,32 @@ service cloud.firestore {
         return id != null;
     }
 
+    function validationBusinessDaySchema(businessDay) {
+        return businessDay.size() == 3
+            && ("business_date" in businessDay)
+            && ("published_datetime" in businessDay)
+            && ("is_pause" in businessDay)
+            && (businessDay.business_date != null)
+            && (businessDay.is_pause != null)
+            && (businessDay.business_date is timestamp)
+            && (businessDay.published_datetime == null
+                || (businessDay.business_date != null && businessDay.published_datetime is timestamp))
+            && (businessDay.is_pause is bool);
+    }
+
+    function validationTimezoneSchema(timezone) {
+        return timezone.size() == 3
+            && ("start_time" in timezone)
+            && ("end_time" in timezone)
+            && ("selected" in timezone)
+            && (timezone.start_time != null)
+            && (timezone.end_time != null)
+            && (timezone.selected != null)
+            && (timezone.start_time is timestamp)
+            && (timezone.end_time is timestamp)
+            && (timezone.selected is bool);
+    }
+
     // [GET] /business_days/{document}
     match /business_days/{document} {
       allow list: if isAuth();
@@ -32,23 +58,12 @@ service cloud.firestore {
     // [POST] /business_days/{document}
     match /business_days/{document} {
       allow create: if isAuth()
-                    && (request.resource.data != null)
-                    && ("business_date" in request.resource.data)
-                    && ("published_datetime" in request.resource.data)
-                    && ("is_pause" in request.resource.data)
-                    && (request.resource.data.business_date != null)
-                    && (request.resource.data.is_pause != null);
+                    && validationBusinessDaySchema(request.resource.data);
 
       // [POST] /business_days/{document}/timezones/{document}
       match /timezones/{document} {
         allow create: if isAuth()
-                      && (request.resource.data != null)
-                      && ("start_time" in request.resource.data)
-                      && ("end_time" in request.resource.data)
-                      && ("selected" in request.resource.data)
-                      && (request.resource.data.start_time != null)
-                      && (request.resource.data.end_time != null)
-                      && (request.resource.data.selected != null);
+                      && validationTimezoneSchema(request.resource.data);
       }
     }
 
@@ -56,33 +71,17 @@ service cloud.firestore {
     match /business_days/{businessDayId} {
       allow update: if isAuth()
                     && hasId(businessDayId)
-                    && (request.resource.data != null)
-                    && ("business_date" in request.resource.data)
-                    && ("published_datetime" in request.resource.data)
-                    && ("is_pause" in request.resource.data)
-                    && (request.resource.data.business_date != null)
-                    && (request.resource.data.is_pause != null);
+                    && validationBusinessDaySchema(request.resource.data);
 
       // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{document} {
         allow create: if isAuth()
-                      && (request.resource.data != null)
-                      && ("start_time" in request.resource.data)
-                      && ("end_time" in request.resource.data)
-                      && ("selected" in request.resource.data)
-                      && (request.resource.data.start_time != null)
-                      && (request.resource.data.end_time != null)
-                      && (request.resource.data.selected != null);
+                      && validationTimezoneSchema(request.resource.data);
       }
       match /timezones/{timezoneId} {
         allow update: if isAuth()
                       && hasId(timezoneId)
-                      && ("start_time" in request.resource.data)
-                      && ("end_time" in request.resource.data)
-                      && ("selected" in request.resource.data)
-                      && (request.resource.data.start_time != null)
-                      && (request.resource.data.end_time != null)
-                      && (request.resource.data.selected != null);
+                      && validationTimezoneSchema(request.resource.data);
       }
     }
 

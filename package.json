@@ -6,13 +6,12 @@
     "serve": "vue-cli-service serve --mode development",
     "serve:db": "firebase serve --only firestore",
     "build": "vue-cli-service build --mode production",
-    "test:unit": "vue-cli-service test:unit --watch",
+    "test:unit": "export FIRESTORE_EMULATOR_HOST=localhost:8082; vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
     "deploy-dev": "vue-cli-service build --mode development && firebase deploy",
     "build:dev": "vue-cli-service build --mode development"
   },
   "dependencies": {
-    "@firebase/testing": "^0.20.11",
     "@fortawesome/fontawesome-free": "^5.15.0",
     "buefy": "^0.9.3",
     "core-js": "^3.6.5",
@@ -28,6 +27,7 @@
     "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
+    "@firebase/testing": "^0.20.11",
     "@types/ismobilejs": "^1.0.1",
     "@types/jest": "^26.0.14",
     "@types/lodash": "^4.14.161",

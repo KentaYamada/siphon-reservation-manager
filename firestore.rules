@@ -14,8 +14,6 @@ service cloud.firestore {
             && ("business_date" in businessDay)
             && ("published_datetime" in businessDay)
             && ("is_pause" in businessDay)
-            && (businessDay.business_date != null)
-            && (businessDay.is_pause != null)
             && (businessDay.business_date is timestamp)
             && (businessDay.published_datetime == null
                 || (businessDay.business_date != null && businessDay.published_datetime is timestamp))

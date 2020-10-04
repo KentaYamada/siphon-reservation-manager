@@ -118,6 +118,16 @@ service cloud.firestore {
         allow update: if true;
     }
 
+    function validationTimezoneSchema(timezone) {
+        return (timezone.size() == 3)
+            && ("start_time" in timezone)
+            && ("end_time" in timezone)
+            && ("is_default_select" in timezone)
+            && (timezone.start_time is timestamp)
+            && (timezone.end_time is timestamp)
+            && (timezone.is_default_select is bool);
+    }
+
     // [GET] /timezones/{document}
     match /timezones/{document} {
         allow list: if isAuth();
@@ -130,12 +140,15 @@ service cloud.firestore {
 
     // [POST] /timezones/{document}
     match /timezones/{document} {
-        allow create: if isAuth();
+        allow create: if isAuth()
+                      && validationTimezoneSchema(request.resource.data);
     }
 
     // [PUT] /timezones/{timezoneId}
     match /timezones/{timezoneId} {
-        allow update: if isAuth() && hasId(timezoneId);
+        allow update: if isAuth()
+                      && hasId(timezoneId)
+                      && validationTimezoneSchema(request.resource.data);
     }
 
     // [DELETE] /timezones/{timezoneId}

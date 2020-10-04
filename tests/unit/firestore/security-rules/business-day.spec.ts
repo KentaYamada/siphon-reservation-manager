@@ -3,6 +3,10 @@ import * as firebase from "@firebase/testing";
 const MY_PROJECT_ID = "siphon-reservation-manager-dev";
 
 describe("business day security rules tests", () => {
+  afterAll(async () => {
+    await Promise.all(firebase.apps().map(app => app.delete()));
+  });
+
   afterEach(async () => {
     await firebase.clearFirestoreData({ projectId: MY_PROJECT_ID });
   });

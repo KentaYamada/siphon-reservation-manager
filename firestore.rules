@@ -20,14 +20,11 @@ service cloud.firestore {
             && (businessDay.is_pause is bool);
     }
 
-    function validationTimezoneSchema(timezone) {
+    function validationSelectableTimezoneSchema(timezone) {
         return timezone.size() == 3
             && ("start_time" in timezone)
             && ("end_time" in timezone)
             && ("selected" in timezone)
-            && (timezone.start_time != null)
-            && (timezone.end_time != null)
-            && (timezone.selected != null)
             && (timezone.start_time is timestamp)
             && (timezone.end_time is timestamp)
             && (timezone.selected is bool);
@@ -61,7 +58,7 @@ service cloud.firestore {
       // [POST] /business_days/{document}/timezones/{document}
       match /timezones/{document} {
         allow create: if isAuth()
-                      && validationTimezoneSchema(request.resource.data);
+                      && validationSelectableTimezoneSchema(request.resource.data);
       }
     }
 
@@ -74,12 +71,12 @@ service cloud.firestore {
       // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{document} {
         allow create: if isAuth()
-                      && validationTimezoneSchema(request.resource.data);
+                      && validationSelectableTimezoneSchema(request.resource.data);
       }
       match /timezones/{timezoneId} {
         allow update: if isAuth()
                       && hasId(timezoneId)
-                      && validationTimezoneSchema(request.resource.data);
+                      && validationSelectableTimezoneSchema(request.resource.data);
       }
     }
 

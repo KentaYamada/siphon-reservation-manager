@@ -20,6 +20,16 @@ service cloud.firestore {
             && (businessDay.is_pause is bool);
     }
 
+    function existBusinessDay(businessDayId) {
+        return (businessDayId != null)
+            && exists(/databases/$(database)/documents/business_days/$(businessDayId));
+    }
+
+    function existSelectableTimezone(businessDayId, timezoneId) {
+        return (businessDayId != null)
+            && exists(/databases/$(database)/documents/business_days/$(businessDayId)/timezones/$(timezoneId));
+    }
+
     function validationSelectableTimezoneSchema(timezone) {
         return timezone.size() == 3
             && ("start_time" in timezone)
@@ -32,21 +42,23 @@ service cloud.firestore {
 
     // [GET] /business_days/{document}
     match /business_days/{document} {
-      allow list: if isAuth();
+      allow list;
 
       // [GET] /business_days/{document}/timezones/{document}
       match /timezones/{document} {
-        allow list: if isAuth();
+        allow list;
       }
     }
 
     // [GET] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
-      allow get: if isAuth() && hasId(businessDayId);
+      allow get: if isAuth()
+                  && existBusinessDay(businessDayId);
 
       // [GET] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{timezoneId} {
-        allow get: if isAuth() && hasId(timezoneId);
+        allow get: if isAuth()
+                   && existSelectableTimezone(businessDayId, timezoneId);
       }
     }
 
@@ -65,7 +77,7 @@ service cloud.firestore {
     // [PUT] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
       allow update: if isAuth()
-                    && hasId(businessDayId)
+                    && existBusinessDay(businessDayId)
                     && validationBusinessDaySchema(request.resource.data);
 
       // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
@@ -75,18 +87,20 @@ service cloud.firestore {
       }
       match /timezones/{timezoneId} {
         allow update: if isAuth()
-                      && hasId(timezoneId)
+                      && existSelectableTimezone(businessDayId, timezoneId)
                       && validationSelectableTimezoneSchema(request.resource.data);
       }
     }
 
     // [DELETE] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
-      allow delete: if isAuth() && hasId(businessDayId);
+      allow delete: if isAuth()
+                    && existBusinessDay(businessDayId);
 
       // [DELETE] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{timezoneId} {
-        allow delete: if isAuth() && hasId(timezoneId);
+        allow delete: if isAuth()
+                      && existSelectableTimezone(businessDayId, timezoneId);
       }
     }
 

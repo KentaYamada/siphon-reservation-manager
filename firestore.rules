@@ -1,8 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAuth() {
-        return true;
+    function isAuth(auth) {
+        return auth != null;
     }
 
     function hasId(id) {
@@ -10,34 +10,23 @@ service cloud.firestore {
     }
 
     function validationBusinessDaySchema(businessDay) {
-        return businessDay.size() == 3
-            && ("business_date" in businessDay)
-            && ("published_datetime" in businessDay)
-            && ("is_pause" in businessDay)
-            && (businessDay.business_date is timestamp)
-            && (businessDay.published_datetime == null
-                || (businessDay.business_date != null && businessDay.published_datetime is timestamp))
-            && (businessDay.is_pause is bool);
-    }
-
-    function existBusinessDay(businessDayId) {
-        return (businessDayId != null)
-            && exists(/databases/$(database)/documents/business_days/$(businessDayId));
-    }
-
-    function existSelectableTimezone(businessDayId, timezoneId) {
-        return (businessDayId != null)
-            && exists(/databases/$(database)/documents/business_days/$(businessDayId)/timezones/$(timezoneId));
+        return (businessDay.size() == 3) &&
+               ("business_date" in businessDay) &&
+               ("published_datetime" in businessDay) &&
+               ("is_pause" in businessDay) &&
+               (businessDay.business_date is timestamp) &&
+               (businessDay.published_datetime == null || (businessDay.business_date != null && businessDay.published_datetime is timestamp)) &&
+               (businessDay.is_pause is bool);
     }
 
     function validationSelectableTimezoneSchema(timezone) {
-        return timezone.size() == 3
-            && ("start_time" in timezone)
-            && ("end_time" in timezone)
-            && ("selected" in timezone)
-            && (timezone.start_time is timestamp)
-            && (timezone.end_time is timestamp)
-            && (timezone.selected is bool);
+        return (timezone.size() == 3) &&
+               ("start_time" in timezone) &&
+               ("end_time" in timezone) &&
+               ("selected" in timezone) &&
+               (timezone.start_time is timestamp) &&
+               (timezone.end_time is timestamp) &&
+               (timezone.selected is bool);
     }
 
     // [GET] /business_days/{document}
@@ -52,97 +41,88 @@ service cloud.firestore {
 
     // [GET] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
-      allow get: if isAuth()
-                  && existBusinessDay(businessDayId);
+      allow get: if isAuth(request.auth) && hasId(businessDayId);
 
       // [GET] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{timezoneId} {
-        allow get: if isAuth()
-                   && existSelectableTimezone(businessDayId, timezoneId);
+        allow get: if isAuth(request.auth) && hasId(timezoneId);
       }
     }
 
     // [POST] /business_days/{document}
     match /business_days/{document} {
-      allow create: if isAuth()
-                    && validationBusinessDaySchema(request.resource.data);
+      allow create: if isAuth(request.auth) &&
+                       validationBusinessDaySchema(request.resource.data);
 
       // [POST] /business_days/{document}/timezones/{document}
       match /timezones/{document} {
-        allow create: if isAuth()
-                      && validationSelectableTimezoneSchema(request.resource.data);
+        allow create: if isAuth(request.auth) &&
+                         validationSelectableTimezoneSchema(request.resource.data);
       }
     }
 
     // [PUT] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
-      allow update: if isAuth()
-                    && existBusinessDay(businessDayId)
-                    && validationBusinessDaySchema(request.resource.data);
+      allow update: if isAuth(request.auth) &&
+                       hasId(businessDayId) &&
+                       validationBusinessDaySchema(request.resource.data);
 
       // [PUT] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{document} {
-        allow create: if isAuth()
-                      && validationSelectableTimezoneSchema(request.resource.data);
+        allow create: if isAuth(request.auth) &&
+                         validationSelectableTimezoneSchema(request.resource.data);
       }
       match /timezones/{timezoneId} {
-        allow update: if isAuth()
-                      && existSelectableTimezone(businessDayId, timezoneId)
-                      && validationSelectableTimezoneSchema(request.resource.data);
+        allow update: if isAuth(request.auth) &&
+                         hasId(timezoneId) &&
+                         validationSelectableTimezoneSchema(request.resource.data);
       }
     }
 
     // [DELETE] /business_days/{businessDayId}
     match /business_days/{businessDayId} {
-      allow delete: if isAuth()
-                    && existBusinessDay(businessDayId);
+      allow delete: if isAuth(request.auth) && hasId(businessDayId);
 
       // [DELETE] /business_days/{businessDayId}/timezones/{timezoneId}
       match /timezones/{timezoneId} {
-        allow delete: if isAuth()
-                      && existSelectableTimezone(businessDayId, timezoneId);
+        allow delete: if isAuth(request.auth) && hasId(timezoneId);
       }
     }
 
     function validationReservationSchema(reservation) {
-        return (reservation.size() == 10)
-            && ("reservation_date" in reservation)
-            && ("reservation_date_id" in reservation)
-            && ("reservation_start_time" in reservation)
-            && ("reservation_end_time" in reservation)
-            && ("reservation_time_id" in reservation)
-            && ("reserver_name" in reservation)
-            && ("number_of_reservations" in reservation)
-            && ("tel" in reservation)
-            && ("mail" in reservation)
-            && ("comment" in reservation)
-            && (reservation.reservation_date is timestamp)
-            && (reservation.reservation_date_id is string)
-            && (reservation.reservation_start_time is timestamp)
-            && (reservation.reservation_end_time is timestamp)
-            && (reservation.reservation_time_id is string)
-            && (reservation.reserver_name is string)
-            && (reservation.number_of_reservations is number)
-            && (reservation.number_of_reservations > 0)
-            && (reservation.number_of_reservations <= 8)
-            && (reservation.tel is string)
-            && (reservation.mail is string)
-            && (reservation.comment is string);
-    }
-
-    function existReservation(reservationId) {
-        return (reservationId != null)
-            && exists(/databases/$(database)/documents/reservations/$(reservationId));
+        return (reservation.size() == 10) &&
+               ("reservation_date" in reservation) &&
+               ("reservation_date_id" in reservation) &&
+               ("reservation_start_time" in reservation) &&
+               ("reservation_end_time" in reservation) &&
+               ("reservation_time_id" in reservation) &&
+               ("reserver_name" in reservation) &&
+               ("number_of_reservations" in reservation) &&
+               ("tel" in reservation) &&
+               ("mail" in reservation) &&
+               ("comment" in reservation) &&
+               (reservation.reservation_date is timestamp) &&
+               (reservation.reservation_date_id is string) &&
+               (reservation.reservation_start_time is timestamp) &&
+               (reservation.reservation_end_time is timestamp) &&
+               (reservation.reservation_time_id is string) &&
+               (reservation.reserver_name is string) &&
+               (reservation.number_of_reservations is number) &&
+               (reservation.number_of_reservations > 0) &&
+               (reservation.number_of_reservations <= 8) &&
+               (reservation.tel is string) &&
+               (reservation.mail is string) &&
+               (reservation.comment is string);
     }
 
     // [GET] /reservations
     match /reservations/{document} {
-        allow list: if isAuth();
+        allow list: if isAuth(request.auth);
     }
 
     // [GET] /reservations/{reservationId}
     match /reservations/{reservationId} {
-      allow get: if existReservation(reservationId);
+      allow get: if hasId(reservationId);
     }
 
     // [POST] /reservations
@@ -152,45 +132,40 @@ service cloud.firestore {
 
     // [PUT] /reservation/{reservationId}
     match /reservations/{reservationId} {
-        allow update: if existReservation(reservationId)
+        allow update: if hasId(reservationId)
                       && validationReservationSchema(request.resource.data);
     }
 
     // [DELETE] /reservation/{reservationId}
     match /reservations/{reservationId} {
-        allow delete: if existReservation(reservationId);
+        allow delete: if hasId(reservationId);
     }
 
     function validationReservationSeatSchema(seat) {
-        return seat.size() == 8
-            && ("reservation_id" in seat)
-            && ("seat_no" in seat)
-            && ("is_reserved" in seat)
-            && ("reservation_date" in seat)
-            && ("reservation_date_id" in seat)
-            && ("reservation_start_time" in seat)
-            && ("reservation_end_time" in seat)
-            && ("reservation_time_id" in seat)
-            && ((seat.reservation_id == null) || (seat.reservation_id != null && seat.reservation_id is string))
-            && (seat.seat_no is number)
-            && (seat.seat_no >= 1)
-            && (seat.seat_no <= 4)
-            && (seat.is_reserved is bool)
-            && (seat.reservation_date is timestamp)
-            && (seat.reservation_date_id is string)
-            && (seat.reservation_start_time is timestamp)
-            && (seat.reservation_end_time is timestamp)
-            && (seat.reservation_time_id is string);
-    }
-
-    function existReservationSeat(reservationSeatId) {
-        return (reservationSeatId != null)
-            && exists(/databases/$(database)/documents/reservation_seats/$(reservationSeatId));
+        return (seat.size() == 8) &&
+               ("reservation_id" in seat) &&
+               ("seat_no" in seat) &&
+               ("is_reserved" in seat) &&
+               ("reservation_date" in seat) &&
+               ("reservation_date_id" in seat) &&
+               ("reservation_start_time" in seat) &&
+               ("reservation_end_time" in seat) &&
+               ("reservation_time_id" in seat) &&
+               ((seat.reservation_id == null) || (seat.reservation_id != null && seat.reservation_id is string)) &&
+               (seat.seat_no is number) &&
+               (seat.seat_no >= 1) &&
+               (seat.seat_no <= 4) &&
+               (seat.is_reserved is bool) &&
+               (seat.reservation_date is timestamp) &&
+               (seat.reservation_date_id is string) &&
+               (seat.reservation_start_time is timestamp) &&
+               (seat.reservation_end_time is timestamp) &&
+               (seat.reservation_time_id is string);
     }
 
     // [GET] /reservation_seats
     match /reservation_seats/{document} {
-        allow list: if true;
+        allow list;
     }
 
     // [POST] /reservation_seats
@@ -200,51 +175,51 @@ service cloud.firestore {
 
     // [PUT] /reservation_seats/reservationSeatId
     match /reservation_seats/{reservationSeatId} {
-        allow update: if existReservationSeat(reservationSeatId)
+        allow update: if hasId(reservationSeatId)
                       && validationReservationSeatSchema(request.resource.data);
     }
 
     // [DELETE] /reservation_seats/reservationSeatId
     match /reservation_seats/{reservationSeatId} {
-        allow delete: if existReservationSeat(reservationSeatId);
+        allow delete: if hasId(reservationSeatId);
     }
 
     function validationTimezoneSchema(timezone) {
-        return (timezone.size() == 3)
-            && ("start_time" in timezone)
-            && ("end_time" in timezone)
-            && ("is_default_select" in timezone)
-            && (timezone.start_time is timestamp)
-            && (timezone.end_time is timestamp)
-            && (timezone.is_default_select is bool);
+        return (timezone.size() == 3) &&
+               ("start_time" in timezone) &&
+               ("end_time" in timezone) &&
+               ("is_default_select" in timezone) &&
+               (timezone.start_time is timestamp) &&
+               (timezone.end_time is timestamp) &&
+               (timezone.is_default_select is bool);
     }
 
     // [GET] /timezones/{document}
     match /timezones/{document} {
-        allow list: if isAuth();
+        allow list: if isAuth(request.auth);
     }
 
     // [GET] /timezones/{timezoneId}
     match /timezones/{timezoneId} {
-        allow get: if isAuth() && hasId(timezoneId);
+        allow get: if isAuth(request.auth) && hasId(timezoneId);
     }
 
     // [POST] /timezones/{document}
     match /timezones/{document} {
-        allow create: if isAuth()
+        allow create: if isAuth(request.auth)
                       && validationTimezoneSchema(request.resource.data);
     }
 
     // [PUT] /timezones/{timezoneId}
     match /timezones/{timezoneId} {
-        allow update: if isAuth()
+        allow update: if isAuth(request.auth)
                       && hasId(timezoneId)
                       && validationTimezoneSchema(request.resource.data);
     }
 
     // [DELETE] /timezones/{timezoneId}
     match /timezones/{timezoneId} {
-        allow delete: if isAuth() && hasId(timezoneId);
+        allow delete: if isAuth(request.auth) && hasId(timezoneId);
     }
   }
 }

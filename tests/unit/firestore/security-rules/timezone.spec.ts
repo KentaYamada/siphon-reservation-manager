@@ -66,7 +66,7 @@ describe("Timezone security rules tests", () => {
       );
     });
 
-    it("Can't create document when request is no contain end_time", async () => {
+    it("Cannot create document when request is no contain end_time", async () => {
       const doc = getCollection().doc();
       await firebase.assertFails(
         doc.set({
@@ -77,7 +77,7 @@ describe("Timezone security rules tests", () => {
       );
     });
 
-    it("Can't create document in the timezones when request is no contain is_default_select", async () => {
+    it("Cannot create document when request is no contain is_default_select", async () => {
       const doc = getCollection().doc();
       await firebase.assertFails(
         doc.set({
@@ -88,7 +88,7 @@ describe("Timezone security rules tests", () => {
       );
     });
 
-    it("Can't create document in the timezones when start_time is null", async () => {
+    it("Cannot create document when start_time is null", async () => {
       const doc = getCollection().doc();
       await firebase.assertFails(
         doc.set({
@@ -99,7 +99,7 @@ describe("Timezone security rules tests", () => {
       );
     });
 
-    it("Can't create document in the timezones when end_time is null", async () => {
+    it("Cannot create document when end_time is null", async () => {
       const doc = getCollection().doc();
       await firebase.assertFails(
         doc.set({
@@ -110,7 +110,7 @@ describe("Timezone security rules tests", () => {
       );
     });
 
-    it("Can't create document in the timezones when is_default_select is null", async () => {
+    it("Cannot create document when is_default_select is null", async () => {
       const doc = getCollection().doc();
       await firebase.assertFails(
         doc.set({

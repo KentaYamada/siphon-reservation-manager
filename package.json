@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
-    "serve:db": "firebase emulators:start --only firestore",
+    "serve:firestore": "firebase emulators:start --only firestore",
     "build": "vue-cli-service build --mode production",
-    "test:unit": "export FIRESTORE_EMULATOR_HOST=localhost:8082; vue-cli-service test:unit --watch",
+    "test:unit": "export FIRESTORE_EMULATOR_HOST=localhost:8082; vue-cli-service test:unit --watchAll",
     "lint": "vue-cli-service lint",
     "deploy-dev": "vue-cli-service build --mode development && firebase deploy",
     "build:dev": "vue-cli-service build --mode development"

@@ -127,4 +127,39 @@ describe("Timezone security rules tests", () => {
       );
     });
   });
+
+  describe("Update security rules", () => {
+    const docId = "test_timezone_id";
+
+    beforeEach(async () => {
+      const doc = getCollection().doc(docId);
+      await doc.set({
+        start_time: new Date(),
+        end_time: new Date(),
+        is_default_select: true
+      });
+    });
+
+    it("Can update document", async () => {
+      const doc = getCollection().doc(docId);
+      await firebase.assertSucceeds(
+        doc.update({
+          start_time: new Date(),
+          end_time: new Date(),
+          is_default_select: false
+        })
+      );
+    });
+
+    it("Cannot update document", async () => {
+      const doc = getCollection().doc("is_not_exist_timezone");
+      await firebase.assertFails(
+        doc.update({
+          start_time: new Date(),
+          end_time: new Date(),
+          is_default_select: false
+        })
+      );
+    });
+  });
 });

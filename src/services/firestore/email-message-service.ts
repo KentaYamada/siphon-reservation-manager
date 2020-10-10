@@ -12,18 +12,21 @@ export class EmailMessageService {
         {
           id: "reserved",
           theme: "is-success",
+          category: "予約完了メッセージ",
           subject: "[Cafe de GAMOYON] 予約完了しました",
           body: "Thank you for reservation"
         },
         {
           id: "edited",
           theme: "is-info",
+          category: "予約変更完了メッセージ",
           subject: "[Cafe de GAMOYON] 予変更了しました",
           body: "Thank you for reservation"
         },
         {
           id: "canceled",
           theme: "is-danger",
+          category: "予約キャンセル完了メッセージ",
           subject: "[Cafe de GAMOYON] 予約キャンセルしました",
           body: "Thank you for reservation"
         }
@@ -37,6 +40,7 @@ export class EmailMessageService {
       const message: EmailMessage = {
         id: "reserved",
         theme: "is-success",
+        category: "予約完了メッセージ",
         subject: "[Cafe de GAMOYON] 予約完了しました",
         body: "Thank you for reservation"
       };

@@ -1,5 +1,7 @@
 <div class="email-message-list">
-    aaa
-    <email-message-list-item>
+    <email-message-list-item
+        :message="message"
+        :key="message.id"
+        v-for="message in messages">
     </email-message-list-item>
 </div>

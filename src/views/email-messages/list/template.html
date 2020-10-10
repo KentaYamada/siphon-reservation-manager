@@ -5,7 +5,10 @@
                 <div class="page-header">
                 </div>
                 <div class="page-content">
-                    <email-message-list></email-message-list>
+                    <email-message-list
+                        :messages="messages">
+                    </email-message-list>
+                    <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
                 </div>
             </div>
         </div>

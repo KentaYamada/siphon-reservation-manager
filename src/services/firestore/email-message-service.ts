@@ -31,4 +31,16 @@ export class EmailMessageService {
       subscriber.next(messages);
     });
   }
+
+  static fetchById(id: string): Observable<EmailMessage> {
+    return new Observable(subscriber => {
+      const message: EmailMessage = {
+        id: "reserved",
+        theme: "is-success",
+        subject: "[Cafe de GAMOYON] 予約完了しました",
+        body: "Thank you for reservation"
+      };
+      subscriber.next(message);
+    });
+  }
 }

@@ -2,20 +2,20 @@
     <div class="field">
         <label class="label">タイトル</label>
         <div class="control">
-            <input type="text" class="input">
+            <input type="text" class="input" v-model="message.subject">
         </div>
     </div>
     <div class="field">
         <label class="label">本文</label>
         <div class="control">
-            <textarea class="input"></textarea>
+            <textarea class="textarea" v-model="message.body" rows="10"></textarea>
         </div>
     </div>
     <div class="buttons is-right">
         <button type="button" class="button" @click="handlePreview()">
             <i class="fas"></i>プレビュー
         </button>
-        <button type="submit" class="button is-info" @click="handleSave()">
+        <button type="button" class="button is-info" @click="handleSave()">
             <i class="fas"></i>保存する
         </button>
     </div>

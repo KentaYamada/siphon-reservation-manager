@@ -1,6 +1,4 @@
 import Vue, { PropType } from "vue";
-import { BModalConfig } from "buefy/types/components";
-import EmailMessageEditDialog from "@/components/email-message/dialog/EmailMessageEditDialog.vue";
 import { EmailMessage } from "@/entity/email-message";
 import { EMAIL_MESSAGE_EDIT_URL } from "@/router/url";
 

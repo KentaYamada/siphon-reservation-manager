@@ -17,4 +17,11 @@ if (firebase.apps.length <= 0) {
   firebase.initializeApp(firebaseConfig);
 }
 
+if (window.location.hostname === "localhost") {
+  firebase.firestore().settings({
+    host: "localhost:8082",
+    ssl: false
+  });
+}
+
 export default firebase;

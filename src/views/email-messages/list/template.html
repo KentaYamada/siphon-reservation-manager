@@ -6,7 +6,8 @@
                 </div>
                 <div class="page-content">
                     <email-message-list
-                        :messages="messages">
+                        :messages="messages"
+                        :is-loading="isLoading">
                     </email-message-list>
                     <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
                 </div>

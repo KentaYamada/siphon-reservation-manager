@@ -11,11 +11,15 @@ export default Vue.extend({
     messages: {
       required: true,
       type: Array as PropType<Array<EmailMessage>>
+    },
+    isLoading: {
+      required: true,
+      type: Boolean
     }
   },
   computed: {
-    hasItems(): boolean {
-      return !!this.messages && this.messages.length > 0;
+    visibleEmptyItem(): boolean {
+      return !this.isLoading && this.messages.length == 0;
     }
   }
 });

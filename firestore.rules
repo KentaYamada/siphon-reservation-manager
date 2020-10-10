@@ -214,5 +214,34 @@ service cloud.firestore {
     match /timezones/{timezoneId} {
         allow delete: if isAuth(request.auth);
     }
+
+    function validationEmailMessageSchema(data) {
+        return (data.size() == 2) &&
+               (data.keys().hasAll(["subject", "body"])) &&
+               (data.subject is string) &&
+               (data.body is string);
+    }
+
+    // [GET] /email_messages
+    match /email_messages/{document} {
+        allow list: if isAuth(request.auth);
+    }
+
+    // [GET] /email_messages/{id}
+    match /email_messages/{id} {
+        allow get: if isAuth(request.auth);
+    }
+
+    // [POST] /email_messages
+    match /email_messages/{document} {
+        allow create: if isAuth(request.auth) &&
+                         validationEmailMessageSchema(request.resource.data);
+    }
+
+    // [PUT] /email_messages/{id}
+    match /email_messages/{id} {
+        allow update: if isAuth(request.auth) &&
+                         validationEmailMessageSchema(request.resource.data);
+    }
   }
 }

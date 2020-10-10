@@ -424,9 +424,4 @@ describe("reservation seats security rules tests", () => {
 
     await firebase.assertSucceeds(doc.delete());
   });
-
-  it("Can't delete document when it doesn't exists", async () => {
-    const doc = getCollection().doc("does_not_exist_doc");
-    await firebase.assertFails(doc.delete());
-  });
 });

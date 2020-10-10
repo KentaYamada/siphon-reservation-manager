@@ -2,7 +2,13 @@ import * as firebase from "@firebase/testing";
 
 const MY_PROJECT_ID = "siphon-reservation-manager-dev";
 const getCollection = () => {
-  return firebase.initializeTestApp({ projectId: MY_PROJECT_ID }).firestore().collection("timezones");
+  return firebase
+    .initializeTestApp({
+      projectId: MY_PROJECT_ID,
+      auth: { uid: "test", email: "taro@email.com" }
+    })
+    .firestore()
+    .collection("timezones");
 };
 
 describe("Timezone security rules tests", () => {

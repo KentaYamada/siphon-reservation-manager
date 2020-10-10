@@ -550,7 +550,8 @@ describe("reservation security rules tests", () => {
 
   it("Can't read document in the reservations when it's not exist", async () => {
     const doc = getCollection().doc("not_exist_reservation");
-    await firebase.assertFails(doc.get());
+    const promise = await doc.get();
+    expect(promise.exists).toBeFalsy();
   });
 
   it("Can delete document in the reservations", async () => {
@@ -568,10 +569,5 @@ describe("reservation security rules tests", () => {
       comment: "this is test data"
     });
     await firebase.assertSucceeds(doc.delete());
-  });
-
-  it("Can't delete document in the reservations when it's not exist", async () => {
-    const doc = getCollection().doc("not_exist_reservation");
-    await firebase.assertFails(doc.delete());
   });
 });

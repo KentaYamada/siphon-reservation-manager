@@ -118,7 +118,7 @@ service cloud.firestore {
 
     // [GET] /reservations/{reservationId}
     match /reservations/{reservationId} {
-      allow get;
+      allow get: if hasId(reservationId);
     }
 
     // [POST] /reservations

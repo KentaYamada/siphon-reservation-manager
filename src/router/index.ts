@@ -4,6 +4,7 @@ import VueRouter, { RouteConfig, Route } from "vue-router";
 // Routing URL
 import {
   INDEX_URL,
+  EMAIL_MESSAGE_LIST_URL,
   RESERVATION_CANCELED_URL,
   RESERVATION_EDIT_URL,
   RESERVATION_EDITED_URL,
@@ -111,6 +112,15 @@ const routes: RouteConfig[] = [
     path: MANAGEMENT_LOGIN_URL,
     name: "login",
     component: Login
+  },
+  {
+    path: EMAIL_MESSAGE_LIST_URL,
+    name: "email-message-list",
+    component: () =>
+      import(/* webpackChunkName: "email-message-list" */ "@/views/email-messages/list/EmailMessageListView.vue"),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: FORBIDDEN_URL,

@@ -180,4 +180,29 @@ describe("Timezone security rules tests", () => {
       await firebase.assertSucceeds(doc.delete());
     });
   });
+
+  describe("Get security rule tests", () => {
+    const docId = "test_timezone_id";
+
+    beforeEach(async () => {
+      const doc = getCollection().doc(docId);
+      await doc.set({
+        start_time: new Date(),
+        end_time: new Date(),
+        is_default_select: true
+      });
+    });
+
+    it("Can read document by id", async () => {
+      const doc = getCollection().doc(docId);
+      const promise = await doc.get();
+      expect(promise.exists).toBeTruthy();
+    });
+
+    it("Cannot read document by id", async () => {
+      const doc = getCollection().doc("is_not_exist_timezone");
+      const promise = await doc.get();
+      expect(promise.exists).toBeFalsy();
+    });
+  });
 });

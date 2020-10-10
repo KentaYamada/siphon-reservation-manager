@@ -2,7 +2,11 @@
     <div class="columns is-centered is-desktop">
         <div class="column is-half">
             <email-message-edit-form
-                :message="message">
+                :message="message"
+                @edit-succeeded="handleEditSucceeded"
+                @edit-failed="handleEditFailed"
+                @validation-failed="handleValidationFailed"
+                v-if="!!message">
             </email-message-edit-form>
         </div>
     </div>

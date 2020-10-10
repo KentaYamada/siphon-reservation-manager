@@ -1,6 +1,9 @@
 import Vue from "vue";
+import { BNoticeConfig } from "buefy/types/components";
+import { tap } from "rxjs/operators";
 import EmailMessageEditForm from "@/components/email-message/form/EmailMessageEditForm.vue";
 import { EmailMessage } from "@/entity/email-message";
+import { EmailMessageService } from "@/services/firestore/email-message-service";
 
 export default Vue.extend({
   components: {
@@ -22,5 +25,49 @@ export default Vue.extend({
         body: ""
       } as EmailMessage
     };
+  },
+  methods: {
+    handleEditSucceeded() {
+      const config: BNoticeConfig = {
+        message: "変更しました",
+        type: "is-success"
+      };
+      this.$buefy.toast.open(config);
+    },
+
+    handleEditFailed() {
+      const config: BNoticeConfig = {
+        message: "変更に失敗しました",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(config);
+    },
+
+    handleValidationFailed() {
+      const config: BNoticeConfig = {
+        message: "入力内容に誤りがあります。エラーメッセージを確認してください。",
+        type: "is-danger"
+      };
+      this.$buefy.toast.open(config);
+    }
+  },
+  mounted() {
+    this.isLoading = true;
+
+    EmailMessageService.fetchById(this.id)
+      .pipe(tap(() => (this.isLoading = false)))
+      .subscribe(
+        (message: EmailMessage) => {
+          console.log(message);
+          this.message = message;
+        },
+        () => {
+          const config: BNoticeConfig = {
+            message: "データの取得に失敗しました",
+            type: "is-danger"
+          };
+          this.$buefy.toast.open(config);
+        }
+      );
   }
 });

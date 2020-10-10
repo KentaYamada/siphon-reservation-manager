@@ -1,0 +1,17 @@
+<div class="modal-card">
+    <header class="modal-card-head">
+        <p class="modal-card-title">
+            <i class="fas-fa-mail-bulk"></i>
+            メッセージプレビュー
+        </p>
+    </header>
+    <section class="modal-card-body">
+        <h3 class="subtitle">件名: {{ message.subject }}</h3>
+        <p>{{ message.body }}</p>
+        <div class="buttons is-right">
+            <button type="button" class="button">
+                閉じる
+            </button>
+        </div>
+    </section>
+</div>

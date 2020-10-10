@@ -11,16 +11,19 @@ export class EmailMessageService {
       const messages: Array<EmailMessage> = [
         {
           id: "reserved",
+          theme: "is-success",
           subject: "[Cafe de GAMOYON] 予約完了しました",
           body: "Thank you for reservation"
         },
         {
           id: "edited",
+          theme: "is-info",
           subject: "[Cafe de GAMOYON] 予変更了しました",
           body: "Thank you for reservation"
         },
         {
           id: "canceled",
+          theme: "is-danger",
           subject: "[Cafe de GAMOYON] 予約キャンセルしました",
           body: "Thank you for reservation"
         }

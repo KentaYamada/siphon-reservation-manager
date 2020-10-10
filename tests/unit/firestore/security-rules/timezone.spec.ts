@@ -128,7 +128,7 @@ describe("Timezone security rules tests", () => {
     });
   });
 
-  describe("Update security rules", () => {
+  describe("Update security rule tests", () => {
     const docId = "test_timezone_id";
 
     beforeEach(async () => {
@@ -160,6 +160,24 @@ describe("Timezone security rules tests", () => {
           is_default_select: false
         })
       );
+    });
+  });
+
+  describe("Delete security rule tests", () => {
+    const docId = "test_timezone_id";
+
+    beforeEach(async () => {
+      const doc = getCollection().doc(docId);
+      await doc.set({
+        start_time: new Date(),
+        end_time: new Date(),
+        is_default_select: true
+      });
+    });
+
+    it("Can delete document", async () => {
+      const doc = getCollection().doc(docId);
+      await firebase.assertSucceeds(doc.delete());
     });
   });
 });

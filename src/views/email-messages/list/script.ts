@@ -1,4 +1,4 @@
-import Vue, { PropType } from "vue";
+import Vue from "vue";
 import { BNoticeConfig } from "buefy/types/components";
 import { tap } from "rxjs/operators";
 import EmailMessageList from "@/components/email-message/list/EmailMessageList.vue";

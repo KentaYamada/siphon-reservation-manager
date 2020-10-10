@@ -9,7 +9,7 @@
             <h3>本文</h3>
             <p>{{ message.body }}</p>
             <div class="buttons is-right">
-                <button class="button is-info is-inverted" type="button">
+                <button class="button is-info is-inverted" type="button" @click="handleEditMessage()">
                     <i class="fas fa-edit"></i>
                     メッセージを編集する
                 </button>

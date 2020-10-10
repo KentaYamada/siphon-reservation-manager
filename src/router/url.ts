@@ -29,3 +29,5 @@ export const NOTFOUND_URL = "/notfound";
 export const HELP_MAIL_UNREACHED = "/helps/mail_unreached";
 
 export const EMAIL_MESSAGE_LIST_URL = "/managements/email_messages";
+
+export const EMAIL_MESSAGE_EDIT_URL = "/managements/email_messages/edit";

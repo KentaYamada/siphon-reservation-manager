@@ -540,6 +540,62 @@ describe("reservation security rules tests", () => {
     });
   });
 
+  describe("Update security rule tests", () => {
+    const docId = "test_reservation";
+
+    beforeEach(async () => {
+      const doc = getCollection().doc(docId);
+      await doc.set({
+        reservation_date: new Date(),
+        reservation_date_id: "test_reservation_date_id",
+        reservation_start_time: new Date(),
+        reservation_end_time: new Date(),
+        reservation_time_id: "test_reservation_time_id",
+        reserver_name: "test",
+        number_of_reservations: 1,
+        tel: "09012345678",
+        mail: "test@email.com",
+        comment: "this is test data"
+      });
+    });
+
+    it("Can update document", async () => {
+      const doc = getCollection().doc(docId);
+      await firebase.assertSucceeds(
+        doc.update({
+          reservation_date: new Date(),
+          reservation_date_id: "test_reservation_date_id",
+          reservation_start_time: new Date(),
+          reservation_end_time: new Date(),
+          reservation_time_id: "test_reservation_time_id",
+          reserver_name: "edited test",
+          number_of_reservations: 1,
+          tel: "09012345678",
+          mail: "edit-test@email.com",
+          comment: "this is test data"
+        })
+      );
+    });
+
+    it("Cannot update document", async () => {
+      const doc = getCollection().doc("is_not_exist_reservation");
+      await firebase.assertFails(
+        doc.update({
+          reservation_date: new Date(),
+          reservation_date_id: "test_reservation_date_id",
+          reservation_start_time: new Date(),
+          reservation_end_time: new Date(),
+          reservation_time_id: "test_reservation_time_id",
+          reserver_name: "edited test",
+          number_of_reservations: 1,
+          tel: "09012345678",
+          mail: "edit-test@email.com",
+          comment: "this is test data"
+        })
+      );
+    });
+  });
+
   describe("Delete security rule tests", () => {
     const docId = "test_reservation";
 

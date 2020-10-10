@@ -3,6 +3,7 @@ import { BNoticeConfig } from "buefy/types/components";
 import { tap } from "rxjs/operators";
 import EmailMessageEditForm from "@/components/email-message/form/EmailMessageEditForm.vue";
 import { EmailMessage } from "@/entity/email-message";
+import { EMAIL_MESSAGE_LIST_URL } from "@/router/url";
 import { EmailMessageService } from "@/services/firestore/email-message-service";
 
 export default Vue.extend({
@@ -15,16 +16,10 @@ export default Vue.extend({
       type: String
     }
   },
-  data() {
-    return {
-      isLoading: false,
-      message: {
-        id: "",
-        theme: "",
-        subject: "",
-        body: ""
-      } as EmailMessage
-    };
+  computed: {
+    redirectUrl(): string {
+      return EMAIL_MESSAGE_LIST_URL;
+    }
   },
   methods: {
     handleEditSucceeded() {
@@ -51,6 +46,17 @@ export default Vue.extend({
       this.$buefy.toast.open(config);
     }
   },
+  data() {
+    return {
+      isLoading: false,
+      message: {
+        id: "",
+        theme: "",
+        subject: "",
+        body: ""
+      } as EmailMessage
+    };
+  },
   mounted() {
     this.isLoading = true;
 
@@ -58,7 +64,6 @@ export default Vue.extend({
       .pipe(tap(() => (this.isLoading = false)))
       .subscribe(
         (message: EmailMessage) => {
-          console.log(message);
           this.message = message;
         },
         () => {

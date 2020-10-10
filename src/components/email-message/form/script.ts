@@ -15,8 +15,8 @@ export default Vue.extend({
     handleSave() {
       console.log("save");
     },
+
     handlePreview() {
-      console.log("preview");
       const config: BModalConfig = {
         parent: this,
         component: EmailMessagePreviewDialog,

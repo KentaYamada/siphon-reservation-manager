@@ -4,4 +4,7 @@
         :key="message.id"
         v-for="message in messages">
     </email-message-list-item>
+    <p class="has-text-centered" v-if="visibleEmptyItem">
+        表示するデータがありません
+    </p>
 </div>

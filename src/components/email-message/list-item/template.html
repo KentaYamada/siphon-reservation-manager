@@ -7,7 +7,7 @@
             <h3>タイトル</h3>
             <p>{{ message.subject }}</p>
             <h3>本文</h3>
-            <p>{{ message.body }}</p>
+            <p v-html="body"></p>
             <div class="buttons is-right">
                 <button class="button is-info is-inverted" type="button" @click="handleEditMessage()">
                     <i class="fas fa-edit"></i>

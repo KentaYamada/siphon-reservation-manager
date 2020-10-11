@@ -40,9 +40,9 @@ const getNavigations = (): Navigation[] => {
           icon: "fa-store"
         },
         {
-          name: "メール設定",
+          name: "メールメッセージ設定",
           url: EMAIL_MESSAGE_LIST_URL,
-          icon: "fa-mail-bulk"
+          icon: "fa-envelope"
         }
       ]
     },

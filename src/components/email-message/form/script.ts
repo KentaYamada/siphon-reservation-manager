@@ -2,6 +2,7 @@ import Vue, { PropType } from "vue";
 import { BModalConfig } from "buefy/types/components";
 import EmailMessagePreviewDialog from "@/components/email-message/preview-dialog/EmailMessagePreviewDialog.vue";
 import { EmailMessage } from "@/entity/email-message";
+import { EmailMessageService } from "@/services/firestore/email-message-service";
 
 export default Vue.extend({
   template: "<email-message-edit-form/>",
@@ -13,7 +14,15 @@ export default Vue.extend({
   },
   methods: {
     handleSave() {
-      console.log("save");
+      EmailMessageService.edit(this.message).subscribe(
+        () => {
+          this.$emit("edit-succeeded");
+        },
+        error => {
+          console.log(error);
+          this.$emit("edit-failed");
+        }
+      );
     },
 
     handlePreview() {

@@ -4,10 +4,14 @@
             <p>{{ message.category }}</p>
         </div>
         <div class="message-body">
-            <h3>タイトル</h3>
-            <p>{{ message.subject }}</p>
-            <h3>本文</h3>
-            <p v-html="body"></p>
+            <div class="group">
+                <h3 class="is-size-5">タイトル</h3>
+                <p>{{ message.subject }}</p>
+            </div>
+            <div class="group">
+                <h3 class="is-size-5">本文</h3>
+                <p v-html="body"></p>
+            </div>
             <div class="buttons is-right">
                 <button class="button is-info is-inverted" type="button" @click="handleEditMessage()">
                     <i class="fas fa-edit"></i>

@@ -1,0 +1,23 @@
+<div class="email-message-list-item">
+    <article class="message" :class="message.theme">
+        <div class="message-header">
+            <p>{{ message.category }}</p>
+        </div>
+        <div class="message-body">
+            <div class="group">
+                <h3 class="is-size-5">タイトル</h3>
+                <p>{{ message.subject }}</p>
+            </div>
+            <div class="group">
+                <h3 class="is-size-5">本文</h3>
+                <p v-html="body"></p>
+            </div>
+            <div class="buttons is-right">
+                <button class="button is-info is-inverted" type="button" @click="handleEditMessage()">
+                    <i class="fas fa-edit"></i>
+                    メッセージを編集する
+                </button>
+            </div>
+        </div>
+    </article>
+</div>

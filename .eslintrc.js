@@ -25,6 +25,7 @@ module.exports = {
       { selector: "variable", format: null },
       { selector: "enum", format: null },
       { selector: "enumMember", format: null },
+      { selector: "typeParameter", format: ["PascalCase"] },
       { selector: "method", format: ["camelCase"], leadingUnderscore: "allow", trailingUnderscore: "allow" }
     ]
   },

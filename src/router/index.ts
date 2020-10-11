@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig, Route } from "vue-router";
-
-// Routing URL
 import {
   INDEX_URL,
+  EMAIL_MESSAGE_LIST_URL,
+  EMAIL_MESSAGE_EDIT_URL,
   RESERVATION_CANCELED_URL,
   RESERVATION_EDIT_URL,
   RESERVATION_EDITED_URL,
@@ -16,8 +16,6 @@ import {
   FORBIDDEN_URL,
   HELP_MAIL_UNREACHED
 } from "@/router/url";
-
-// Reservation
 import ReservationCanceledMessage from "@/views/reservations/canceled-message/ReservationCanceledMessage.vue";
 import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
 import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
@@ -25,15 +23,9 @@ import ReservationEditedMessage from "@/views/reservations/edited-message/Reserv
 import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
 import ReservationList from "@/views/reservations/list/ReservationList.vue";
 import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
-
-// Management
 import Login from "@/views/managements/login/Login.vue";
 import Shop from "@/views/managements/shop/Shop.vue";
-
-// Help
 import HelpMailUnreached from "@/views/helps/mail-unreached/HelpMailUnreached.vue";
-
-// Other
 import Forbidden from "@/views/forbidden/Forbidden.vue";
 import NotFound from "@/views/notfound/NotFound.vue";
 
@@ -111,6 +103,27 @@ const routes: RouteConfig[] = [
     path: MANAGEMENT_LOGIN_URL,
     name: "login",
     component: Login
+  },
+  {
+    path: EMAIL_MESSAGE_LIST_URL,
+    name: "email-message-list",
+    component: () =>
+      import(/* webpackChunkName: "email-message-list" */ "@/views/email-messages/list/EmailMessageListView.vue"),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: EMAIL_MESSAGE_EDIT_URL,
+    name: "email-message-edit",
+    component: () =>
+      import(/* webpackChunkName: "email-message-edit" */ "@/views/email-messages/edit/EmailMessageEditView.vue"),
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: FORBIDDEN_URL,

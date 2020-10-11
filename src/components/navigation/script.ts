@@ -2,7 +2,13 @@ import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
 import { Navigation } from "@/entity/navigation";
-import { INDEX_URL, MANAGEMENT_RESERVATION_LIST_URL, SHOP_SETTING_URL, HELP_MAIL_UNREACHED } from "@/router/url";
+import {
+  INDEX_URL,
+  EMAIL_MESSAGE_LIST_URL,
+  MANAGEMENT_RESERVATION_LIST_URL,
+  SHOP_SETTING_URL,
+  HELP_MAIL_UNREACHED
+} from "@/router/url";
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
 
 const getNavigations = (): Navigation[] => {
@@ -32,6 +38,11 @@ const getNavigations = (): Navigation[] => {
           name: "営業設定",
           url: SHOP_SETTING_URL,
           icon: "fa-store"
+        },
+        {
+          name: "メールメッセージ設定",
+          url: EMAIL_MESSAGE_LIST_URL,
+          icon: "fa-envelope"
         }
       ]
     },

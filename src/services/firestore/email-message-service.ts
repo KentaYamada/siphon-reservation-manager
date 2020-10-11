@@ -1,5 +1,5 @@
 import { from, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 import { ApiResponse } from "@/entity/api-response";
 import { EmailMessage } from "@/entity/email-message";
 import firebase from "@/plugins/firebase";
@@ -12,62 +12,48 @@ export class EmailMessageService {
   }
 
   static fetch(): Observable<Array<EmailMessage>> {
-    return new Observable(subscriber => {
-      const messages: Array<EmailMessage> = [
-        {
-          id: "reserved",
-          theme: "is-success",
-          category: "予約完了メッセージ",
-          subject: "[Cafe de GAMOYON] 予約完了しました",
-          body: "Thank you for reservation"
-        },
-        {
-          id: "edited",
-          theme: "is-info",
-          category: "予約変更完了メッセージ",
-          subject: "[Cafe de GAMOYON] 予変更了しました",
-          body: "Thank you for reservation"
-        },
-        {
-          id: "canceled",
-          theme: "is-danger",
-          category: "予約キャンセル完了メッセージ",
-          subject: "[Cafe de GAMOYON] 予約キャンセルしました",
-          body: "Thank you for reservation"
-        }
-      ];
-      subscriber.next(messages);
-    });
+    const collection = EmailMessageService._getCollection();
+
+    return from(collection.get()).pipe(
+      filter(snapshot => !snapshot.empty),
+      map(snapshot => {
+        return snapshot.docs.map(doc => {
+          return {
+            id: doc.id,
+            theme: doc.data()?.theme,
+            category: doc.data()?.category,
+            subject: doc.data()?.subject,
+            body: doc.data()?.body
+          } as EmailMessage;
+        });
+      })
+    );
   }
 
   static fetchById(id: string): Observable<EmailMessage> {
-    return new Observable(subscriber => {
-      const message: EmailMessage = {
-        id: "reserved",
-        theme: "is-success",
-        category: "予約完了メッセージ",
-        subject: "[Cafe de GAMOYON] 予約完了しました",
-        body: `Thank you for reservation
-            {予約者名}
-            {予約サイトURL}`
-      };
-      subscriber.next(message);
-    });
+    const docRef = EmailMessageService._getCollection().doc(id);
+
+    return from(docRef.get()).pipe(
+      filter(snapshot => snapshot.exists),
+      map(snapshot => {
+        return {
+          id: snapshot.id,
+          theme: snapshot.data()?.theme,
+          category: snapshot.data()?.category,
+          subject: snapshot.data()?.subject,
+          body: snapshot.data()?.body
+        } as EmailMessage;
+      })
+    );
   }
 
-  static edit(payload: EmailMessage): Observable<ApiResponse<void>> {
+  static edit(payload: EmailMessage): Observable<void> {
     const docRef = EmailMessageService._getCollection().doc(payload.id);
     const data: firebase.firestore.DocumentData = {
       subject: payload.subject,
       body: payload.body
     };
 
-    return from(docRef.update(data)).pipe(
-      map(() => {
-        return {
-          message: "変更しました"
-        } as ApiResponse<void>;
-      })
-    );
+    return from(docRef.update(data));
   }
 }

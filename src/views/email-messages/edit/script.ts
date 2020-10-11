@@ -28,6 +28,7 @@ export default Vue.extend({
         type: "is-success"
       };
       this.$buefy.toast.open(config);
+      this.$router.push({ path: EMAIL_MESSAGE_LIST_URL });
     },
 
     handleEditFailed() {

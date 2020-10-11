@@ -7,7 +7,7 @@
     </header>
     <section class="modal-card-body">
         <h3 class="subtitle">件名: {{ message.subject }}</h3>
-        <p>{{ message.body }}</p>
+        <p v-html="body"></p>
         <div class="buttons is-right">
             <button type="button" class="button" @click="$parent.close()">
                 閉じる

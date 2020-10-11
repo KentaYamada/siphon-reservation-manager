@@ -18,8 +18,7 @@ export default Vue.extend({
         () => {
           this.$emit("edit-succeeded");
         },
-        error => {
-          console.log(error);
+        () => {
           this.$emit("edit-failed");
         }
       );

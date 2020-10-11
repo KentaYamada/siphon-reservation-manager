@@ -1,6 +1,5 @@
 import { from, Observable } from "rxjs";
 import { filter, map } from "rxjs/operators";
-import { ApiResponse } from "@/entity/api-response";
 import { EmailMessage } from "@/entity/email-message";
 import firebase from "@/plugins/firebase";
 

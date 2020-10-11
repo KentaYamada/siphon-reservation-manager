@@ -216,10 +216,12 @@ service cloud.firestore {
     }
 
     function validationEmailMessageSchema(data) {
-        return (data.size() == 2) &&
-               (data.keys().hasAll(["subject", "body"])) &&
+        return (data.size() == 4) &&
+               (data.keys().hasAll(["category", "theme", "subject", "body"])) &&
                (data.subject is string) &&
-               (data.body is string);
+               (data.body is string) &&
+               (data.category is string) &&
+               (data.theme is string);
     }
 
     // [GET] /email_messages

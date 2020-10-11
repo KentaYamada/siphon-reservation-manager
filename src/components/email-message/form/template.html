@@ -4,11 +4,21 @@
         <div class="control">
             <input type="text" class="input" v-model="message.subject">
         </div>
+        <div v-if="$v.message.subject.$error">
+            <small class="help is-danger" v-if="!$v.message.subject.required">
+                タイトルを入力してください。
+            </small>
+        </div>
     </div>
     <div class="field">
         <label class="label">本文</label>
         <div class="control">
             <textarea class="textarea" v-model="message.body" rows="10"></textarea>
+        </div>
+        <div v-if="$v.message.body.$error">
+            <small class="help is-danger" v-if="!$v.message.body.required">
+                本文を入力してください。
+            </small>
         </div>
     </div>
     <div class="buttons is-right">

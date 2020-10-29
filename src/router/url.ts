@@ -27,3 +27,5 @@ export const FORBIDDEN_URL = "/forbidden";
 export const NOTFOUND_URL = "/notfound";
 
 export const HELP_MAIL_UNREACHED = "/helps/mail_unreached";
+
+export const NEW_YEAR_DISHES_SETTING_URL = "/managements/new_year_dishes";

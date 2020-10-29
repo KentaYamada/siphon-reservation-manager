@@ -14,7 +14,8 @@ import {
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
   FORBIDDEN_URL,
-  HELP_MAIL_UNREACHED
+  HELP_MAIL_UNREACHED,
+  NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
 
 // Reservation
@@ -121,6 +122,14 @@ const routes: RouteConfig[] = [
     path: HELP_MAIL_UNREACHED,
     name: "help-mail-unreached",
     component: HelpMailUnreached
+  },
+  {
+    path: NEW_YEAR_DISHES_SETTING_URL,
+    name: "new-year-dishes-setting",
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-setting" */ "@/views/new-year-dishes-settings/NewYearDishesSettingView.vue"
+      )
   },
   {
     path: "*",

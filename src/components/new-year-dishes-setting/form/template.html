@@ -1,0 +1,39 @@
+<form>
+    <div class="field">
+        <label class="label">受付開始日</label>
+        <div class="control">
+            <b-datepicker icon="calendar-day"></b-datepicker>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">受付終了日</label>
+        <div class="control">
+            <b-datepicker icon="calendar-day"></b-datepicker>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">受付数</label>
+        <input type="number" class="input has-text-right" min="0">
+    </div>
+    <div class="field">
+        <label class="label">おせちイメージ画像</label>
+        <b-upload class="file-label" type="is-info">
+            <span class="file-cta">
+                <b-icon class="file-icon" icon="upload"></b-icon>
+                <span class="file-label">ファイルを選択</span>
+            </span>
+            <span class="file-name"></span>
+        </b-upload>
+    </div>
+    <div class="field">
+        <label class="checkbox">
+            <input type="checkbox" class="checkbox">休止する
+        </label>
+        <p class="help is-danger">チェックすると、おせち予約フォームにアクセスできなくなります</p>
+    </div>
+    <div class="buttons is-right">
+        <button type="button" class="button is-info">
+            <i class="fas fa-save"></i>保存する
+        </button>
+    </div>
+</form>

@@ -214,5 +214,29 @@ service cloud.firestore {
     match /timezones/{timezoneId} {
         allow delete: if isAuth(request.auth);
     }
+
+    function validationNewYearDishesSettingSchema(data) {
+        return (data.size() == 7) &&
+               (data.keys().hasAll(["start_datetime", "end_datetime", "receptions", "is_pause", "image", "created_at", "modified_at"])) &&
+               (data.start_datetime is timestamp) &&
+               (data.end_datetime is timestamp) &&
+               (data.receptions is number) &&
+               (data.receptions > 0) &&
+               (data.is_pause is bool) &&
+               // (data.image is) &&
+               (data.created_at is timestamp) &&
+               (data.modified_at is timestamp);
+    }
+
+    // [GET] /new_year_dishes_setting/{id}
+    match /new_year_dishes_settings/{id} {
+        allow get: if isAuth(request.auth);
+    }
+
+    // [POST] /new_year_dishes_setting/{document}
+    match /new_year_dishes_settings/{document} {
+        allow create: if isAuth(request.auth) &&
+                         validationNewYearDishesSettingSchema(request.resource.data);
+    }
   }
 }

@@ -7,6 +7,19 @@ export default Vue.extend({
     NewYearDishesSettingForm
   },
   methods: {
+    handleLoadFailed() {
+      const toastConfig: BNoticeConfig = {
+        message: "データの読み込みに失敗しました",
+        type: "is-danger"
+      };
+
+      this.$buefy.toast.open(toastConfig);
+    },
+
+    handleUpdateIsLoading(isLoading: boolean) {
+      this.isLoading = isLoading;
+    },
+
     handleSaveSucceeded() {
       const toastConfig: BNoticeConfig = {
         message: "保存しました",
@@ -33,5 +46,10 @@ export default Vue.extend({
 
       this.$buefy.toast.open(toastConfig);
     }
+  },
+  data() {
+    return {
+      isLoading: false
+    };
   }
 });

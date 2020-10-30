@@ -62,9 +62,22 @@ export default Vue.extend({
 
     return {
       isSaving: false,
-      isLoading: false,
       minDate: today,
       newYearDishesSetting: newYearDishesSetting
     };
+  },
+  mounted() {
+    this.$emit("update-is-loading", true);
+    NewYearDishesSettingService.fetch().subscribe(
+      (response: NewYearDishesSetting) => {
+        this.newYearDishesSetting = response;
+      },
+      () => {
+        this.$emit("load-failed");
+      },
+      () => {
+        this.$emit("update-is-loading", false);
+      }
+    );
   }
 });

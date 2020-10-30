@@ -10,6 +10,8 @@
                 </div>
                 <div class="page-content">
                     <new-year-dishes-setting-form
+                        @save-succeeded="handleSaveSucceeded"
+                        @save-failed="handleSaveFailed"
                         @validation-failed="handleValidationFailed">
                     </new-year-dishes-setting-form>
                 </div>

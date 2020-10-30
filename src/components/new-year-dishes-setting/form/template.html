@@ -4,12 +4,12 @@
         <div class="control">
             <b-datetimepicker icon="calendar-day"
                               :min-datetime="minDate"
-                              v-model="newYearDishesSetting.start_date">
+                              v-model="newYearDishesSetting.start_datetime">
             </b-datetimepicker>
         </div>
-        <div v-if="$v.newYearDishesSetting.start_date.$error">
+        <div v-if="$v.newYearDishesSetting.start_datetime.$error">
             <small class="help is-danger"
-                   v-if="!$v.newYearDishesSetting.start_date.required">
+                   v-if="!$v.newYearDishesSetting.start_datetime.required">
                 受付開始日は必須入力です
             </small>
         </div>
@@ -19,12 +19,12 @@
         <div class="control">
             <b-datetimepicker icon="calendar-day"
                               :min-datetime="minDate"
-                              v-model="newYearDishesSetting.end_date">
+                              v-model="newYearDishesSetting.end_datetime">
             </b-datetimepicker>
         </div>
-        <div v-if="$v.newYearDishesSetting.end_date.$error">
+        <div v-if="$v.newYearDishesSetting.end_datetime.$error">
             <small class="help is-danger"
-                   v-if="!$v.newYearDishesSetting.end_date.required">
+                   v-if="!$v.newYearDishesSetting.end_datetime.required">
                 受付終了日は必須入力です
             </small>
         </div>
@@ -32,7 +32,7 @@
     <div class="field">
         <label class="label">受付数</label>
         <div class="control">
-            <input type="number" class="input has-text-right" min="0" v-model="newYearDishesSetting.receptions">
+            <input type="number" class="input has-text-right" min="0" v-model.number="newYearDishesSetting.receptions">
         </div>
         <div v-if="$v.newYearDishesSetting.receptions.$error">
             <small class="help is-danger"

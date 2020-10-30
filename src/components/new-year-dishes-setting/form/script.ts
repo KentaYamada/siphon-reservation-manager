@@ -1,16 +1,18 @@
 import Vue from "vue";
 import { required, minValue } from "vuelidate/lib/validators";
 import moment from "moment";
+import { Observable } from "rxjs";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
+import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
 
 export default Vue.extend({
   template: "<new-year-dishes-setting-form/>",
   validations: {
     newYearDishesSetting: {
-      start_date: {
+      start_datetime: {
         required
       },
-      end_date: {
+      end_datetime: {
         required
       },
       receptions: {
@@ -27,6 +29,17 @@ export default Vue.extend({
         this.$emit("validation-failed");
       } else {
         this.isSaving = true;
+        NewYearDishesSettingService.save(this.newYearDishesSetting).subscribe(
+          () => {
+            this.$emit("save-succeeded");
+          },
+          () => {
+            this.$emit("save-failed");
+          },
+          () => {
+            this.isSaving = false;
+          }
+        );
       }
     }
   },
@@ -40,9 +53,8 @@ export default Vue.extend({
       })
       .toDate();
     const newYearDishesSetting: NewYearDishesSetting = {
-      id: "1",
-      start_date: today,
-      end_date: today,
+      start_datetime: today,
+      end_datetime: today,
       receptions: 0,
       is_pause: false,
       image: null

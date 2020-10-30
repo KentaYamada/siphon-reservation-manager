@@ -3,8 +3,8 @@
  */
 export interface NewYearDishesSetting {
   id?: string;
-  start_date: Date;
-  end_date: Date;
+  start_datetime: Date;
+  end_datetime: Date;
   receptions: number;
   is_pause: boolean;
   image: string | null;

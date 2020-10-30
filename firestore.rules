@@ -233,10 +233,10 @@ service cloud.firestore {
         allow get: if isAuth(request.auth);
     }
 
-    // [POST] /new_year_dishes_setting/{document}
+    // [POST/PUT] /new_year_dishes_setting/{document}
     match /new_year_dishes_settings/{document} {
-        allow create: if isAuth(request.auth) &&
-                         validationNewYearDishesSettingSchema(request.resource.data);
+        allow create, update: if isAuth(request.auth) &&
+                                 validationNewYearDishesSettingSchema(request.resource.data);
     }
   }
 }

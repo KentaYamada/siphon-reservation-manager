@@ -2,21 +2,53 @@
     <div class="field">
         <label class="label">受付開始日</label>
         <div class="control">
-            <b-datepicker icon="calendar-day"></b-datepicker>
+            <b-datetimepicker icon="calendar-day"
+                              :min-datetime="minDate"
+                              v-model="newYearDishesSetting.start_date">
+            </b-datetimepicker>
+        </div>
+        <div v-if="$v.newYearDishesSetting.start_date.$error">
+            <small class="help is-danger"
+                   v-if="!$v.newYearDishesSetting.start_date.required">
+                受付開始日は必須入力です
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">受付終了日</label>
         <div class="control">
-            <b-datepicker icon="calendar-day"></b-datepicker>
+            <b-datetimepicker icon="calendar-day"
+                              :min-datetime="minDate"
+                              v-model="newYearDishesSetting.end_date">
+            </b-datetimepicker>
+        </div>
+        <div v-if="$v.newYearDishesSetting.end_date.$error">
+            <small class="help is-danger"
+                   v-if="!$v.newYearDishesSetting.end_date.required">
+                受付終了日は必須入力です
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">受付数</label>
-        <input type="number" class="input has-text-right" min="0">
+        <div class="control">
+            <input type="number" class="input has-text-right" min="0" v-model="newYearDishesSetting.receptions">
+        </div>
+        <div v-if="$v.newYearDishesSetting.receptions.$error">
+            <small class="help is-danger"
+                   v-if="!$v.newYearDishesSetting.receptions.required">
+                受付数は必須入力です
+            </small>
+        </div>
+        <div v-if="$v.newYearDishesSetting.receptions.$error">
+            <small class="help is-danger"
+                   v-if="!$v.newYearDishesSetting.receptions.minValue">
+                受付数は1以上の数値を入力してください
+            </small>
+        </div>
     </div>
     <div class="field">
-        <b-upload class="file-label" type="is-info">
+        <b-upload class="file-label" type="is-info" v-model="newYearDishesSetting.image">
             <span class="file-cta">
                 <b-icon class="file-icon" icon="upload"></b-icon>
                 <span class="file-label">イメージ画像をアップロード</span>
@@ -31,7 +63,10 @@
         <p class="help is-danger">チェックすると、おせち予約フォームにアクセスできなくなります</p>
     </div>
     <div class="buttons is-right">
-        <button type="button" class="button is-info">
+        <button type="button"
+                class="button is-info"
+                @click="handleSave()"
+                :disabled="isSaving">
             <i class="fas fa-save"></i>保存する
         </button>
     </div>

@@ -1,5 +1,5 @@
 import { Observable, from } from "rxjs";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import firebase from "@/plugins/firebase";
 
@@ -13,7 +13,6 @@ export class NewYearDishesSettingService {
 
   static save(payload: NewYearDishesSetting): Observable<void> {
     const docRef = NewYearDishesSettingService._getCollection().doc(NewYearDishesSettingService.ID);
-    const today = new Date();
     const data: firebase.firestore.DocumentData = {
       start_datetime: payload.start_datetime,
       end_datetime: payload.end_datetime,
@@ -31,6 +30,7 @@ export class NewYearDishesSettingService {
     const docRef = NewYearDishesSettingService._getCollection().doc(NewYearDishesSettingService.ID);
 
     return from(docRef.get()).pipe(
+      filter(snapshot => snapshot.exists),
       map(snapshot => {
         return {
           id: snapshot.id,

@@ -2,8 +2,7 @@
     <div class="field">
         <label class="label">受付開始日</label>
         <div class="control">
-            <b-datetimepicker icon="calendar-day"
-                              :min-datetime="minDate"
+            <b-datetimepicker :min-datetime="minDate"
                               v-model="newYearDishesSetting.start_datetime">
             </b-datetimepicker>
         </div>
@@ -17,8 +16,7 @@
     <div class="field">
         <label class="label">受付終了日</label>
         <div class="control">
-            <b-datetimepicker icon="calendar-day"
-                              :min-datetime="minDate"
+            <b-datetimepicker :min-datetime="minDate"
                               v-model="newYearDishesSetting.end_datetime">
             </b-datetimepicker>
         </div>
@@ -27,6 +25,24 @@
                    v-if="!$v.newYearDishesSetting.end_datetime.required">
                 受付終了日は必須入力です
             </small>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">引渡日</label>
+        <div class="control">
+            <b-datepicker v-model="newYearDishesSetting.delivery_date"></b-datepicker>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">引渡時間 (開始)</label>
+        <div class="control">
+            <b-timepicker v-model="newYearDishesSetting.delivery_time_from"></b-timepicker>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">引渡時間 (終了)</label>
+        <div class="control">
+            <b-timepicker v-model="newYearDishesSetting.delivery_time_to"></b-timepicker>
         </div>
     </div>
     <div class="field">

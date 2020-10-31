@@ -2,6 +2,7 @@ import Vue from "vue";
 import { required, minValue } from "vuelidate/lib/validators";
 import moment from "moment";
 import { Observable } from "rxjs";
+import { filter } from "rxjs/operators";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
 
@@ -52,9 +53,22 @@ export default Vue.extend({
         milliseconds: 0
       })
       .toDate();
+    const newYearsEve = moment()
+      .set({
+        // month: 12,
+        // day: 31,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0
+      })
+      .toDate();
     const newYearDishesSetting: NewYearDishesSetting = {
       start_datetime: today,
       end_datetime: today,
+      delivery_date: newYearsEve,
+      delivery_time_from: today,
+      delivery_time_to: today,
       receptions: 0,
       is_pause: false,
       image: null

@@ -28,4 +28,6 @@ export const NOTFOUND_URL = "/notfound";
 
 export const HELP_MAIL_UNREACHED = "/helps/mail_unreached";
 
+export const NEW_YEAR_DISHES_RESERVATION_URL = "/new_year_dishes_reservations/entry";
+
 export const NEW_YEAR_DISHES_SETTING_URL = "/managements/new_year_dishes";

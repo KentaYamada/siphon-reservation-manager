@@ -7,6 +7,7 @@ import {
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   HELP_MAIL_UNREACHED,
+  NEW_YEAR_DISHES_RESERVATION_URL,
   NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
@@ -20,6 +21,11 @@ const getNavigations = (): Navigation[] => {
         {
           name: "予約登録",
           url: INDEX_URL,
+          icon: "fa-calendar-plus"
+        },
+        {
+          name: "スイーツおせち予約",
+          url: NEW_YEAR_DISHES_RESERVATION_URL,
           icon: "fa-calendar-plus"
         }
       ]

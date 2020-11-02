@@ -15,7 +15,8 @@ import {
   MANAGEMENT_LOGIN_URL,
   FORBIDDEN_URL,
   HELP_MAIL_UNREACHED,
-  NEW_YEAR_DISHES_RESERVATION_URL,
+  NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+  NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
   NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
 
@@ -125,7 +126,15 @@ const routes: RouteConfig[] = [
     component: HelpMailUnreached
   },
   {
-    path: NEW_YEAR_DISHES_RESERVATION_URL,
+    path: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+    name: "new-year-dishes-reservation-list",
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-list" */ "@/views/new-year-dishes-reservations/list/NewYearDishesReservationListView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
     name: "new-year-dishes-reservation-entry",
     component: () =>
       import(

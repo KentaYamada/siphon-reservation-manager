@@ -7,7 +7,8 @@ import {
   MANAGEMENT_RESERVATION_LIST_URL,
   SHOP_SETTING_URL,
   HELP_MAIL_UNREACHED,
-  NEW_YEAR_DISHES_RESERVATION_URL,
+  NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+  NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
   NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
@@ -25,7 +26,7 @@ const getNavigations = (): Navigation[] => {
         },
         {
           name: "スイーツおせち予約",
-          url: NEW_YEAR_DISHES_RESERVATION_URL,
+          url: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
           icon: "fa-calendar-plus"
         }
       ]
@@ -44,6 +45,11 @@ const getNavigations = (): Navigation[] => {
           name: "営業設定",
           url: SHOP_SETTING_URL,
           icon: "fa-store"
+        },
+        {
+          name: "スイーツおせち予約状況",
+          url: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+          icon: "fa-list"
         },
         {
           name: "おせち受付設定",

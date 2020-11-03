@@ -4,44 +4,79 @@
         <label class="label">ご予約数</label>
         <div class="control">
             <div class="select">
-                <select class="">
+                <select placeholder="ご予約数を選択してください" v-model.number="reservation.quantity">
+                    <option value="1">1</option>
                 </select>
             </div>
         </div>
         <p class="help">※最大3セットまでです</p>
+        <div v-if="$v.reservation.quantity.$error">
+            <small class="help is-danger" v-if="!$v.reservation.quantity.required">
+                ご予約数を選択してください
+            </small>
+            <small class="help is-danger" v-if="!$v.reservation.quantity.minValue">
+                ご予約数を選択してください
+            </small>
+        </div>
     </div>
     <div class="field">
         <label class="label">お名前</label>
         <div class="control">
-            <input class="input" type="text">
+            <input class="input" type="text" placeholder="Gamoyon 花子" v-model="reservation.reserver_name">
+        </div>
+        <div v-if="$v.reservation.reserver_name.$error">
+            <small class="help is-danger" v-if="!$v.reservation.reserver_name.required">
+                お名前を入力してください
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">住所</label>
         <div class="control">
-            <input class="input" type="text" placeholder="大阪市">
+            <input class="input" type="text" placeholder="大阪市" v-model="reservation.address">
+        </div>
+        <div v-if="$v.reservation.address.$error">
+            <small class="help is-danger" v-if="!$v.reservation.address.required">
+                住所を入力してください
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">電話番号 (ハイフンなし)</label>
         <div class="control">
-            <input class="input" type="text" placeholder="09012345678">
+            <input class="input" type="text" placeholder="09012345678" v-model="reservation.tel">
+        </div>
+        <div v-if="$v.reservation.tel.$error">
+            <small class="help is-danger" v-if="!$v.reservation.tel.required">
+                電話番号を入力してください
+            </small>
+            <small class="help is-danger" v-if="!$v.reservation.tel.tel">
+                電話番号は半角数字で入力してください
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">メールアドレス</label>
         <div class="control">
-            <input class="input" type="text" placeholder="sweets.sukiko@email.com">
+            <input class="input" type="text" placeholder="sweets.sukiko@email.com" v-model="reservation.mail">
         </div>
         <p class="help">※入力したメールアドレスにお間違いがないか確認してください</p>
+        <div v-if="$v.reservation.mail.$error">
+            <small class="help is-danger" v-if="!$v.reservation.mail.required">
+                メールアドレスを入力してください
+            </small>
+            <small class="help is-danger" v-if="!$v.reservation.mail.email">
+                メールアドレスの形式で入力してください (例: sweets.sukiko@mail.com)
+            </small>
+        </div>
     </div>
     <div class="field">
         <label class="label">備考</label>
-        <textarea class="textarea" name="" placeholder="お店への伝達事項などあれば記入してください"></textarea>
+        <textarea class="textarea" placeholder="お店への伝達事項などあれば記入してください" v-model="reservation.comment"></textarea>
     </div>
     <div class="field is-grouped is-grouped-right">
         <div class="control">
-            <button class="button is-info" type="button">
+            <button class="button is-info" type="button" @click="handleSave()">
                 <i class="fas fa-calendar-check"></i>予約する
             </button>
         </div>

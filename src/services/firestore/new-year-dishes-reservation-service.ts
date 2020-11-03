@@ -7,6 +7,14 @@ export class NewYearDishesReservationService {
     return firebase.firestore().collection("new_year_dishes_reservations");
   }
 
+  static save(payload: NewYearDishesReservation): Observable<void> {
+    if (!payload) {
+      return new Observable(subscriber => subscriber.error());
+    }
+
+    return new Observable(subscriber => subscriber.next());
+  }
+
   static fetch(): Observable<Array<NewYearDishesReservation>> {
     return new Observable(subscriber => {
       const data: Array<NewYearDishesReservation> = [

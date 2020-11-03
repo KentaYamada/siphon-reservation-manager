@@ -2,6 +2,7 @@ import Vue, { PropType } from "vue";
 import { BDialogConfig, BModalConfig } from "buefy/types/components";
 import NewYearDishesReservationAddressDialog from "@/components/new-year-dishes-reservations/dialog/address/NewYearDishesReservationAddressDialog.vue";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
+import { nl2br } from "@/filters/nl2br";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
 
 export default Vue.extend({
@@ -10,6 +11,11 @@ export default Vue.extend({
     reservation: {
       required: true,
       type: Object as PropType<NewYearDishesReservation>
+    }
+  },
+  computed: {
+    comment(): string {
+      return nl2br(this.reservation.comment);
     }
   },
   methods: {

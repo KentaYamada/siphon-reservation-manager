@@ -13,7 +13,17 @@ export class NewYearDishesReservationService {
         {
           id: "test",
           quantity: 1,
-          reserver_name: "Gamoyon 花子",
+          reserver_name: "蒲生 花子",
+          address: "大阪市鶴見区",
+          tel: "09012345678",
+          mail: "sweets.sukiko@email.com",
+          comment: "むっちゃ楽しみにしてます！",
+          is_delivered: false
+        },
+        {
+          id: "test",
+          quantity: 1,
+          reserver_name: "蒲生 花子2",
           address: "大阪市鶴見区",
           tel: "09012345678",
           mail: "sweets.sukiko@email.com",

@@ -1,4 +1,7 @@
 <div class="new-year-dishes-reservation-list">
-    <new-year-dishes-reservation-list-item>
+    <new-year-dishes-reservation-list-item
+        :key="r.id"
+        :reservation="r"
+        v-for="r in reservations">
     </new-year-dishes-reservation-list-item>
 </div>

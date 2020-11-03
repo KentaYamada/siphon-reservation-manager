@@ -25,4 +25,12 @@ export class NewYearDishesReservationService {
       subscriber.next(data);
     });
   }
+
+  static cancel(id: string): Observable<void> {
+    if (!id) {
+      return new Observable(subscriber => subscriber.error());
+    }
+
+    return new Observable(subscriber => subscriber.next());
+  }
 }

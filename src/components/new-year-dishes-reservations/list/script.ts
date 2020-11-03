@@ -8,13 +8,24 @@ export default Vue.extend({
   components: {
     NewYearDishesReservationListItem
   },
+  methods: {
+    handleCancelSucceeded() {
+      this.$emit("cancel-succeeded");
+    },
+    handleCancelFailed() {
+      this.$emit("cancel-failed");
+    },
+    handleUpdateProgress(isProgress: boolean) {
+      this.$emit("update-progress", isProgress);
+    }
+  },
   data() {
     return {
       reservations: [] as Array<NewYearDishesReservation>
     };
   },
   mounted() {
-    this.$emit("update-loading", true);
+    this.$emit("update-progress", true);
 
     NewYearDishesReservationService.fetch().subscribe(
       (reservations: Array<NewYearDishesReservation>) => {
@@ -24,7 +35,7 @@ export default Vue.extend({
         this.$emit("load-failed");
       },
       () => {
-        this.$emit("update-loading", false);
+        this.$emit("update-progress", false);
       }
     );
   }

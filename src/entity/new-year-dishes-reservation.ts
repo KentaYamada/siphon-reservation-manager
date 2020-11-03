@@ -2,7 +2,7 @@
  * New year dishes reservation entity
  */
 export interface NewYearDishesReservation {
-  id?: string;
+  id: string;
   quantity: number;
   reserver_name: string;
   address: string;

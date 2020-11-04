@@ -221,9 +221,13 @@ service cloud.firestore {
                (data.quantity is number) &&
                (data.quantity > 0) &&
                (data.reserver_name is string) &&
+               (data.reserver_name != "") &&
                (data.address is string) &&
+               (data.address != "") &&
                (data.tel is string) &&
+               (data.tel != "") &&
                (data.mail is string) &&
+               (data.mail != "") &&
                (data.comment is string) &&
                (data.is_delivered is bool);
     }

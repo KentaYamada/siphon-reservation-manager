@@ -215,6 +215,23 @@ service cloud.firestore {
         allow delete: if isAuth(request.auth);
     }
 
+    function validationNewYearDishesReservationSchema(data) {
+        return (data.size() == 7) &&
+               (data.keys().hasAll(["quantity", "reserver_name", "address", "tel", "mail", "comment", "is_delivered"])) &&
+               (data.quantity is number) &&
+               (data.quantity > 0) &&
+               (data.reserver_name is string) &&
+               (data.address is string) &&
+               (data.tel is string) &&
+               (data.mail is string) &&
+               (data.comment is string) &&
+               (data.is_delivered is bool);
+    }
+
+    match /new_year_dishes_reservations/{document} {
+        allow create: if validationNewYearDishesReservationSchema(request.resource.data);
+    }
+
     function validationNewYearDishesSettingSchema(data) {
         return (data.size() == 5) &&
                (data.keys().hasAll(["start_datetime", "end_datetime", "receptions", "is_pause", "image"])) &&

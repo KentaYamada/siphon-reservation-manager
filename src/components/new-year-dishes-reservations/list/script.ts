@@ -11,12 +11,31 @@ export default Vue.extend({
   methods: {
     handleCancelSucceeded() {
       this.$emit("cancel-succeeded");
+      this._fetch();
     },
+
     handleCancelFailed() {
       this.$emit("cancel-failed");
     },
+
     handleUpdateProgress(isProgress: boolean) {
       this.$emit("update-progress", isProgress);
+    },
+
+    _fetch() {
+      this.$emit("update-progress", true);
+
+      NewYearDishesReservationService.fetch().subscribe(
+        (reservations: Array<NewYearDishesReservation>) => {
+          this.reservations = reservations;
+        },
+        () => {
+          this.$emit("load-failed");
+        },
+        () => {
+          this.$emit("update-progress", false);
+        }
+      );
     }
   },
   data() {
@@ -25,18 +44,6 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.$emit("update-progress", true);
-
-    NewYearDishesReservationService.fetch().subscribe(
-      (reservations: Array<NewYearDishesReservation>) => {
-        this.reservations = reservations;
-      },
-      () => {
-        this.$emit("load-failed");
-      },
-      () => {
-        this.$emit("update-progress", false);
-      }
-    );
+    this._fetch();
   }
 });

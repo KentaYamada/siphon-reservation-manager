@@ -236,6 +236,14 @@ service cloud.firestore {
         allow create: if validationNewYearDishesReservationSchema(request.resource.data);
     }
 
+    match /new_year_dishes_reservations/{document} {
+        allow list: if isAuth(request.auth);
+    }
+
+    match /new_year_dishes_reservations/{id} {
+        allow delete: if hasId(id);
+    }
+
     function validationNewYearDishesSettingSchema(data) {
         return (data.size() == 5) &&
                (data.keys().hasAll(["start_datetime", "end_datetime", "receptions", "is_pause", "image"])) &&

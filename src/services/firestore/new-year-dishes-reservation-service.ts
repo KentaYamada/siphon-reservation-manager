@@ -1,4 +1,5 @@
 import { Observable, from } from "rxjs";
+import { map } from "rxjs/operators";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import firebase from "@/plugins/firebase";
 
@@ -7,41 +8,46 @@ export class NewYearDishesReservationService {
     return firebase.firestore().collection("new_year_dishes_reservations");
   }
 
-  static save(payload: NewYearDishesReservation): Observable<void> {
+  static add(payload: NewYearDishesReservation): Observable<void> {
     if (!payload) {
       return new Observable(subscriber => subscriber.error());
     }
 
-    return new Observable(subscriber => subscriber.next());
+    console.log(payload);
+    const collection = NewYearDishesReservationService._getCollection();
+    const docRef = collection.doc();
+    const data: firebase.firestore.DocumentData = {
+      quantity: payload.quantity,
+      reserver_name: payload.reserver_name,
+      address: payload.address,
+      tel: payload.tel,
+      mail: payload.mail,
+      comment: payload.comment,
+      is_delivered: false
+    };
+
+    return from(docRef.set(data));
   }
 
   static fetch(): Observable<Array<NewYearDishesReservation>> {
-    return new Observable(subscriber => {
-      const data: Array<NewYearDishesReservation> = [
-        {
-          id: "test",
-          quantity: 1,
-          reserver_name: "蒲生 花子",
-          address: "大阪市鶴見区",
-          tel: "09012345678",
-          mail: "sweets.sukiko@email.com",
-          comment: "むっちゃ楽しみにしてます！",
-          is_delivered: false
-        },
-        {
-          id: "test",
-          quantity: 1,
-          reserver_name: "蒲生 花子2",
-          address: "大阪市鶴見区",
-          tel: "09012345678",
-          mail: "sweets.sukiko@email.com",
-          comment: "むっちゃ楽しみにしてます！",
-          is_delivered: false
-        }
-      ];
+    const collection = NewYearDishesReservationService._getCollection();
 
-      subscriber.next(data);
-    });
+    return from(collection.get()).pipe(
+      map(snapshot => {
+        return snapshot.docs.map(doc => {
+          return {
+            id: doc.id,
+            quantity: doc.data().quantity,
+            reserver_name: doc.data().reserver_name,
+            address: doc.data().address,
+            tel: doc.data().tel,
+            mail: doc.data().mail,
+            comment: doc.data().comment,
+            is_delivered: doc.data().is_delivered
+          } as NewYearDishesReservation;
+        });
+      })
+    );
   }
 
   static cancel(id: string): Observable<void> {
@@ -49,6 +55,8 @@ export class NewYearDishesReservationService {
       return new Observable(subscriber => subscriber.error());
     }
 
-    return new Observable(subscriber => subscriber.next());
+    const docRef = NewYearDishesReservationService._getCollection().doc(id);
+
+    return from(docRef.delete());
   }
 }

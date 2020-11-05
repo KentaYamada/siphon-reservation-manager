@@ -37,7 +37,7 @@ export default Vue.extend({
       } else {
         this.$emit("update-progress", true);
 
-        NewYearDishesReservationService.save(this.reservation).subscribe(
+        NewYearDishesReservationService.add(this.reservation).subscribe(
           () => {
             this.$emit("save-succeeded");
           },
@@ -53,7 +53,15 @@ export default Vue.extend({
   },
   data() {
     return {
-      reservation: {} as NewYearDishesReservation
+      reservation: {
+        quantity: 0,
+        reserver_name: "",
+        address: "",
+        tel: "",
+        mail: "",
+        comment: "",
+        is_delivered: false
+      } as NewYearDishesReservation
     };
   }
 });

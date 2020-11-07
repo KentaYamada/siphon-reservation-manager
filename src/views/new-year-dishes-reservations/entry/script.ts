@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { BNoticeConfig } from "buefy/types/components";
 import NewYearDishesReservationForm from "@/components/new-year-dishes-reservations/form/NewYearDishesReservationForm.vue";
+import { NEW_YEAR_DISHES_RESERVED_MESSAGE_URL } from "@/router/url";
 
 export default Vue.extend({
   components: {
@@ -23,8 +24,7 @@ export default Vue.extend({
       };
 
       this.$buefy.toast.open(toastConfig);
-
-      // todo: redirect to reserved message page
+      this.$router.push({ path: NEW_YEAR_DISHES_RESERVED_MESSAGE_URL });
     },
 
     handleSaveFailed() {

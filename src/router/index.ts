@@ -17,6 +17,7 @@ import {
   HELP_MAIL_UNREACHED,
   NEW_YEAR_DISHED_RESERVATION_LIST_URL,
   NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
+  NEW_YEAR_DISHES_RESERVED_MESSAGE_URL,
   NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
 
@@ -139,6 +140,14 @@ const routes: RouteConfig[] = [
     component: () =>
       import(
         /* webpackChunkName: "new-year-dishes-reservation-entry" */ "@/views/new-year-dishes-reservations/entry/NewYearDishesReservationEntryView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVED_MESSAGE_URL,
+    name: "new-year-dishes-reservation-reserved-message",
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reserved-message" */ "@/views/new-year-dishes-reservations/reserved-message/NewYearDishesReservedMessageView.vue"
       )
   },
   {

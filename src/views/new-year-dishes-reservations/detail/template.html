@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="columns is-centered is-desktop">
+        <div class="column is-half">
+            <div class="box">
+                <div class="page-header">
+                    <h4 class="title">
+                        <i class="fas fa-calendar-alt"></i>
+                        予約確認
+                    </h4>
+                </div>
+                <div class="page-content">
+                    <p>以下の内容で承っております</p>
+                    <new-year-dishes-reservation-detail
+                        :id="id"
+                        @load-failed="handleLoadFailed"
+                        @update-progress="handleUpdateProgress">
+                    </new-year-dishes-reservation-detail>
+                </div>
+                <div class="page-footer">
+                    <div class="buttons is-right">
+                        <button class="button is-danger is-inverted" type="button" @click="handleCancel()">
+                            <i class="fas fa-times"></i>予約の取消
+                        </button>
+                        <button class="button is-info is-inverted" type="button" @click="handleRedirectEditPage()">
+                            <i class="fas fa-edit"></i>予約内容を変更
+                        </button>
+                    </div>
+                </div>
+                <b-loading :active.sync="isProgress"></b-loading>
+            </div>
+        </div>
+    </div>
+</div>

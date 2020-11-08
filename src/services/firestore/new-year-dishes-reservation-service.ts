@@ -1,5 +1,5 @@
 import { Observable, from } from "rxjs";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import firebase from "@/plugins/firebase";
 
@@ -13,7 +13,6 @@ export class NewYearDishesReservationService {
       return new Observable(subscriber => subscriber.error());
     }
 
-    console.log(payload);
     const collection = NewYearDishesReservationService._getCollection();
     const docRef = collection.doc();
     const data: firebase.firestore.DocumentData = {
@@ -46,6 +45,27 @@ export class NewYearDishesReservationService {
             is_delivered: doc.data().is_delivered
           } as NewYearDishesReservation;
         });
+      })
+    );
+  }
+
+  static fetchById(id: string): Observable<NewYearDishesReservation> {
+    const docRef = NewYearDishesReservationService._getCollection().doc(id);
+
+    return from(docRef.get()).pipe(
+      filter(doc => doc.exists),
+      map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          quantity: data?.quantity,
+          reserver_name: data?.reserver_name,
+          address: data?.address,
+          tel: data?.tel,
+          mail: data?.mail,
+          comment: data?.comment,
+          is_delivered: data?.is_delivered
+        } as NewYearDishesReservation;
       })
     );
   }

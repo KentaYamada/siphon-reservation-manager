@@ -32,4 +32,6 @@ export const NEW_YEAR_DISHED_RESERVATION_LIST_URL = "/managements/new_year_dishe
 
 export const NEW_YEAR_DISHES_RESERVATION_ENTRY_URL = "/new_year_dishes_reservations/entry";
 
+export const NEW_YEAR_DISHES_RESERVATION_DETAIL_URL = "/new_year_dishes_reservations/detail/:id";
+
 export const NEW_YEAR_DISHES_SETTING_URL = "/managements/new_year_dishes";

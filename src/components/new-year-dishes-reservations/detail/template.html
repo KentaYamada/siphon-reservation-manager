@@ -1,0 +1,23 @@
+<div class="new-year-dises-reservation-detail" v-if="visibleContent">
+    <h4 class="title is-size-4">{{ model.reserver_name}}様</h4>
+    <div class="item">
+        <h5 class="item-label">ご予約数</h5>
+        <p>{{ model.quantity }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label">ご住所</h5>
+        <p>{{ model.address }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label">TEL</h5>
+        <p>{{ model.tel }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label">メールアドレス</h5>
+        <p>{{ model.mail }}</p>
+    </div>
+    <div class="item">
+        <h5 class="item-label">メモ</h5>
+        <p v-html="comment"></p>
+    </div>
+</div>

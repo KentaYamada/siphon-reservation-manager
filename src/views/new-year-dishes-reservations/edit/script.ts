@@ -24,22 +24,22 @@ export default Vue.extend({
 
     handleSaveSucceeded(id: string) {
       const toastConfig: BNoticeConfig = {
-        message: "予約しました",
+        message: "予約内容を変更しました",
         type: "is-success"
       };
 
       this.$buefy.toast.open(toastConfig);
-      // this.$router.push({
-      //   name: "new-year-dishes-reserved-message",
-      //   params: {
-      //     id: id
-      //   }
-      // });
+      this.$router.push({
+        name: "new-year-dishes-reservation-edited-message",
+        params: {
+          id: id
+        }
+      });
     },
 
     handleSaveFailed() {
       const toastConfig: BNoticeConfig = {
-        message: "予約することができませんでした",
+        message: "予約内容の変更に失敗しました",
         type: "is-danger"
       };
 

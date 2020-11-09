@@ -1,9 +1,9 @@
 import { Observable, from } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { doc } from "rxfire/firestore";
+import { isNil } from "lodash";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import firebase from "@/plugins/firebase";
-import { fromPairs } from 'lodash';
 
 export class NewYearDishesReservationService {
   private static _getCollection() {
@@ -32,6 +32,26 @@ export class NewYearDishesReservationService {
     return doc(docRef);
 
     // return from(docRef.set(data));
+  }
+
+  static edit(payload: NewYearDishesReservation): Observable<firebase.firestore.DocumentSnapshot> {
+    if (isNil(payload) || isNil(payload.id)) {
+      return new Observable(subscriber => subscriber.error());
+    }
+    const docRef = NewYearDishesReservationService._getCollection().doc(payload.id);
+    const data: firebase.firestore.DocumentData = {
+      quantity: payload.quantity,
+      reserver_name: payload.reserver_name,
+      address: payload.address,
+      tel: payload.tel,
+      mail: payload.mail,
+      comment: payload.comment,
+      is_delivered: false
+    };
+
+    docRef.update(data);
+
+    return doc(docRef);
   }
 
   static fetch(): Observable<Array<NewYearDishesReservation>> {

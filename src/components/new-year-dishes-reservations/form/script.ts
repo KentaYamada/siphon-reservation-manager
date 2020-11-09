@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { email, minValue, required } from "vuelidate/lib/validators";
-import { isNil } from "lodash";
+import { isEmpty } from "lodash";
 import { tap } from "rxjs/operators";
 import { tel } from "@/plugins/validate";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
@@ -46,7 +46,11 @@ export default Vue.extend({
       } else {
         this.$emit("update-progress", true);
 
-        NewYearDishesReservationService.add(this.reservation).subscribe(
+        const observe$ = isEmpty(this.id)
+          ? NewYearDishesReservationService.add(this.reservation)
+          : NewYearDishesReservationService.edit(this.reservation);
+
+        observe$.subscribe(
           (snapshot: firebase.firestore.DocumentSnapshot) => {
             this.$emit("save-succeeded", snapshot.id);
           },
@@ -74,7 +78,7 @@ export default Vue.extend({
     };
   },
   mounted() {
-    if (!isNil(this.id)) {
+    if (!isEmpty(this.id)) {
       this.$emit("update-progress", true);
 
       NewYearDishesReservationService.fetchById(this.id)

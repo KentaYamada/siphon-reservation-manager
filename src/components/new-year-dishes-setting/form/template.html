@@ -28,25 +28,25 @@
         </div>
     </div>
     <div class="field">
-        <label class="label">引渡日</label>
+        <label class="label">受渡日</label>
         <div class="control">
             <b-datepicker v-model="newYearDishesSetting.delivery_date"></b-datepicker>
         </div>
     </div>
     <div class="field">
-        <label class="label">引渡時間 (開始)</label>
+        <label class="label">受渡時間 (開始)</label>
         <div class="control">
             <b-timepicker v-model="newYearDishesSetting.delivery_time_from"></b-timepicker>
         </div>
     </div>
     <div class="field">
-        <label class="label">引渡時間 (終了)</label>
+        <label class="label">受渡時間 (終了)</label>
         <div class="control">
             <b-timepicker v-model="newYearDishesSetting.delivery_time_to"></b-timepicker>
         </div>
     </div>
     <div class="field">
-        <label class="label">受付数</label>
+        <label class="label">受付上限</label>
         <div class="control">
             <input type="number" class="input has-text-right" min="0" v-model.number="newYearDishesSetting.receptions">
         </div>
@@ -62,6 +62,10 @@
                 受付数は1以上の数値を入力してください
             </small>
         </div>
+    </div>
+    <div class="field">
+        <label class="label">予約あたりの受付上限</label>
+        <input type="number" class="input has-text-right" min="0" v-model.number="newYearDishesSetting.max_quantity_per_reservation">
     </div>
     <div class="field">
         <b-upload class="file-label" type="is-info" v-model="newYearDishesSetting.image">

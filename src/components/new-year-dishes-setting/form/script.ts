@@ -2,7 +2,7 @@ import Vue from "vue";
 import { required, minValue } from "vuelidate/lib/validators";
 import moment from "moment";
 import { Observable } from "rxjs";
-import { filter } from "rxjs/operators";
+import { filter, tap } from "rxjs/operators";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
 
@@ -30,6 +30,7 @@ export default Vue.extend({
         this.$emit("validation-failed");
       } else {
         this.isSaving = true;
+
         NewYearDishesSettingService.save(this.newYearDishesSetting).subscribe(
           () => {
             this.$emit("save-succeeded");
@@ -70,6 +71,7 @@ export default Vue.extend({
       delivery_time_from: today,
       delivery_time_to: today,
       receptions: 0,
+      max_quantity_per_reservation: 0,
       is_pause: false,
       image: null
     };

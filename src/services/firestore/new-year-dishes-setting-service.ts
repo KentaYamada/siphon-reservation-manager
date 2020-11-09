@@ -17,6 +17,7 @@ export class NewYearDishesSettingService {
       start_datetime: payload.start_datetime,
       end_datetime: payload.end_datetime,
       receptions: payload.receptions,
+      max_quantity_per_reservation: payload.max_quantity_per_reservation,
       is_pause: payload.is_pause,
       image: payload.image
     };
@@ -37,6 +38,7 @@ export class NewYearDishesSettingService {
           start_datetime: snapshot.data()?.start_datetime.toDate(),
           end_datetime: snapshot.data()?.end_datetime.toDate(),
           receptions: snapshot.data()?.receptions,
+          max_quantity_per_reservation: snapshot.data()?.max_quantity_per_reservation,
           is_pause: snapshot.data()?.is_pause,
           image: snapshot.data()?.image
         } as NewYearDishesSetting;

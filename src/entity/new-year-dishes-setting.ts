@@ -9,6 +9,7 @@ export interface NewYearDishesSetting {
   delivery_time_from: Date;
   delivery_time_to: Date;
   receptions: number;
+  max_quantity_per_reservation: number;
   is_pause: boolean;
   image: string | null;
 }

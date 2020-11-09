@@ -145,7 +145,10 @@ const routes: RouteConfig[] = [
   },
   {
     path: NEW_YEAR_DISHES_RESERVED_MESSAGE_URL,
-    name: "new-year-dishes-reservation-reserved-message",
+    name: "new-year-dishes-reserved-message",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
     component: () =>
       import(
         /* webpackChunkName: "new-year-dishes-reserved-message" */ "@/views/new-year-dishes-reservations/reserved-message/NewYearDishesReservedMessageView.vue"

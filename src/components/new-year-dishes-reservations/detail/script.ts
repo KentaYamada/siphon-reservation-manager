@@ -17,7 +17,7 @@ export default Vue.extend({
       return !!this.model;
     },
     comment(): string {
-      return nl2br(this.model.comment);
+      return this.model?.comment ? nl2br(this.model.comment) : "";
     }
   },
   data() {
@@ -38,7 +38,9 @@ export default Vue.extend({
           this.$emit("load-failed");
         },
         () => {
-          this.$emit("update-progress", false);
+          if (!this.model.id) {
+            this.$router.push({ name: "notfound" });
+          }
         }
       );
   }

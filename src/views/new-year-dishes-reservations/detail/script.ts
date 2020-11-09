@@ -59,15 +59,15 @@ export default Vue.extend({
         }
       };
 
-      this.$buefy.toast.open(config);
+      this.$buefy.dialog.confirm(config);
     },
 
     handleLoadFailed() {
-      const toastConfig: BNoticeConfig = {
+      const config: BNoticeConfig = {
         message: "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
         type: "is-danger"
       };
-      this.$buefy.toast.open(toastConfig);
+      this.$buefy.toast.open(config);
       this.$router.push({ name: "notfound" });
     },
 

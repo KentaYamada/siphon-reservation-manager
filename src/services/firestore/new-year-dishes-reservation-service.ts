@@ -1,14 +1,16 @@
 import { Observable, from } from "rxjs";
 import { filter, map } from "rxjs/operators";
+import { doc } from "rxfire/firestore";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import firebase from "@/plugins/firebase";
+import { fromPairs } from 'lodash';
 
 export class NewYearDishesReservationService {
   private static _getCollection() {
     return firebase.firestore().collection("new_year_dishes_reservations");
   }
 
-  static add(payload: NewYearDishesReservation): Observable<void> {
+  static add(payload: NewYearDishesReservation): Observable<firebase.firestore.DocumentSnapshot> {
     if (!payload) {
       return new Observable(subscriber => subscriber.error());
     }
@@ -25,7 +27,11 @@ export class NewYearDishesReservationService {
       is_delivered: false
     };
 
-    return from(docRef.set(data));
+    docRef.set(data);
+
+    return doc(docRef);
+
+    // return from(docRef.set(data));
   }
 
   static fetch(): Observable<Array<NewYearDishesReservation>> {

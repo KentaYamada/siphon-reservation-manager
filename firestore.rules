@@ -241,7 +241,7 @@ service cloud.firestore {
     }
 
     match /new_year_dishes_reservations/{id} {
-        allow delete: if hasId(id);
+        allow get, delete: if hasId(id);
     }
 
     function validationNewYearDishesSettingSchema(data) {

@@ -17,14 +17,19 @@ export default Vue.extend({
       this.$buefy.toast.open(toastConfig);
     },
 
-    handleSaveSucceeded() {
+    handleSaveSucceeded(id: string) {
       const toastConfig: BNoticeConfig = {
         message: "予約しました",
         type: "is-success"
       };
 
       this.$buefy.toast.open(toastConfig);
-      this.$router.push({ path: NEW_YEAR_DISHES_RESERVED_MESSAGE_URL });
+      this.$router.push({
+        name: "new-year-dishes-reserved-message",
+        params: {
+          id: id
+        }
+      });
     },
 
     handleSaveFailed() {

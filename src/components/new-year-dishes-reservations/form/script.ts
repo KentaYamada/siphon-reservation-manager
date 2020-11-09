@@ -38,8 +38,8 @@ export default Vue.extend({
         this.$emit("update-progress", true);
 
         NewYearDishesReservationService.add(this.reservation).subscribe(
-          () => {
-            this.$emit("save-succeeded");
+          (snapshot: firebase.firestore.DocumentSnapshot) => {
+            this.$emit("save-succeeded", snapshot.id);
           },
           () => {
             this.$emit("save-failed");

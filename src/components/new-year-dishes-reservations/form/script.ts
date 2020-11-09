@@ -1,10 +1,12 @@
 import Vue from "vue";
+import { mapGetters } from "vuex";
 import { email, minValue, required } from "vuelidate/lib/validators";
 import { isEmpty } from "lodash";
 import { tap } from "rxjs/operators";
 import { tel } from "@/plugins/validate";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
+import { GET_QUANTITY_LIST } from "@/store/constant";
 
 export default Vue.extend({
   template: "<new-year-dishes-reservation-form/>",
@@ -36,6 +38,11 @@ export default Vue.extend({
         email
       }
     }
+  },
+  computed: {
+    ...mapGetters("newYearDishesSetting", {
+      quantityList: GET_QUANTITY_LIST
+    })
   },
   methods: {
     handleSave() {

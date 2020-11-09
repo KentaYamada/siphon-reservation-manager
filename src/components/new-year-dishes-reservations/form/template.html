@@ -1,11 +1,13 @@
 <form>
-    <p>残り50セットの受付となっております</p>
     <div class="field">
         <label class="label">ご予約数</label>
         <div class="control">
             <div class="select">
                 <select placeholder="ご予約数を選択してください" v-model.number="reservation.quantity">
-                    <option value="1">1</option>
+                    <option value=""></option>
+                    <option :key="index" :value="value" v-for="(value, index) in quantityList">
+                        {{ value }}
+                    </option>
                 </select>
             </div>
         </div>

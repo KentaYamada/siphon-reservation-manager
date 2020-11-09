@@ -72,7 +72,12 @@ export default Vue.extend({
     },
 
     handleRedirectEditPage() {
-      console.log("run");
+      this.$router.push({
+        name: "new-year-dishes-reservation-edit",
+        params: {
+          id: this.id
+        }
+      });
     },
 
     handleUpdateProgress(isProgress: boolean) {

@@ -25,7 +25,7 @@ const getNavigations = (): Navigation[] => {
           icon: "fa-calendar-plus"
         },
         {
-          name: "スイーツおせち予約",
+          name: "新春スイーツ予約受付",
           url: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
           icon: "fa-calendar-plus"
         }
@@ -42,19 +42,19 @@ const getNavigations = (): Navigation[] => {
           icon: "fa-list"
         },
         {
+          name: "新春スイーツ予約一覧",
+          url: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+          icon: "fa-list"
+        },
+        {
           name: "営業設定",
           url: SHOP_SETTING_URL,
           icon: "fa-store"
         },
         {
-          name: "スイーツおせち予約状況",
-          url: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
-          icon: "fa-list"
-        },
-        {
-          name: "おせち受付設定",
+          name: "新春スイーツ受付設定",
           url: NEW_YEAR_DISHES_SETTING_URL,
-          icon: ""
+          icon: "fa-store"
         }
       ]
     },

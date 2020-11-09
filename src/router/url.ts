@@ -38,6 +38,8 @@ export const NEW_YEAR_DISHES_RESERVATION_DETAIL_URL = "/new_year_dishes_reservat
 
 export const NEW_YEAR_DISHES_RESERVATION_EDIT_URL = "/new_year_dishes_reservations/edit/:id";
 
-export const NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL = "/new_year_dishes_reservations/edited-message/:id";
+export const NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL = "/new_year_dishes_reservations/edited/:id";
+
+export const NEW_YEAR_DISHES_RESERVATION_CANCELED_URL = "/new_year_dishes_reservations/canceled";
 
 export const NEW_YEAR_DISHES_SETTING_URL = "/managements/new_year_dishes";

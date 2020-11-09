@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
+import { tap } from "rxjs/operators";
 import NewYearDishesReservationDetail from "@/components/new-year-dishes-reservations/detail/NewYearDishesReservationDetail.vue";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
@@ -31,31 +32,31 @@ export default Vue.extend({
         onConfirm: () => {
           this.isProgress = true;
 
-          NewYearDishesReservationService.cancel(this.id).subscribe(
-            () => {
-              const config: BNoticeConfig = {
-                message: "予約を取り消しました",
-                type: "is-danger"
-              };
+          NewYearDishesReservationService.cancel(this.id)
+            .pipe(tap(() => (this.isProgress = false)))
+            .subscribe(
+              () => {
+                const config: BNoticeConfig = {
+                  message: "予約を取り消しました",
+                  type: "is-danger"
+                };
 
-              this.$buefy.toast.open(config);
-            },
-            () => {
-              const message = `
+                this.$buefy.toast.open(config);
+                this.$router.push({ name: "new-year-dishes-reservation-canceled-message" });
+              },
+              () => {
+                const message = `
                     <p>予約の取り消しに失敗しました</p>
                     <p>お手数ですが、時間をおいて再度実行してください</p>
                   `;
-              const toastConfig: BNoticeConfig = {
-                message: message,
-                type: "is-danger"
-              };
+                const toastConfig: BNoticeConfig = {
+                  message: message,
+                  type: "is-danger"
+                };
 
-              this.$buefy.toast.open(config);
-            },
-            () => {
-              this.isProgress = false;
-            }
-          );
+                this.$buefy.toast.open(config);
+              }
+            );
         }
       };
 

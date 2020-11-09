@@ -233,7 +233,7 @@ service cloud.firestore {
     }
 
     match /new_year_dishes_reservations/{document} {
-        allow create: if validationNewYearDishesReservationSchema(request.resource.data);
+        allow create, update: if validationNewYearDishesReservationSchema(request.resource.data);
     }
 
     match /new_year_dishes_reservations/{document} {

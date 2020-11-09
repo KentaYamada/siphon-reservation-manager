@@ -1,11 +1,20 @@
 import Vue from "vue";
 import { email, minValue, required } from "vuelidate/lib/validators";
+import { isNil } from "lodash";
+import { tap } from "rxjs/operators";
 import { tel } from "@/plugins/validate";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
 
 export default Vue.extend({
   template: "<new-year-dishes-reservation-form/>",
+  props: {
+    id: {
+      required: false,
+      type: String,
+      default: ""
+    }
+  },
   validations: {
     reservation: {
       quantity: {
@@ -63,5 +72,21 @@ export default Vue.extend({
         is_delivered: false
       } as NewYearDishesReservation
     };
+  },
+  mounted() {
+    if (!isNil(this.id)) {
+      this.$emit("update-progress", true);
+
+      NewYearDishesReservationService.fetchById(this.id)
+        .pipe(tap(() => this.$emit("update-progress", false)))
+        .subscribe(
+          (reservation: NewYearDishesReservation) => {
+            this.reservation = reservation;
+          },
+          () => {
+            this.$emit("initialize-failed");
+          }
+        );
+    }
   }
 });

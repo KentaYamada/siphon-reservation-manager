@@ -41,8 +41,6 @@ import Shop from "@/views/managements/shop/Shop.vue";
 // Help
 import HelpMailUnreached from "@/views/helps/mail-unreached/HelpMailUnreached.vue";
 
-// Other
-import Forbidden from "@/views/forbidden/Forbidden.vue";
 import NotFound from "@/views/notfound/NotFound.vue";
 
 // store
@@ -123,7 +121,7 @@ const routes: RouteConfig[] = [
   {
     path: FORBIDDEN_URL,
     name: "forbidden",
-    component: Forbidden
+    component: () => import(/* webpackChunkName: "forbidden" */ "@/views/forbidden/Forbidden.vue")
   },
   {
     path: HELP_MAIL_UNREACHED,

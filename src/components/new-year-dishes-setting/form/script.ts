@@ -1,8 +1,6 @@
 import Vue from "vue";
-import { required, minValue } from "vuelidate/lib/validators";
 import moment from "moment";
-import { Observable } from "rxjs";
-import { filter, tap } from "rxjs/operators";
+import { required, minValue } from "vuelidate/lib/validators";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
 
@@ -32,15 +30,9 @@ export default Vue.extend({
         this.isSaving = true;
 
         NewYearDishesSettingService.save(this.newYearDishesSetting).subscribe(
-          () => {
-            this.$emit("save-succeeded");
-          },
-          () => {
-            this.$emit("save-failed");
-          },
-          () => {
-            this.isSaving = false;
-          }
+          () => this.$emit("save-succeeded"),
+          () => this.$emit("save-failed"),
+          () => (this.isSaving = false)
         );
       }
     }
@@ -83,17 +75,12 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.$emit("update-is-loading", true);
+    this.$emit("update-progress", true);
+
     NewYearDishesSettingService.fetch().subscribe(
-      (response: NewYearDishesSetting) => {
-        this.newYearDishesSetting = response;
-      },
-      () => {
-        this.$emit("load-failed");
-      },
-      () => {
-        this.$emit("update-is-loading", false);
-      }
+      (response: NewYearDishesSetting) => (this.newYearDishesSetting = response),
+      () => this.$emit("load-failed"),
+      () => this.$emit("update-progress", false)
     );
   }
 });

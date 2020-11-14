@@ -11,14 +11,14 @@
                 <div class="page-content">
                     <new-year-dishes-setting-form
                         @load-failed="handleLoadFailed"
-                        @update-is-loading="handleUpdateIsLoading"
                         @save-succeeded="handleSaveSucceeded"
                         @save-failed="handleSaveFailed"
+                        @update-progress="handleUpdateProgress"
                         @validation-failed="handleValidationFailed">
                     </new-year-dishes-setting-form>
                 </div>
             </div>
         </div>
     </div>
-    <b-loading :active.sync="isLoading"></b-loading>
+    <b-loading :active.sync="isProgress"></b-loading>
 </div>

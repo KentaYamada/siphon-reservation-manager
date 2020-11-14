@@ -18,6 +18,7 @@
                 <div class="page-content">
                     <new-year-dishes-reservation-form
                         :id="id"
+                        @access-denied="handleAccessDenied"
                         @initialize-failed="handleInitializeFailed"
                         @save-succeeded="handleSaveSucceeded"
                         @save-failed="handleSaveFailed"

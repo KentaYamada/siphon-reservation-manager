@@ -1,13 +1,16 @@
 import Vue from "vue";
 import { BNoticeConfig } from "buefy/types/components";
 import NewYearDishesReservationForm from "@/components/new-year-dishes-reservations/form/NewYearDishesReservationForm.vue";
-import { NEW_YEAR_DISHES_RESERVED_MESSAGE_URL } from "@/router/url";
 
 export default Vue.extend({
   components: {
     NewYearDishesReservationForm
   },
   methods: {
+    handleAccessDenied() {
+      this.$router.push({ name: "forbidden"});
+    },
+
     handleInitializeFailed() {
       const toastConfig: BNoticeConfig = {
         message: "データの初期化に失敗しました",

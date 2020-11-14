@@ -13,6 +13,10 @@ export default Vue.extend({
     NewYearDishesReservationForm
   },
   methods: {
+    handleAccessDenied() {
+      this.$router.push({ name: "forbidden" });
+    },
+
     handleInitializeFailed() {
       const toastConfig: BNoticeConfig = {
         message: "データの初期化に失敗しました",

@@ -1,16 +1,14 @@
 import Vue from "vue";
 import moment from "moment";
-import { mapGetters, mapMutations } from "vuex";
 import { email, minValue, required } from "vuelidate/lib/validators";
 import { isEmpty } from "lodash";
-import { Observable, zip } from "rxjs";
+import { forkJoin } from "rxjs";
 import { tap } from "rxjs/operators";
 import { tel } from "@/plugins/validate";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
 import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
-import { GET_QUANTITY_LIST, IS_ACCESSIBLE, SET_ITEM } from "@/store/constant";
 
 export default Vue.extend({
   template: "<new-year-dishes-reservation-form/>",
@@ -44,33 +42,27 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters("newYearDishesSetting", {
-      quantityList: GET_QUANTITY_LIST
-      // isAccessible: IS_ACCESSIBLE
-    }),
-
     isAccessible(): boolean {
       if (this.setting.is_pause) {
         return false;
       }
 
-      if (moment().diff(this.setting.end_datetime) <= 0) {
+      if (moment(this.setting.end_datetime).diff(new Date()) <= 0) {
         return false;
       }
 
-      // todo: 予約受付上限こえてるか
-      if (this.setting.receptions < 45) {
+      if (this.setting.receptions < this.receptions) {
         return false;
       }
 
       return true;
+    },
+
+    quantityList(): Array<number> {
+      return [...Array(this.setting.max_quantity_per_reservation).keys()].map(i => ++i);
     }
   },
   methods: {
-    ...mapMutations("newYearDishesSetting", {
-      setItem: SET_ITEM
-    }),
-
     handleSave() {
       this.$v.$touch();
 
@@ -91,7 +83,7 @@ export default Vue.extend({
             this.$emit("save-failed");
           },
           () => {
-            this.$emit("update-progress", true);
+            this.$emit("update-progress", false);
           }
         );
       }
@@ -116,57 +108,31 @@ export default Vue.extend({
     };
   },
   created() {
-    this.$emit("update-progress", true);
-
-    NewYearDishesSettingService.fetch().subscribe(
-      (setting: NewYearDishesSetting) => {
-        this.setting = setting;
-        this.setItem(setting);
+    forkJoin([NewYearDishesSettingService.fetch(), NewYearDishesReservationService.fetchReceptions()]).subscribe(
+      value => {
+        this.setting = value[0];
+        this.receptions = value[1];
       },
       () => {
         this.$emit("initialize-failed");
+      },
+      () => {
+        if (!this.isAccessible) {
+          this.$emit("access-denied");
+        }
       }
     );
   },
-  beforeMount() {
-    if (!this.isAccessible) {
-      this.$router.push({ name: "forbidden" });
-    }
-  },
   mounted() {
-    const observable_1 = NewYearDishesSettingService.fetch();
-    const observable_2 = NewYearDishesReservationService.fetchReceptions();
-    const observables$: Array<
-      Observable<NewYearDishesSetting> | Observable<number> | Observable<NewYearDishesReservation>
-    > = [observable_1, observable_2];
-
-    observable_1.subscribe((setting: NewYearDishesSetting) => (this.setting = setting));
-    observable_2.subscribe((receptions: number) => (this.receptions = receptions));
-
     if (!isEmpty(this.id)) {
-      const observable_3 = NewYearDishesReservationService.fetchById(this.id);
-      observable_3.subscribe((reservation: NewYearDishesReservation) => (this.reservation = reservation));
-      observables$.push(observable_3);
-    }
+      this.$emit("update-progress", true);
 
-    zip(observables$)
-      .pipe(tap(() => this.$emit("update-progress", false)))
-      .subscribe(
-        () => this.$emit("update-accessible", this.isAccessible),
-        () => this.$emit("initialize-failed")
-      );
-
-    /*if (!isEmpty(this.id)) {
       NewYearDishesReservationService.fetchById(this.id)
         .pipe(tap(() => this.$emit("update-progress", false)))
         .subscribe(
-          (reservation: NewYearDishesReservation) => {
-            this.reservation = reservation;
-          },
-          () => {
-            this.$emit("initialize-failed");
-          }
+          (reservation: NewYearDishesReservation) => (this.reservation = reservation),
+          () => this.$emit("initialize-failed")
         );
-    }*/
+    }
   }
 });

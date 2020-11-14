@@ -41,6 +41,7 @@ export default Vue.extend({
         type: "is-danger"
       };
 
+      this.isProgress = false;
       this.$buefy.toast.open(toastConfig);
     },
 

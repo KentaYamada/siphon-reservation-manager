@@ -79,14 +79,13 @@ export default Vue.extend({
           .pipe(
             switchMap((canSaveReservation: boolean) => {
               if (!canSaveReservation) {
-                return throwError("");
+                return throwError("予約上限越えてます");
               }
 
               return isEmpty(this.id)
                 ? NewYearDishesReservationService.add(this.reservation)
                 : NewYearDishesReservationService.edit(this.reservation);
-            }),
-            tap(() => this.$emit("update-progress", false))
+            })
           )
           .subscribe(
             snapshot => this.$emit("save-succeeded", snapshot.id),

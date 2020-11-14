@@ -30,7 +30,7 @@
     <div class="field">
         <label class="label">受渡日</label>
         <div class="control">
-            <b-datepicker v-model="newYearDishesSetting.delivery_date"></b-datepicker>
+            <b-datepicker :min-date="minDate" v-model="newYearDishesSetting.delivery_date"></b-datepicker>
         </div>
     </div>
     <div class="field">

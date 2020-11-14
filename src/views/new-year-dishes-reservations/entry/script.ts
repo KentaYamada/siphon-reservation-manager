@@ -8,7 +8,7 @@ export default Vue.extend({
   },
   methods: {
     handleAccessDenied() {
-      this.$router.push({ name: "forbidden"});
+      this.$router.push({ name: "forbidden" });
     },
 
     handleInitializeFailed() {

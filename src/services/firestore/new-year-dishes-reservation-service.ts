@@ -3,6 +3,7 @@ import { filter, map } from "rxjs/operators";
 import { doc } from "rxfire/firestore";
 import { isNil } from "lodash";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
+import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import firebase from "@/plugins/firebase";
 
 export class NewYearDishesReservationService {
@@ -30,8 +31,6 @@ export class NewYearDishesReservationService {
     docRef.set(data);
 
     return doc(docRef);
-
-    // return from(docRef.set(data));
   }
 
   static edit(payload: NewYearDishesReservation): Observable<firebase.firestore.DocumentSnapshot> {
@@ -109,5 +108,17 @@ export class NewYearDishesReservationService {
     const docRef = NewYearDishesReservationService._getCollection().doc(id);
 
     return from(docRef.delete());
+  }
+
+  static canSaveReservation(reservation: NewYearDishesReservation, setting: NewYearDishesSetting): Observable<boolean> {
+    if (!reservation || !setting) {
+      return new Observable(subscriber => subscriber.error());
+    }
+
+    return NewYearDishesReservationService.fetchReceptions().pipe(
+      map((receptions: number) => {
+        return reservation.quantity + receptions <= setting.receptions;
+      })
+    );
   }
 }

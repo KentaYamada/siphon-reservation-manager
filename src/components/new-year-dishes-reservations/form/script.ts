@@ -2,8 +2,8 @@ import Vue from "vue";
 import moment from "moment";
 import { email, minValue, required } from "vuelidate/lib/validators";
 import { isEmpty } from "lodash";
-import { forkJoin } from "rxjs";
-import { tap } from "rxjs/operators";
+import { forkJoin, throwError } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 import { tel } from "@/plugins/validate";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
@@ -75,21 +75,23 @@ export default Vue.extend({
       } else {
         this.$emit("update-progress", true);
 
-        const observe$ = isEmpty(this.id)
-          ? NewYearDishesReservationService.add(this.reservation)
-          : NewYearDishesReservationService.edit(this.reservation);
+        NewYearDishesReservationService.canSaveReservation(this.reservation, this.setting)
+          .pipe(
+            switchMap((canSaveReservation: boolean) => {
+              if (!canSaveReservation) {
+                return throwError("");
+              }
 
-        observe$.subscribe(
-          (snapshot: firebase.firestore.DocumentSnapshot) => {
-            this.$emit("save-succeeded", snapshot.id);
-          },
-          () => {
-            this.$emit("save-failed");
-          },
-          () => {
-            this.$emit("update-progress", false);
-          }
-        );
+              return isEmpty(this.id)
+                ? NewYearDishesReservationService.add(this.reservation)
+                : NewYearDishesReservationService.edit(this.reservation);
+            }),
+            tap(() => this.$emit("update-progress", false))
+          )
+          .subscribe(
+            snapshot => this.$emit("save-succeeded", snapshot.id),
+            () => this.$emit("save-failed")
+          );
       }
     }
   },

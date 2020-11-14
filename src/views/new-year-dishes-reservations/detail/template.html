@@ -13,11 +13,12 @@
                     <new-year-dishes-reservation-detail
                         :id="id"
                         @load-failed="handleLoadFailed"
+                        @notfound="handleNotfound"
                         @update-progress="handleUpdateProgress">
                     </new-year-dishes-reservation-detail>
                 </div>
                 <div class="page-footer">
-                    <div class="buttons is-right">
+                    <div class="buttons is-right" v-if="visibleActions">
                         <button class="button is-danger is-inverted" type="button" @click="handleCancel()">
                             <i class="fas fa-times"></i>予約の取消
                         </button>

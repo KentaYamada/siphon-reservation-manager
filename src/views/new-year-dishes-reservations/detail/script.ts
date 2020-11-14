@@ -1,9 +1,12 @@
 import Vue from "vue";
+import moment from "moment";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import { tap } from "rxjs/operators";
 import NewYearDishesReservationDetail from "@/components/new-year-dishes-reservations/detail/NewYearDishesReservationDetail.vue";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
+import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
+import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
 
 export default Vue.extend({
   components: {
@@ -13,6 +16,19 @@ export default Vue.extend({
     id: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    visibleActions(): boolean {
+      if (this.setting.is_pause) {
+        return false;
+      }
+
+      if (moment(this.setting.end_datetime).diff(new Date()) <= 0) {
+        return false;
+      }
+
+      return true;
     }
   },
   methods: {
@@ -81,13 +97,21 @@ export default Vue.extend({
       });
     },
 
+    handleNotfound() {
+      this.$router.push({ name: "notfound" });
+    },
+
     handleUpdateProgress(isProgress: boolean) {
       this.isProgress = isProgress;
     }
   },
   data() {
     return {
-      isProgress: false
+      isProgress: false,
+      setting: {} as NewYearDishesSetting
     };
+  },
+  mounted() {
+    NewYearDishesSettingService.fetch().subscribe((setting: NewYearDishesSetting) => (this.setting = setting));
   }
 });

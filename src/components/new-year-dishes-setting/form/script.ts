@@ -27,12 +27,12 @@ export default Vue.extend({
       if (this.$v.$invalid) {
         this.$emit("validation-failed");
       } else {
-        this.isSaving = true;
+        this.$emit("update-progress", true);
 
         NewYearDishesSettingService.save(this.newYearDishesSetting).subscribe(
           () => this.$emit("save-succeeded"),
           () => this.$emit("save-failed"),
-          () => (this.isSaving = false)
+          () => this.$emit("update-progress", false)
         );
       }
     }
@@ -48,8 +48,8 @@ export default Vue.extend({
       .toDate();
     const newYearsEve = moment()
       .set({
-        // month: 12,
-        // day: 31,
+        month: 11, // 0 origin
+        date: 31,
         hours: 0,
         minutes: 0,
         seconds: 0,
@@ -69,7 +69,6 @@ export default Vue.extend({
     };
 
     return {
-      isSaving: false,
       minDate: today,
       newYearDishesSetting: newYearDishesSetting
     };

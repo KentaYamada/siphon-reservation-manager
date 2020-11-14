@@ -245,10 +245,22 @@ service cloud.firestore {
     }
 
     function validationNewYearDishesSettingSchema(data) {
-        return (data.size() == 6) &&
-               (data.keys().hasAll(["start_datetime", "end_datetime", "receptions", "max_quantity_per_reservation", "is_pause", "image"])) &&
+        return (data.size() == 9) &&
+               (data.keys().hasAll([
+                "start_datetime",
+                "end_datetime",
+                "delivery_date",
+                "delivery_time_from",
+                "delivery_time_to",
+                "receptions",
+                "max_quantity_per_reservation",
+                "is_pause",
+                "image"])) &&
                (data.start_datetime is timestamp) &&
                (data.end_datetime is timestamp) &&
+               (data.delivery_date is timestamp) &&
+               (data.delivery_time_from is timestamp) &&
+               (data.delivery_time_to is timestamp) &&
                (data.receptions is number) &&
                (data.receptions > 0) &&
                (data.max_quantity_per_reservation is number) &&

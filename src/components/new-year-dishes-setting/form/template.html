@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="field">
-        <label class="label">受付上限</label>
+        <label class="label">在庫数</label>
         <div class="control">
             <input type="number" class="input has-text-right" min="0" v-model.number="newYearDishesSetting.receptions">
         </div>
@@ -64,10 +64,10 @@
         </div>
     </div>
     <div class="field">
-        <label class="label">予約あたりの受付上限</label>
+        <label class="label">注文上限</label>
         <input type="number" class="input has-text-right" min="0" v-model.number="newYearDishesSetting.max_quantity_per_reservation">
     </div>
-    <div class="field">
+    <!--<div class="field">
         <b-upload class="file-label" type="is-info" v-model="newYearDishesSetting.image">
             <span class="file-cta">
                 <b-icon class="file-icon" icon="upload"></b-icon>
@@ -75,7 +75,7 @@
             </span>
             <span class="file-name"></span>
         </b-upload>
-    </div>
+    </div>-->
     <div class="field">
         <label class="checkbox">
             <input type="checkbox" class="checkbox" v-model="newYearDishesSetting.is_pause">おせち予約サイトを休止する
@@ -85,8 +85,7 @@
     <div class="buttons is-right">
         <button type="button"
                 class="button is-info"
-                @click="handleSave()"
-                :disabled="isSaving">
+                @click="handleSave()">
             <i class="fas fa-save"></i>保存する
         </button>
     </div>

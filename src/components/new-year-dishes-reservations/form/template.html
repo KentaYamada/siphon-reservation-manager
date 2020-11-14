@@ -11,7 +11,7 @@
                 </select>
             </div>
         </div>
-        <p class="help">※最大3セットまでです</p>
+        <p class="help">{{ maxReceptionsHelpText }}</p>
         <div v-if="$v.reservation.quantity.$error">
             <small class="help is-danger" v-if="!$v.reservation.quantity.required">
                 ご予約数を選択してください

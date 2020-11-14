@@ -60,6 +60,10 @@ export default Vue.extend({
 
     quantityList(): Array<number> {
       return [...Array(this.setting.max_quantity_per_reservation).keys()].map(i => ++i);
+    },
+
+    maxReceptionsHelpText(): string {
+      return `※最大${this.setting.max_quantity_per_reservation}セットまで`;
     }
   },
   methods: {

@@ -96,6 +96,11 @@ export class NewYearDishesReservationService {
     );
   }
 
+  static fetchReceptions(): Observable<number> {
+    const collection = NewYearDishesReservationService._getCollection();
+    return from(collection.get()).pipe(map(snapshot => snapshot.size));
+  }
+
   static cancel(id: string): Observable<void> {
     if (!id) {
       return new Observable(subscriber => subscriber.error());

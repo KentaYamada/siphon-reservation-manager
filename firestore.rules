@@ -214,5 +214,80 @@ service cloud.firestore {
     match /timezones/{timezoneId} {
         allow delete: if isAuth(request.auth);
     }
+
+    function validationNewYearDishesReservationSchema(data) {
+        return (data.size() == 8) &&
+               (data.keys().hasAll([
+                 "quantity",
+                 "reserver_name",
+                 "address",
+                 "tel",
+                 "mail",
+                 "comment",
+                 "is_delivered",
+                 "detail_url"])) &&
+               (data.quantity is number) &&
+               (data.quantity > 0) &&
+               (data.reserver_name is string) &&
+               (data.reserver_name != "") &&
+               (data.address is string) &&
+               (data.address != "") &&
+               (data.tel is string) &&
+               (data.tel != "") &&
+               (data.mail is string) &&
+               (data.mail != "") &&
+               (data.comment is string) &&
+               (data.is_delivered is bool) &&
+               (data.detail_url is string) &&
+               (data.detail_url != "");
+    }
+
+    match /new_year_dishes_reservations/{document} {
+        allow create, update: if validationNewYearDishesReservationSchema(request.resource.data);
+    }
+
+    match /new_year_dishes_reservations/{document} {
+        allow list: if isAuth(request.auth);
+    }
+
+    match /new_year_dishes_reservations/{id} {
+        allow get, delete: if hasId(id);
+    }
+
+    function validationNewYearDishesSettingSchema(data) {
+        return (data.size() == 9) &&
+               (data.keys().hasAll([
+                "start_datetime",
+                "end_datetime",
+                "delivery_date",
+                "delivery_time_from",
+                "delivery_time_to",
+                "receptions",
+                "max_quantity_per_reservation",
+                "is_pause",
+                "image"])) &&
+               (data.start_datetime is timestamp) &&
+               (data.end_datetime is timestamp) &&
+               (data.delivery_date is timestamp) &&
+               (data.delivery_time_from is timestamp) &&
+               (data.delivery_time_to is timestamp) &&
+               (data.receptions is number) &&
+               (data.receptions > 0) &&
+               (data.max_quantity_per_reservation is number) &&
+               (data.max_quantity_per_reservation > 0) &&
+               (data.is_pause is bool);
+               // (data.image is) &&
+    }
+
+    // [GET] /new_year_dishes_setting/{id}
+    match /new_year_dishes_settings/{id} {
+        allow get: if isAuth(request.auth);
+    }
+
+    // [POST/PUT] /new_year_dishes_setting/{document}
+    match /new_year_dishes_settings/{document} {
+        allow create, update: if isAuth(request.auth) &&
+                                 validationNewYearDishesSettingSchema(request.resource.data);
+    }
   }
 }

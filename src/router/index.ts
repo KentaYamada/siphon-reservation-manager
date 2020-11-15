@@ -14,7 +14,15 @@ import {
   SHOP_SETTING_URL,
   MANAGEMENT_LOGIN_URL,
   FORBIDDEN_URL,
-  HELP_MAIL_UNREACHED
+  HELP_MAIL_UNREACHED,
+  NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+  NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
+  NEW_YEAR_DISHES_RESERVED_MESSAGE_URL,
+  NEW_YEAR_DISHES_RESERVATION_DETAIL_URL,
+  NEW_YEAR_DISHES_RESERVATION_EDIT_URL,
+  NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL,
+  NEW_YEAR_DISHES_RESERVATION_CANCELED_URL,
+  NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
 
 // Reservation
@@ -33,8 +41,6 @@ import Shop from "@/views/managements/shop/Shop.vue";
 // Help
 import HelpMailUnreached from "@/views/helps/mail-unreached/HelpMailUnreached.vue";
 
-// Other
-import Forbidden from "@/views/forbidden/Forbidden.vue";
 import NotFound from "@/views/notfound/NotFound.vue";
 
 // store
@@ -115,12 +121,91 @@ const routes: RouteConfig[] = [
   {
     path: FORBIDDEN_URL,
     name: "forbidden",
-    component: Forbidden
+    component: () => import(/* webpackChunkName: "forbidden" */ "@/views/forbidden/Forbidden.vue")
   },
   {
     path: HELP_MAIL_UNREACHED,
     name: "help-mail-unreached",
     component: HelpMailUnreached
+  },
+  {
+    path: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+    name: "new-year-dishes-reservation-list",
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-list" */ "@/views/new-year-dishes-reservations/list/NewYearDishesReservationListView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
+    name: "new-year-dishes-reservation-entry",
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-entry" */ "@/views/new-year-dishes-reservations/entry/NewYearDishesReservationEntryView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVED_MESSAGE_URL,
+    name: "new-year-dishes-reserved-message",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reserved-message" */ "@/views/new-year-dishes-reservations/reserved-message/NewYearDishesReservedMessageView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVATION_DETAIL_URL,
+    name: "new-year-dishes-reservation-detail",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-detail" */ "@/views/new-year-dishes-reservations/detail/NewYearDishesReservationDetailView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVATION_EDIT_URL,
+    name: "new-year-dishes-reservation-edit",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-edit" */ "@/views/new-year-dishes-reservations/edit/NewYearDishesReservationEditView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL,
+    name: "new-year-dishes-reservation-edited-message",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-edited-message" */ "@/views/new-year-dishes-reservations/edited-message/NewYearDishesReservationEditedMessageView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_RESERVATION_CANCELED_URL,
+    name: "new-year-dishes-reservation-canceled-message",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-edited-message" */ "@/views/new-year-dishes-reservations/canceled-message/NewYearDishesReservationCanceledMessageView.vue"
+      )
+  },
+  {
+    path: NEW_YEAR_DISHES_SETTING_URL,
+    name: "new-year-dishes-setting",
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-setting" */ "@/views/new-year-dishes-settings/NewYearDishesSettingView.vue"
+      )
   },
   {
     path: "*",

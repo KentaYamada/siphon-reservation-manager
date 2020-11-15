@@ -4,8 +4,8 @@ import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 export const getNewYearDishesReservedMessage = (reserverName: string, setting: NewYearDishesSetting): string => {
   console.log(setting);
   const deliveryDate = moment(setting.delivery_date).format("YYYY年MM月DD日");
-  const deliveryTimeFrom = moment(setting.delivery_time_from).format("hh:mm");
-  const deliveryTimeTo = moment(setting.delivery_time_to).format("hh:mm");
+  const deliveryTimeFrom = moment(setting.delivery_time_from).format("HH:mm");
+  const deliveryTimeTo = moment(setting.delivery_time_to).format("HH:mm");
 
   return `${reserverName} 様
 Cafe de Gamoyonです

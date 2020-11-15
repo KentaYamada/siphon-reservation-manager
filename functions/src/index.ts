@@ -3,9 +3,9 @@ import * as functions from "firebase-functions";
 import * as nodemailer from "nodemailer";
 import * as corsLib from "cors";
 import {
-  getNewYearDishesReservedMessage, 
+  getNewYearDishesReservedMessage,
   getNewYearDishesEditedMessage,
-  getNewYearDishesCanceledMessage 
+  getNewYearDishesCanceledMessage
 } from "./email-message";
 import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 
@@ -52,12 +52,12 @@ exports.sendMail = functions.https.onRequest((request, response: functions.Respo
 exports.onCreateNewYearDishesReservation = functions.firestore
   .document("new_year_dishes_reservations/{id}")
   .onCreate(async snap => {
-    const promise$ = await admin.firestore().collection("new_year_dishes_setting").doc("1").get();
-    const setting = {
+    const promise$ = await admin.firestore().collection("new_year_dishes_settings").doc("1").get();
+    const setting: NewYearDishesSetting = {
       delivery_date: promise$.data()?.delivery_date.toDate(),
       delivery_time_from: promise$.data()?.delivery_time_from.toDate(),
-      delivery_time_to: promise$.data()?.delivery_time_to.toDate(),
-    } as NewYearDishesSetting;
+      delivery_time_to: promise$.data()?.delivery_time_to.toDate()
+    };
     const data = snap.data();
     const message = getNewYearDishesReservedMessage(data?.reserver_name, setting);
     const sendData = {
@@ -79,12 +79,12 @@ exports.onCreateNewYearDishesReservation = functions.firestore
 exports.onUpdateNewYearDishesReservation = functions.firestore
   .document("new_year_dishes_reservations/{id}")
   .onUpdate(async snap => {
-    const promise$ = await admin.firestore().collection("new_year_dishes_setting").doc("1").get();
-    const setting = {
+    const promise$ = await admin.firestore().collection("new_year_dishes_settings").doc("1").get();
+    const setting: NewYearDishesSetting = {
       delivery_date: promise$.data()?.delivery_date.toDate(),
       delivery_time_from: promise$.data()?.delivery_time_from.toDate(),
-      delivery_time_to: promise$.data()?.delivery_time_to.toDate(),
-    } as NewYearDishesSetting;
+      delivery_time_to: promise$.data()?.delivery_time_to.toDate()
+    };
     const data = snap.after.data();
     const message = getNewYearDishesEditedMessage(data?.reserver_name, setting);
     const sendData = {

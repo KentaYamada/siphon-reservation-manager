@@ -35,7 +35,7 @@
     <div class="field">
         <label class="label">住所</label>
         <div class="control">
-            <input class="input" type="text" placeholder="大阪市" v-model="reservation.address">
+            <input class="input" type="text" placeholder="大阪府大阪市城東区今福東2-9-19" v-model="reservation.address">
         </div>
         <div v-if="$v.reservation.address.$error">
             <small class="help is-danger" v-if="!$v.reservation.address.required">

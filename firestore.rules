@@ -216,8 +216,16 @@ service cloud.firestore {
     }
 
     function validationNewYearDishesReservationSchema(data) {
-        return (data.size() == 7) &&
-               (data.keys().hasAll(["quantity", "reserver_name", "address", "tel", "mail", "comment", "is_delivered"])) &&
+        return (data.size() == 8) &&
+               (data.keys().hasAll([
+                 "quantity",
+                 "reserver_name",
+                 "address",
+                 "tel",
+                 "mail",
+                 "comment",
+                 "is_delivered",
+                 "detail_url"])) &&
                (data.quantity is number) &&
                (data.quantity > 0) &&
                (data.reserver_name is string) &&
@@ -229,7 +237,9 @@ service cloud.firestore {
                (data.mail is string) &&
                (data.mail != "") &&
                (data.comment is string) &&
-               (data.is_delivered is bool);
+               (data.is_delivered is bool) &&
+               (data.detail_url is string) &&
+               (data.detail_url != "");
     }
 
     match /new_year_dishes_reservations/{document} {

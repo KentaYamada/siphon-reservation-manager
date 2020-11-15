@@ -59,7 +59,7 @@ exports.onCreateNewYearDishesReservation = functions.firestore
       delivery_time_to: promise$.data()?.delivery_time_to.toDate()
     };
     const data = snap.data();
-    const message = getNewYearDishesReservedMessage(data?.reserver_name, setting);
+    const message = getNewYearDishesReservedMessage(data?.reserver_name, data?.detail_url, setting);
     const sendData = {
       from: `Cafe de Gamoyon <${config.gmail.email}>`,
       to: data?.mail,
@@ -86,7 +86,7 @@ exports.onUpdateNewYearDishesReservation = functions.firestore
       delivery_time_to: promise$.data()?.delivery_time_to.toDate()
     };
     const data = snap.after.data();
-    const message = getNewYearDishesEditedMessage(data?.reserver_name, setting);
+    const message = getNewYearDishesEditedMessage(data?.reserver_name, data?.detail_url, setting);
     const sendData = {
       from: `Cafe de Gamoyon <${config.gmail.email}>`,
       to: data?.mail,

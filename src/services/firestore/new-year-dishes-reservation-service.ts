@@ -25,7 +25,8 @@ export class NewYearDishesReservationService {
       tel: payload.tel,
       mail: payload.mail,
       comment: payload.comment,
-      is_delivered: false
+      is_delivered: false,
+      detail_url: payload.detail_url.replace(":id", docRef.id)
     };
 
     docRef.set(data);
@@ -45,7 +46,8 @@ export class NewYearDishesReservationService {
       tel: payload.tel,
       mail: payload.mail,
       comment: payload.comment,
-      is_delivered: false
+      is_delivered: false,
+      detail_url: payload.detail_url
     };
 
     docRef.update(data);
@@ -89,7 +91,8 @@ export class NewYearDishesReservationService {
           tel: data?.tel,
           mail: data?.mail,
           comment: data?.comment,
-          is_delivered: data?.is_delivered
+          is_delivered: data?.is_delivered,
+          detail_url: data?.detail_url
         } as NewYearDishesReservation;
       })
     );

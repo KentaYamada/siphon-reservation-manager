@@ -10,4 +10,5 @@ export interface NewYearDishesReservation {
   mail: string;
   comment: string;
   is_delivered: boolean;
+  detail_url: string;
 }

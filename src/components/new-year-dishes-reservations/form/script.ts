@@ -9,6 +9,7 @@ import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
 import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
+import { NEW_YEAR_DISHES_RESERVATION_DETAIL_URL } from "@/router/url";
 
 export default Vue.extend({
   template: "<new-year-dishes-reservation-form/>",
@@ -102,7 +103,8 @@ export default Vue.extend({
       tel: "",
       mail: "",
       comment: "",
-      is_delivered: false
+      is_delivered: false,
+      detail_url: location.origin.concat(NEW_YEAR_DISHES_RESERVATION_DETAIL_URL)
     } as NewYearDishesReservation;
     const setting = {} as NewYearDishesSetting;
 

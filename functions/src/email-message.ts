@@ -2,7 +2,7 @@ import * as moment from "moment";
 import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 
 
-export const getNewYearDishesReservedMessage = (reserverName: string, setting: NewYearDishesSetting): string => {
+export const getNewYearDishesReservedMessage = (reserverName: string, redirectUrl: string, setting: NewYearDishesSetting): string => {
   const deliveryDate = moment(setting.delivery_date).add(9, "hours").format("YYYY年MM月DD日");
   const deliveryTimeFrom = moment(setting.delivery_time_from).add(9, "hours").format("HH:mm");
   const deliveryTimeTo = moment(setting.delivery_time_to).add(9, "hours").format("HH:mm");
@@ -23,6 +23,9 @@ Cafe de Gamoyonです
 
 数量変更は予定数に達していた場合、変更できない事があります
 
+ご予約の確認、変更、キャンセルはこちら
+${redirectUrl}
+
 Cafe de Gamoyon
 大阪府大阪市城東区今福東2-9-19
 https://goo.gl/maps/X2NpTBBGJBamfPgw6
@@ -32,7 +35,7 @@ Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja
 Facebook: https://www.facebook.com/gamoyon4204/`;
 };
 
-export const getNewYearDishesEditedMessage = (reserverName: string, setting: NewYearDishesSetting): string => {
+export const getNewYearDishesEditedMessage = (reserverName: string, redirectUrl: string, setting: NewYearDishesSetting): string => {
   const deliveryDate = moment(setting.delivery_date).add(9, "hours").format("YYYY年MM月DD日");
   const deliveryTimeFrom = moment(setting.delivery_time_from).add(9, "hours").format("hh:mm");
   const deliveryTimeTo = moment(setting.delivery_time_to).add(9, "hours").format("hh:mm");
@@ -52,6 +55,9 @@ Cafe de Gamoyonです
 ※ キャンセル料は全額お客様負担となります
 
 数量変更は予定数に達していた場合、変更できない事があります
+
+ご予約の確認、変更、キャンセルはこちら
+${redirectUrl}
 
 Cafe de Gamoyon
 大阪府大阪市城東区今福東2-9-19

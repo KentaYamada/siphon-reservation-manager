@@ -1,7 +1,7 @@
 import { Observable, from } from "rxjs";
 import { filter, map } from "rxjs/operators";
 import { doc } from "rxfire/firestore";
-import { isNil, sumBy } from "lodash";
+import { isNil } from "lodash";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import firebase from "@/plugins/firebase";
@@ -97,7 +97,23 @@ export class NewYearDishesReservationService {
 
   static fetchReceptions(): Observable<number> {
     const collection = NewYearDishesReservationService._getCollection();
-    return from(collection.get()).pipe(map(snapshot => sumBy(snapshot.docs, "quantity")));
+    return from(collection.get()).pipe(
+      map(snapshot => {
+        let receptions = 0;
+
+        if (snapshot.size < 1) {
+          return receptions;
+        }
+
+        snapshot.forEach(doc => {
+          if (doc.data()) {
+            receptions += doc.data().quantity;
+          }
+        });
+
+        return receptions;
+      })
+    );
   }
 
   static cancel(id: string): Observable<void> {
@@ -117,6 +133,9 @@ export class NewYearDishesReservationService {
 
     return NewYearDishesReservationService.fetchReceptions().pipe(
       map((receptions: number) => {
+        console.log(receptions);
+        console.log(reservation.quantity);
+        console.log(setting.receptions);
         return reservation.quantity + receptions <= setting.receptions;
       })
     );

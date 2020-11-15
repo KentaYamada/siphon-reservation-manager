@@ -1,11 +1,11 @@
 import * as moment from "moment";
 import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 
+
 export const getNewYearDishesReservedMessage = (reserverName: string, setting: NewYearDishesSetting): string => {
-  console.log(setting);
-  const deliveryDate = moment(setting.delivery_date).format("YYYY年MM月DD日");
-  const deliveryTimeFrom = moment(setting.delivery_time_from).format("HH:mm");
-  const deliveryTimeTo = moment(setting.delivery_time_to).format("HH:mm");
+  const deliveryDate = moment(setting.delivery_date).add(9, "hours").format("YYYY年MM月DD日");
+  const deliveryTimeFrom = moment(setting.delivery_time_from).add(9, "hours").format("HH:mm");
+  const deliveryTimeTo = moment(setting.delivery_time_to).add(9, "hours").format("HH:mm");
 
   return `${reserverName} 様
 Cafe de Gamoyonです
@@ -33,9 +33,9 @@ Facebook: https://www.facebook.com/gamoyon4204/`;
 };
 
 export const getNewYearDishesEditedMessage = (reserverName: string, setting: NewYearDishesSetting): string => {
-  const deliveryDate = moment(setting.delivery_date).format("YYYY年MM月DD日");
-  const deliveryTimeFrom = moment(setting.delivery_time_from).format("hh:mm");
-  const deliveryTimeTo = moment(setting.delivery_time_to).format("hh:mm");
+  const deliveryDate = moment(setting.delivery_date).add(9, "hours").format("YYYY年MM月DD日");
+  const deliveryTimeFrom = moment(setting.delivery_time_from).add(9, "hours").format("hh:mm");
+  const deliveryTimeTo = moment(setting.delivery_time_to).add(9, "hours").format("hh:mm");
 
   return `${reserverName} 様
 Cafe de Gamoyonです

@@ -52,7 +52,7 @@ const getNavigations = (): Navigation[] => {
           icon: "fa-store"
         },
         {
-          name: "新春スイーツ受付設定",
+          name: "新春スイーツ予約設定",
           url: NEW_YEAR_DISHES_SETTING_URL,
           icon: "fa-store"
         }

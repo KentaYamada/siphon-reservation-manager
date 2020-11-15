@@ -68,7 +68,7 @@ Cafe de Gamoyonです
 
 またのご利用をおまちしております
 
-Cafe de GAMOYON
+Cafe de Gamoyon
 大阪府大阪市城東区今福東2-9-19
 https://goo.gl/maps/X2NpTBBGJBamfPgw6
 

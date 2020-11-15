@@ -2,6 +2,7 @@ import * as moment from "moment";
 import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 
 export const getNewYearDishesReservedMessage = (reserverName: string, setting: NewYearDishesSetting): string => {
+  console.log(setting);
   const deliveryDate = moment(setting.delivery_date).format("YYYY年MM月DD日");
   const deliveryTimeFrom = moment(setting.delivery_time_from).format("hh:mm");
   const deliveryTimeTo = moment(setting.delivery_time_to).format("hh:mm");
@@ -17,7 +18,7 @@ Cafe de Gamoyonです
 2020年12月15日(火)までWebのみで操作可
 ※ キャンセル料なし
 
-2020年12月16日(水)以降の変更、キャンセルなどのご相談は、このメールご返信ください
+2020年12月16日(水)以降の変更、キャンセルなどのご相談はこのメールにご返信ください
 ※ キャンセル料は全額お客様負担となります
 
 数量変更は予定数に達していた場合、変更できない事があります
@@ -47,7 +48,7 @@ Cafe de Gamoyonです
 2020年12月15日(火)までWebのみで操作可
 ※ キャンセル料なし
 
-2020年12月16日(水)以降の変更、キャンセルなどのご相談は、このメールご返信ください
+2020年12月16日(水)以降の変更、キャンセルなどのご相談はこのメールご返信にください
 ※ キャンセル料は全額お客様負担となります
 
 数量変更は予定数に達していた場合、変更できない事があります

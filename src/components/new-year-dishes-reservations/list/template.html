@@ -1,0 +1,10 @@
+<div class="new-year-dishes-reservation-list">
+    <new-year-dishes-reservation-list-item
+        :key="r.id"
+        :reservation="r"
+        @cancel-succeeded="handleCancelSucceeded"
+        @cancel-failed="handleCancelFailed"
+        @update-progress="handleUpdateProgress"
+        v-for="r in reservations">
+    </new-year-dishes-reservation-list-item>
+</div>

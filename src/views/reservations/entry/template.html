@@ -16,6 +16,9 @@
                     <a href="https://www.instagram.com/cafedegamoyon/?hl=ja" class="sns-link" target="_blank"><i class="fab fa-instagram"></i>インスタグラム</a>
                         からお問い合わせください。
                     </p>
+                    <div class="new-year-dishes-link" v-if="isAccessible">
+                        <router-link class="link" :to="{ name: 'new-year-dishes-reservation-entry' }">新春スイーツのご予約はこちら！</router-link>
+                    </div>
                 </div>
 
                 <div class="page-content">

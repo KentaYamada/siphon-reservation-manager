@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="columns">
+        <div class="column is-half is-offset-3">
+            <div class="box">
+                <div class="page-header">
+                    <h4 class="title is-size-3">
+                        <i class="fas fa-calendar-alt"></i>新春スイーツ予約設定
+                    </h4>
+                </div>
+                <div class="page-content">
+                    <new-year-dishes-setting-form
+                        @load-failed="handleLoadFailed"
+                        @save-succeeded="handleSaveSucceeded"
+                        @save-failed="handleSaveFailed"
+                        @update-progress="handleUpdateProgress"
+                        @validation-failed="handleValidationFailed">
+                    </new-year-dishes-setting-form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <b-loading :active.sync="isProgress"></b-loading>
+</div>

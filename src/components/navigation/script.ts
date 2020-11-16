@@ -2,7 +2,15 @@ import Vue from "vue";
 import { mapActions, mapGetters } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
 import { Navigation } from "@/entity/navigation";
-import { INDEX_URL, MANAGEMENT_RESERVATION_LIST_URL, SHOP_SETTING_URL, HELP_MAIL_UNREACHED } from "@/router/url";
+import {
+  INDEX_URL,
+  MANAGEMENT_RESERVATION_LIST_URL,
+  SHOP_SETTING_URL,
+  HELP_MAIL_UNREACHED,
+  NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+  NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
+  NEW_YEAR_DISHES_SETTING_URL
+} from "@/router/url";
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
 
 const getNavigations = (): Navigation[] => {
@@ -14,6 +22,11 @@ const getNavigations = (): Navigation[] => {
         {
           name: "予約登録",
           url: INDEX_URL,
+          icon: "fa-calendar-plus"
+        },
+        {
+          name: "新春スイーツ予約受付",
+          url: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
           icon: "fa-calendar-plus"
         }
       ]
@@ -29,8 +42,18 @@ const getNavigations = (): Navigation[] => {
           icon: "fa-list"
         },
         {
+          name: "新春スイーツ予約一覧",
+          url: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+          icon: "fa-list"
+        },
+        {
           name: "営業設定",
           url: SHOP_SETTING_URL,
+          icon: "fa-store"
+        },
+        {
+          name: "新春スイーツ予約設定",
+          url: NEW_YEAR_DISHES_SETTING_URL,
           icon: "fa-store"
         }
       ]

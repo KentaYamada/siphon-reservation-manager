@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-content">
+        <h3 class="reserver">
+            {{ reservation.reserver_name }} ({{ reservation.quantity }}セット)
+        </h3>
+        <p v-html="comment"></p>
+        <div class="buttons is-right">
+            <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog()">
+                <i class="fas fa-address-card"></i>連絡先を表示
+            </button>
+            <button type="button" class="button is-danger is-inverted" @click="handleCancel()">
+                <i class="fas fa-times"></i>予約をキャンセル
+            </button>
+        </div>
+    </div>
+</div>

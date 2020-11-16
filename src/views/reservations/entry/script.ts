@@ -1,9 +1,15 @@
 import Vue from "vue";
+import _ from "lodash";
+import moment from "moment";
 import { mapState } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
+import { forkJoin } from "rxjs";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
-import _ from "lodash";
+import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
+import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
+import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
+import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
 import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
@@ -11,7 +17,23 @@ export default Vue.extend({
     ReservationForm
   },
   computed: {
-    ...mapState("reservation", ["reservation"])
+    ...mapState("reservation", ["reservation"]),
+
+    isAccessible(): boolean {
+      if (this.setting.is_pause) {
+        return false;
+      }
+
+      if (moment(this.setting.end_datetime).diff(new Date()) <= 0) {
+        return false;
+      }
+
+      if (this.setting.receptions <= this.receptions) {
+        return false;
+      }
+
+      return true;
+    }
   },
   methods: {
     handleInitializing(): void {
@@ -94,9 +116,28 @@ export default Vue.extend({
       sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CREATED);
     }
   },
+  created() {
+    forkJoin([NewYearDishesSettingService.fetch(), NewYearDishesReservationService.fetchReceptions()]).subscribe(
+      value => {
+        this.setting = value[0];
+        this.receptions = value[1];
+      },
+      () => {
+        this.$emit("initialize-failed");
+      },
+      () => {
+        if (!this.isAccessible) {
+          this.$emit("access-denied");
+        }
+      }
+    );
+  },
   data() {
+    const setting = {} as NewYearDishesSetting;
     return {
-      isProgressing: false
+      isProgressing: false,
+      setting: setting,
+      receptions: 0
     };
   }
 });

@@ -27,3 +27,19 @@ export const FORBIDDEN_URL = "/forbidden";
 export const NOTFOUND_URL = "/notfound";
 
 export const HELP_MAIL_UNREACHED = "/helps/mail_unreached";
+
+export const NEW_YEAR_DISHED_RESERVATION_LIST_URL = "/managements/new_year_dishes_reservations";
+
+export const NEW_YEAR_DISHES_RESERVATION_ENTRY_URL = "/new_year_dishes_reservations/entry";
+
+export const NEW_YEAR_DISHES_RESERVED_MESSAGE_URL = "/new_year_dishes_reservations/reserved";
+
+export const NEW_YEAR_DISHES_RESERVATION_DETAIL_URL = "/new_year_dishes_reservations/detail/:id";
+
+export const NEW_YEAR_DISHES_RESERVATION_EDIT_URL = "/new_year_dishes_reservations/edit/:id";
+
+export const NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL = "/new_year_dishes_reservations/edited/:id";
+
+export const NEW_YEAR_DISHES_RESERVATION_CANCELED_URL = "/new_year_dishes_reservations/canceled";
+
+export const NEW_YEAR_DISHES_SETTING_URL = "/managements/new_year_dishes";

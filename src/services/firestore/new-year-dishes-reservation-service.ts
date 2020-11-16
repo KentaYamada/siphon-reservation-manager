@@ -109,7 +109,7 @@ export class NewYearDishesReservationService {
         }
 
         snapshot.forEach(doc => {
-          if (doc.data() && (!isNil(id) && doc.id !== id)) {
+          if (doc.data() && doc.id !== id) {
             receptions += doc.data().quantity;
           }
         });

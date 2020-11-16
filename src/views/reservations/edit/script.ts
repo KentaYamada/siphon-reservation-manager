@@ -34,7 +34,7 @@ export default Vue.extend({
         return false;
       }
 
-      if (this.setting.receptions < this.receptions) {
+      if (this.setting.receptions <= this.receptions) {
         return false;
       }
 

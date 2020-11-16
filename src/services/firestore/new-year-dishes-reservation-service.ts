@@ -98,7 +98,7 @@ export class NewYearDishesReservationService {
     );
   }
 
-  static fetchReceptions(): Observable<number> {
+  static fetchReceptions(id?: string): Observable<number> {
     const collection = NewYearDishesReservationService._getCollection();
     return from(collection.get()).pipe(
       map(snapshot => {
@@ -109,7 +109,7 @@ export class NewYearDishesReservationService {
         }
 
         snapshot.forEach(doc => {
-          if (doc.data()) {
+          if (doc.data() && (!isNil(id) && doc.id !== id)) {
             receptions += doc.data().quantity;
           }
         });
@@ -134,11 +134,8 @@ export class NewYearDishesReservationService {
       return new Observable(subscriber => subscriber.error());
     }
 
-    return NewYearDishesReservationService.fetchReceptions().pipe(
+    return NewYearDishesReservationService.fetchReceptions(reservation.id).pipe(
       map((receptions: number) => {
-        console.log(receptions);
-        console.log(reservation.quantity);
-        console.log(setting.receptions);
         return reservation.quantity + receptions <= setting.receptions;
       })
     );

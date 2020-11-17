@@ -247,7 +247,7 @@ service cloud.firestore {
     }
 
     match /new_year_dishes_reservations/{document} {
-        allow list: if isAuth(request.auth);
+        allow list: if true;
     }
 
     match /new_year_dishes_reservations/{id} {
@@ -281,7 +281,7 @@ service cloud.firestore {
 
     // [GET] /new_year_dishes_setting/{id}
     match /new_year_dishes_settings/{id} {
-        allow get: if isAuth(request.auth);
+        allow get: if true;
     }
 
     // [POST/PUT] /new_year_dishes_setting/{document}

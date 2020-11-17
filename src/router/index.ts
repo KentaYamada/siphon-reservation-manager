@@ -134,7 +134,10 @@ const routes: RouteConfig[] = [
     component: () =>
       import(
         /* webpackChunkName: "new-year-dishes-reservation-list" */ "@/views/new-year-dishes-reservations/list/NewYearDishesReservationListView.vue"
-      )
+      ),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
@@ -205,7 +208,10 @@ const routes: RouteConfig[] = [
     component: () =>
       import(
         /* webpackChunkName: "new-year-dishes-setting" */ "@/views/new-year-dishes-settings/NewYearDishesSettingView.vue"
-      )
+      ),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: "*",

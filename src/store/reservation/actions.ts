@@ -9,13 +9,9 @@ import { ReservationSeatService } from "@/services/firestore/reservation-seat-se
 import { RootState } from "@/store";
 import { ReservationState } from "@/store/reservation";
 import {
-  CANCEL,
-  FETCH,
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
-  SAVE,
   SET_ITEM,
-  SET_ITEMS,
   SET_RESERVATION_SEATS
 } from "@/store/constant";
 
@@ -103,15 +99,6 @@ const actions: ActionTree<ReservationState, RootState> = {
     commit(SET_ITEM, reservation);
 
     return Promise.all([reservationRef, reservationSeatsRef]);
-  },
-
-  [SAVE]: async ({ commit }, reservation: Reservation) => {
-    const service = new ReservationService();
-    const promise = service.save(reservation);
-
-    promise.then(() => commit(SET_ITEM, reservation));
-
-    return promise;
   }
 };
 

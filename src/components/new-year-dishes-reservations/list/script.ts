@@ -1,4 +1,5 @@
 import Vue from "vue";
+import { tap } from "rxjs/operators";
 import NewYearDishesReservationListItem from "@/components/new-year-dishes-reservations/list-item/NewYearDishesReservationListItem.vue";
 import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
@@ -25,17 +26,15 @@ export default Vue.extend({
     _fetch() {
       this.$emit("update-progress", true);
 
-      NewYearDishesReservationService.fetch().subscribe(
-        (reservations: Array<NewYearDishesReservation>) => {
-          this.reservations = reservations;
-        },
-        () => {
-          this.$emit("load-failed");
-        },
-        () => {
-          this.$emit("update-progress", false);
-        }
-      );
+      NewYearDishesReservationService.fetch()
+        .pipe(tap(() => this.$emit("update-progress", false)))
+        .subscribe(
+          (reservations: Array<NewYearDishesReservation>) => {
+            this.reservations = reservations;
+            this.$emit("update-current-receptions", reservations.length);
+          },
+          () => this.$emit("load-failed")
+        );
     }
   },
   data() {

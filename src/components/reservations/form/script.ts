@@ -5,10 +5,12 @@ import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
 import _ from "lodash";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
+import { Reservation } from '@/entity/reservation';
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
 import { timePeriod } from "@/filters/time-period";
+import { ReservationService } from "@/services/firestore/reservation-service";
 import {
   FETCH_RESERVATION_SEATS,
   FETCH_RESERVABLE_BUSINESS_DAYS,
@@ -18,16 +20,10 @@ import {
   GET_SELECTED_TIMEZONE,
   HAS_RESERVATION_SEATS,
   HAS_SELECTED_SEATS,
-  INITIALIZE,
   INITIALIZE_RESERVATION_SEATS,
-  RESET_RESERVATION_TIMEZONE,
   RESET_RESERVATION_SEATS,
-  SET_RESERVATION_DATE,
-  SET_RESERVATION_TIMEZONE,
   IS_FULL_OF_RESERVED
 } from "@/store/constant";
-import { ReservationService } from "@/services/firestore/reservation-service";
-import { Reservation } from '@/entity/reservation';
 
 export default Vue.extend({
   template: "<reservation-form/>",
@@ -67,7 +63,6 @@ export default Vue.extend({
   },
   computed: {
     ...mapState("businessDay", ["businessDays"]),
-    ...mapState("reservation", ["reservation"]),
     ...mapGetters("businessDay", {
       getBusinessDayById: GET_BY_ID,
       getSelectableTimezones: GET_SELECTABLE_TIMEZONES
@@ -102,18 +97,15 @@ export default Vue.extend({
       fetchReservationSeats: FETCH_RESERVATION_SEATS
     }),
     ...mapMutations("reservation", {
-      initialize: INITIALIZE,
       initializeReservationSeats: INITIALIZE_RESERVATION_SEATS,
-      resetReservationSeats: RESET_RESERVATION_SEATS,
-      resetReservationTimezone: RESET_RESERVATION_TIMEZONE,
-      setReservationDate: SET_RESERVATION_DATE,
-      setReservationTimezone: SET_RESERVATION_TIMEZONE
+      resetReservationSeats: RESET_RESERVATION_SEATS
     }),
 
     handleUpdateReservationDate(selectedId: string): void {
-      const businessDay = this.getBusinessDayById(selectedId);
-      this.setReservationDate(businessDay.business_date);
-      this.resetReservationTimezone();
+      this.reservation.reservation_date = this.getBusinessDayById(selectedId).business_date;
+      this.reservation.reservation_end_time = null;
+      this.reservation.reservation_start_time = null;
+      this.reservation.reservation_time_id = "";
       this.option.reservation_date_id = selectedId;
       this.option.reservation_time_id = "";
       this._fetchReservationSeats();
@@ -121,16 +113,19 @@ export default Vue.extend({
 
     handleUpdateReservationTimezone(selectedId: string): void {
       const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
-      this.setReservationTimezone(timezone);
+      this.reservation.reservation_end_time = timezone.end_time;
+      this.reservation.reservation_start_time = timezone.start_time;
       this.option.reservation_time_id = selectedId;
       this._fetchReservationSeats();
     },
 
-    handleSave(): void {
+    handleSave() {
       this.$v.$touch();
 
-      if (!this.$v.$invalid && this.hasSelectedSeats) {
-        this.$emit("update-progress", true);
+      // if (!this.$v.$invalid && this.hasSelectedSeats) {
+      if (!this.$v.$invalid) {
+        // this.$emit("update-progress", true);
+        console.log(this.reservation);
 
         ReservationService.save(this.reservation)
           .pipe(tap(() => this.$emit("update-progress", false)))
@@ -164,6 +159,19 @@ export default Vue.extend({
     timePeriod
   },
   data() {
+    const reservation: Reservation = {
+      reservation_date: null,
+      reservation_date_id: "",
+      reservation_start_time: null,
+      reservation_end_time: null,
+      reservation_time_id: "",
+      reserver_name: "",
+      reservation_seats: [],
+      number_of_reservations: null,
+      tel: "",
+      mail: "",
+      comment: ""
+    };
     const option: ReservationSeatSearchOption = {
       reservation_id: "",
       reservation_date_id: "",
@@ -173,11 +181,11 @@ export default Vue.extend({
     return {
       isLoadingSeats: false,
       isSaving: false,
-      option: option
+      option: option,
+      reservation: reservation
     };
   },
   created() {
-    this.initialize();
     this.fetchReservableBusinessDays()
       .then(() => {
         this.option.reservation_id = this.id;

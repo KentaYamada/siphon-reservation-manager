@@ -64,8 +64,6 @@ export const SET_RESERVATION_SEAT = "setReservationSeat";
 
 export const SET_RESERVATION_SEATS = "setReservationSeats";
 
-export const SET_RESERVATION_DATE = "setReservationDate";
-
 export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
 
 export const VISIBLE_ACTIONS = "visibleActions";

@@ -28,8 +28,7 @@ export class ReservationService {
       const reservationsRef = db.collection(this.COLLECTION_NAME);
       const reservationRef = reservation.id ? reservationsRef.doc(reservation.id) : reservationsRef.doc();
       const existData = await transaction.get(reservationRef);
-      // todo: type safe
-      const reservationData: any = {
+      const reservationData: firebase.firestore.DocumentData = {
         reservation_date: reservation.reservation_date,
         reservation_date_id: reservation.reservation_date_id,
         reservation_start_time: reservation.reservation_start_time,
@@ -65,8 +64,7 @@ export class ReservationService {
       if (reservationSeatsRef.empty) {
         _.each(reservation.reservation_seats, (seat: ReservationSeat) => {
           const reservationSeatRef = db.collection(this.SUB_COLLECTION_NAME).doc();
-          // todo: type safe
-          const seatData: any = {
+          const seatData: firebase.firestore.DocumentData = {
             seat_no: seat.seat_no,
             is_reserved: false,
             reservation_id: null,
@@ -94,8 +92,7 @@ export class ReservationService {
             return Promise.reject();
           }
 
-          // todo: type safe
-          const seatData: any = {
+          const seatData: firebase.firestore.DocumentData = {
             seat_no: seat.seat_no,
             reservation_date: reservation.reservation_date,
             reservation_date_id: reservation.reservation_date_id,

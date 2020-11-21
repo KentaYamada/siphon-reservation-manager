@@ -6,4 +6,20 @@
 .page-content {
     margin-top: 24px;
     position: relative;
+
+    .current-receptions {
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+    }
+    .divider {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #b5b5b5;
+    }
+    .list-container {
+        max-height: 500px;
+        overflow-y: scroll;
+        -webkit-overflow-scroll: touch;
+    }
 }

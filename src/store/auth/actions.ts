@@ -1,7 +1,8 @@
 import { ActionTree } from "vuex";
 
 // plugin
-import firebase from "firebase";
+import firebase from "@/plugins/firebase";
+import "firebase/auth";
 
 // strore
 import { RootState } from "@/store";

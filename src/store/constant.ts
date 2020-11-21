@@ -79,7 +79,3 @@ export const GET_RESERVABLE_SEATS = "getReservableSeats";
 export const GET_RESERVABLE_TIMEZONES = "getReservableTimezones";
 
 export const GET_TIMEZONES_BY_RESERVATION_DATE = "getTimezonesByReservationDate";
-
-export const GET_QUANTITY_LIST = "getQuantityList";
-
-export const IS_ACCESSIBLE = "isAccessible";

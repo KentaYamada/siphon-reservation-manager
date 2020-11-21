@@ -9,12 +9,19 @@
                 </div>
 
                 <div class="page-content">
-                    <new-year-dishes-reservation-list
-                        @cancel-succeeded="handleCancelSucceeded"
-                        @cancel-failed="handleCancelFailed"
-                        @load-failed="handleLoadFailed"
-                        @update-progress="handleUpdateProgress">
-                    </new-year-dishes-reservation-list>
+                    <p class="current-receptions" v-if="visibleCurrentReceptions">
+                        {{ currentReceptions }}
+                    </p>
+                    <div class="divider"></div>
+                    <div class="list-container">
+                        <new-year-dishes-reservation-list
+                            @cancel-succeeded="handleCancelSucceeded"
+                            @cancel-failed="handleCancelFailed"
+                            @load-failed="handleLoadFailed"
+                            @update-current-receptions="handleUpdateCurrentReceptions"
+                            @update-progress="handleUpdateProgress">
+                        </new-year-dishes-reservation-list>
+                    </div>
                     <b-loading :is-full-page="false" :active.sync="isProgress"></b-loading>
                 </div>
             </div>

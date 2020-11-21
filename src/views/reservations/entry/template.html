@@ -22,14 +22,13 @@
                 </div>
 
                 <div class="page-content">
-                    <reservation-form @initializing="handleInitializing"
-                                      @initialized="handleInitialized"
-                                      @initialize-failure="handleInitializeFailure"
-                                      @load-reservation-seats-failure="handleLoadReservationSeatsFailure"
-                                      @saving="handleSaving"
-                                      @save-succeeded="handleSaveSuceeded"
-                                      @save-failure="handleSaveFailure"
-                                      @validation-failure="handleValidationFailure">
+                    <reservation-form
+                        @initialize-failed="handleInitializeFailed"
+                        @load-reservation-seats-failure="handleLoadReservationSeatsFailure"
+                        @save-succeeded="handleSaveSucceeded"
+                        @save-failed="handleSaveFailed"
+                        @validation-failed="handleValidationFailed"
+                        @update-progress="handleUpdateProgress">
                     </reservation-form>
                 </div>
             </div>

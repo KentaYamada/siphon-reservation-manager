@@ -68,7 +68,7 @@ export default Vue.extend({
           message: "データの読み込みに失敗しました",
           type: "is-danger"
         };
-        this.$buefy.toast.open(toastConfig);
+        this.$buefy.toast.open(config);
       }
     );
   }

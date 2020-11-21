@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { tap } from "rxjs/operators";
 import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
 import _ from "lodash";
@@ -9,7 +10,6 @@ import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
 import { timePeriod } from "@/filters/time-period";
 import {
-  FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
   FETCH_RESERVABLE_BUSINESS_DAYS,
   GET_BY_ID,
@@ -22,11 +22,12 @@ import {
   INITIALIZE_RESERVATION_SEATS,
   RESET_RESERVATION_TIMEZONE,
   RESET_RESERVATION_SEATS,
-  SAVE,
   SET_RESERVATION_DATE,
   SET_RESERVATION_TIMEZONE,
   IS_FULL_OF_RESERVED
 } from "@/store/constant";
+import { ReservationService } from "@/services/firestore/reservation-service";
+import { Reservation } from '@/entity/reservation';
 
 export default Vue.extend({
   template: "<reservation-form/>",
@@ -98,9 +99,7 @@ export default Vue.extend({
       fetchReservableBusinessDays: FETCH_RESERVABLE_BUSINESS_DAYS
     }),
     ...mapActions("reservation", {
-      fetchById: FETCH_BY_ID,
-      fetchReservationSeats: FETCH_RESERVATION_SEATS,
-      save: SAVE
+      fetchReservationSeats: FETCH_RESERVATION_SEATS
     }),
     ...mapMutations("reservation", {
       initialize: INITIALIZE,
@@ -130,24 +129,17 @@ export default Vue.extend({
     handleSave(): void {
       this.$v.$touch();
 
-      if (this.$v.$invalid || !this.hasSelectedSeats) {
-        this.$emit("validation-failure");
-      } else {
-        this.isSaving = true;
-        this.save(this.reservation)
-          .then((id: string) => {
-            this.$emit("save-succeeded", id);
-          })
-          .catch(error => {
-            this.$emit("save-failure", error);
+      if (!this.$v.$invalid && this.hasSelectedSeats) {
+        this.$emit("update-progress", true);
 
-            if (error.refetch_seats) {
-              this._fetchReservationSeats();
-            }
-          })
-          .finally(() => {
-            this.isSaving = false;
-          });
+        ReservationService.save(this.reservation)
+          .pipe(tap(() => this.$emit("update-progress", false)))
+          .subscribe(
+            (snapshot) => this.$emit("save-succeeded", snapshot.id),
+            (error) => console.log(error)
+          );
+      } else {
+        this.$emit("validation-failed");
       }
     },
 
@@ -186,25 +178,24 @@ export default Vue.extend({
   },
   created() {
     this.initialize();
-    this.$emit("initializing");
-  },
-  mounted() {
-    const promises = [this.fetchReservableBusinessDays()];
-
-    if (!_.isEmpty(this.id)) {
-      promises.push(this.fetchById(this.id));
-    }
-
-    Promise.all(promises)
+    this.fetchReservableBusinessDays()
       .then(() => {
-        // todo: refactoring
         this.option.reservation_id = this.id;
         this.option.reservation_date_id = this.reservation.reservation_date_id;
         this.option.reservation_time_id = this.reservation.reservation_time_id;
-        this.$emit("initialized");
       })
       .catch(() => {
-        this.$emit("initialize-failure");
+        this.$emit("initialize-failed");
       });
+  },
+  mounted() {
+    if (this.id) {
+      ReservationService.fetchById(this.id)
+        .pipe(tap(() => this.$emit("initialized", false)))
+        .subscribe(
+          (reservation: Reservation) => console.log(reservation),
+          () => this.$emit("load-failed")
+        )
+    }
   }
 });

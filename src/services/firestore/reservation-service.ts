@@ -14,6 +14,42 @@ export class ReservationService {
     return firebase.firestore().collection("reservations");
   }
 
+  static save(payload: Reservation): Observable<firebase.firestore.DocumentSnapshot> {
+    if (!payload) {
+      throwError("Error: 予約データがありません");
+    }
+
+    const db = firebase.firestore();
+    const collection = db.collection("reservations");
+    const transaction$ = db.runTransaction(async transaction => {
+      // todo: 座席引当
+      const docRef = payload.id ? collection.doc(payload.id) : collection.doc();
+      const doc = await transaction.get(docRef);
+      const data: firebase.firestore.DocumentData = {
+        reservation_date: payload.reservation_date,
+        reservation_date_id: payload.reservation_date_id,
+        reservation_start_time: payload.reservation_start_time,
+        reservation_end_time: payload.reservation_end_time,
+        reservation_time_id: payload.reservation_time_id,
+        reserver_name: payload.reserver_name,
+        number_of_reservations: payload.number_of_reservations,
+        tel: payload.tel,
+        mail: payload.mail,
+        comment: payload.comment
+      };
+
+      if (doc.exists) {
+        transaction.update(docRef, data);
+      } else {
+        transaction.set(docRef, data);
+      }
+
+      return docRef.get();
+    });
+
+    return from(transaction$);
+  }
+
   async save(reservation: Reservation) {
     if (_.isNil(reservation)) {
       return Promise.reject({

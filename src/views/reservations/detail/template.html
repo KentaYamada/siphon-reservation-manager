@@ -12,9 +12,9 @@
                     <reservation-detail-content
                         :id="id"
                         v-if="!!id"
-                        @load-start="handleLoadStart"
-                        @load-succeeded="handleLoadSucceeded"
-                        @load-failure="handleLoadFailure"/>
+                        @load-failed="handleLoadFailed"
+                        @update-progress="handleUpdateProgress">
+                    </reservation-detail-content>
                 </div>
                 <div class="page-footer" v-if="visibleActions">
                     <div class="buttons is-right is-hidden-touch">
@@ -50,5 +50,5 @@
         </div>
     </div>
 
-    <b-loading :active.sync="isLoading"></b-loading>
+    <b-loading :active.sync="isProgress"></b-loading>
 </div>

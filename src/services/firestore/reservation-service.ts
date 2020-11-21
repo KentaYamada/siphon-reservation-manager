@@ -1,4 +1,6 @@
 import _ from "lodash";
+import { from, throwError, Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
@@ -7,6 +9,10 @@ import firebase from "@/plugins/firebase";
 export class ReservationService {
   private readonly COLLECTION_NAME: string = "reservations";
   private readonly SUB_COLLECTION_NAME: string = "reservation_seats";
+
+  private static _getCollection() {
+    return firebase.firestore().collection("reservations");
+  }
 
   async save(reservation: Reservation) {
     if (_.isNil(reservation)) {
@@ -169,12 +175,32 @@ export class ReservationService {
     return query.get();
   }
 
-  fetchById(id: string) {
-    if (_.isEmpty(id)) {
-      return Promise.reject();
+  static fetchById(id: string): Observable<Reservation> {
+    if (!id) {
+      throwError("不正なリクエストです");
     }
+    const docRef = ReservationService._getCollection().doc(id);
 
-    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).get();
+    return from(docRef.get()).pipe(
+      map(doc => {
+        const data = doc.data();
+
+        return {
+          id: doc.id,
+          reservation_date: data?.reservation_date?.toDate(),
+          reservation_date_id: data?.reservation_date_id,
+          reservation_end_time: data?.reservation_end_time.toDate(),
+          reservation_start_time: data?.reservation_end_time.toDate(),
+          reservation_time_id: data?.reservation_time_id,
+          reserver_name: data?.reserver_name,
+          number_of_reservations: data?.number_of_reservations,
+          tel: data?.tel,
+          mail: data?.mail,
+          comment: data?.comment,
+          reservation_seats: []
+        } as Reservation;
+      })
+    );
   }
 
   private async _existReservedSeats(reservation: Reservation): Promise<boolean> {

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
@@ -17,7 +17,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState("reservation", ["reservation"]),
     ...mapGetters("reservation", [VISIBLE_ACTIONS])
   },
   methods: {
@@ -69,29 +68,22 @@ export default Vue.extend({
       this.$buefy.dialog.confirm(config);
     },
 
-    handleClickEdit(): void {
-      this.$router.push({
-        name: "reservation-edit",
-        params: { id: this.id }
-      });
+    handleClickEdit() {
+      this.$router.push({name: "reservation-edit", params: { id: this.id } });
     },
 
-    handleLoadStart(): void {
-      this.isLoading = true;
-    },
-
-    handleLoadSucceeded(): void {
-      this.isLoading = false;
-    },
-
-    handleLoadFailure(): void {
-      this.isLoading = false;
+    handleLoadFailed() {
       const toastConfig: BNoticeConfig = {
         message: "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
         type: "is-danger"
       };
+
       this.$buefy.toast.open(toastConfig);
       this.$router.push({ name: "notfound" });
+    },
+
+    handleUpdateProgress(isProgress: boolean) {
+      this.isProgress = isProgress;
     },
 
     /**
@@ -108,7 +100,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      isLoading: true
+      isProgress: false
     };
   }
 });

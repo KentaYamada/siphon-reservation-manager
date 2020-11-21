@@ -1,10 +1,12 @@
 import Vue from "vue";
-import { mapActions, mapGetters } from "vuex";
+import { tap } from "rxjs/operators";
+import { mapGetters } from "vuex";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
-import { CANCEL, VISIBLE_ACTIONS } from "@/store/constant";
+import { VISIBLE_ACTIONS } from "@/store/constant";
 import { sendEmail } from "@/utility/email-utility";
+import { ReservationService } from "@/services/firestore/reservation-service";
 
 export default Vue.extend({
   components: {
@@ -20,8 +22,6 @@ export default Vue.extend({
     ...mapGetters("reservation", [VISIBLE_ACTIONS])
   },
   methods: {
-    ...mapActions("reservation", [CANCEL]),
-
     handleConfirmCancel(): void {
       const message = `
         <p>予約を取り消しますか？</p>
@@ -36,32 +36,34 @@ export default Vue.extend({
         iconPack: "fas",
         icon: "exclamation-circle",
         onConfirm: () => {
-          this.cancel(this.id)
-            .then(() => {
-              this._sendEmail(this.id);
+          this.isProgress = true;
 
-              const toastConfig: BNoticeConfig = {
-                message: "予約を取り消しました",
-                type: "is-danger"
-              };
-              this.$buefy.toast.open(toastConfig);
-              this.$router.push({
-                name: "reservation-canceled-message"
-              });
-            })
-            .catch(error => {
-              console.error(error);
+          ReservationService.cancel(this.id)
+            .pipe(tap(() => this.isProgress = false))
+            .subscribe(
+              () => {
+                const config: BNoticeConfig = {
+                  message: "予約を取り消しました",
+                  type: "is-danger"
+                };
 
-              const message = `
-                <p>予約の取り消しに失敗しました</p>
-                <p>お手数ですが、時間をおいて再度実行してください</p>
-              `;
-              const toastConfig: BNoticeConfig = {
-                message: message,
-                type: "is-danger"
-              };
-              this.$buefy.toast.open(toastConfig);
-            });
+                this.$buefy.toast.open(config);
+                this.$router.push({ name: "reservation-canceled-message" });
+              },
+              () => {
+                const message = `
+                  <p>予約の取り消しに失敗しました</p>
+                  <p>お手数ですが、時間をおいて再度実行してください</p>
+                `;
+                const toastConfig: BNoticeConfig = {
+                  message: message,
+                  type: "is-danger"
+                };
+
+                this.$buefy.toast.open(toastConfig);
+              }
+            );
+
         }
       };
 
@@ -95,7 +97,7 @@ export default Vue.extend({
         path: "/"
       }).href;
       const redirectUrl = `${location.origin}${href}`;
-      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
+      // sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
     }
   },
   data() {

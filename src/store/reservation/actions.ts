@@ -112,11 +112,6 @@ const actions: ActionTree<ReservationState, RootState> = {
     promise.then(() => commit(SET_ITEM, reservation));
 
     return promise;
-  },
-
-  [CANCEL]: async ({ commit }, id: string) => {
-    const service = new ReservationService();
-    return service.cancel(id);
   }
 };
 

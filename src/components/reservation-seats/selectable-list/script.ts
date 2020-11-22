@@ -47,6 +47,12 @@ export default Vue.extend({
   },
   methods: {
     handleUpdateSeat(selected: boolean, no: number) {
+      this.seats.forEach(seat => {
+        if (no === seat.seat_no) {
+          seat.is_selected = selected;
+        }
+      });
+
       this.$emit("update-seat", selected, no);
     }
   },

@@ -1,11 +1,11 @@
-import _ from "lodash";
+import _, { difference } from "lodash";
 import { from, throwError, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import firebase from "@/plugins/firebase";
-import { ReservationSeatSearchOption } from '@/entity/reservation-seat-search-option';
+import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 
 export class ReservationService {
   /** 最大予約人数 */
@@ -24,7 +24,23 @@ export class ReservationService {
     const db = firebase.firestore();
     const collection = db.collection(ReservationService.COLLECTION_NAME);
     const transaction$ = db.runTransaction(async transaction => {
-      // todo: 座席引当
+      // 座席引当
+      const reservations = await collection
+        .where("reservation_date_id", "==", payload.reservation_date_id)
+        .where("reservation_time_id", "==", payload.reservation_time_id)
+        .get();
+      const reservedSeats: Array<number> = [];
+
+      reservations.forEach(doc => {
+        if (doc.data()?.seats) {
+          reservedSeats.push(...(doc.data()?.seats as Array<number>));
+        }
+      });
+
+      if (difference(reservedSeats, payload.seats).length === 0) {
+        return Promise.reject("選択した座席が予約済のため、予約処理に失敗しました");
+      }
+
       const docRef = payload.id ? collection.doc(payload.id) : collection.doc();
       const doc = await transaction.get(docRef);
       const data: firebase.firestore.DocumentData = {
@@ -41,8 +57,6 @@ export class ReservationService {
         seats: payload.seats
       };
 
-      console.log(data);
-
       if (doc.exists) {
         transaction.update(docRef, data);
       } else {
@@ -56,7 +70,7 @@ export class ReservationService {
   }
 
   static cancel(id: string): Observable<void> {
-    if(!id) {
+    if (!id) {
       throwError("Error: 予約IDが空白です");
     }
 
@@ -115,20 +129,20 @@ export class ReservationService {
     const query = ReservationService._getCollection()
       .where("reservation_date_id", "==", params.reservation_date_id)
       .where("reservation_time_id", "==", params.reservation_time_id);
-    
-    return from(query.get()).pipe((
+
+    return from(query.get()).pipe(
       map(snapshot => {
         const seats = _.chain(_.range(ReservationService.MAX_NUMBER_OF_RESERVATIONS / 2))
-            .map(no => {
-              return {
-                seat_no: no + 1,
-                is_reserved: false,
-                is_selected: false,
-                reservation_id: ""
-              } as ReservationSeat;
-            })
-            .orderBy("seat_no", "asc")
-            .value();
+          .map(no => {
+            return {
+              seat_no: no + 1,
+              is_reserved: false,
+              is_selected: false,
+              reservation_id: ""
+            } as ReservationSeat;
+          })
+          .orderBy("seat_no", "asc")
+          .value();
 
         if (snapshot.empty) {
           return seats;
@@ -136,7 +150,7 @@ export class ReservationService {
 
         snapshot.forEach(doc => {
           const data = doc.data();
-          const reservedSeats = data?.seats ? data?.seats as Array<number> : [];
+          const reservedSeats = data?.seats ? (data?.seats as Array<number>) : [];
           const isMyReservation = doc.id === params.reservation_id;
 
           reservedSeats.forEach(reservedSeat => {
@@ -152,6 +166,6 @@ export class ReservationService {
 
         return seats;
       })
-    ));
+    );
   }
 }

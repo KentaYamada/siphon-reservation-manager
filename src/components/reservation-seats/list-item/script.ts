@@ -11,18 +11,15 @@ export default Vue.extend({
   },
   computed: {
     seatColorCss(): string {
-      let selectedColor = "";
-
       if (this.seat.is_selected) {
-        selectedColor = "selected";
+        return "selected";
+      } else if (this.seat.is_reserved) {
+        return "reserved";
       } else {
-        if (this.seat.is_reserved) {
-          selectedColor = "reserved";
-        }
+        return "";
       }
-
-      return selectedColor;
     },
+
     seatPositionCss(): string {
       return `no${this.seat.seat_no}`;
     }

@@ -34,7 +34,7 @@ export default Vue.extend({
           this.isProgress = true;
 
           ReservationService.cancel(this.id)
-            .pipe(tap(() => this.isProgress = false))
+            .pipe(tap(() => (this.isProgress = false)))
             .subscribe(
               () => {
                 const config: BNoticeConfig = {
@@ -58,7 +58,6 @@ export default Vue.extend({
                 this.$buefy.toast.open(toastConfig);
               }
             );
-
         }
       };
 
@@ -66,7 +65,7 @@ export default Vue.extend({
     },
 
     handleClickEdit() {
-      this.$router.push({name: "reservation-edit", params: { id: this.id } });
+      this.$router.push({ name: "reservation-edit", params: { id: this.id } });
     },
 
     handleLoadFailed() {

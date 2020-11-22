@@ -86,7 +86,6 @@ export default Vue.extend({
       this.$buefy.toast.open(config);
     },
 
-
     _sendEmail(id: string): void {
       const href = this.$router.resolve({
         name: "reservation-detail",

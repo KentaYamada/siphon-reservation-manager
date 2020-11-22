@@ -1,9 +1,13 @@
-<div class="room">
-    <div class="entrance"></div>
-    <div class="seats">
-        <reservation-seat-list-item
-            v-for="seat in reservationSeats"
-            :reservationSeat="seat"
-            :key="seat.seat_no"/>
+<div>
+    <div class="reservation-status">
+        <small><span class="status"></span>空席</small>
+        <small><span class="status selected"></span>予約中</small>
+        <small><span class="status reserved"></span>予約不可</small>
+    </div>
+    <div class="room">
+        <div class="entrance"></div>
+        <div class="seats">
+            <reservation-seat-list-item :reservationSeat="seat" :key="seat.seat_no" v-for="seat in seats"></reservation-seat-list-item>
+        </div>
     </div>
 </div>

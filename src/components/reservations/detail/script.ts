@@ -1,8 +1,8 @@
 import Vue from "vue";
 import moment from "moment";
-import { tap } from "rxjs/operators";
 import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
 import { Reservation } from "@/entity/reservation";
+import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { nl2br } from "@/filters/nl2br";
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 import { reserverNameWithNumberOfPeople } from "@/filters/reserver-name-with-number-of-people";
@@ -42,6 +42,11 @@ export default Vue.extend({
       return reservationDate.diff(today) > 0;
     }
   },
+  methods: {
+    handleUpdateProgress(isProgress: boolean) {
+      this.$emit("update-progress", isProgress);
+    }
+  },
   filters: {
     formatReservationDatetime,
     reserverNameWithNumberOfPeople
@@ -61,19 +66,28 @@ export default Vue.extend({
       comment: "",
       seats: []
     };
+    const searchParams: ReservationSeatSearchOption = {
+      reservation_date_id: "",
+      reservation_id: "",
+      reservation_time_id: ""
+    }
 
     return {
-      reservation
+      reservation: reservation,
+      searchParams: searchParams
     };
   },
   mounted() {
     this.$emit("update-progress", true);
 
     ReservationService.fetchById(this.id)
-      .pipe(tap(() => this.$emit("update-progress", false)))
       .subscribe(
         (reservation: Reservation) => {
           this.reservation = reservation;
+          this.searchParams.reservation_date_id = reservation.reservation_date_id;
+          this.searchParams.reservation_id = this.id;
+          this.searchParams.reservation_time_id = reservation.reservation_time_id;
+
           this.$emit("update-is-available-actions", this.isAvailableActions);
         },
         () => this.$emit("load-failed")

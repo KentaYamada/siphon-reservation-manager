@@ -7,7 +7,7 @@
     <div class="room">
         <div class="entrance"></div>
         <div class="seats">
-            <reservation-seat-list-item :reservationSeat="seat" :key="seat.seat_no" v-for="seat in seats"></reservation-seat-list-item>
+            <reservation-seat-list-item :seat="seat" :key="seat.seat_no" v-for="seat in seats"></reservation-seat-list-item>
         </div>
     </div>
 </div>

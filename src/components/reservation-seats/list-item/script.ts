@@ -4,7 +4,7 @@ import { ReservationSeat } from "@/entity/reservation-seat";
 export default Vue.extend({
   template: "<reservation-seat-list-item/>",
   props: {
-    reservationSeat: {
+    seat: {
       required: true,
       type: Object as PropType<ReservationSeat>
     }
@@ -13,10 +13,10 @@ export default Vue.extend({
     seatColorCss(): string {
       let selectedColor = "";
 
-      if (this.reservationSeat.is_selected) {
+      if (this.seat.is_selected) {
         selectedColor = "selected";
       } else {
-        if (this.reservationSeat.is_reserved) {
+        if (this.seat.is_reserved) {
           selectedColor = "reserved";
         }
       }
@@ -24,7 +24,7 @@ export default Vue.extend({
       return selectedColor;
     },
     seatPositionCss(): string {
-      return `no${this.reservationSeat.seat_no}`;
+      return `no${this.seat.seat_no}`;
     }
   }
 });

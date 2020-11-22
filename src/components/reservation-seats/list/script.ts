@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { tap } from 'rxjs/operators';
-import ReservationSeatListItem from "@/components/reservation-seats/list/item/ReservationSeatListItem.vue";
+import ReservationSeatListItem from "@/components/reservation-seats/list-item/ReservationSeatListItem.vue";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { ReservationService } from "@/services/firestore/reservation-service";

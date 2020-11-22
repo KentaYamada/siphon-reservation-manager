@@ -41,38 +41,6 @@ export const GET_SELECTED_TIMEZONE = "getSelectedTimezone";
 
 export const SET_SELECTABLE_TIMEZONES = "setSelectableTimezones";
 
-// Reservation actions
-export const CANCEL = "cancel";
-
-export const FETCH_RESERVATION_SEATS = "fetchReservationSeats";
-
-export const GET_RESERVABLE_PEOPLE = "getReservablePeople";
-
-export const HAS_RESERVATION_SEATS = "hasReservationSeats";
-
-export const HAS_SELECTED_SEATS = "hasSelectedSeats";
-
-export const INITIALIZE_RESERVATION_SEATS = "initializeReservationSeats";
-
-export const IS_FULL_OF_RESERVED = "isFullOfReserved";
-
-export const RESET_RESERVATION_SEATS = "resetReservationSeats";
-
-export const RESET_RESERVATION_TIMEZONE = "resetReservationTimezone";
-
-export const SET_RESERVATION_SEAT = "setReservationSeat";
-
-export const SET_RESERVATION_SEATS = "setReservationSeats";
-
-export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
-
-export const VISIBLE_ACTIONS = "visibleActions";
-
-export const CAN_RESERVED = "canReserved";
-
-// Reservation seat actions
-export const GET_RESERVABLE_SEATS = "getReservableSeats";
-
 // Timezone
 export const GET_RESERVABLE_TIMEZONES = "getReservableTimezones";
 

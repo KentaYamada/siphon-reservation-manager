@@ -32,7 +32,7 @@
     <div class="field">
         <label class="label">空席状況</label>
         <div class="reservation-seats-container" v-if="hasReservationSeats">
-            <p><small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small></p>
+            <p><small>現在<strong>{{ reservablePeople }}名</strong>までのご予約受け付けております。</small></p>
             <p><small>ご予約は空席をクリックしてください。</small></p>
             <p><small>※ テーブルは2名席です。</small></p>
 
@@ -49,16 +49,13 @@
                 </small>
             </div>
 
-            <selectable-reservation-seat-list
-                :reservationSeats="reservation.reservation_seats"
-                v-if="!!reservation.reservation_seats"/>
-
+            <selectable-reservation-seat-list :seats="seats" @update-seat="handleUpdateSeat" v-if="!!seats"></selectable-reservation-seat-list>
             <b-loading :is-full-page="false" :active.sync="isLoadingSeats"></b-loading>
         </div>
         <div v-if="visibleSelectionSeatMessage" class="no-seat-selection-message">
             <p class="has-text-danger">座席を選択してください。</p>
         </div>
-        <div v-if="isFullOfReserved" class="no-seat-selection-message">
+        <div v-if="isFullOfReservation" class="no-seat-selection-message">
             <small class="has-text-danger">
                 指定した予約日時がただいま満席となっております。<br>
                 予約日時を再選択してご予約ください。<br>

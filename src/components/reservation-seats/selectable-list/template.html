@@ -2,8 +2,10 @@
     <div class="entrance"></div>
     <div class="seats">
         <selectable-reservation-seat-list-item
-            v-for="reservationSeat in reservationSeats"
-            :key="reservationSeat.id"
-            :reservation-seat="reservationSeat"/>
+            :seat="seat"
+            :key="seat.id"
+            @update-seat="handleUpdateSeat"
+            v-for="seat in seats">
+        </selectable-reservation-seat-list-item>
     </div>
 </div>

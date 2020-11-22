@@ -16,4 +16,5 @@ export interface Reservation {
   tel: string;
   mail: string;
   comment: string;
+  seats: Array<number>;
 }

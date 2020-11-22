@@ -1,0 +1,16 @@
+<div class="seat"
+    :class="{ 'reserved': seat.is_reserved, 'selected': seat.is_selected }">
+    <input type="checkbox"
+           class="seat-checkbox"
+           :id="seatNo"
+           :disabled="seat.is_reserved"
+           :value="seat.is_selected"
+           @change="handleUpdateSeat($event)">
+    <label :for="seatNo" class="seat-label">
+        <div class="chair"></div>
+        <div class="desk">
+            <i class="fas fa-check check-icon"></i>
+        </div>
+        <div class="chair"></div>
+    </label>
+</div>

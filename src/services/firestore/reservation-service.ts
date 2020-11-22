@@ -1,12 +1,15 @@
 import _ from "lodash";
 import { from, throwError, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import firebase from "@/plugins/firebase";
+import { ReservationSeatSearchOption } from '@/entity/reservation-seat-search-option';
 
 export class ReservationService {
+  /** 最大予約人数 */
+  private static readonly MAX_NUMBER_OF_RESERVATIONS = 8;
   private static readonly COLLECTION_NAME: string = "reservations";
 
   private static _getCollection() {
@@ -51,7 +54,7 @@ export class ReservationService {
 
   static cancel(id: string): Observable<void> {
     if(!id) {
-      throwError("不正なリクエストです。");
+      throwError("Error: 予約IDが空白です");
     }
 
     const docRef = ReservationService._getCollection().doc(id);
@@ -98,9 +101,28 @@ export class ReservationService {
           tel: data?.tel,
           mail: data?.mail,
           comment: data?.comment,
-          reservation_seats: []
+          reservation_seats: [],
+          seats: []
         } as Reservation;
       })
     );
+  }
+
+  static fetchSeats(params: ReservationSeatSearchOption): Observable<Array<ReservationSeat>> {
+    return new Observable(subscriber => {
+      const seats = _.chain(_.range(ReservationService.MAX_NUMBER_OF_RESERVATIONS / 2))
+        .map(no => {
+          return {
+            seat_no: no + 1,
+            is_reserved: false,
+            is_selected: false,
+            reservation_id: ""
+          } as ReservationSeat;
+        })
+        .value();
+
+      subscriber.next(seats);
+      subscriber.complete();
+    });
   }
 }

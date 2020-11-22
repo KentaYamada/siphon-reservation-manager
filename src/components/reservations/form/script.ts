@@ -1,28 +1,22 @@
 import Vue from "vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import _ from "lodash";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { tap } from "rxjs/operators";
 import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
-import _ from "lodash";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
 import { Reservation } from '@/entity/reservation';
+import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
 import { timePeriod } from "@/filters/time-period";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import {
-  FETCH_RESERVATION_SEATS,
   FETCH_RESERVABLE_BUSINESS_DAYS,
   GET_BY_ID,
-  GET_RESERVABLE_PEOPLE,
   GET_SELECTABLE_TIMEZONES,
-  GET_SELECTED_TIMEZONE,
-  HAS_RESERVATION_SEATS,
-  HAS_SELECTED_SEATS,
-  INITIALIZE_RESERVATION_SEATS,
-  RESET_RESERVATION_SEATS,
-  IS_FULL_OF_RESERVED
+  GET_SELECTED_TIMEZONE
 } from "@/store/constant";
 
 export default Vue.extend({
@@ -70,60 +64,56 @@ export default Vue.extend({
     ...mapGetters("businessDay", {
       getSelectedTimezone: GET_SELECTED_TIMEZONE
     }),
-    ...mapGetters("reservation", {
-      getReservablePeople: GET_RESERVABLE_PEOPLE,
-      hasReservationSeats: HAS_RESERVATION_SEATS,
-      hasSelectedSeats: HAS_SELECTED_SEATS,
-      isFullOfReserved: IS_FULL_OF_RESERVED
-    }),
 
     timezones(): Array<SelectableTimezone> {
       return this.getSelectableTimezones(this.reservation.reservation_date_id);
     },
 
     visibleSelectionSeatMessage(): boolean {
-      return this.hasReservationSeats && !this.isFullOfReserved && !this.hasSelectedSeats;
+      return this.hasReservationSeats && !this.isFullOfReservation && !this.hasSelectedSeats;
     },
 
     buttonText(): string {
-      return _.isEmpty(this.id) ? "予約する" : "予約内容を変更する";
+      return this.id ? "予約する" : "予約内容を変更する";
+    },
+
+    hasReservationSeats(): boolean {
+      return this.reservation.reservation_seats.length > 0;
+    },
+
+    reservablePeople(): number {
+      if (!this.reservation) {
+        return 0;
+      }
+
+      return 1;
+    },
+
+    hasSelectedSeats(): boolean {
+      if (!this.reservation) {
+        return false;
+      }
+
+      return this.reservation.reservation_seats.filter(seat => seat.is_selected).length > 0;
+    },
+
+    isFullOfReservation(): boolean {
+      if (!this.reservation) {
+        return false;
+      }
+
+      return this.reservation.reservation_seats.filter(seat => seat.is_reserved).length === 8;
     }
   },
   methods: {
     ...mapActions("businessDay", {
       fetchReservableBusinessDays: FETCH_RESERVABLE_BUSINESS_DAYS
     }),
-    ...mapActions("reservation", {
-      fetchReservationSeats: FETCH_RESERVATION_SEATS
-    }),
-    ...mapMutations("reservation", {
-      initializeReservationSeats: INITIALIZE_RESERVATION_SEATS,
-      resetReservationSeats: RESET_RESERVATION_SEATS
-    }),
-
-    handleUpdateReservationDate(selectedId: string): void {
-      this.reservation.reservation_date = this.getBusinessDayById(selectedId).business_date;
-      this.reservation.reservation_end_time = null;
-      this.reservation.reservation_start_time = null;
-      this.reservation.reservation_time_id = "";
-      this.option.reservation_date_id = selectedId;
-      this.option.reservation_time_id = "";
-      this._fetchReservationSeats();
-    },
-
-    handleUpdateReservationTimezone(selectedId: string): void {
-      const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
-      this.reservation.reservation_end_time = timezone.end_time;
-      this.reservation.reservation_start_time = timezone.start_time;
-      this.option.reservation_time_id = selectedId;
-      this._fetchReservationSeats();
-    },
 
     handleSave() {
       this.$v.$touch();
 
-      // if (!this.$v.$invalid && this.hasSelectedSeats) {
-      if (!this.$v.$invalid) {
+      if (!this.$v.$invalid && this.hasSelectedSeats) {
         // this.$emit("update-progress", true);
         console.log(this.reservation);
 
@@ -138,20 +128,52 @@ export default Vue.extend({
       }
     },
 
-    _fetchReservationSeats(): void {
-      this.isLoadingSeats = true;
-      this.resetReservationSeats();
+    handleUpdateSeat(selected: boolean, seatNo: number) {
+      this.seats.forEach((seat: ReservationSeat) => {
+        if (seatNo === seat.seat_no) {
+          seat.is_selected = selected;
+        }
+      });
 
-      if (!_.isEmpty(this.option.reservation_date_id) && !_.isEmpty(this.option.reservation_time_id)) {
-        this.initializeReservationSeats();
-        this.fetchReservationSeats(this.option)
-          .catch(() => {
-            this.$emit("load-reservation-seats-failure");
-          })
-          .finally(() => {
-            this.isLoadingSeats = false;
-          });
+      if (selected) {
+        this.reservation.seats.push(seatNo);
+      } else {
+        this.reservation.seats = this.reservation.seats.filter(seat => seat !== seatNo);
       }
+
+      this.reservation.seats = this.reservation.seats.sort();
+      console.log(this.reservation.seats);
+    },
+
+    handleUpdateReservationDate(selectedId: string): void {
+      this.reservation.reservation_date = this.getBusinessDayById(selectedId).business_date;
+      this.reservation.reservation_end_time = null;
+      this.reservation.reservation_start_time = null;
+      this.reservation.reservation_time_id = "";
+      this.searchParams.reservation_date_id = selectedId;
+      this._fetchReservationSeats();
+    },
+
+    handleUpdateReservationTimezone(selectedId: string): void {
+      const timezone = this.getSelectedTimezone(this.searchParams.reservation_date_id, selectedId);
+      this.reservation.reservation_end_time = timezone.end_time;
+      this.reservation.reservation_start_time = timezone.start_time;
+      this.searchParams.reservation_time_id = selectedId;
+      this._fetchReservationSeats();
+    },
+
+    _fetchReservationSeats() {
+      this.isLoadingSeats = true;
+
+      ReservationService.fetchSeats(this.searchParams)
+        .pipe(tap(() => this.isLoadingSeats = false))
+        .subscribe(
+            (seats: Array<ReservationSeat>) => {
+              this.reservation.reservation_seats = seats;
+              this.seats = seats;
+            },
+            (error) => console.error(error)
+        );
     }
   },
   filters: {
@@ -170,27 +192,30 @@ export default Vue.extend({
       number_of_reservations: null,
       tel: "",
       mail: "",
-      comment: ""
+      comment: "",
+      seats: []
     };
-    const option: ReservationSeatSearchOption = {
-      reservation_id: "",
+    const searchParams: ReservationSeatSearchOption = {
       reservation_date_id: "",
+      reservation_id: "",
       reservation_time_id: ""
     };
+    const seats = [] as Array<ReservationSeat>;
 
     return {
       isLoadingSeats: false,
       isSaving: false,
-      option: option,
-      reservation: reservation
+      searchParams: searchParams,
+      reservation: reservation,
+      seats: seats
     };
   },
   created() {
     this.fetchReservableBusinessDays()
       .then(() => {
-        this.option.reservation_id = this.id;
-        this.option.reservation_date_id = this.reservation.reservation_date_id;
-        this.option.reservation_time_id = this.reservation.reservation_time_id;
+        this.searchParams.reservation_id = this.id;
+        this.searchParams.reservation_date_id = this.reservation.reservation_date_id;
+        this.searchParams.reservation_time_id = this.reservation.reservation_time_id;
       })
       .catch(() => {
         this.$emit("initialize-failed");

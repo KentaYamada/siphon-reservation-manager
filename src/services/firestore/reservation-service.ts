@@ -10,6 +10,7 @@ import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-op
 export class ReservationService {
   /** 最大予約人数 */
   static readonly MAX_NUMBER_OF_RESERVATIONS = 8;
+
   private static readonly COLLECTION_NAME: string = "reservations";
 
   private static _getCollection() {
@@ -31,18 +32,21 @@ export class ReservationService {
         .get();
       const reservedSeats: Array<number> = [];
 
-      reservations.forEach(doc => {
-        if (doc.data()?.seats) {
-          reservedSeats.push(...(doc.data()?.seats as Array<number>));
-        }
-      });
+      if (!reservations.empty) {
+        reservations.forEach(doc => {
+          if (doc.data()?.seats) {
+            reservedSeats.push(...(doc.data()?.seats as Array<number>));
+          }
+        });
 
-      if (difference(reservedSeats, payload.seats).length === 0) {
-        return Promise.reject("選択した座席が予約済のため、予約処理に失敗しました");
+        if (difference(reservedSeats, payload.seats).length === 0) {
+          return Promise.reject("選択した座席が予約済のため、予約処理に失敗しました");
+        }
       }
 
       const docRef = payload.id ? collection.doc(payload.id) : collection.doc();
       const doc = await transaction.get(docRef);
+      const today = new Date();
       const data: firebase.firestore.DocumentData = {
         reservation_date: payload.reservation_date,
         reservation_date_id: payload.reservation_date_id,
@@ -54,12 +58,14 @@ export class ReservationService {
         tel: payload.tel,
         mail: payload.mail,
         comment: payload.comment,
-        seats: payload.seats
+        seats: payload.seats,
+        modified_at: today
       };
 
       if (doc.exists) {
         transaction.update(docRef, data);
       } else {
+        data.created_at = today;
         transaction.set(docRef, data);
       }
 

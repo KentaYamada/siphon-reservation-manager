@@ -1,37 +1,3 @@
-.reservation-seats-container {
-    position: relative;
-
-    .status-title {
-        font-size: 14px;
-        font-weight: 500;
-        margin-top: 12px;
-    }
-    .reservation-status {
-        margin-bottom: 8px;
-
-        .status {
-            border: solid 1px #aaa;
-            background-color: #fff;
-            display: inline-block;
-            width: 24px;
-            height: 12px;
-            margin-right: 6px;
-
-            &.selected {
-                border: solid 1px #b9936c;
-                background-color: #debf9f;
-            }
-            &.reserved {
-                border: solid 1px #aaa;
-                background-color: #ccc;
-            }
-        }
-    }
-    .no-seat-selection-message {
-        margin-left: 20px;
-    }
-}
-
 .form-actions {
     .fas {
         margin-right: 6px;

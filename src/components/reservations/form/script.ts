@@ -6,7 +6,6 @@ import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
 import { Reservation } from '@/entity/reservation';
-import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
@@ -69,40 +68,8 @@ export default Vue.extend({
       return this.getSelectableTimezones(this.reservation.reservation_date_id);
     },
 
-    visibleSelectionSeatMessage(): boolean {
-      return this.hasReservationSeats && !this.isFullOfReservation && !this.hasSelectedSeats;
-    },
-
     buttonText(): string {
       return this.id ? "予約する" : "予約内容を変更する";
-    },
-
-    hasReservationSeats(): boolean {
-      return this.reservation.reservation_seats.length > 0;
-    },
-
-    reservablePeople(): number {
-      if (!this.reservation) {
-        return 0;
-      }
-
-      return 1;
-    },
-
-    hasSelectedSeats(): boolean {
-      if (!this.reservation) {
-        return false;
-      }
-
-      return this.reservation.reservation_seats.filter(seat => seat.is_selected).length > 0;
-    },
-
-    isFullOfReservation(): boolean {
-      if (!this.reservation) {
-        return false;
-      }
-
-      return this.reservation.reservation_seats.filter(seat => seat.is_reserved).length === 8;
     }
   },
   methods: {
@@ -112,8 +79,8 @@ export default Vue.extend({
 
     handleSave() {
       this.$v.$touch();
-
-      if (!this.$v.$invalid && this.hasSelectedSeats) {
+      console.log(this.reservation.seats);
+      if (!this.$v.$invalid && this.reservation.seats.length > 0) {
         // this.$emit("update-progress", true);
         console.log(this.reservation);
 
@@ -128,13 +95,11 @@ export default Vue.extend({
       }
     },
 
-    handleUpdateSeat(selected: boolean, seatNo: number) {
-      this.seats.forEach((seat: ReservationSeat) => {
-        if (seatNo === seat.seat_no) {
-          seat.is_selected = selected;
-        }
-      });
+    handleUpdateIsAllReservedSeats(isAllReserved: boolean) {
+      this.isAllReserved = isAllReserved;
+    },
 
+    handleUpdateSeat(selected: boolean, seatNo: number) {
       if (selected) {
         this.reservation.seats.push(seatNo);
       } else {
@@ -142,7 +107,6 @@ export default Vue.extend({
       }
 
       this.reservation.seats = this.reservation.seats.sort();
-      console.log(this.reservation.seats);
     },
 
     handleUpdateReservationDate(selectedId: string): void {
@@ -151,7 +115,6 @@ export default Vue.extend({
       this.reservation.reservation_start_time = null;
       this.reservation.reservation_time_id = "";
       this.searchParams.reservation_date_id = selectedId;
-      this._fetchReservationSeats();
     },
 
     handleUpdateReservationTimezone(selectedId: string): void {
@@ -159,21 +122,6 @@ export default Vue.extend({
       this.reservation.reservation_end_time = timezone.end_time;
       this.reservation.reservation_start_time = timezone.start_time;
       this.searchParams.reservation_time_id = selectedId;
-      this._fetchReservationSeats();
-    },
-
-    _fetchReservationSeats() {
-      this.isLoadingSeats = true;
-
-      ReservationService.fetchSeats(this.searchParams)
-        .pipe(tap(() => this.isLoadingSeats = false))
-        .subscribe(
-            (seats: Array<ReservationSeat>) => {
-              this.reservation.reservation_seats = seats;
-              this.seats = seats;
-            },
-            (error) => console.error(error)
-        );
     }
   },
   filters: {
@@ -200,14 +148,11 @@ export default Vue.extend({
       reservation_id: "",
       reservation_time_id: ""
     };
-    const seats = [] as Array<ReservationSeat>;
-
     return {
-      isLoadingSeats: false,
-      isSaving: false,
+      disableSave: false,
+      isAllReserved: false,
       searchParams: searchParams,
-      reservation: reservation,
-      seats: seats
+      reservation: reservation
     };
   },
   created() {

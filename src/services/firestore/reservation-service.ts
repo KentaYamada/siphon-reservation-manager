@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { from, throwError, Observable } from "rxjs";
-import { map, take } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
@@ -9,7 +9,7 @@ import { ReservationSeatSearchOption } from '@/entity/reservation-seat-search-op
 
 export class ReservationService {
   /** 最大予約人数 */
-  private static readonly MAX_NUMBER_OF_RESERVATIONS = 8;
+  static readonly MAX_NUMBER_OF_RESERVATIONS = 8;
   private static readonly COLLECTION_NAME: string = "reservations";
 
   private static _getCollection() {
@@ -37,8 +37,11 @@ export class ReservationService {
         number_of_reservations: payload.number_of_reservations,
         tel: payload.tel,
         mail: payload.mail,
-        comment: payload.comment
+        comment: payload.comment,
+        seats: payload.seats
       };
+
+      console.log(data);
 
       if (doc.exists) {
         transaction.update(docRef, data);
@@ -109,20 +112,46 @@ export class ReservationService {
   }
 
   static fetchSeats(params: ReservationSeatSearchOption): Observable<Array<ReservationSeat>> {
-    return new Observable(subscriber => {
-      const seats = _.chain(_.range(ReservationService.MAX_NUMBER_OF_RESERVATIONS / 2))
-        .map(no => {
-          return {
-            seat_no: no + 1,
-            is_reserved: false,
-            is_selected: false,
-            reservation_id: ""
-          } as ReservationSeat;
-        })
-        .value();
+    const query = ReservationService._getCollection()
+      .where("reservation_date_id", "==", params.reservation_date_id)
+      .where("reservation_time_id", "==", params.reservation_time_id);
+    
+    return from(query.get()).pipe((
+      map(snapshot => {
+        const seats = _.chain(_.range(ReservationService.MAX_NUMBER_OF_RESERVATIONS / 2))
+            .map(no => {
+              return {
+                seat_no: no + 1,
+                is_reserved: false,
+                is_selected: false,
+                reservation_id: ""
+              } as ReservationSeat;
+            })
+            .orderBy("seat_no", "asc")
+            .value();
 
-      subscriber.next(seats);
-      subscriber.complete();
-    });
+        if (snapshot.empty) {
+          return seats;
+        }
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const reservedSeats = data?.seats ? data?.seats as Array<number> : [];
+          const isMyReservation = doc.id === params.reservation_id;
+
+          reservedSeats.forEach(reservedSeat => {
+            seats.forEach(seat => {
+              if (reservedSeat === seat.seat_no) {
+                seat.is_reserved = !isMyReservation;
+                seat.is_selected = isMyReservation;
+                seat.reservation_id = doc.id;
+              }
+            });
+          });
+        });
+
+        return seats;
+      })
+    ));
   }
 }

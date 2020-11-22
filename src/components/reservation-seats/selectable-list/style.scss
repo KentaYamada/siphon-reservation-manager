@@ -1,21 +1,54 @@
-.room {
-    border: 1px solid #aaa;
-    margin-left: 22px;
-    margin-bottom: 10px;
-    padding: 20px;
-    height: 120px;
+.reservation-seats-container {
     position: relative;
 
-    .entrance {
-        border: 1px solid #aaa;
-        border-bottom-left-radius: 24px;
-        width: 24px;
-        height: 36px;
-        position: absolute;
-        top: -1px;
-        left: -24px;
+    .status-title {
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 12px;
     }
-    .seats {
-        margin-top: 24px;
+    .reservation-status {
+        margin-bottom: 8px;
+
+        .status {
+            border: solid 1px #aaa;
+            background-color: #fff;
+            display: inline-block;
+            width: 24px;
+            height: 12px;
+            margin-right: 6px;
+
+            &.selected {
+                border: solid 1px #b9936c;
+                background-color: #debf9f;
+            }
+            &.reserved {
+                border: solid 1px #aaa;
+                background-color: #ccc;
+            }
+        }
+    }
+    .no-seat-selection-message {
+        margin-left: 20px;
+    }
+    .room {
+        border: 1px solid #aaa;
+        margin-left: 22px;
+        margin-bottom: 10px;
+        padding: 20px;
+        height: 120px;
+        position: relative;
+
+        .entrance {
+            border: 1px solid #aaa;
+            border-bottom-left-radius: 24px;
+            width: 24px;
+            height: 36px;
+            position: absolute;
+            top: -1px;
+            left: -24px;
+        }
+        .seats {
+            margin-top: 24px;
+        }
     }
 }

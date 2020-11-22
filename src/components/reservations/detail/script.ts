@@ -1,4 +1,5 @@
 import Vue from "vue";
+import moment from "moment";
 import { tap } from "rxjs/operators";
 import ReservationSeatList from "@/components/reservation-seats/list/ReservationSeatList.vue";
 import { Reservation } from "@/entity/reservation";
@@ -21,11 +22,26 @@ export default Vue.extend({
   computed: {
     reservationComment(): string {
       return nl2br(this.reservation.comment);
+    },
+
+    isAvailableActions(): boolean {
+      if (!this.reservation) {
+        return false;
+      }
+
+      const today = moment();
+      const reservationDate = moment(this.reservation.reservation_date);
+
+      reservationDate.set({
+        hour: 10,
+        minutes: 1,
+        second: 0,
+        millisecond: 0
+      });
+
+      return reservationDate.diff(today) > 0;
     }
   },
-  /*methods: {
-    
-  },*/
   filters: {
     formatReservationDatetime,
     reserverNameWithNumberOfPeople
@@ -42,7 +58,8 @@ export default Vue.extend({
       number_of_reservations: null,
       tel: "",
       mail: "",
-      comment: ""
+      comment: "",
+      seats: []
     };
 
     return {
@@ -55,7 +72,10 @@ export default Vue.extend({
     ReservationService.fetchById(this.id)
       .pipe(tap(() => this.$emit("update-progress", false)))
       .subscribe(
-        (reservation: Reservation) => this.reservation = reservation,
+        (reservation: Reservation) => {
+          this.reservation = reservation;
+          this.$emit("update-is-available-actions", this.isAvailableActions);
+        },
         () => this.$emit("load-failed")
       );
   }

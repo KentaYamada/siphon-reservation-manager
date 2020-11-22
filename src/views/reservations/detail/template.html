@@ -13,10 +13,11 @@
                         :id="id"
                         v-if="!!id"
                         @load-failed="handleLoadFailed"
+                        @update-is-available-actions="handleUpdateIsAvailableActions"
                         @update-progress="handleUpdateProgress">
                     </reservation-detail-content>
                 </div>
-                <div class="page-footer" v-if="visibleActions">
+                <div class="page-footer" v-if="isAvailableActions">
                     <div class="buttons is-right is-hidden-touch">
                         <button type="button"
                                 class="button is-danger is-inverted"

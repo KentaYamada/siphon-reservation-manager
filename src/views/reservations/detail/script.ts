@@ -1,10 +1,8 @@
 import Vue from "vue";
 import { tap } from "rxjs/operators";
-import { mapGetters } from "vuex";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
 import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
-import { VISIBLE_ACTIONS } from "@/store/constant";
 import { sendEmail } from "@/utility/email-utility";
 import { ReservationService } from "@/services/firestore/reservation-service";
 
@@ -17,9 +15,6 @@ export default Vue.extend({
       type: String,
       required: true
     }
-  },
-  computed: {
-    ...mapGetters("reservation", [VISIBLE_ACTIONS])
   },
   methods: {
     handleConfirmCancel(): void {
@@ -84,14 +79,14 @@ export default Vue.extend({
       this.$router.push({ name: "notfound" });
     },
 
+    handleUpdateIsAvailableActions(isAvailableActions: boolean) {
+      this.isAvailableActions = isAvailableActions;
+    },
+
     handleUpdateProgress(isProgress: boolean) {
       this.isProgress = isProgress;
     },
 
-    /**
-     * 予約キャンセル完了通知メール送信
-     * @param id
-     */
     _sendEmail(id: string): void {
       const href = this.$router.resolve({
         path: "/"
@@ -102,7 +97,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      isProgress: false
+      isProgress: false,
+      isAvailableActions: true
     };
   }
 });

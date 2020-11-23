@@ -1,7 +1,5 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig, Route } from "vue-router";
-
-// Routing URL
 import {
   INDEX_URL,
   RESERVATION_CANCELED_URL,
@@ -24,26 +22,6 @@ import {
   NEW_YEAR_DISHES_RESERVATION_CANCELED_URL,
   NEW_YEAR_DISHES_SETTING_URL
 } from "@/router/url";
-
-// Reservation
-import ReservationCanceledMessage from "@/views/reservations/canceled-message/ReservationCanceledMessage.vue";
-import ReservationDetail from "@/views/reservations/detail/ReservationDetail.vue";
-import ReservationEdit from "@/views/reservations/edit/ReservationEdit.vue";
-import ReservationEditedMessage from "@/views/reservations/edited-message/ReservationEditedMessage.vue";
-import ReservationEntry from "@/views/reservations/entry/ReservationEntry.vue";
-import ReservationList from "@/views/reservations/list/ReservationList.vue";
-import ReservedMessage from "@/views/reservations/reserved-message/ReservedMessage.vue";
-
-// Management
-import Login from "@/views/managements/login/Login.vue";
-import Shop from "@/views/managements/shop/Shop.vue";
-
-// Help
-import HelpMailUnreached from "@/views/helps/mail-unreached/HelpMailUnreached.vue";
-
-import NotFound from "@/views/notfound/NotFound.vue";
-
-// store
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -58,44 +36,53 @@ const routes: RouteConfig[] = [
   {
     path: RESERVATION_ENTRY_URL,
     name: "reservation-entry",
-    component: ReservationEntry
-  },
-  {
-    path: `${RESERVATION_EDIT_URL}/:id`,
-    name: "reservation-edit",
-    component: ReservationEdit,
-    props: (router: Route) => ({
-      id: router.params.id
-    })
-  },
-  {
-    path: `${RESERVATION_EDITED_URL}/:id`,
-    name: "reservation-edited-message",
-    component: ReservationEditedMessage,
-    props: (router: Route) => ({
-      id: router.params.id
-    })
-  },
-  {
-    path: `${RESERVATION_DETAIL_URL}/:id`,
-    name: "reservation-detail",
-    component: ReservationDetail,
-    props: (router: Route) => ({
-      id: router.params.id
-    })
+    component: () =>
+      import(/* webpackChunkName: "reservation-entry" */ "@/views/reservations/entry/ReservationEntry.vue")
   },
   {
     path: RESERVED_MESSAGE_URL,
     name: "reserved-message",
-    component: ReservedMessage,
     props: (router: Route) => ({
       id: router.params.id
-    })
+    }),
+    component: () =>
+      import(/* webpackChunkName: "reserved-message" */ "@/views/reservations/reserved-message/ReservedMessage.vue")
+  },
+  {
+    path: RESERVATION_DETAIL_URL.concat("/:id"),
+    name: "reservation-detail",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(/* webpackChunkName: "reservation-detail" */ "@/views/reservations/detail/ReservationDetail.vue")
+  },
+  {
+    path: RESERVATION_EDIT_URL.concat("/:id"),
+    name: "reservation-edit",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () => import(/* webpackChunkName: "reservation-edit" */ "@/views/reservations/edit/ReservationEdit.vue")
+  },
+  {
+    path: RESERVATION_EDITED_URL.concat("/:id"),
+    name: "reservation-edited-message",
+    props: (router: Route) => ({
+      id: router.params.id
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "reservation-edited-message" */ "@/views/reservations/edited-message/ReservationEditedMessage.vue"
+      )
   },
   {
     path: RESERVATION_CANCELED_URL,
     name: "reservation-canceled-message",
-    component: ReservationCanceledMessage
+    component: () =>
+      import(
+        /* webpackChunkName: "reservation-canceled-message" */ "@/views/reservations/canceled-message/ReservationCanceledMessage.vue"
+      )
   },
   {
     path: MANAGEMENT_RESERVATION_LIST_URL,
@@ -103,7 +90,12 @@ const routes: RouteConfig[] = [
     meta: {
       requireAuth: true
     },
-    component: ReservationList
+    component: () => import(/* webpackChunkName: "reservation-list" */ "@/views/reservations/list/ReservationList.vue")
+  },
+  {
+    path: MANAGEMENT_LOGIN_URL,
+    name: "login",
+    component: () => import(/* webpackChunkName: "login" */ "@/views/managements/login/Login.vue")
   },
   {
     path: SHOP_SETTING_URL,
@@ -111,33 +103,7 @@ const routes: RouteConfig[] = [
     meta: {
       requireAuth: true
     },
-    component: Shop
-  },
-  {
-    path: MANAGEMENT_LOGIN_URL,
-    name: "login",
-    component: Login
-  },
-  {
-    path: FORBIDDEN_URL,
-    name: "forbidden",
-    component: () => import(/* webpackChunkName: "forbidden" */ "@/views/forbidden/Forbidden.vue")
-  },
-  {
-    path: HELP_MAIL_UNREACHED,
-    name: "help-mail-unreached",
-    component: HelpMailUnreached
-  },
-  {
-    path: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
-    name: "new-year-dishes-reservation-list",
-    component: () =>
-      import(
-        /* webpackChunkName: "new-year-dishes-reservation-list" */ "@/views/new-year-dishes-reservations/list/NewYearDishesReservationListView.vue"
-      ),
-    meta: {
-      requireAuth: true
-    }
+    component: () => import(/* webpackChunkName: "shop" */ "@/views/managements/shop/Shop.vue")
   },
   {
     path: NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
@@ -203,20 +169,43 @@ const routes: RouteConfig[] = [
       )
   },
   {
+    path: NEW_YEAR_DISHED_RESERVATION_LIST_URL,
+    name: "new-year-dishes-reservation-list",
+    meta: {
+      requireAuth: true
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "new-year-dishes-reservation-list" */ "@/views/new-year-dishes-reservations/list/NewYearDishesReservationListView.vue"
+      )
+  },
+  {
     path: NEW_YEAR_DISHES_SETTING_URL,
     name: "new-year-dishes-setting",
+    meta: {
+      requireAuth: true
+    },
     component: () =>
       import(
         /* webpackChunkName: "new-year-dishes-setting" */ "@/views/new-year-dishes-settings/NewYearDishesSettingView.vue"
-      ),
-    meta: {
-      requireAuth: true
-    }
+      )
+  },
+  {
+    path: HELP_MAIL_UNREACHED,
+    name: "help-mail-unreached",
+    component: () => import(
+      /* webpackChunkName: "help-mail-unreached" */ "@/views/helps/mail-unreached/HelpMailUnreached.vue"
+    )
+  },
+  {
+    path: FORBIDDEN_URL,
+    name: "forbidden",
+    component: () => import(/* webpackChunkName: "forbidden" */ "@/views/forbidden/Forbidden.vue")
   },
   {
     path: "*",
     name: "notfound",
-    component: NotFound
+    component: () => import(/* webpackChunkName: "notfound" */ "@/views/notfound/NotFound.vue")
   }
 ];
 

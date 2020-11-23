@@ -1,4 +1,4 @@
-import _, { difference } from "lodash";
+import _, { difference, range } from "lodash";
 import { from, throwError, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
@@ -135,24 +135,27 @@ export class ReservationService {
     const query = ReservationService._getCollection()
       .where("reservation_date_id", "==", params.reservation_date_id)
       .where("reservation_time_id", "==", params.reservation_time_id);
+    const seats: Array<ReservationSeat> = [];
+
+    from(range(ReservationService.MAX_NUMBER_OF_RESERVATIONS / 2))
+      .pipe(
+        map((no: number) => {
+          return {
+            seat_no: no + 1,
+            is_reserved: false,
+            is_selected: false,
+            reservation_id: ""
+          } as ReservationSeat;
+        })
+      )
+      .subscribe((seat: ReservationSeat) => {
+        seats.push(seat);
+      });
 
     return from(query.get()).pipe(
       map(snapshot => {
-        const seats = _.chain(_.range(ReservationService.MAX_NUMBER_OF_RESERVATIONS / 2))
-          .map(no => {
-            return {
-              seat_no: no + 1,
-              is_reserved: false,
-              is_selected: false,
-              reservation_id: ""
-            } as ReservationSeat;
-          })
-          .orderBy("seat_no", "asc")
-          .value();
-
         snapshot.forEach(doc => {
-          const data = doc.data();
-          const reservedSeats = data?.seats ? (data?.seats as Array<number>) : [];
+          const reservedSeats = doc.data().seats as Array<number> ?? [];
           const isMyReservation = doc.id === params.reservation_id;
 
           reservedSeats.forEach(reservedSeat => {

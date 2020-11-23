@@ -142,50 +142,6 @@ service cloud.firestore {
         allow delete: if hasId(reservationId);
     }
 
-    function validationReservationSeatSchema(seat) {
-        return (seat.size() == 8) &&
-               (seat.keys().hasAll([
-                   "reservation_id",
-                   "seat_no",
-                   "is_reserved",
-                   "reservation_date",
-                   "reservation_date_id",
-                   "reservation_start_time",
-                   "reservation_end_time",
-                   "reservation_time_id"
-               ])) &&
-               ((seat.reservation_id == null) || (seat.reservation_id != null && seat.reservation_id is string)) &&
-               (seat.seat_no is number) &&
-               (seat.seat_no >= 1) &&
-               (seat.seat_no <= 4) &&
-               (seat.is_reserved is bool) &&
-               (seat.reservation_date is timestamp) &&
-               (seat.reservation_date_id is string) &&
-               (seat.reservation_start_time is timestamp) &&
-               (seat.reservation_end_time is timestamp) &&
-               (seat.reservation_time_id is string);
-    }
-
-    // [GET] /reservation_seats
-    match /reservation_seats/{document} {
-        allow list;
-    }
-
-    // [POST] /reservation_seats
-    match /reservation_seats/{document} {
-        allow create: if validationReservationSeatSchema(request.resource.data);
-    }
-
-    // [PUT] /reservation_seats/reservationSeatId
-    match /reservation_seats/{reservationSeatId} {
-        allow update: if validationReservationSeatSchema(request.resource.data);
-    }
-
-    // [DELETE] /reservation_seats/reservationSeatId
-    match /reservation_seats/{reservationSeatId} {
-        allow delete: if hasId(reservationSeatId);
-    }
-
     function validationTimezoneSchema(timezone) {
         return (timezone.size() == 3) &&
                (timezone.keys().hasAll(["start_time", "end_time", "is_default_select"])) &&

@@ -34,12 +34,12 @@ export class ReservationService {
 
       if (!reservations.empty) {
         reservations.forEach(doc => {
-          if (doc.data()?.seats) {
+          if (doc.data()?.seats && payload.id !== doc.id) {
             reservedSeats.push(...(doc.data()?.seats as Array<number>));
           }
         });
 
-        if (difference(reservedSeats, payload.seats).length === 0) {
+        if (reservedSeats.length > 0 && difference(reservedSeats, payload.seats).length === 0) {
           return Promise.reject("選択した座席が予約済のため、予約処理に失敗しました");
         }
       }
@@ -125,7 +125,7 @@ export class ReservationService {
           mail: data?.mail,
           comment: data?.comment,
           reservation_seats: [],
-          seats: []
+          seats: data?.seats ?? []
         } as Reservation;
       })
     );

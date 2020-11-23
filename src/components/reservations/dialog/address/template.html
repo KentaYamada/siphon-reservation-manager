@@ -8,21 +8,21 @@
     <section class="modal-card-body">
         <div class="item">
             <h4><i class="fas fa-user"></i>お名前</h4>
-            <p>{{ reserver.reserver_name }}</p>
+            <p>{{ reservation.reserver_name }}</p>
         </div>
         <div class="item">
             <h4><i class="fas fa-envelope"></i>メールアドレス</h4>
-            <p><a class="button is-info is-inverted" :href="'mailto:'+reserver.mail">{{ reserver.mail }}</a></p>
+            <p><a class="button is-info is-inverted" :href="mailTo">{{ reservation.mail }}</a></p>
         </div>
         <div class="item">
             <h4><i class="fas fa-phone"></i>電話番号</h4>
-            <p>{{ reserver.tel }}</p>
+            <p>{{ reservation.tel }}</p>
         </div>
     </section>
 
     <footer class="modal-card-foot">
-            <button class="button is-inverted" @click="$parent.close()">
-                <i class="fas fa-times"></i>閉じる
-            </button>
+        <button class="button is-inverted" @click="$parent.close()">
+            <i class="fas fa-times"></i>閉じる
+        </button>
     </footer>
 </div>

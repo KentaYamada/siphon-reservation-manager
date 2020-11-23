@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import ReserverCard from "@/components/reserver/card/ReserverCard.vue";
-import { ReservationList } from "@/entity/reservation-list";
+import { ReservationByDate } from "@/entity/reservation-by-date";
 import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 
 export default Vue.extend({
@@ -9,9 +9,9 @@ export default Vue.extend({
     ReserverCard
   },
   props: {
-    reservation: {
+    reservationByDate: {
       required: true,
-      type: Object as PropType<ReservationList>
+      type: Object as PropType<ReservationByDate>
     }
   },
   filters: {

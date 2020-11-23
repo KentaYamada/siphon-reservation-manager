@@ -1,10 +1,10 @@
 import Vue, { PropType } from "vue";
-import { tap } from "rxjs/operators";
+import { groupBy, map, mergeMap, tap, toArray } from "rxjs/operators";
 import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
 import { ReservationByDate } from "@/entity/reservation-by-date";
 import { Reservation } from "@/entity/reservation";
-import { ReservationService } from '@/services/firestore/reservation-service';
-import { ReservationSearchOption } from '@/entity/reservation-search-option';
+import { ReservationService } from "@/services/firestore/reservation-service";
+import { ReservationSearchOption } from "@/entity/reservation-search-option";
 
 export default Vue.extend({
   template: "<reservation-list/>",
@@ -24,8 +24,8 @@ export default Vue.extend({
   },
   methods: {
     handleCancelSucceeded() {
-      this._fetch(this.searchParams);
       this.$emit("cancel-succeeded");
+      this._fetch(this.searchParams);
     },
 
     handleCancelFailed() {
@@ -38,11 +38,27 @@ export default Vue.extend({
 
         ReservationService.fetch(searchParams)
           .pipe(
+            groupBy(value => value.reservation_start_time),
+            mergeMap(value => value.pipe(toArray())),
+            map(value => {
+              const reservationByDate: Array<ReservationByDate> = value.map(v => {
+                const data: ReservationByDate = {
+                  reservation_date: v[0].reservation_date as Date,
+                  reservation_date_id: v[0].reservation_date_id,
+                  reservation_start_time: v[0].reservation_start_time as Date,
+                  reservation_end_time: v[0].reservation_end_time as Date,
+                  reservation_time_id: v[0].reservation_time_id,
+                  reservations: v
+                };
+
+                return data;
+              });
+
+              return reservationByDate;
+            }),
             tap(() => this.$emit("update-progress", false))
           )
-          .subscribe(
-            (reservations: Array<Reservation>) => console.log(reservations)
-          );
+          .subscribe((reservations: Array<ReservationByDate>) => (this.reservations = reservations));
       }
     }
   },
@@ -57,6 +73,6 @@ export default Vue.extend({
   data() {
     return {
       reservations: [] as Array<ReservationByDate>
-    }
+    };
   }
 });

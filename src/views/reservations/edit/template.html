@@ -21,15 +21,14 @@
                 </div>
 
                 <div class="page-content">
-                    <reservation-form :id="id"
-                                      @initializing="handleInitializing"
-                                      @initialized="handleInitialized"
-                                      @initialize-failure="handleInitializeFailure"
-                                      @load-reservation-seats-failure="handleLoadReservationSeatsFailure"
-                                      @saving="handleSaving"
-                                      @save-succeeded="handleSaveSuceeded"
-                                      @save-failure="handleSaveFailure"
-                                      @validation-failure="handleValidationFailure">
+                    <reservation-form
+                        :id="id"
+                        @initialize-failed="handleInitializeFailed"
+                        @load-reservation-seats-failure="handleLoadReservationSeatsFailure"
+                        @save-succeeded="handleSaveSuceeded"
+                        @save-failed="handleSaveFailed"
+                        @update-progress="handleUpdateProgress"
+                        @validation-failed="handleValidationFailed">
                     </reservation-form>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import Vue, { PropType } from "vue";
-import { tap } from 'rxjs/operators';
+import { tap } from "rxjs/operators";
 import ReservationSeatListItem from "@/components/reservation-seats/list-item/ReservationSeatListItem.vue";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
@@ -24,7 +24,7 @@ export default Vue.extend({
           ReservationService.fetchSeats(newVal)
             .pipe(tap(() => this.$emit("update-progress", false)))
             .subscribe(
-              (seats: Array<ReservationSeat>) => this.seats = seats,
+              (seats: Array<ReservationSeat>) => (this.seats = seats),
               () => this.$emit("load-failed")
             );
         }
@@ -34,6 +34,6 @@ export default Vue.extend({
   data() {
     return {
       seats: [] as Array<ReservationSeat>
-    }
+    };
   }
 });

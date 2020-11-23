@@ -69,7 +69,7 @@ export default Vue.extend({
       reservation_date_id: "",
       reservation_id: "",
       reservation_time_id: ""
-    }
+    };
 
     return {
       reservation: reservation,
@@ -79,17 +79,16 @@ export default Vue.extend({
   mounted() {
     this.$emit("update-progress", true);
 
-    ReservationService.fetchById(this.id)
-      .subscribe(
-        (reservation: Reservation) => {
-          this.reservation = reservation;
-          this.searchParams.reservation_date_id = reservation.reservation_date_id;
-          this.searchParams.reservation_id = this.id;
-          this.searchParams.reservation_time_id = reservation.reservation_time_id;
+    ReservationService.fetchById(this.id).subscribe(
+      (reservation: Reservation) => {
+        this.reservation = reservation;
+        this.searchParams.reservation_date_id = reservation.reservation_date_id;
+        this.searchParams.reservation_id = this.id;
+        this.searchParams.reservation_time_id = reservation.reservation_time_id;
 
-          this.$emit("update-is-available-actions", this.isAvailableActions);
-        },
-        () => this.$emit("load-failed")
-      );
+        this.$emit("update-is-available-actions", this.isAvailableActions);
+      },
+      () => this.$emit("load-failed")
+    );
   }
 });

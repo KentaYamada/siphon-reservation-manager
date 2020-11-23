@@ -193,9 +193,8 @@ const routes: RouteConfig[] = [
   {
     path: HELP_MAIL_UNREACHED,
     name: "help-mail-unreached",
-    component: () => import(
-      /* webpackChunkName: "help-mail-unreached" */ "@/views/helps/mail-unreached/HelpMailUnreached.vue"
-    )
+    component: () =>
+      import(/* webpackChunkName: "help-mail-unreached" */ "@/views/helps/mail-unreached/HelpMailUnreached.vue")
   },
   {
     path: FORBIDDEN_URL,

@@ -173,7 +173,7 @@ export class ReservationService {
     return from(query.get()).pipe(
       map(snapshot => {
         snapshot.forEach(doc => {
-          const reservedSeats = doc.data().seats as Array<number> ?? [];
+          const reservedSeats = (doc.data().seats ?? []) as Array<number>;
           const isMyReservation = doc.id === params.reservation_id;
 
           reservedSeats.forEach(reservedSeat => {

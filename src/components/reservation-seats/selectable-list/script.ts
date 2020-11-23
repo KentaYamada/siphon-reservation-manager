@@ -66,7 +66,6 @@ export default Vue.extend({
             .pipe(tap(() => (this.isProgress = false)))
             .subscribe(
               (seats: Array<ReservationSeat>) => {
-                console.log(seats);
                 this.seats = seats;
                 this.$emit("update-is-all-reserved-seats", this.isAllReservedSeats);
               },

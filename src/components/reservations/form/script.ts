@@ -1,5 +1,4 @@
 import Vue from "vue";
-import _ from "lodash";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { tap } from "rxjs/operators";
 import { required, email } from "vuelidate/lib/validators";
@@ -161,6 +160,8 @@ export default Vue.extend({
   },
   mounted() {
     if (this.id) {
+      this.$emit("update-progress", true);
+
       ReservationService.fetchById(this.id)
         .pipe(tap(() => this.$emit("update-progress", false)))
         .subscribe(

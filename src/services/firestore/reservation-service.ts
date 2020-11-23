@@ -4,8 +4,8 @@ import { map } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
-import firebase from "@/plugins/firebase";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
+import firebase from "@/plugins/firebase";
 
 export class ReservationService {
   /** 最大予約人数 */
@@ -149,10 +149,6 @@ export class ReservationService {
           })
           .orderBy("seat_no", "asc")
           .value();
-
-        if (snapshot.empty) {
-          return seats;
-        }
 
         snapshot.forEach(doc => {
           const data = doc.data();

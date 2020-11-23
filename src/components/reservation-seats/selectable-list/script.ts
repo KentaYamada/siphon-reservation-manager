@@ -1,5 +1,5 @@
 import Vue, { PropType } from "vue";
-import { filter, isEmpty } from "lodash";
+import { filter } from "lodash";
 import { tap } from "rxjs/operators";
 import SelectableReservationSeatListItem from "@/components/reservation-seats/selectable-list-item/SelectableReservationSeatListItem.vue";
 import { ReservationSeat } from "@/entity/reservation-seat";
@@ -17,14 +17,14 @@ export default Vue.extend({
       type: Object as PropType<ReservationSeatSearchOption>
     }
   },
-  computed : {
+  computed: {
     reservablePeople(): number {
       if (!this.seats) {
         return 0;
       }
 
-      const reservedCount = filter(this.seats, (seat => seat.is_reserved)).length;
-      const selectedCount = filter(this.seats, (seat => seat.is_selected)).length;
+      const reservedCount = filter(this.seats, seat => seat.is_reserved).length;
+      const selectedCount = filter(this.seats, seat => seat.is_selected).length;
 
       // 2名席/テーブルで計算
       const total = reservedCount * 2 + selectedCount * 2;
@@ -32,7 +32,7 @@ export default Vue.extend({
       return ReservationService.MAX_NUMBER_OF_RESERVATIONS - total;
     },
 
-    hasSeats() : boolean {
+    hasSeats(): boolean {
       return this.seats.length > 0;
     },
 
@@ -43,7 +43,6 @@ export default Vue.extend({
     isAllReservedSeats(): boolean {
       return ReservationService.MAX_NUMBER_OF_RESERVATIONS === filter(this.seats, seats => seats.is_reserved).length;
     }
-
   },
   methods: {
     handleUpdateSeat(selected: boolean, no: number) {
@@ -60,31 +59,20 @@ export default Vue.extend({
     searchParams: {
       deep: true,
       handler(newVal: ReservationSeatSearchOption) {
-          this.isProgress = true;
+        this.isProgress = true;
+
+        if (newVal.reservation_date_id !== "" && newVal.reservation_time_id !== "") {
           ReservationService.fetchSeats(newVal)
-            .pipe(tap(() => this.isProgress = false))
+            .pipe(tap(() => (this.isProgress = false)))
             .subscribe(
-                (seats: Array<ReservationSeat>) => {
-                  console.log(seats);
-                  this.seats = seats;
-                  this.$emit("update-is-all-reserved-seats", this.isAllReservedSeats);
-                },
-                (error) => console.error(error)
+              (seats: Array<ReservationSeat>) => {
+                console.log(seats);
+                this.seats = seats;
+                this.$emit("update-is-all-reserved-seats", this.isAllReservedSeats);
+              },
+              error => console.error(error)
             );
-        // if (!isEmpty(newVal.reservation_date_id) && !isEmpty(newVal.reservation_time_id)) {
-        //   ReservationService.fetchSeats(newVal)
-        //     .pipe(tap(() => this.isProgress = false))
-        //     .subscribe(
-        //         (seats: Array<ReservationSeat>) => {
-        //           console.log(seats);
-        //           this.seats = seats;
-        //           this.$emit("update-is-all-reserved-seats", this.isAllReservedSeats);
-        //         },
-        //         (error) => console.error(error)
-        //     );
-        // } else {
-        //   this.seats = [];
-        // }
+        }
       }
     }
   },

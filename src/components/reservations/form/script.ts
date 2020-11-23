@@ -5,7 +5,7 @@ import { tap } from "rxjs/operators";
 import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
 import SelectableReservationSeatList from "@/components/reservation-seats/selectable-list/SelectableReservationSeatList.vue";
-import { Reservation } from '@/entity/reservation';
+import { Reservation } from "@/entity/reservation";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import { formatDateJp } from "@/filters/format-date-jp";
@@ -79,18 +79,17 @@ export default Vue.extend({
 
     handleSave() {
       this.$v.$touch();
-      console.log(this.reservation.seats);
-      if (!this.$v.$invalid && this.reservation.seats.length > 0) {
-        // this.$emit("update-progress", true);
-        console.log(this.reservation);
+      this.$emit("update-progress", true);
 
+      if (!this.$v.$invalid && this.reservation.seats.length > 0) {
         ReservationService.save(this.reservation)
           .pipe(tap(() => this.$emit("update-progress", false)))
           .subscribe(
-            (snapshot) => this.$emit("save-succeeded", snapshot.id),
-            (error) => console.log(error)
+            snapshot => this.$emit("save-succeeded", snapshot.id),
+            error => console.log(error)
           );
       } else {
+        this.$emit("update-progress", false);
         this.$emit("validation-failed");
       }
     },
@@ -156,24 +155,23 @@ export default Vue.extend({
     };
   },
   created() {
-    this.fetchReservableBusinessDays()
-      .then(() => {
-        this.searchParams.reservation_id = this.id;
-        this.searchParams.reservation_date_id = this.reservation.reservation_date_id;
-        this.searchParams.reservation_time_id = this.reservation.reservation_time_id;
-      })
-      .catch(() => {
-        this.$emit("initialize-failed");
-      });
+    this.fetchReservableBusinessDays().catch(() => {
+      this.$emit("initialize-failed");
+    });
   },
   mounted() {
     if (this.id) {
       ReservationService.fetchById(this.id)
-        .pipe(tap(() => this.$emit("initialized", false)))
+        .pipe(tap(() => this.$emit("update-progress", false)))
         .subscribe(
-          (reservation: Reservation) => console.log(reservation),
+          (reservation: Reservation) => {
+            this.reservation = reservation;
+            this.searchParams.reservation_id = this.id;
+            this.searchParams.reservation_date_id = this.reservation.reservation_date_id;
+            this.searchParams.reservation_time_id = this.reservation.reservation_time_id;
+          },
           () => this.$emit("load-failed")
-        )
+        );
     }
   }
 });

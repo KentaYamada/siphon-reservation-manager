@@ -100,7 +100,7 @@ export default Vue.extend({
       }).href;
       const redirectUrl = `${location.origin}${href}`;
       // todo: cloud functions triggerを使ってメール配信する
-      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.EDITED);
+      // sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.EDITED);
     }
   },
   created() {

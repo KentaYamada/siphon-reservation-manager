@@ -59,7 +59,6 @@ export default Vue.extend({
       reservation_end_time: null,
       reservation_time_id: "",
       reserver_name: "",
-      reservation_seats: [],
       number_of_reservations: null,
       tel: "",
       mail: "",

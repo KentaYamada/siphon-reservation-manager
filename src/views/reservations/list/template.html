@@ -4,8 +4,7 @@
             <div class="box">
                 <div class="page-header">
                     <h4 class="title">
-                        <i class="fas fa-calendar-check"></i>
-                        予約状況
+                        <i class="fas fa-calendar-check"></i>予約状況
                     </h4>
                 </div>
 
@@ -19,12 +18,11 @@
                     <div class="divider"></div>
                     <div class="list-container">
                         <reservation-list
-                            :reservation-list="reservationList"
+                            :searchParams="searchParams"
                             @cancel-succeeded="handleCancelSucceeded()"
-                            @cancel-failed="handleCancelFailed()"
-                            v-if="!!reservationList">
+                            @cancel-failed="handleCancelFailed()">
                         </reservation-list>
-                        <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
+                        <b-loading :is-full-page="false" :active.sync="isProgress"></b-loading>
                     </div>
                 </div>
             </div>

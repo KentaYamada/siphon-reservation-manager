@@ -11,7 +11,6 @@ export interface Reservation {
   reservation_end_time: Date | null;
   reservation_time_id: string;
   reserver_name: string;
-  reservation_seats: ReservationSeat[];
   number_of_reservations: number | null;
   tel: string;
   mail: string;

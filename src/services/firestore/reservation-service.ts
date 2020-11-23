@@ -1,6 +1,6 @@
-import _, { difference, range } from "lodash";
+import { difference, range } from "lodash";
 import { from, throwError, Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
@@ -8,7 +8,7 @@ import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-op
 import firebase from "@/plugins/firebase";
 
 export class ReservationService {
-  /** 最大予約人数 */
+  /** 予約人数上限 */
   static readonly MAX_NUMBER_OF_RESERVATIONS = 8;
 
   private static readonly COLLECTION_NAME: string = "reservations";
@@ -85,21 +85,40 @@ export class ReservationService {
     return from(docRef.delete());
   }
 
-  fetch(option: ReservationSearchOption) {
-    if (_.isNil(option)) {
-      return Promise.reject();
+  static fetch(option: ReservationSearchOption): Observable<Array<Reservation>> {
+    if (!option) {
+      throwError("Error: 検索できませんでした");
     }
 
-    let query = firebase
-      .firestore()
-      .collection(ReservationService.COLLECTION_NAME)
-      .where("reservation_date_id", "==", option.reservation_date_id);
+    let query = ReservationService._getCollection().where("reservation_date_id", "==", option.reservation_date_id);
 
-    if (!_.isEmpty(option.reservation_time_id)) {
+    if (option.reservation_time_id !== "") {
       query = query.where("reservation_time_id", "==", option.reservation_time_id);
     }
 
-    return query.get();
+    return from(query.get()).pipe(
+      filter(snapshot => !snapshot.empty),
+      map(snapshot => {
+        return snapshot.docs.map(doc => {
+          const data = doc.data();
+
+          return {
+            id: doc.id,
+            reservation_date: data?.reservation_date?.toDate(),
+            reservation_date_id: data?.reservation_date_id,
+            reservation_end_time: data?.reservation_end_time.toDate(),
+            reservation_start_time: data?.reservation_end_time.toDate(),
+            reservation_time_id: data?.reservation_time_id,
+            reserver_name: data?.reserver_name,
+            number_of_reservations: data?.number_of_reservations,
+            tel: data?.tel,
+            mail: data?.mail,
+            comment: data?.comment,
+            seats: data?.seats ?? []
+          } as Reservation;
+        });
+      })
+    );
   }
 
   static fetchById(id: string): Observable<Reservation> {
@@ -124,7 +143,6 @@ export class ReservationService {
           tel: data?.tel,
           mail: data?.mail,
           comment: data?.comment,
-          reservation_seats: [],
           seats: data?.seats ?? []
         } as Reservation;
       })

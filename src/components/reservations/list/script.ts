@@ -1,8 +1,10 @@
 import Vue, { PropType } from "vue";
-import { mapGetters } from "vuex";
-import { ReservationList } from "@/entity/reservation-list";
+import { tap } from "rxjs/operators";
 import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
-import { HAS_ITEMS } from "@/store/constant";
+import { ReservationByDate } from "@/entity/reservation-by-date";
+import { Reservation } from "@/entity/reservation";
+import { ReservationService } from '@/services/firestore/reservation-service';
+import { ReservationSearchOption } from '@/entity/reservation-search-option';
 
 export default Vue.extend({
   template: "<reservation-list/>",
@@ -10,23 +12,51 @@ export default Vue.extend({
     ReservationListItem
   },
   props: {
-    reservationList: {
+    searchParams: {
       required: true,
-      type: Array as PropType<Array<ReservationList>>
+      type: Object as PropType<ReservationSearchOption>
     }
   },
   computed: {
-    ...mapGetters("reservationList", {
-      hasItems: HAS_ITEMS
-    })
+    hasItems(): boolean {
+      return this.reservations.length > 0;
+    }
   },
   methods: {
     handleCancelSucceeded() {
+      this._fetch(this.searchParams);
       this.$emit("cancel-succeeded");
     },
 
     handleCancelFailed() {
       this.$emit("cancel-failed");
+    },
+
+    _fetch(searchParams: ReservationSearchOption) {
+      if (searchParams.reservation_date_id !== "") {
+        this.$emit("update-progress", true);
+
+        ReservationService.fetch(searchParams)
+          .pipe(
+            tap(() => this.$emit("update-progress", false))
+          )
+          .subscribe(
+            (reservations: Array<Reservation>) => console.log(reservations)
+          );
+      }
+    }
+  },
+  watch: {
+    searchParams: {
+      deep: true,
+      handler(newVal: ReservationSearchOption) {
+        this._fetch(newVal);
+      }
+    }
+  },
+  data() {
+    return {
+      reservations: [] as Array<ReservationByDate>
     }
   }
 });

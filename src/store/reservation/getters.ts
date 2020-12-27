@@ -101,11 +101,13 @@ const getters: GetterTree<ReservationState, RootState> = {
       return false;
     }
 
+    // 予約変更・キャンセルは予約日時-2日前まで
     const current = moment();
-    const reservationDate = moment(state.reservation.reservation_date as Date);
-    reservationDate.set({ hour: 10, minutes: 1, second: 0, millisecond: 0 });
+    const deadline = moment(state.reservation.reservation_date);
+    deadline.set({ hour: 23, minutes: 59, second: 59, millisecond: 0 });
+    deadline.subtract(2, "days");
 
-    return reservationDate.diff(current) > 0;
+    return deadline.diff(current) >= 0;
   },
 
   /**

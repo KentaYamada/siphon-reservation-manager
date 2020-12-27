@@ -42,6 +42,7 @@ export class ReservationService {
       };
 
       if (existData.exists) {
+        reservationData.modified_at = new Date();
         transaction.update(reservationRef, reservationData);
 
         const reservedSeatsRef = await db
@@ -52,6 +53,8 @@ export class ReservationService {
           transaction.update(doc.ref, { reservation_id: null, is_reserved: false });
         });
       } else {
+        reservationData.created_at = new Date();
+        reservationData.modified_at = new Date();
         transaction.set(reservationRef, reservationData);
       }
 

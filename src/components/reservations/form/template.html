@@ -10,7 +10,7 @@
         </b-select>
         <div v-if="$v.reservation.reservation_date.$error">
             <small class="help is-danger" v-if="!$v.reservation.reservation_date.required">
-                予約日を選択してください。
+                予約日を選択してください
             </small>
         </div>
     </div>
@@ -25,7 +25,7 @@
         </b-select>
         <div v-if="$v.reservation.reservation_start_time.$error">
             <small class="help is-danger" v-if="!$v.reservation.reservation_start_time.required">
-                予約時間を選択してください。
+                予約時間を選択してください
             </small>
         </div>
     </div>
@@ -33,8 +33,8 @@
         <label class="label">空席状況</label>
         <div class="reservation-seats-container" v-if="hasReservationSeats">
             <p><small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small></p>
-            <p><small>ご予約は空席をクリックしてください。</small></p>
-            <p><small>※ テーブルは2名席です。</small></p>
+            <p><small>ご予約は空席をクリックしてください</small></p>
+            <p><small>※ テーブルは2名席です</small></p>
 
             <h5 class="status-title">座席表の見方</h5>
             <div class="reservation-status">
@@ -56,17 +56,17 @@
             <b-loading :is-full-page="false" :active.sync="isLoadingSeats"></b-loading>
         </div>
         <div v-if="visibleSelectionSeatMessage" class="no-seat-selection-message">
-            <p class="has-text-danger">座席を選択してください。</p>
+            <p class="has-text-danger">座席を選択してください</p>
         </div>
         <div v-if="isFullOfReserved" class="no-seat-selection-message">
             <small class="has-text-danger">
-                指定した予約日時がただいま満席となっております。<br>
-                予約日時を再選択してご予約ください。<br>
-                ※ご指定の日時でキャンセルが出た場合はご予約いただけます。時間をおいてアクセスしてください。
+                指定した予約日時がただいま満席となっております<br>
+                予約日時を再選択してご予約ください<br>
+                ※ご指定の日時でキャンセルが出た場合はご予約いただけます。時間をおいてアクセスしてください
             </small>
         </div>
         <div v-if="!hasReservationSeats">
-            <p>予約日・予約時間を選択してください。</p>
+            <p>予約日・予約時間を選択してください</p>
         </div>
     </div>
     <div class="field">
@@ -78,7 +78,7 @@
                    :class="{ 'is-danger': $v.reservation.number_of_reservations.$error }">
             <div v-if="$v.reservation.number_of_reservations.$error">
                 <small class="help is-danger" v-if="!$v.reservation.number_of_reservations.required">
-                    予約人数を入力してください。
+                    予約人数を入力してください
                 </small>
             </div>
         </div>
@@ -93,7 +93,7 @@
                    :class="{ 'is-danger': $v.reservation.reserver_name.$error }">
             <div v-if="$v.reservation.reserver_name.$error">
                 <small class="help is-danger" v-if="!$v.reservation.reserver_name.required">
-                    名前を入力してください。
+                    名前を入力してください
                 </small>
             </div>
         </div>
@@ -108,10 +108,10 @@
                    :class="{ 'is-danger': $v.reservation.tel.$error }">
             <div v-if="$v.reservation.tel.$error">
                 <small class="help is-danger" v-if="!$v.reservation.tel.required">
-                    電話番号を入力してください。
+                    電話番号を入力してください
                 </small>
                 <small class="help is-danger" v-if="!$v.reservation.tel.tel">
-                    電話番号は半角数字で入力してください。
+                    電話番号は半角数字で入力してください
                 </small>
             </div>
         </div>
@@ -126,20 +126,21 @@
                    placeholder="sweets.sukiko@email.com"
                    v-model.trim="reservation.mail"
                    :class="{ 'is-danger': $v.reservation.mail.$error }">
-            <small>※入力したメールアドレスにお間違いがないか確認してください。</small>
+            <small class="note">※メールアドレスがお間違いないかご確認ください</small>
             <div v-if="$v.reservation.mail.$error">
                 <small class="help is-danger" v-if="!$v.reservation.mail.required">
-                    メールアドレスを入力してください。
+                    メールアドレスを入力してください
                 </small>
                 <small class="help is-danger"  v-if="!$v.reservation.mail.email">
-                    メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)。
+                    メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)
                 </small>
             </div>
         </div>
     </div>
     <div class="field">
-        <label class="label">備考</label>
-        <textarea class="textarea" placeholder="お店への伝達事項などあれば記入してください(例: 卵アレルギーがあります)" v-model="reservation.comment"></textarea>
+        <label class="label">メモ</label>
+        <textarea class="textarea" placeholder="桃のショートケーキ1つ" v-model="reservation.comment"></textarea>
+        <small class="note">※ご注文メニューまたは連絡事項をご入力ください</small>
     </div>
     <div class="form-actions has-text-right">
         <button type="button"

@@ -5,6 +5,7 @@ import VueRouter, { RouteConfig, Route } from "vue-router";
 import {
   INDEX_URL,
   RESERVATION_CANCELED_URL,
+  RESERVATION_CANCEL_LOG_LIST_URL,
   RESERVATION_EDIT_URL,
   RESERVATION_EDITED_URL,
   RESERVATION_ENTRY_URL,
@@ -112,6 +113,17 @@ const routes: RouteConfig[] = [
       requireAuth: true
     },
     component: Shop
+  },
+  {
+    path: RESERVATION_CANCEL_LOG_LIST_URL,
+    name: "reservation-cancel-log-list",
+    meta: {
+      requireAuth: true
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "reservation-cancel-log-list" */ "@/views/reservation-cancel-logs/list/ReservationCancelLogListView.vue"
+      )
   },
   {
     path: MANAGEMENT_LOGIN_URL,

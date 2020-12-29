@@ -38,21 +38,5 @@ export default Vue.extend({
       } as ReservationCancelLogSearchOption,
       items: [] as Array<ReservationCancelLog>
     };
-  },
-  mounted() {
-    this.isLoading = true;
-
-    ReservationCancelLogService.fetch(this.searchOption).subscribe(
-      (items: Array<ReservationCancelLog>) => (this.items = items),
-      () => {
-        const toastConfig: BNoticeConfig = {
-          message: "データの読み込みに失敗しました",
-          type: "is-danger"
-        };
-
-        this.$buefy.toast.open(toastConfig);
-      },
-      () => (this.isLoading = false)
-    );
   }
 });

@@ -1,1 +1,22 @@
-<p>piyo</p>
+<div class="box">
+    <h3 class="title is-size-5">
+        {{ item.reserver_name }}
+    </h3>
+    <div>
+        <h4><i class="far fa-calendar-times"></i>キャンセル日時</h4>
+        <p>{{ item.canceled_at | formatDateJp }}</p>
+    </div>
+    <div>
+        <h4><i class="far fa-calendar-alt"></i>予約日時</h4>
+        <p>{{ item.reservation_date | formatDateJp }}</p>
+    </div>
+    <div>
+        <h4><i class="fas fa-chair"></i>座席</h4>
+        <p>{{ seats }}</p>
+    </div>
+    <div class="buttons is-right">
+        <button class="button is-info is-inverted" @click="handleShowAddressDialog()">
+            <i class="fas fa-address-card"></i>連絡先を表示
+        </button>
+    </div>
+</div>

@@ -3,14 +3,13 @@
         <div class="column is-half is-offset-3">
             <div class="box">
                 <h4 class="title is-size-5">
-                    <i class="fas"></i>予約キャンセル履歴
+                    <i class="fas fa-history"></i>予約キャンセル履歴
                 </h4>
                 <reservation-cancel-log-search-form>
                 </reservation-cancel-log-search-form>
             </div>
             <div class="reservation-cancel-log-list-container">
-                <reservation-cancel-log-list>
-                </reservation-cancel-log-list>
+                <reservation-cancel-log-list :items="items"></reservation-cancel-log-list>
                 <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
             </div>
         </div>

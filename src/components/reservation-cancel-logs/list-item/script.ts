@@ -1,11 +1,17 @@
-import Vue from "vue";
+import Vue, { PropType } from "vue";
+import { BModalConfig } from "buefy/types/components";
 import ReservationAddressDialog from "@/components/reservations/dialog/address/ReservationAddressDialog.vue";
 import { ReservationCancelLog } from "@/entity/reservation-cancel-log";
-import { BModalConfig } from "buefy/types/components";
 import { formatDateJp } from "@/filters/format-date-jp";
 
 export default Vue.extend({
   template: "<reservation-cancel-log-list-item/>",
+  props: {
+    item: {
+      required: true,
+      type: Object as PropType<ReservationCancelLog>
+    }
+  },
   computed: {
     seats(): string {
       return this.item.seats.join(", ");
@@ -27,19 +33,5 @@ export default Vue.extend({
 
       this.$buefy.modal.open(config);
     }
-  },
-  data() {
-    return {
-      item: {
-        id: "1",
-        canceled_at: new Date(),
-        reservation_id: "abc",
-        reservation_date: new Date(),
-        reserver_name: "Gamoyon 花子",
-        mail: "sweets.sukiko@email.com",
-        tel: "09012345678",
-        seats: [1, 2]
-      } as ReservationCancelLog
-    };
   }
 });

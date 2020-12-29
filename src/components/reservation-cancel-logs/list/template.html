@@ -1,5 +1,8 @@
 <div class="reservation-cancel-log-list">
-    <reservation-cancel-log-list-item>
+    <reservation-cancel-log-list-item
+        :item="item"
+        :key="item.id"
+        v-for="item in items">
     </reservation-cancel-log-list-item>
-    <no-list-item :visibility="hasItem"></no-list-item>
+    <no-list-item :visibility="noItem"></no-list-item>
 </div>

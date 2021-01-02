@@ -1,5 +1,5 @@
 import { ActionTree } from "vuex";
-import _ from "lodash";
+import _, { orderBy } from "lodash";
 import moment from "moment";
 import { Timezone } from "@/entity/timezone";
 import { TimezoneService } from "@/services/firestore/timezone-service";
@@ -20,14 +20,25 @@ const actions: ActionTree<TimezoneState, RootState> = {
           isDefaultSelect = data.is_default_select;
         }
 
+        const startTime = moment(data.start_time?.toDate()).set({
+          year: 2020,
+          month: 0,
+          date: 1
+        });
+        const endTime = moment(data.end_time?.toDate()).set({
+          year: 2020,
+          month: 0,
+          date: 1
+        });
+
         return {
           id: doc.id,
-          start_time: data.start_time.toDate(),
-          end_time: data.end_time.toDate(),
+          start_time: startTime.toDate(),
+          end_time: endTime.toDate(),
           is_default_select: isDefaultSelect
         } as Timezone;
       })
-      .orderBy((t: Timezone) => moment(t.start_time).format("HHmmss"))
+      .orderBy(["start_time", "end_time"], ["asc", "asc"])
       .value();
 
     commit(SET_ITEMS, timezones);

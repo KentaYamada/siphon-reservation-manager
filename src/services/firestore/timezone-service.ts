@@ -13,8 +13,7 @@ export class TimezoneService {
       return Promise.reject();
     }
 
-    // todo: type safe
-    const requestBody = {
+    const requestBody: firebase.firestore.DocumentData = {
       start_time: timezone.start_time,
       end_time: timezone.end_time,
       is_default_select: timezone.is_default_select
@@ -28,8 +27,7 @@ export class TimezoneService {
       return Promise.reject();
     }
 
-    // todo: type safe
-    const requestBody = {
+    const requestBody: firebase.firestore.DocumentData = {
       start_time: timezone.start_time,
       end_time: timezone.end_time,
       is_default_select: timezone.is_default_select

@@ -54,14 +54,26 @@ const actions: ActionTree<BusinessDayState, RootState> = {
         const timezonesRef = await doc.ref.collection(service.subCollectionName).where("selected", "==", true).get();
         businessDay.timezones = _.chain(timezonesRef.docs)
           .map(doc => {
-            return {
+            const startTime = moment(doc.data()?.start_time?.toDate()).set({
+              year: 2020,
+              month: 0,
+              date: 1
+            });
+            const endTime = moment(doc.data()?.end_time?.toDate()).set({
+              year: 2020,
+              month: 0,
+              date: 1
+            });
+            const timezone: SelectableTimezone = {
               id: doc.id,
-              start_time: doc.data().start_time.toDate(),
-              end_time: doc.data().end_time.toDate(),
+              start_time: startTime.toDate(),
+              end_time: endTime.toDate(),
               selected: doc.data().selected
-            } as SelectableTimezone;
+            };
+
+            return timezone;
           })
-          .sortBy((t: SelectableTimezone) => t.start_time.getHours())
+          .orderBy(["start_time", "end_time"], ["asc", "asc"])
           .value();
 
         businessDays.push(businessDay);

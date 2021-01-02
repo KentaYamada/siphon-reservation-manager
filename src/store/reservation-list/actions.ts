@@ -1,5 +1,6 @@
 import { ActionTree } from "vuex";
 import _ from "lodash";
+import moment from "moment";
 import { ReservationList } from "@/entity/reservation-list";
 import { Reserver } from "@/entity/reserver";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
@@ -58,12 +59,23 @@ const actions: ActionTree<ReservationListState, RootState> = {
     const reservations = _.chain(reservationRef.docs)
       .groupBy(doc => doc.data()?.reservation_start_time.toDate())
       .map(doc => {
+        const startTime = moment(doc[0].data()?.reservation_start_time?.toDate()).set({
+          year: 2020,
+          month: 0,
+          date: 1
+        });
+        const endTime = moment(doc[0].data()?.reservation_end_time?.toDate()).set({
+          year: 2020,
+          month: 0,
+          date: 1
+        });
+
         return {
           id: doc[0].id,
           reservation_date: doc[0].data()?.reservation_date.toDate(),
           reservation_date_id: doc[0].data().reservation_date_id,
-          reservation_start_time: doc[0].data()?.reservation_start_time.toDate(),
-          reservation_end_time: doc[0].data()?.reservation_end_time.toDate(),
+          reservation_start_time: startTime.toDate(),
+          reservation_end_time: endTime.toDate(),
           reservation_time_id: doc[0].data().reservation_time_id,
           seats: []
         } as ReservationList;
@@ -75,7 +87,7 @@ const actions: ActionTree<ReservationListState, RootState> = {
           );
         });
       })
-      .orderBy(["reservation_start_time"], ["asc"])
+      .orderBy(["reservation_start_time", "reservation_end_time"], ["asc", "asc"])
       .value();
 
     commit(SET_ITEMS, reservations);

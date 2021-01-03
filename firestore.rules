@@ -84,7 +84,7 @@ service cloud.firestore {
     }
 
     function validationReservationSchema(reservation) {
-        return (reservation.size() == 10) &&
+        return (reservation.size() == 13) &&
                (reservation.keys().hasAll([
                     "reservation_date",
                     "reservation_date_id",
@@ -96,6 +96,9 @@ service cloud.firestore {
                     "tel",
                     "mail", 
                     "comment",
+                    "seats",
+                    "created_at",
+                    "modified_at"
                 ])) &&
                (reservation.reservation_date is timestamp) &&
                (reservation.reservation_date_id is string) &&
@@ -108,7 +111,10 @@ service cloud.firestore {
                (reservation.number_of_reservations <= 8) &&
                (reservation.tel is string) &&
                (reservation.mail is string) &&
-               (reservation.comment is string);
+               (reservation.comment is string) &&
+               (reservation.seats is list) &&
+               (reservation.created_at is timestamp) &&
+               (reservation.modified_at is timestamp);
     }
 
     // [GET] /reservations

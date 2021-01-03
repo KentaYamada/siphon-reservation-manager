@@ -23,6 +23,13 @@ export class ReservationService {
       });
     }
 
+    const selectedSeats: Array<number> = [];
+    reservation.reservation_seats.forEach((seat: ReservationSeat) => {
+      if (seat.is_selected) {
+        selectedSeats.push(seat.seat_no);
+      }
+    });
+
     const db = firebase.firestore();
     const transaction = db.runTransaction(async transaction => {
       const reservationsRef = db.collection(this.COLLECTION_NAME);
@@ -38,10 +45,12 @@ export class ReservationService {
         number_of_reservations: reservation.number_of_reservations,
         tel: reservation.tel,
         mail: reservation.mail,
-        comment: reservation.comment
+        comment: reservation.comment,
+        seats: selectedSeats
       };
 
       if (existData.exists) {
+        reservationData.modified_at = new Date();
         transaction.update(reservationRef, reservationData);
 
         const reservedSeatsRef = await db
@@ -52,6 +61,8 @@ export class ReservationService {
           transaction.update(doc.ref, { reservation_id: null, is_reserved: false });
         });
       } else {
+        reservationData.created_at = new Date();
+        reservationData.modified_at = new Date();
         transaction.set(reservationRef, reservationData);
       }
 

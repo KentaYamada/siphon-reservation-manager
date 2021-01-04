@@ -6,6 +6,9 @@ import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import ReservationList from "@/components/reservations/list/ReservationList.vue";
 import ReservationSearchForm from "@/components/reservations/search/ReservationSearchForm.vue";
 import { FETCH, SET_ITEMS } from "@/store/constant";
+import { ReservationService } from "@/services/firestore/reservation-service";
+import { Reservation } from "@/entity/reservation";
+import { groupBy, switchMap } from "rxjs/operators";
 
 export default Vue.extend({
   components: {
@@ -63,6 +66,10 @@ export default Vue.extend({
             this.$buefy.toast.open(toastConfig);
           })
           .finally(() => (this.isLoading = false));
+        const observe$ = ReservationService.fetchV2(option)
+        observe$.subscribe(
+          (reservations: Array<Reservation>) => console.log(reservations)
+        );
       }
     }
   },

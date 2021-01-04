@@ -12,6 +12,7 @@ export interface Reservation {
   reservation_time_id: string;
   reserver_name: string;
   reservation_seats: ReservationSeat[];
+  seats?: number[];
   number_of_reservations: number | null;
   tel: string;
   mail: string;

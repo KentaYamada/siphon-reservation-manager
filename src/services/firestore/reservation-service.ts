@@ -1,12 +1,21 @@
-import _ from "lodash";
+import _, { groupBy } from "lodash";
+import moment from "moment";
+import { Observable, from } from "rxjs";
+import { map, retry, switchMap } from "rxjs/operators";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import firebase from "@/plugins/firebase";
+import { getFixedDate } from "@/utility/datetime-utility";
+import { formatReservationDatetime } from "@/filters/format-reservation-datetime";
 
 export class ReservationService {
   private readonly COLLECTION_NAME: string = "reservations";
   private readonly SUB_COLLECTION_NAME: string = "reservation_seats";
+
+  private static _getCollection() {
+    return firebase.firestore().collection("reservations");
+  }
 
   async save(reservation: Reservation) {
     if (_.isNil(reservation)) {
@@ -178,6 +187,77 @@ export class ReservationService {
     }
 
     return query.get();
+  }
+
+  static fetchV2(payload: ReservationSearchOption): Observable<Array<Reservation>> {
+    if (_.isNil(payload)) {
+      return new Observable(subscriber => subscriber.error())
+    }
+
+    let query = ReservationService
+      ._getCollection()
+      .where("reservation_date_id", "==", payload.reservation_date_id);
+
+    if (!_.isEmpty(payload.reservation_time_id)) {
+      query = query.where("reservation_time_id", "==", payload.reservation_time_id);
+    }
+
+    const observe$ = from(query.get()).pipe(
+      switchMap(snapshot => {
+        const reservations: Array<Reservation> = snapshot.docs.map(doc => {
+          const data = doc.data();
+          const reservation: Reservation = {
+            id: doc.id,
+            reservation_date: data?.reservation_date?.toDate(),
+            reservation_date_id: data.reservation_date_id,
+            reservation_start_time: getFixedDate(data?.reservation_start_time?.toDate()),
+            reservation_end_time: getFixedDate(data?.reservation_end_time?.toDate()),
+            reservation_time_id: data.reservation_time_id,
+            reserver_name: data.reserver_name,
+            seats: data.seats ?? [],
+            reservation_seats: [],
+            number_of_reservations: data.number_of_reservations,
+            mail: data.mail,
+            tel: data.tel,
+            comment: data.comment
+          };
+
+          return reservation;
+        });
+
+        return from(_.orderBy(reservations, ["reservation_start_time", "reservation_end_time"], ["asc", "asc"]));
+      }),
+      // groupBy((reservation: Reservation) => {
+      //   return reservation.id;
+      //   // return formatReservationDatetime(reservation.reservation_date, reservation.reservation_start_time, reservation.reservation_end_time);
+      // }),
+      // map(snapshot => {
+      //   const reservations: Array<Reservation> = snapshot.docs.map(doc => {
+      //     const data = doc.data();
+      //     const reservation: Reservation = {
+      //       id: doc.id,
+      //       reservation_date: data?.reservation_date?.toDate(),
+      //       reservation_date_id: data.reservation_date_id,
+      //       reservation_start_time: getFixedDate(data?.reservation_start_time?.toDate()),
+      //       reservation_end_time: getFixedDate(data?.reservation_end_time?.toDate()),
+      //       reservation_time_id: data.reservation_time_id,
+      //       reserver_name: data.reserver_name,
+      //       seats: data.seats ?? [],
+      //       reservation_seats: [],
+      //       number_of_reservations: data.number_of_reservations,
+      //       mail: data.mail,
+      //       tel: data.tel,
+      //       comment: data.comment
+      //     };
+
+      //     return reservation;
+      //   });
+
+      //   return _.orderBy(reservations, ["reservation_start_time", "reservation_end_time"], ["asc", "asc"]);
+      // })
+    );
+
+    return observe$;
   }
 
   fetchById(id: string) {

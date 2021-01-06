@@ -4,6 +4,7 @@ import { Navigation } from "@/entity/navigation";
 import {
   INDEX_URL,
   MANAGEMENT_RESERVATION_LIST_URL,
+  RESERVATION_CANCEL_LOG_LIST_URL,
   SHOP_SETTING_URL,
   HELP_MAIL_UNREACHED,
   NEW_YEAR_DISHED_RESERVATION_LIST_URL,
@@ -38,6 +39,11 @@ const getNavigations = (): Navigation[] => {
         {
           name: "予約一覧",
           url: MANAGEMENT_RESERVATION_LIST_URL,
+          icon: "fa-list"
+        },
+        {
+          name: "予約キャンセル履歴",
+          url: RESERVATION_CANCEL_LOG_LIST_URL,
           icon: "fa-list"
         },
         {

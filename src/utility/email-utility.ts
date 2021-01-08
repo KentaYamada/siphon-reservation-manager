@@ -8,7 +8,7 @@ import firebase from "@/plugins/firebase";
 const setReservationCreatedMessage = (model: Reservation, redirectUrl: string): string => {
   const message = `${model.reserver_name} 様
 
-Cafe de GAMOYONです
+Cafe de Gamoyonです
 ご予約ありがとうございます！
 ご来店お待ちしております
 
@@ -20,9 +20,12 @@ Cafe de GAMOYONです
 ご連絡なく10分以上遅れられますと、キャンセルになりますのでご注意ください
 
 ご予約の確認、変更、キャンセルはこちら
+オーダー、人数追加は1週間前まで
+キャンセルはご来店2日前までとなります
+
 ${redirectUrl}
 
-Cafe de GAMOYON
+Cafe de Gamoyon
 大阪府大阪市城東区今福東2-9-19
 https://goo.gl/maps/X2NpTBBGJBamfPgw6
 
@@ -37,14 +40,17 @@ Facebook: https://www.facebook.com/gamoyon4204/
 const setReservationEditedMessage = (model: Reservation, redirectUrl: string): string => {
   const message = `${model.reserver_name} 様
 
-Cafe de GAMOYONです
+Cafe de Gamoyonです
 ご予約の変更承りました
 スペシャルデザートのオーダー、内容変更は来店1週間前までにメモ欄までお願いします
 
 ご予約の確認、変更、キャンセルはこちら
+オーダー、人数追加は1週間前まで
+キャンセルはご来店2日前までとなります
+
 ${redirectUrl}
 
-Cafe de GAMOYON
+Cafe de Gamoyon
 大阪府大阪市城東区今福東2-9-19
 https://goo.gl/maps/X2NpTBBGJBamfPgw6
 
@@ -59,15 +65,16 @@ Facebook: https://www.facebook.com/gamoyon4204/
 const setReservationCanceledMessage = (model: Reservation, redirectUrl: string): string => {
   const message = `${model.reserver_name} 様
 
-Cafe de GAMOYONです
-予約のキャンセルを承りました
+Cafe de Gamoyonです
+ご予約のキャンセル承りました
 
 またのご予約をお待ちしております
 
 再予約はこちらから
+
 ${redirectUrl}
 
-Cafe de GAMOYON
+Cafe de Gamoyon
 大阪府大阪市城東区今福東2-9-19
 https://goo.gl/maps/X2NpTBBGJBamfPgw6
 
@@ -98,15 +105,15 @@ export const sendEmail = async (
 
   switch (type) {
     case EMAIL_MESSAGE_TEMPLATES.CREATED:
-      subject = "[Cafe de GAMOYON] 予約完了のお知らせ";
+      subject = "[Cafe de Gamoyon] 予約完了のお知らせ";
       message = setReservationCreatedMessage(reservation, redirectUrl);
       break;
     case EMAIL_MESSAGE_TEMPLATES.EDITED:
-      subject = "[Cafe de GAMOYON] 予約変更完了のお知らせ";
+      subject = "[Cafe de Gamoyon] 予約変更完了のお知らせ";
       message = setReservationEditedMessage(reservation, redirectUrl);
       break;
     case EMAIL_MESSAGE_TEMPLATES.CANCELED:
-      subject = "[Cafe de GAMOYON] 予約キャンセル完了のお知らせ";
+      subject = "[Cafe de Gamoyon] 予約キャンセル完了のお知らせ";
       message = setReservationCanceledMessage(reservation, redirectUrl);
       break;
     default:

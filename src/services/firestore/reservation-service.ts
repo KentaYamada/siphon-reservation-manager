@@ -141,35 +141,6 @@ export class ReservationService {
     return transaction;
   }
 
-  async cancel(id: string) {
-    if (_.isEmpty(id)) {
-      return Promise.reject("Invalid argument: id");
-    }
-
-    const db = firebase.firestore();
-    const transaction = db.runTransaction(async transaction => {
-      const reservationRef = db.collection(this.COLLECTION_NAME).doc(id);
-      const existData = await transaction.get(reservationRef);
-
-      if (!existData.exists) {
-        return Promise.reject("Reservation not found");
-      }
-
-      const reservationSeatsRef = await db.collection(this.SUB_COLLECTION_NAME).where("reservation_id", "==", id).get();
-
-      reservationSeatsRef.forEach(doc => {
-        transaction.update(doc.ref, {
-          is_reserved: false,
-          reservation_id: null
-        });
-      });
-
-      transaction.delete(reservationRef);
-    });
-
-    return transaction;
-  }
-
   fetch(option: ReservationSearchOption) {
     if (_.isNil(option)) {
       return Promise.reject();
@@ -187,17 +158,32 @@ export class ReservationService {
     return query.get();
   }
 
+  static cancel(id: string) {
+    const transaction$ = firebase.firestore().runTransaction(async transaction => {
+      const ref = ReservationService.getCollection().doc(id);
+      const doc = await transaction.get(ref);
+
+      if (!doc.exists) {
+        return Promise.reject("Document does not exists");
+      }
+
+      transaction.delete(ref);
+    });
+
+    return transaction$;
+  }
+
   static fetchById(id: string) {
-    return this.getCollection().doc(id).get();
+    return ReservationService.getCollection().doc(id).get();
   }
 
   static fetchSeats(payload: ReservationSearchOption) {
-    const collection = this.getCollection();
-    const query = collection
-      .where("reservation_date_id", "==", payload.reservation_date_id)
-      .where("reservation_time_id", "==", payload.reservation_time_id);
+    const collection = ReservationService.getCollection();
 
-    return query.get();
+    return collection
+      .where("reservation_date_id", "==", payload.reservation_date_id)
+      .where("reservation_time_id", "==", payload.reservation_time_id)
+      .get();
   }
 
   private async _existReservedSeats(reservation: Reservation): Promise<boolean> {

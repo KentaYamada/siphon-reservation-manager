@@ -139,8 +139,7 @@ const actions: ActionTree<ReservationState, RootState> = {
   },
 
   [CANCEL]: async ({ commit }, id: string) => {
-    const service = new ReservationService();
-    return service.cancel(id);
+    return ReservationService.cancel(id);
   }
 };
 

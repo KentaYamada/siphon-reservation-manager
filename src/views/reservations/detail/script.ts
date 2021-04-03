@@ -39,8 +39,6 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.id)
             .then(() => {
-              this._sendEmail(this.id);
-
               const toastConfig: BNoticeConfig = {
                 message: "予約を取り消しました",
                 type: "is-danger"
@@ -92,18 +90,6 @@ export default Vue.extend({
       };
       this.$buefy.toast.open(toastConfig);
       this.$router.push({ name: "notfound" });
-    },
-
-    /**
-     * 予約キャンセル完了通知メール送信
-     * @param id
-     */
-    _sendEmail(id: string): void {
-      const href = this.$router.resolve({
-        path: "/"
-      }).href;
-      const redirectUrl = `${location.origin}${href}`;
-      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
     }
   },
   data() {

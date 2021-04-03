@@ -7,7 +7,7 @@ import _ from "lodash";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import { ReservationSeatService } from "@/services/firestore/reservation-seat-service";
 import { RootState } from "@/store";
-import { ReservationState } from "@/store/reservation";
+import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
 import {
   CANCEL,
   FETCH_BY_ID,
@@ -90,7 +90,8 @@ const actions: ActionTree<ReservationState, RootState> = {
     reservationSeats = _.orderBy(reservationSeats, "seat_no", "asc");
 
     // 空席を埋めていく
-    _.times(4-reservationSeats.length, () => {
+    const emptySeats = (MAX_NUMBER_OF_RESERVATIONS / 2) - reservationSeats.length;
+    _.times(emptySeats, () => {
         seatNo += 1;
         const seat: ReservationSeat = {
           id: "",

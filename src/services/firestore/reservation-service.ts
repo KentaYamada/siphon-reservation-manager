@@ -1,11 +1,9 @@
 import _ from "lodash";
-import { from, throwError } from "rxjs";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import firebase from "@/plugins/firebase";
 import { RESERVATION_DETAIL_URL } from "@/router/url";
-import { switchMap } from "rxjs/operators";
 
 export class ReservationService {
   private readonly COLLECTION_NAME: string = "reservations";

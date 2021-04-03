@@ -2,9 +2,7 @@ import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
-import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 import { CANCEL, VISIBLE_ACTIONS } from "@/store/constant";
-import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   components: {

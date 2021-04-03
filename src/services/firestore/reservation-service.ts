@@ -9,6 +9,10 @@ export class ReservationService {
   private readonly COLLECTION_NAME: string = "reservations";
   private readonly SUB_COLLECTION_NAME: string = "reservation_seats";
 
+  private static getCollection() {
+    return firebase.firestore().collection("reservations");
+  }
+
   async save(reservation: Reservation) {
     if (_.isNil(reservation)) {
       return Promise.reject({
@@ -183,12 +187,17 @@ export class ReservationService {
     return query.get();
   }
 
-  fetchById(id: string) {
-    if (_.isEmpty(id)) {
-      return Promise.reject();
-    }
+  static fetchById(id: string) {
+    return this.getCollection().doc(id).get();
+  }
 
-    return firebase.firestore().collection(this.COLLECTION_NAME).doc(id).get();
+  static fetchSeats(payload: ReservationSearchOption) {
+    const collection = this.getCollection();
+    const query = collection
+      .where("reservation_date_id", "==", payload.reservation_date_id)
+      .where("reservation_time_id", "==", payload.reservation_time_id);
+
+    return query.get();
   }
 
   private async _existReservedSeats(reservation: Reservation): Promise<boolean> {

@@ -12,28 +12,13 @@
                 </div>
                 <div class="page-content">
                     <reservation-detail-content
-                        :id="id"
-                        v-if="!!id"
-                        @load-start="handleLoadStart"
-                        @load-succeeded="handleLoadSucceeded"
-                        @load-failure="handleLoadFailure"/>
+                        :reservation="reservation"
+                        v-if="!!reservation"
+                    >
+                    </reservation-detail-content>
                 </div>
                 <div class="page-footer" v-if="visibleActions">
-                    <div class="buttons is-right is-hidden-touch">
-                        <button type="button"
-                                class="button is-danger is-inverted"
-                                @click="handleConfirmCancel()">
-                            <i class="fas fa-times"></i>
-                            予約の取り消し
-                        </button>
-                        <button type="button"
-                                class="button is-info is-inverted"
-                                @click="handleClickEdit()">
-                            <i class="fas fa-edit"></i>
-                            予約内容を変更
-                        </button>
-                    </div>
-                    <div class="is-hidden-desktop has-text-right">
+                    <div class="buttons is-right">
                         <button type="button"
                                 class="button is-danger is-inverted"
                                 @click="handleConfirmCancel()">

@@ -2,9 +2,10 @@ import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
-import { CANCEL, VISIBLE_ACTIONS } from "@/store/constant";
+import { CANCEL, FETCH_BY_ID, VISIBLE_ACTIONS } from "@/store/constant";
 
 export default Vue.extend({
+  name: "reservation-detail",
   components: {
     ReservationDetailContent
   },
@@ -14,12 +15,31 @@ export default Vue.extend({
       required: true
     }
   },
+  data() {
+    return {
+      isLoading: false
+    };
+  },
   computed: {
     ...mapState("reservation", ["reservation"]),
     ...mapGetters("reservation", [VISIBLE_ACTIONS])
   },
+  mounted() {
+    this.isLoading = true;
+    this.fetchById(this.id)
+      .catch(() => {
+        this.handleShowDangerToast("予約情報の取得に失敗しました。時間をおいてアクセスしてください。");
+        this.$router.push({ name: "notfound" });
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+  },
   methods: {
-    ...mapActions("reservation", [CANCEL]),
+    ...mapActions("reservation", {
+      cancel: CANCEL,
+      fetchById: FETCH_BY_ID
+    }),
 
     handleConfirmCancel(): void {
       const message = `
@@ -35,29 +55,21 @@ export default Vue.extend({
         iconPack: "fas",
         icon: "exclamation-circle",
         onConfirm: () => {
+          this.isLoading = true;
           this.cancel(this.id)
             .then(() => {
-              const toastConfig: BNoticeConfig = {
-                message: "予約を取り消しました",
-                type: "is-danger"
-              };
-              this.$buefy.toast.open(toastConfig);
-              this.$router.push({
-                name: "reservation-canceled-message"
-              });
+              this.handleShowDangerToast("予約を取り消しました");
+              this.$router.push({ name: "reservation-canceled-message" });
             })
-            .catch(error => {
-              console.error(error);
-
+            .catch(() => {
               const message = `
                 <p>予約の取り消しに失敗しました</p>
                 <p>お手数ですが、時間をおいて再度実行してください</p>
               `;
-              const toastConfig: BNoticeConfig = {
-                message: message,
-                type: "is-danger"
-              };
-              this.$buefy.toast.open(toastConfig);
+              this.handleShowDangerToast(message);
+            })
+            .finally(() => {
+              this.isLoading = false;
             });
         }
       };
@@ -66,33 +78,16 @@ export default Vue.extend({
     },
 
     handleClickEdit(): void {
-      this.$router.push({
-        name: "reservation-edit",
-        params: { id: this.id }
-      });
+      this.$router.push({ name: "reservation-edit", params: { id: this.id } });
     },
 
-    handleLoadStart(): void {
-      this.isLoading = true;
-    },
-
-    handleLoadSucceeded(): void {
-      this.isLoading = false;
-    },
-
-    handleLoadFailure(): void {
-      this.isLoading = false;
-      const toastConfig: BNoticeConfig = {
-        message: "予約情報の取得に失敗しました。時間をおいてアクセスしてください。",
+    handleShowDangerToast(message: string): void {
+      const config: BNoticeConfig = {
+        message: message,
         type: "is-danger"
       };
-      this.$buefy.toast.open(toastConfig);
-      this.$router.push({ name: "notfound" });
+
+      this.$buefy.toast.open(config);
     }
-  },
-  data() {
-    return {
-      isLoading: true
-    };
   }
 });

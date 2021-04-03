@@ -1,7 +1,5 @@
 import * as moment from "moment";
 import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
-import { MailMessage } from "./entity/mail-message";
-import { MailTransmissionLog } from "./entity/mail-transmission-log";
 
 export const getNewYearDishesReservedMessage = (
   reserverName: string,
@@ -91,93 +89,4 @@ https://goo.gl/maps/X2NpTBBGJBamfPgw6
 最新情報をSNSでチェック！
 Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja
 Facebook: https://www.facebook.com/gamoyon4204/`;
-};
-
-export const getReservedMessage = (payload: MailTransmissionLog): MailMessage => {
-  const text = `${payload.reserver_name} 様
-
-Cafe de Gamoyonです
-ご予約ありがとうございます！
-ご来店お待ちしております
-
-ご予約確定後もメモ欄に追加入力可能です
-スペシャルデザートのオーダー、内容変更は来店1週間前までにメモ欄までお願いします
-
-当日のご連絡はInstagram、Facebookへメッセージをお願いします
-
-ご連絡なく10分以上遅れられますと、キャンセルになりますのでご注意ください
-
-ご予約の確認、変更、キャンセルはこちら
-オーダー、人数追加は1週間前まで
-キャンセルはご来店2日前までとなります
-
-${payload.redirect_url}
-
-Cafe de Gamoyon
-大阪府大阪市城東区今福東2-9-19
-https://goo.gl/maps/X2NpTBBGJBamfPgw6
-
-最新情報をSNSでチェック！
-Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja
-Facebook: https://www.facebook.com/gamoyon4204/
-  `;
-  const data: MailMessage = {
-    subject: "[Cafe de Gamoyon] 予約完了のお知らせ",
-    text: text
-  };
-
-  return data;
-};
-
-export const getReservationEditedMessage = (payload: MailTransmissionLog): MailMessage => {
-  const text = `${payload.reserver_name} 様
-
-Cafe de Gamoyonです
-ご予約の変更承りました
-スペシャルデザートのオーダー、内容変更は来店1週間前までにメモ欄までお願いします
-
-ご予約の確認、変更、キャンセルはこちら
-オーダー、人数追加は1週間前まで
-キャンセルはご来店2日前までとなります
-
-Cafe de Gamoyon
-大阪府大阪市城東区今福東2-9-19
-https://goo.gl/maps/X2NpTBBGJBamfPgw6
-
-最新情報をSNSでチェック！
-Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja
-Facebook: https://www.facebook.com/gamoyon4204/
-  `;
-  const data: MailMessage = {
-    subject: "[Cafe de Gamoyon] 予約変更完了のお知らせ",
-    text: text
-  };
-
-  return data;
-};
-
-export const getReservationCanceledMessage = (payload: MailTransmissionLog): MailMessage => {
-  const text = `${payload.reserver_name} 様
-
-Cafe de Gamoyonです
-ご予約のキャンセル承りました
-
-またのご予約をお待ちしております
-
-再予約はこちらから
-
-Cafe de Gamoyon
-大阪府大阪市城東区今福東2-9-19
-https://goo.gl/maps/X2NpTBBGJBamfPgw6
-
-最新情報をSNSでチェック！
-Instagram: https://www.instagram.com/cafedegamoyon/?hl=ja
-Facebook: https://www.facebook.com/gamoyon4204/
-  `;
-  const data: MailMessage = {
-    subject: "[Cafe de Gamoyon] 予約キャンセル完了のお知らせ",
-    text: text
-  };
-
-  return data;
 };

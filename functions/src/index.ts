@@ -11,7 +11,6 @@ import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 import { onCreateReservation } from "./firestore-triggers/reservation/create-reservation";
 import { onUpdateReservation } from "./firestore-triggers/reservation/update-reservation";
 import { onDeleteReservation } from "./firestore-triggers/reservation/delete-reservation";
-import { onCreateMailTransmissionLog } from "./firestore-triggers/mail-transmission-log/create-mail-transmission-log";
 
 admin.initializeApp();
 
@@ -29,7 +28,6 @@ const mailTransport = nodemailer.createTransport({
 exports.onCreateReservation = onCreateReservation;
 exports.onDeleteReservation = onDeleteReservation;
 exports.onUpdateReservation = onUpdateReservation;
-exports.onCreateMailTransmissionLog = onCreateMailTransmissionLog;
 
 exports.onCreateNewYearDishesReservation = functions.firestore
   .document("new_year_dishes_reservations/{id}")

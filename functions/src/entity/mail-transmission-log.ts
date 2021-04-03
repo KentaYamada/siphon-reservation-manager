@@ -8,5 +8,6 @@ export interface MailTransmissionLog {
   redirect_url: string;
   type: string;
   type_name: string;
+  result: string;
   created_at: Date;
 }

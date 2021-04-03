@@ -3,6 +3,7 @@ import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import firebase from "@/plugins/firebase";
+import { RESERVATION_DETAIL_URL } from "@/router/url";
 
 export class ReservationService {
   private readonly COLLECTION_NAME: string = "reservations";
@@ -35,6 +36,7 @@ export class ReservationService {
       const reservationsRef = db.collection(this.COLLECTION_NAME);
       const reservationRef = reservation.id ? reservationsRef.doc(reservation.id) : reservationsRef.doc();
       const existData = await transaction.get(reservationRef);
+      const redirectUrl = location.origin.concat(RESERVATION_DETAIL_URL, `/${reservationRef.id}`);
       const reservationData: firebase.firestore.DocumentData = {
         reservation_date: reservation.reservation_date,
         reservation_date_id: reservation.reservation_date_id,
@@ -46,6 +48,7 @@ export class ReservationService {
         tel: reservation.tel,
         mail: reservation.mail,
         comment: reservation.comment,
+        redirect_url: redirectUrl,
         seats: selectedSeats
       };
 

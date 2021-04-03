@@ -2,9 +2,7 @@ import Vue from "vue";
 import { mapActions, mapGetters, mapState } from "vuex";
 import { BDialogConfig, BNoticeConfig } from "buefy/types/components";
 import ReservationDetailContent from "@/components/reservations/detail/ReservationDetailContent.vue";
-import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
 import { CANCEL, VISIBLE_ACTIONS } from "@/store/constant";
-import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   components: {
@@ -39,8 +37,6 @@ export default Vue.extend({
         onConfirm: () => {
           this.cancel(this.id)
             .then(() => {
-              this._sendEmail(this.id);
-
               const toastConfig: BNoticeConfig = {
                 message: "予約を取り消しました",
                 type: "is-danger"
@@ -92,18 +88,6 @@ export default Vue.extend({
       };
       this.$buefy.toast.open(toastConfig);
       this.$router.push({ name: "notfound" });
-    },
-
-    /**
-     * 予約キャンセル完了通知メール送信
-     * @param id
-     */
-    _sendEmail(id: string): void {
-      const href = this.$router.resolve({
-        path: "/"
-      }).href;
-      const redirectUrl = `${location.origin}${href}`;
-      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.CANCELED);
     }
   },
   data() {

@@ -5,12 +5,9 @@ import { mapState } from "vuex";
 import { BNoticeConfig } from "buefy/types/components";
 import { forkJoin } from "rxjs";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
-import { EMAIL_MESSAGE_TEMPLATES } from "@/entity/email";
-import { NewYearDishesReservation } from "@/entity/new-year-dishes-reservation";
 import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
 import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
 import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
-import { sendEmail } from "@/utility/email-utility";
 
 export default Vue.extend({
   components: {
@@ -81,7 +78,6 @@ export default Vue.extend({
 
       this.isProgressing = false;
       this.$buefy.toast.open(toastConfig);
-      this._sendEmail(reservationId);
       this.$router.push({ name: "reserved-message", params: { id: reservationId } });
     },
 
@@ -108,18 +104,6 @@ export default Vue.extend({
 
       this.isProgressing = false;
       this.$buefy.toast.open(toastConfig);
-    },
-
-    _sendEmail(id: string): void {
-      const href = this.$router.resolve({
-        name: "reservation-detail",
-        params: {
-          id: id
-        }
-      }).href;
-      const redirectUrl = `${location.origin}${href}`;
-      // todo: cloud functions triggerを使ってメール配信する
-      sendEmail(this.reservation, id, redirectUrl, EMAIL_MESSAGE_TEMPLATES.EDITED);
     }
   },
   created() {

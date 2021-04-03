@@ -1,7 +1,6 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 import * as nodemailer from "nodemailer";
-import * as corsLib from "cors";
 import {
   getNewYearDishesReservedMessage,
   getNewYearDishesEditedMessage,
@@ -9,9 +8,12 @@ import {
 } from "./email-message";
 import { NewYearDishesSetting } from "./entity/new-year-dishes-setting";
 
+import { onCreateReservation } from "./firestore-triggers/reservation/create-reservation";
+import { onUpdateReservation } from "./firestore-triggers/reservation/update-reservation";
+import { onDeleteReservation } from "./firestore-triggers/reservation/delete-reservation";
+
 admin.initializeApp();
 
-const cors = corsLib({ origin: true });
 const config = functions.config();
 const mailTransport = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -23,31 +25,9 @@ const mailTransport = nodemailer.createTransport({
   }
 });
 
-exports.sendMail = functions.https.onRequest((request, response: functions.Response) => {
-  return cors(request, response, () => {
-    const message = {
-      from: `Cafe de Gamoyon <${config.gmail.email}>`,
-      to: request.body.data.destination,
-      bcc: config.gmail.email,
-      subject: request.body.data.subject,
-      text: request.body.data.message
-    };
-
-    console.log(request.body);
-    console.log(message);
-
-    return mailTransport
-      .sendMail(message)
-      .then(res => {
-        console.log(res);
-        return response.status(200).json({ message: "Send email" });
-      })
-      .catch(error => {
-        console.error(error);
-        return response.status(500).json({ message: "Failed send email" });
-      });
-  });
-});
+exports.onCreateReservation = onCreateReservation;
+exports.onDeleteReservation = onDeleteReservation;
+exports.onUpdateReservation = onUpdateReservation;
 
 exports.onCreateNewYearDishesReservation = functions.firestore
   .document("new_year_dishes_reservations/{id}")

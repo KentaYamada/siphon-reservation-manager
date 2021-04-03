@@ -84,7 +84,7 @@ service cloud.firestore {
     }
 
     function validationReservationSchema(reservation) {
-        return (reservation.size() == 13) &&
+        return (reservation.size() == 14) &&
                (reservation.keys().hasAll([
                     "reservation_date",
                     "reservation_date_id",
@@ -97,6 +97,7 @@ service cloud.firestore {
                     "mail", 
                     "comment",
                     "seats",
+                    "redirect_url",
                     "created_at",
                     "modified_at"
                 ])) &&
@@ -113,6 +114,7 @@ service cloud.firestore {
                (reservation.mail is string) &&
                (reservation.comment is string) &&
                (reservation.seats is list) &&
+               (reservation.redirect_url is string) &&
                (reservation.created_at is timestamp) &&
                (reservation.modified_at is timestamp);
     }
@@ -294,6 +296,10 @@ service cloud.firestore {
     match /new_year_dishes_settings/{document} {
         allow create, update: if isAuth(request.auth) &&
                                  validationNewYearDishesSettingSchema(request.resource.data);
+    }
+
+    match /mail_transmission_logs/{document} {
+        allow create: if isAuth(request.auth);
     }
   }
 }

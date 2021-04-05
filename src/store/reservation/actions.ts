@@ -39,7 +39,7 @@ const actions: ActionTree<ReservationState, RootState> = {
     });
 
     // 空席データ作成
-    _.times(((MAX_NUMBER_OF_RESERVATIONS / 2) - seats.length), t => {
+    _.times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, t => {
       seatNo += 1;
       const seat: ReservationSeat = {
         id: "",
@@ -145,13 +145,16 @@ const actions: ActionTree<ReservationState, RootState> = {
     return Promise.all([reservationRef, reservationSeatsRef]);
   },
 
-  [SAVE]: async ({ commit }, reservation: Reservation) => {
-    const service = new ReservationService();
-    const promise = service.save(reservation);
+  [SAVE]: async ({ commit }, payload: Reservation) => {
+    let promise$ = null;
 
-    promise.then(() => commit(SET_ITEM, reservation));
+    if (payload.id) {
+      promise$ = ReservationService.edit(payload);
+    } else {
+      promise$ = ReservationService.entry(payload);
+    }
 
-    return promise;
+    return promise$;
   },
 
   [CANCEL]: async ({ commit }, id: string) => {

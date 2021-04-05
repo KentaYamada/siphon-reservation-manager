@@ -3,7 +3,7 @@
     <div class="seats">
         <selectable-reservation-seat-list-item
             v-for="reservationSeat in reservationSeats"
-            :key="reservationSeat.id"
+            :key="reservationSeat.seat_no"
             :reservation-seat="reservationSeat"/>
     </div>
 </div>

@@ -5,45 +5,61 @@ import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
 import _ from "lodash";
 import { ReservationService } from "@/services/firestore/reservation-service";
-import { ReservationSeatService } from "@/services/firestore/reservation-seat-service";
 import { RootState } from "@/store";
 import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
-import {
-  CANCEL,
-  FETCH_BY_ID,
-  FETCH_RESERVATION_SEATS,
-  SAVE,
-  SET_ITEM,
-  SET_RESERVATION_SEATS
-} from "@/store/constant";
+import { CANCEL, FETCH_BY_ID, FETCH_RESERVATION_SEATS, SAVE, SET_ITEM, SET_RESERVATION_SEATS } from "@/store/constant";
 
 const actions: ActionTree<ReservationState, RootState> = {
-  [FETCH_RESERVATION_SEATS]: async ({ commit }, searchOption: ReservationSeatSearchOption) => {
-    const reservationSeatService = new ReservationSeatService();
-    const reservationSeatsRef = await reservationSeatService.fetch(searchOption);
+  [FETCH_RESERVATION_SEATS]: async ({ commit }, payload: ReservationSeatSearchOption) => {
+    const docs = await ReservationService.fetchSeats(payload);
 
-    if (!reservationSeatsRef.empty) {
-      const seats: Array<ReservationSeat> = _.chain(reservationSeatsRef.docs)
-        .map(doc => {
-          const isMyReservation = searchOption.reservation_id === doc.data()?.reservation_id;
-          return {
-            id: doc.id,
-            seat_no: doc.data()?.seat_no,
-            is_reserved: !isMyReservation && doc.data()?.is_reserved,
-            is_selected: isMyReservation && doc.data()?.is_reserved,
-            reservation_id: doc.data()?.reservation_id,
-            reservation_date: doc.data()?.reservation_date.toDate(),
-            reservation_date_id: doc.data()?.reservation_date_id,
-            reservation_start_time: doc.data()?.reservation_start_time.toDate(),
-            reservation_end_time: doc.data()?.reservation_end_time.toDate(),
-            reservation_time_id: doc.data()?.reservation_time_id
-          } as ReservationSeat;
-        })
-        .orderBy("seat_no", "asc")
-        .value();
+    let seats: Array<ReservationSeat> = [];
+    let seatNo = 0;
 
-      commit(SET_RESERVATION_SEATS, seats);
-    }
+    docs.forEach(doc => {
+      const data = doc.data();
+
+      (data.seats as Array<number>).forEach(s => {
+        const seat: ReservationSeat = {
+          id: doc.id,
+          seat_no: s,
+          is_reserved: true,
+          is_selected: false,
+          reservation_id: doc.id,
+          reservation_date: data?.reservation_date.toDate(),
+          reservation_date_id: data?.reservation_date_id,
+          reservation_start_time: data?.reservation_start_time.toDate(),
+          reservation_end_time: data?.reservation_end_time.toDate(),
+          reservation_time_id: data?.reservation_time_id
+        };
+
+        seatNo = s;
+        seats.push(seat);
+      });
+    });
+
+    // 空席データ作成
+    _.times(((MAX_NUMBER_OF_RESERVATIONS / 2) - seats.length), t => {
+      seatNo += 1;
+      const seat: ReservationSeat = {
+        id: "",
+        seat_no: seatNo,
+        is_reserved: false,
+        is_selected: false,
+        reservation_id: "",
+        reservation_date: null,
+        reservation_date_id: "",
+        reservation_start_time: null,
+        reservation_end_time: null,
+        reservation_time_id: ""
+      };
+
+      seats.push(seat);
+    });
+
+    seats = _.orderBy(seats, "seat_no", "asc");
+
+    commit(SET_RESERVATION_SEATS, seats);
   },
 
   [FETCH_BY_ID]: async ({ commit }, id: string) => {
@@ -84,29 +100,29 @@ const actions: ActionTree<ReservationState, RootState> = {
         };
         reservationSeats.push(seat);
         seatNo = s;
-      })
+      });
     });
 
     reservationSeats = _.orderBy(reservationSeats, "seat_no", "asc");
 
     // 空席を埋めていく
-    const emptySeats = (MAX_NUMBER_OF_RESERVATIONS / 2) - reservationSeats.length;
+    const emptySeats = MAX_NUMBER_OF_RESERVATIONS / 2 - reservationSeats.length;
     _.times(emptySeats, () => {
-        seatNo += 1;
-        const seat: ReservationSeat = {
-          id: "",
-          seat_no: seatNo,
-          is_reserved: false,
-          is_selected: false,
-          reservation_id: "",
-          reservation_date: null,
-          reservation_date_id: "",
-          reservation_start_time: null,
-          reservation_end_time: null,
-          reservation_time_id: ""
-        };
+      seatNo += 1;
+      const seat: ReservationSeat = {
+        id: "",
+        seat_no: seatNo,
+        is_reserved: false,
+        is_selected: false,
+        reservation_id: "",
+        reservation_date: null,
+        reservation_date_id: "",
+        reservation_start_time: null,
+        reservation_end_time: null,
+        reservation_time_id: ""
+      };
 
-        reservationSeats.push(seat);
+      reservationSeats.push(seat);
     });
 
     const reservation: Reservation = {

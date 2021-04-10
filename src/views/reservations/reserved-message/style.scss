@@ -1,12 +1,25 @@
-.reserved-message-container {
+.box {
     text-align: center;
 
-    .main-title {
-        font-size: 42px;
-        font-weight: 700;
+    .link-button {
+        background-color: #fff;
+        color: #167df0;
     }
-    .reservation-detail-link-container {
-        margin-top: 24px;
+    .page-header {
+        .title {
+            font-size: 42px;
+            font-weight: 700;
+        }
+    }
+    .page-content {
+        margin-top: 1.4rem;
+
+        .not-receive-mail {
+            font-size: 1.2rem;
+        }
+    }
+    .page-footer {
+        margin-top: 0.8rem;
 
         .link-button {
             font-size: 18px;

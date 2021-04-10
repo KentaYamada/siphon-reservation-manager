@@ -1,127 +1,201 @@
 import Vue from "vue";
-import _ from "lodash";
-import moment from "moment";
-import { mapState } from "vuex";
-import { BNoticeConfig } from "buefy/types/components";
-import { forkJoin } from "rxjs";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { required, email } from "vuelidate/lib/validators";
+import { tel } from "@/plugins/validate";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
-import { NewYearDishesSetting } from "@/entity/new-year-dishes-setting";
-import { NewYearDishesReservationService } from "@/services/firestore/new-year-dishes-reservation-service";
-import { NewYearDishesSettingService } from "@/services/firestore/new-year-dishes-setting-service";
+import { ReservationSearchOption } from "@/entity/reservation-search-option";
+import { SelectableTimezone } from "@/entity/selectable-timezone";
+import {
+  FETCH_RESERVABLE_BUSINESS_DAYS,
+  FETCH_RESERVATION_SEATS,
+  GET_BY_ID,
+  GET_RESERVABLE_PEOPLE,
+  GET_SELECTABLE_TIMEZONES,
+  GET_SELECTED_TIMEZONE,
+  IS_FULL_OF_RESERVATIONS,
+  IS_SELECTED_SEATS,
+  SAVE,
+  UPDATE_COMMENT,
+  UPDATE_NUMBER_OF_RESERVATIONS,
+  UPDATE_MAIL,
+  UPDATE_RESERVATION_DATE,
+  UPDATE_RESERVATION_SEAT,
+  UPDATE_RESERVATION_TIME,
+  UPDATE_RESERVER_NAME,
+  UPDATE_TEL
+} from "@/store/constant";
+import { BNoticeConfig } from "buefy/types/components";
 
+/**
+ * Reservation entry view
+ */
 export default Vue.extend({
+  name: "reservation-entry-view",
   components: {
     ReservationForm
   },
+  data() {
+    return {
+      isLoading: false,
+      isLoadingSeats: false
+    };
+  },
   computed: {
+    ...mapState("businessDay", ["businessDays"]),
+
     ...mapState("reservation", ["reservation"]),
 
-    isAccessible(): boolean {
-      if (this.setting.is_pause) {
-        return false;
-      }
+    ...mapGetters("businessDay", {
+      getBusinessDayById: GET_BY_ID,
+      getSelectableTimezones: GET_SELECTABLE_TIMEZONES,
+      getSelectedTimezone: GET_SELECTED_TIMEZONE
+    }),
 
-      if (moment(this.setting.end_datetime).diff(new Date()) <= 0) {
-        return false;
-      }
+    ...mapGetters("reservation", {
+      reservablePeople: GET_RESERVABLE_PEOPLE,
+      isFullOfReservations: IS_FULL_OF_RESERVATIONS,
+      isSelectedSeats: IS_SELECTED_SEATS
+    }),
 
-      if (this.setting.receptions <= this.receptions) {
-        return false;
-      }
+    timezones(): Array<SelectableTimezone> {
+      return this.getSelectableTimezones(this.reservation.reservation_date_id);
+    },
 
-      return true;
+    visibleReservationSeats(): boolean {
+      return !!this.reservation.reservation_date_id && !!this.reservation.reservation_time_id;
     }
   },
+  mounted() {
+    this.isLoading = true;
+    this.fetchReservableBusinessDays()
+      .catch(() => this._handleFailed("データの取得に失敗しました"))
+      .finally(() => (this.isLoading = false));
+  },
   methods: {
-    handleInitializing(): void {
-      this.isProgressing = true;
-    },
+    ...mapActions("businessDay", {
+      fetchReservableBusinessDays: FETCH_RESERVABLE_BUSINESS_DAYS
+    }),
 
-    handleInitialized(): void {
-      this.isProgressing = false;
-    },
+    ...mapActions("reservation", {
+      fetchReservationSeats: FETCH_RESERVATION_SEATS,
+      save: SAVE
+    }),
 
-    handleInitializeFailure(): void {
-      // todo: redirect 503 page
-      const toastConfig: BNoticeConfig = {
-        message: "データの初期化に失敗しました",
-        type: "is-danger"
-      };
-      this.isProgressing = false;
-      this.$buefy.toast.open(toastConfig);
-    },
+    ...mapMutations("reservation", {
+      updateComment: UPDATE_COMMENT,
+      updateMail: UPDATE_MAIL,
+      updateNumberOfReservations: UPDATE_NUMBER_OF_RESERVATIONS,
+      updateReservationDate: UPDATE_RESERVATION_DATE,
+      updateReservationSeat: UPDATE_RESERVATION_SEAT,
+      updateReservationTime: UPDATE_RESERVATION_TIME,
+      updateReserverName: UPDATE_RESERVER_NAME,
+      updateTel: UPDATE_TEL
+    }),
 
-    handleLoadReservationSeatsFailure(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "予約座席データの取得に失敗しました。時間をおいてアクセスしてください。",
-        type: "is-danger"
-      };
+    handleSave(): void {
+      this.$v.$touch();
 
-      this.$buefy.toast.open(toastConfig);
-    },
-
-    handleSaving(): void {
-      this.isProgressing = true;
-    },
-
-    handleSaveSuceeded(reservationId: string): void {
-      const toastConfig: BNoticeConfig = {
-        message: "予約しました",
-        type: "is-success"
-      };
-
-      this.isProgressing = false;
-      this.$buefy.toast.open(toastConfig);
-      this.$router.push({ name: "reserved-message", params: { id: reservationId } });
-    },
-
-    handleSaveFailure(error: any): void {
-      let message = "予約することができませんでした";
-      if (error.message) {
-        message = error.message;
+      if (this.$v.$invalid) {
+        this._handleFailed("入力内容に誤りがあります。エラーメッセージをご確認ください");
+      } else {
+        this.isLoading = true;
+        this.save(this.reservation)
+          .then((id: string) => {
+            this._handleSucceeded("予約しました");
+            this.$router.push({ name: "reserved-message", params: { id: id } });
+          })
+          .catch(() => this._handleFailed("予約することができませんでした"))
+          .finally(() => (this.isLoading = false));
       }
+    },
 
-      const toastConfig: BNoticeConfig = {
+    handleUpdateComment(comment: string): void {
+      this.updateComment(comment);
+    },
+
+    handleUpdateNumberOfReservations(numberOfReservations: number): void {
+      this.updateNumberOfReservations(numberOfReservations);
+    },
+
+    handleUpdateMail(mail: string): void {
+      this.updateMail(mail);
+    },
+
+    handleUpdateReservationDate(reservationDateId: string): void {
+      const businessDay = this.getBusinessDayById(reservationDateId);
+      this.updateReservationDate(businessDay);
+    },
+
+    handleUpdateReservationSeat(seatNo: number): void {
+      this.updateReservationSeat(seatNo);
+    },
+
+    handleUpdateReservationTime(reservationTimeId: string): void {
+      const timezone = this.getSelectedTimezone(this.reservation.reservation_date_id, reservationTimeId);
+      this.updateReservationTime(timezone);
+      this._fetchReservationSeats();
+    },
+
+    handleUpdateReserverName(reserverName: string): void {
+      this.updateReserverName(reserverName);
+    },
+
+    handleUpdateTel(tel: string): void {
+      this.updateTel(tel);
+    },
+
+    _fetchReservationSeats(): void {
+      const options: ReservationSearchOption = {
+        reservation_date_id: this.reservation.reservation_date_id,
+        reservation_time_id: this.reservation.reservation_time_id
+      };
+
+      this.isLoadingSeats = true;
+      this.fetchReservationSeats(options)
+        .catch(() => this._handleFailed("座席データの取得に失敗しました"))
+        .finally(() => (this.isLoadingSeats = false));
+    },
+
+    _handleFailed(message: string): void {
+      const config: BNoticeConfig = {
         message: message,
         type: "is-danger"
       };
 
-      this.isProgressing = false;
-      this.$buefy.toast.open(toastConfig);
+      this.$buefy.toast.open(config);
     },
 
-    handleValidationFailure(): void {
-      const toastConfig: BNoticeConfig = {
-        message: "入力内容に誤りがあります。エラーメッセージを確認してください。",
-        type: "is-danger"
+    _handleSucceeded(message: string): void {
+      const config: BNoticeConfig = {
+        message: message,
+        type: "is-success"
       };
 
-      this.isProgressing = false;
-      this.$buefy.toast.open(toastConfig);
+      this.$buefy.toast.open(config);
     }
   },
-  created() {
-    forkJoin([NewYearDishesSettingService.fetch(), NewYearDishesReservationService.fetchReceptions()]).subscribe(
-      value => {
-        this.setting = value[0];
-        this.receptions = value[1];
+  validations: {
+    reservation: {
+      reservation_date: {
+        required
       },
-      () => {
-        this.$emit("initialize-failed");
+      reservation_start_time: {
+        required
       },
-      () => {
-        if (!this.isAccessible) {
-          this.$emit("access-denied");
-        }
+      reserver_name: {
+        required
+      },
+      number_of_reservations: {
+        required
+      },
+      tel: {
+        required,
+        tel
+      },
+      mail: {
+        required,
+        email
       }
-    );
-  },
-  data() {
-    const setting = {} as NewYearDishesSetting;
-    return {
-      isProgressing: false,
-      setting: setting,
-      receptions: 0
-    };
+    }
   }
 });

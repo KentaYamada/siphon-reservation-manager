@@ -1,154 +1,123 @@
-<form v-if="!!reservation">
+<form>
     <div class="field">
-        <label class="label">予約日</label>
-        <b-select placeholder="予約日を選択してください"
-                  v-model="reservation.reservation_date_id"
-                  @input="handleUpdateReservationDate($event)">
-            <option v-for="d in businessDays" :key="d.id" :value="d.id">
-                {{ d.business_date | formatDateJp }}
+        <label class="label">ご来店希望日</label>
+        <b-select placeholder="ご希望の日付を選択してください" @input="handleUpdateReservationDate($event)">
+            <option v-for="b in businessDays" :key="b.id" :value="b.id">
+                {{ b.business_date | formatDateJp }}
             </option>
         </b-select>
-        <div v-if="$v.reservation.reservation_date.$error">
-            <small class="help is-danger" v-if="!$v.reservation.reservation_date.required">
-                予約日を選択してください
-            </small>
-        </div>
     </div>
     <div class="field">
-        <label class="label">予約時間</label>
-        <b-select placeholder="予約時間を選択してください"
-                  v-model="reservation.reservation_time_id"
-                  @input="handleUpdateReservationTimezone($event)">
+        <label class="label">ご来店希望時間</label>
+        <b-select placeholder="ご希望の時間帯を選択してください" @input="handleUpdateReservationTime($event)">
             <option v-for="t in timezones" :key="t.id" :value="t.id">
                 {{ t.start_time | timePeriod(t.end_time) }}
             </option>
         </b-select>
-        <div v-if="$v.reservation.reservation_start_time.$error">
-            <small class="help is-danger" v-if="!$v.reservation.reservation_start_time.required">
-                予約時間を選択してください
-            </small>
+    </div>
+    <div class="field">
+        <label class="label">ご来店人数</label>
+        <div class="control">
+            <input
+                type="number"
+                class="input has-text-right"
+                :class="{ 'is-danger': validations.reservation.number_of_reservations.$error }"
+                @input="handleUpdateNumberOfReservations($event.target.value)"
+            >
+            <div v-if="validations.reservation.number_of_reservations.$error">
+                <small class="help is-danger" v-if="!validations.reservation.number_of_reservations.required">
+                    ご来店人数を入力してください
+                </small>
+            </div>
         </div>
     </div>
     <div class="field">
-        <label class="label">空席状況</label>
-        <div class="reservation-seats-container" v-if="hasReservationSeats">
-            <p><small>現在<strong>{{ getReservablePeople }}名</strong>までのご予約受け付けております。</small></p>
-            <p><small>ご予約は空席をクリックしてください</small></p>
+        <label class="label">座席</label>
+        <div class="reservation-seats-container" v-if="visibleReservationSeats">
+            <p><small>現在、<strong>{{ reservablePeople }}名</strong>までのご予約受け付けております。</small></p>
+            <p><small>空席をクリックしてください。</small></p>
             <p><small>※ テーブルは2名席です</small></p>
-
             <h5 class="status-title">座席表の見方</h5>
             <div class="reservation-status">
                 <small>
                     <span class="status"></span>空席
                 </small>
                 <small>
-                    <span class="status selected"></span>予約中
+                    <span class="status selected"></span>選択中
                 </small>
                 <small>
                     <span class="status reserved"></span>予約不可
                 </small>
             </div>
-
             <selectable-reservation-seat-list
                 :reservationSeats="reservation.reservation_seats"
-                v-if="!!reservation.reservation_seats"/>
-
+                @update-reservation-seat="handleUpdateReservationSeat">
+            </selectable-reservation-seat-list>
             <b-loading :is-full-page="false" :active.sync="isLoadingSeats"></b-loading>
-        </div>
-        <div v-if="visibleSelectionSeatMessage" class="no-seat-selection-message">
-            <p class="has-text-danger">座席を選択してください</p>
-        </div>
-        <div v-if="isFullOfReserved" class="no-seat-selection-message">
-            <small class="has-text-danger">
-                指定した予約日時がただいま満席となっております<br>
-                予約日時を再選択してご予約ください<br>
-                ※ご指定の日時でキャンセルが出た場合はご予約いただけます。時間をおいてアクセスしてください
+            <small class="has-text-danger" v-if="isFullOfReservations">
+                ただいま満席です。<br>
+                希望日時を再選択してください。<br>
+                ※ご指定の日時でキャンセルが出た場合、ご予約いただける場合がございます。時間をおいてアクセスしてください。
             </small>
+            <small class="has-text-danger" v-if="!isFullOfReservations && !isSelectedSeats">座席を選択してください</small>
         </div>
-        <div v-if="!hasReservationSeats">
-            <p>予約日・予約時間を選択してください</p>
-        </div>
-    </div>
-    <div class="field">
-        <label class="label">予約人数</label>
-        <div class="control">
-            <input type="number"
-                   class="input has-text-right"
-                   v-model.number="reservation.number_of_reservations"
-                   :class="{ 'is-danger': $v.reservation.number_of_reservations.$error }">
-            <div v-if="$v.reservation.number_of_reservations.$error">
-                <small class="help is-danger" v-if="!$v.reservation.number_of_reservations.required">
-                    予約人数を入力してください
-                </small>
-            </div>
-        </div>
+        <p v-if="!visibleReservationSeats">ご来店希望日時を選択してください</p>
     </div>
     <div class="field">
         <label class="label">お名前</label>
-        <div class="control">
-            <input type="text"
-                   class="input"
-                   placeholder="Gamoyon 花子"
-                   v-model.trim="reservation.reserver_name"
-                   :class="{ 'is-danger': $v.reservation.reserver_name.$error }">
-            <div v-if="$v.reservation.reserver_name.$error">
-                <small class="help is-danger" v-if="!$v.reservation.reserver_name.required">
-                    名前を入力してください
-                </small>
-            </div>
+        <input
+            type="text"
+            class="input"
+            placeholder="Gamoyon 花子"
+            :class="{ 'is-danger': validations.reservation.reserver_name.$error }"
+            @input="handleUpdateReserverName($event.target.value)"
+        >
+        <div v-if="validations.reservation.reserver_name.$error">
+            <small class="help is-danger" v-if="!validations.reservation.reserver_name.required">
+                お名前を入力してください
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">電話番号 (ハイフンなし)</label>
-        <div class="control">
-            <input type="tel"
-                   class="input"
-                   placeholder="09012345678"
-                   v-model.trim="reservation.tel"
-                   :class="{ 'is-danger': $v.reservation.tel.$error }">
-            <div v-if="$v.reservation.tel.$error">
-                <small class="help is-danger" v-if="!$v.reservation.tel.required">
-                    電話番号を入力してください
-                </small>
-                <small class="help is-danger" v-if="!$v.reservation.tel.tel">
-                    電話番号は半角数字で入力してください
-                </small>
-            </div>
+        <input
+            type="text"
+            class="input"
+            placeholder="09012345678"
+            :class="{ 'is-danger': validations.reservation.tel.$error }"
+            @input="handleUpdateTel($event.target.value)"
+        >
+        <div v-if="validations.reservation.tel.$error">
+            <small class="help is-danger" v-if="!validations.reservation.tel.required">
+                電話番号を入力してください
+            </small>
+            <small class="help is-danger" v-if="!validations.reservation.tel.tel">
+                電話番号は半角数字で入力してください
+            </small>
         </div>
     </div>
     <div class="field">
-        <label class="label">
-            メールアドレス
-        </label>
-        <div class="control">
-            <input type="mail"
-                   class="input"
-                   placeholder="sweets.sukiko@email.com"
-                   v-model.trim="reservation.mail"
-                   :class="{ 'is-danger': $v.reservation.mail.$error }">
-            <small class="note">※メールアドレスがお間違いないかご確認ください</small>
-            <div v-if="$v.reservation.mail.$error">
-                <small class="help is-danger" v-if="!$v.reservation.mail.required">
-                    メールアドレスを入力してください
-                </small>
-                <small class="help is-danger"  v-if="!$v.reservation.mail.email">
-                    メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)
-                </small>
-            </div>
+        <label class="label">メールアドレス</label>
+        <input 
+            type="mail"
+            class="input"
+            placeholder="sweets.sukiko@email.com"
+            :class="{ 'is-danger': validations.reservation.mail.$error }"
+            @input="handleUpdateMail($event.target.value)"
+        >
+        <small class="note">※お間違いなくご入力ください</small>
+        <div v-if="validations.reservation.mail.$error">
+            <small class="help is-danger" v-if="!validations.reservation.mail.required">
+                メールアドレスを入力してください
+            </small>
+            <small class="help is-danger"  v-if="!validations.reservation.mail.email">
+                メールアドレスの形式で入力してください(例: sweets.sukiko@email.com)
+            </small>
         </div>
     </div>
     <div class="field">
         <label class="label">メモ</label>
-        <textarea class="textarea" placeholder="桃のショートケーキ1つ" v-model="reservation.comment"></textarea>
+        <textarea class="textarea" placeholder="桃のショートケーキ1つ" @input="handleUpdateComment($event.target.value)"></textarea>
         <small class="note">※ご注文メニューまたは連絡事項をご入力ください</small>
-    </div>
-    <div class="form-actions has-text-right">
-        <button type="button"
-                class="button is-info"
-                :disabled="isSaving"
-                @click="handleSave()">
-                <i class="fas fa-calendar-check"></i>
-            {{ buttonText }}
-        </button>
     </div>
 </form>

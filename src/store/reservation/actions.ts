@@ -14,7 +14,6 @@ const actions: ActionTree<ReservationState, RootState> = {
     const docs = await ReservationService.fetchSeats(payload);
 
     let seats: Array<ReservationSeat> = [];
-    let seatNo = 0;
 
     docs.forEach(doc => {
       const data = doc.data();
@@ -33,13 +32,14 @@ const actions: ActionTree<ReservationState, RootState> = {
           reservation_time_id: data?.reservation_time_id
         };
 
-        seatNo = s;
         seats.push(seat);
       });
     });
 
     // 空席データ作成
-    _.times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, t => {
+    let seatNo = seats.length;
+
+    _.times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, () => {
       seatNo += 1;
       const seat: ReservationSeat = {
         id: "",
@@ -147,12 +147,7 @@ const actions: ActionTree<ReservationState, RootState> = {
 
   [SAVE]: async ({ commit }, payload: Reservation) => {
     let promise$ = null;
-
-    if (payload.id) {
-      promise$ = ReservationService.edit(payload);
-    } else {
-      promise$ = ReservationService.entry(payload);
-    }
+    promise$ = ReservationService.entry(payload);
 
     return promise$;
   },

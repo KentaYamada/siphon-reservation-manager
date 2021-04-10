@@ -50,11 +50,9 @@ export const GET_RESERVABLE_PEOPLE = "getReservablePeople";
 
 export const HAS_RESERVATION_SEATS = "hasReservationSeats";
 
-export const HAS_SELECTED_SEATS = "hasSelectedSeats";
+export const IS_FULL_OF_RESERVATIONS = "isFullOfReservations";
 
-export const INITIALIZE_RESERVATION_SEATS = "initializeReservationSeats";
-
-export const IS_FULL_OF_RESERVED = "isFullOfReserved";
+export const IS_SELECTED_SEATS = "isSelectedSeats";
 
 export const RESET_RESERVATION_SEATS = "resetReservationSeats";
 
@@ -68,9 +66,23 @@ export const SET_RESERVATION_DATE = "setReservationDate";
 
 export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
 
-export const VISIBLE_ACTIONS = "visibleActions";
+export const UPDATE_COMMENT = "updateComment";
 
-export const CAN_RESERVED = "canReserved";
+export const UPDATE_NUMBER_OF_RESERVATIONS = "updateNumberOfReservations";
+
+export const UPDATE_MAIL = "updateMail";
+
+export const UPDATE_RESERVATION_DATE = "updateReservationDate";
+
+export const UPDATE_RESERVATION_SEAT = "updateReservationSeat";
+
+export const UPDATE_RESERVATION_TIME = "updateReservationTime";
+
+export const UPDATE_RESERVER_NAME = "updateReserverName";
+
+export const UPDATE_TEL = "updateTel";
+
+export const VISIBLE_ACTIONS = "visibleActions";
 
 // Reservation seat actions
 export const GET_RESERVABLE_SEATS = "getReservableSeats";

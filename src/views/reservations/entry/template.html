@@ -1,40 +1,47 @@
 <div class="container">
-    <div class="columns">
+    <div class="columns is-desktop">
         <div class="column is-half is-offset-3">
             <div class="box">
                 <div class="page-header">
                     <h4 class="title is-size-3">
-                        <i class="fas fa-calendar-alt"></i>
-                        予約受付
+                        <i class="fas fa-calendar-alt"></i>予約受付
                     </h4>
-                    <p>Cafe de Gamoyonをご利用いただきありがとうございます。<p>
-                    <p>当店は営業時間内一部予約制となっております。<p>
+                    <p>Cafe de Gamoyonをご利用いただきありがとうございます。</p>
+                    <p>当店は予約制となっております。</p>
                     <p>ご予約希望の方は、以下の情報をご入力してください。</p>
                     <p><strong class="has-text-danger">予約完了後、メールにてお知らせいたします。</strong></p>
-                    <p class="contact-message">
-                    <strong>確認メールが届かない場合</strong>は、<a href="https://www.facebook.com/gamoyon4204/" class="sns-link" target="_blank"><i class="fab fa-facebook"></i>Facebookページ</a>または
-                    <a href="https://www.instagram.com/cafedegamoyon/?hl=ja" class="sns-link" target="_blank"><i class="fab fa-instagram"></i>インスタグラム</a>
-                        からお問い合わせください。
-                    </p>
-                    <div class="new-year-dishes-link" v-if="isAccessible">
-                        <router-link class="link" :to="{ name: 'new-year-dishes-reservation-entry' }">新春スイーツのご予約はこちら！</router-link>
-                    </div>
                 </div>
-
                 <div class="page-content">
-                    <reservation-form @initializing="handleInitializing"
-                                      @initialized="handleInitialized"
-                                      @initialize-failure="handleInitializeFailure"
-                                      @load-reservation-seats-failure="handleLoadReservationSeatsFailure"
-                                      @saving="handleSaving"
-                                      @save-succeeded="handleSaveSuceeded"
-                                      @save-failure="handleSaveFailure"
-                                      @validation-failure="handleValidationFailure">
+                    <reservation-form
+                        :businessDays="businessDays"
+                        :isFullOfReservations="isFullOfReservations"
+                        :isLoadingSeats="isLoadingSeats"
+                        :isSelectedSeats="isSelectedSeats"
+                        :reservation="reservation"
+                        :reservablePeople="reservablePeople"
+                        :timezones="timezones"
+                        :validations="$v"
+                        :visibleReservationSeats="visibleReservationSeats"
+                        @update-comment="handleUpdateComment"
+                        @update-mail="handleUpdateMail"
+                        @update-number-of-reservations="handleUpdateNumberOfReservations"
+                        @update-reservation-date="handleUpdateReservationDate"
+                        @update-reservation-seat="handleUpdateReservationSeat"
+                        @update-reservation-time="handleUpdateReservationTime"
+                        @update-reserver-name="handleUpdateReserverName"
+                        @update-tel="handleUpdateTel"
+                    >
                     </reservation-form>
+                </div>
+                <div class="page-footer">
+                    <div class="has-text-right">
+                        <button class="button is-info" @click="handleSave()">
+                            <i class="fas fa-calendar-check"></i>予約する
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <b-loading :is-full-page="true" :active.sync="isProgressing"></b-loading>
+    <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
 </div>

@@ -5,6 +5,7 @@ import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import {
+  INITIALIZE,
   RESET_RESERVATION_TIMEZONE,
   SET_ITEM,
   SET_ITEMS,
@@ -23,6 +24,23 @@ import {
 import { ReservationState } from "@/store/reservation";
 
 const mutations: MutationTree<ReservationState> = {
+  [INITIALIZE]: (state: ReservationState): void => {
+    state.reservation = {
+      id: "",
+      reservation_date: null,
+      reservation_date_id: "",
+      reservation_start_time: null,
+      reservation_end_time: null,
+      reservation_time_id: "",
+      reservation_seats: [],
+      reserver_name: "",
+      number_of_reservations: 0,
+      mail: "",
+      tel: "",
+      comment: ""
+    };
+  },
+
   [SET_ITEM]: (state: ReservationState, item: Reservation): void => {
     state.reservation = item;
   },

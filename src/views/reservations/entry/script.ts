@@ -12,6 +12,7 @@ import {
   GET_RESERVABLE_PEOPLE,
   GET_SELECTABLE_TIMEZONES,
   GET_SELECTED_TIMEZONE,
+  INITIALIZE,
   IS_FULL_OF_RESERVATIONS,
   IS_SELECTED_SEATS,
   SAVE,
@@ -65,6 +66,9 @@ export default Vue.extend({
       return !!this.reservation.reservation_date_id && !!this.reservation.reservation_time_id;
     }
   },
+  created() {
+    this.initialize();
+  },
   mounted() {
     this.isLoading = true;
     this.fetchReservableBusinessDays()
@@ -82,6 +86,7 @@ export default Vue.extend({
     }),
 
     ...mapMutations("reservation", {
+      initialize: INITIALIZE,
       updateComment: UPDATE_COMMENT,
       updateMail: UPDATE_MAIL,
       updateNumberOfReservations: UPDATE_NUMBER_OF_RESERVATIONS,
@@ -95,7 +100,7 @@ export default Vue.extend({
     handleSave(): void {
       this.$v.$touch();
 
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || !this.isSelectedSeats) {
         this._handleFailed("入力内容に誤りがあります。エラーメッセージをご確認ください");
       } else {
         this.isLoading = true;

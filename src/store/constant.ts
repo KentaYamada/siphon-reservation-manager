@@ -44,6 +44,10 @@ export const SET_SELECTABLE_TIMEZONES = "setSelectableTimezones";
 // Reservation actions
 export const CANCEL = "cancel";
 
+export const EDIT = "edit";
+
+export const ENTRY = "entry";
+
 export const FETCH_RESERVATION_SEATS = "fetchReservationSeats";
 
 export const GET_RESERVABLE_PEOPLE = "getReservablePeople";

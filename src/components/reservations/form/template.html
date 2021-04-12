@@ -1,7 +1,11 @@
 <form>
     <div class="field">
         <label class="label">ご来店希望日</label>
-        <b-select placeholder="ご希望の日付を選択してください" @input="handleUpdateReservationDate($event)">
+        <b-select
+            placeholder="ご希望の日付を選択してください"
+            :value="reservation.reservation_date_id"
+            @input="handleUpdateReservationDate($event)"
+        >
             <option v-for="b in businessDays" :key="b.id" :value="b.id">
                 {{ b.business_date | formatDateJp }}
             </option>
@@ -9,7 +13,10 @@
     </div>
     <div class="field">
         <label class="label">ご来店希望時間</label>
-        <b-select placeholder="ご希望の時間帯を選択してください" @input="handleUpdateReservationTime($event)">
+        <b-select
+            placeholder="ご希望の時間帯を選択してください"
+            :value="reservation.reservation_time_id"
+            @input="handleUpdateReservationTime($event)">
             <option v-for="t in timezones" :key="t.id" :value="t.id">
                 {{ t.start_time | timePeriod(t.end_time) }}
             </option>
@@ -22,6 +29,7 @@
                 type="number"
                 class="input has-text-right"
                 :class="{ 'is-danger': validations.reservation.number_of_reservations.$error }"
+                :value="reservation.number_of_reservations"
                 @input="handleUpdateNumberOfReservations($event.target.value)"
             >
             <div v-if="validations.reservation.number_of_reservations.$error">
@@ -70,6 +78,7 @@
             class="input"
             placeholder="Gamoyon 花子"
             :class="{ 'is-danger': validations.reservation.reserver_name.$error }"
+            :value="reservation.reserver_name"
             @input="handleUpdateReserverName($event.target.value)"
         >
         <div v-if="validations.reservation.reserver_name.$error">
@@ -85,6 +94,7 @@
             class="input"
             placeholder="09012345678"
             :class="{ 'is-danger': validations.reservation.tel.$error }"
+            :value="reservation.tel"
             @input="handleUpdateTel($event.target.value)"
         >
         <div v-if="validations.reservation.tel.$error">
@@ -103,6 +113,7 @@
             class="input"
             placeholder="sweets.sukiko@email.com"
             :class="{ 'is-danger': validations.reservation.mail.$error }"
+            :value="reservation.mail"
             @input="handleUpdateMail($event.target.value)"
         >
         <small class="note">※お間違いなくご入力ください</small>

@@ -137,7 +137,7 @@ export class ReservationService {
         mail: payload.mail,
         comment: payload.comment,
         seats: seats,
-        modified: new Date()
+        modified_at: new Date()
       };
       const ref = await transaction.get(doc);
 
@@ -181,11 +181,13 @@ export class ReservationService {
     let reserved = false;
 
     _.each(ref.docs, doc => {
-      const seats = doc.data()?.seats as Array<number>;
+      if (doc.id !== payload.id) {
+        const seats = doc.data()?.seats as Array<number>;
 
-      if (_.intersection(selectedSeats, seats).length > 0) {
-        reserved = true;
-        return false;
+        if (_.intersection(selectedSeats, seats).length > 0) {
+          reserved = true;
+          return false;
+        }
       }
     });
 

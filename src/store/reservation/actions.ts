@@ -7,9 +7,26 @@ import _ from "lodash";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import { RootState } from "@/store";
 import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
-import { CANCEL, FETCH_BY_ID, FETCH_RESERVATION_SEATS, SAVE, SET_ITEM, SET_RESERVATION_SEATS } from "@/store/constant";
+import {
+  CANCEL,
+  EDIT,
+  ENTRY,
+  FETCH_BY_ID,
+  FETCH_RESERVATION_SEATS,
+  SAVE,
+  SET_ITEM,
+  SET_RESERVATION_SEATS
+} from "@/store/constant";
 
 const actions: ActionTree<ReservationState, RootState> = {
+  [EDIT]: ({ commit }, payload: Reservation) => {
+    return ReservationService.edit(payload);
+  },
+
+  [ENTRY]: ({ commit }, payload: Reservation) => {
+    return ReservationService.entry(payload);
+  },
+
   [FETCH_RESERVATION_SEATS]: async ({ commit }, payload: ReservationSeatSearchOption) => {
     const docs = await ReservationService.fetchSeats(payload);
 
@@ -79,7 +96,6 @@ const actions: ActionTree<ReservationState, RootState> = {
       return Promise.reject();
     }
 
-    let seatNo = 0;
     let reservationSeats: Array<ReservationSeat> = [];
 
     reservationSeatsRef.forEach(doc => {
@@ -99,11 +115,11 @@ const actions: ActionTree<ReservationState, RootState> = {
           reservation_time_id: doc.data()?.reservation_time_id
         };
         reservationSeats.push(seat);
-        seatNo = s;
       });
     });
 
     reservationSeats = _.orderBy(reservationSeats, "seat_no", "asc");
+    let seatNo = reservationSeats.length;
 
     // 空席を埋めていく
     const emptySeats = MAX_NUMBER_OF_RESERVATIONS / 2 - reservationSeats.length;

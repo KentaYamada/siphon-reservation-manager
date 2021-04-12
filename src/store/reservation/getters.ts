@@ -4,6 +4,7 @@ import { ReservationSeat } from "@/entity/reservation-seat";
 import { RootState } from "@/store";
 import {
   GET_RESERVABLE_PEOPLE,
+  HAS_RESERVATION_DATETIME,
   HAS_ITEMS,
   IS_SELECTED_SEATS,
   IS_FULL_OF_RESERVATIONS,
@@ -36,6 +37,10 @@ const getters: GetterTree<ReservationState, RootState> = {
     }
 
     return (maxSeats - total) * 2;
+  },
+
+  [HAS_RESERVATION_DATETIME]: (state: ReservationState): boolean => {
+    return state.reservation.reservation_date_id !== "" && state.reservation.reservation_time_id !== "";
   },
 
   [HAS_ITEMS]: (state: ReservationState): boolean => {

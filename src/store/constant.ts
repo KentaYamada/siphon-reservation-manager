@@ -48,6 +48,8 @@ export const FETCH_RESERVATION_SEATS = "fetchReservationSeats";
 
 export const GET_RESERVABLE_PEOPLE = "getReservablePeople";
 
+export const HAS_RESERVATION_DATETIME = "hasReservationDateTime";
+
 export const HAS_RESERVATION_SEATS = "hasReservationSeats";
 
 export const IS_FULL_OF_RESERVATIONS = "isFullOfReservations";

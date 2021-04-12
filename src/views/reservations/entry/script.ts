@@ -12,6 +12,7 @@ import {
   GET_RESERVABLE_PEOPLE,
   GET_SELECTABLE_TIMEZONES,
   GET_SELECTED_TIMEZONE,
+  HAS_RESERVATION_DATETIME,
   INITIALIZE,
   IS_FULL_OF_RESERVATIONS,
   IS_SELECTED_SEATS,
@@ -53,17 +54,14 @@ export default Vue.extend({
     }),
 
     ...mapGetters("reservation", {
-      reservablePeople: GET_RESERVABLE_PEOPLE,
+      hasReservationDateTime: HAS_RESERVATION_DATETIME,
       isFullOfReservations: IS_FULL_OF_RESERVATIONS,
-      isSelectedSeats: IS_SELECTED_SEATS
+      isSelectedSeats: IS_SELECTED_SEATS,
+      reservablePeople: GET_RESERVABLE_PEOPLE
     }),
 
     timezones(): Array<SelectableTimezone> {
       return this.getSelectableTimezones(this.reservation.reservation_date_id);
-    },
-
-    visibleReservationSeats(): boolean {
-      return !!this.reservation.reservation_date_id && !!this.reservation.reservation_time_id;
     }
   },
   created() {

@@ -1,13 +1,12 @@
 <div class="seat"
     :class="{ 'reserved': reservationSeat.is_reserved, 'selected': reservationSeat.is_selected }">
     <input type="checkbox"
-           :id="seatNo"
            class="seat-checkbox"
-           v-model="reservationSeat.is_selected"
+           :id="seatNo"
            :disabled="reservationSeat.is_reserved"
-           @change="onUpdateSeat()">
-    <label :for="seatNo"
-            class="seat-label">
+           @input="handleUpdateReservationSeat()"
+    >
+    <label :for="seatNo" class="seat-label">
         <div class="chair"></div>
         <div class="desk">
             <i class="fas fa-check check-icon"></i>

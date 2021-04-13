@@ -1,15 +1,16 @@
+import { orderBy, times } from "lodash";
 import { ActionTree } from "vuex";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
-import _ from "lodash";
 import { ReservationService } from "@/services/firestore/reservation-service";
-import { ReservationSeatService } from "@/services/firestore/reservation-seat-service";
 import { RootState } from "@/store";
 import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
 import {
   CANCEL,
+  EDIT,
+  ENTRY,
   FETCH_BY_ID,
   FETCH_RESERVATION_SEATS,
   SAVE,
@@ -18,32 +19,52 @@ import {
 } from "@/store/constant";
 
 const actions: ActionTree<ReservationState, RootState> = {
-  [FETCH_RESERVATION_SEATS]: async ({ commit }, searchOption: ReservationSeatSearchOption) => {
-    const reservationSeatService = new ReservationSeatService();
-    const reservationSeatsRef = await reservationSeatService.fetch(searchOption);
+  [EDIT]: ({ commit }, payload: Reservation) => {
+    return ReservationService.edit(payload);
+  },
 
-    if (!reservationSeatsRef.empty) {
-      const seats: Array<ReservationSeat> = _.chain(reservationSeatsRef.docs)
-        .map(doc => {
-          const isMyReservation = searchOption.reservation_id === doc.data()?.reservation_id;
-          return {
-            id: doc.id,
-            seat_no: doc.data()?.seat_no,
-            is_reserved: !isMyReservation && doc.data()?.is_reserved,
-            is_selected: isMyReservation && doc.data()?.is_reserved,
-            reservation_id: doc.data()?.reservation_id,
-            reservation_date: doc.data()?.reservation_date.toDate(),
-            reservation_date_id: doc.data()?.reservation_date_id,
-            reservation_start_time: doc.data()?.reservation_start_time.toDate(),
-            reservation_end_time: doc.data()?.reservation_end_time.toDate(),
-            reservation_time_id: doc.data()?.reservation_time_id
-          } as ReservationSeat;
-        })
-        .orderBy("seat_no", "asc")
-        .value();
+  [ENTRY]: ({ commit }, payload: Reservation) => {
+    return ReservationService.entry(payload);
+  },
 
-      commit(SET_RESERVATION_SEATS, seats);
-    }
+  [FETCH_RESERVATION_SEATS]: async ({ commit }, payload: ReservationSeatSearchOption) => {
+    const docs = await ReservationService.fetchSeats(payload);
+
+    let seats: Array<ReservationSeat> = [];
+
+    docs.forEach(doc => {
+      const data = doc.data();
+
+      (data.seats as Array<number>).forEach(s => {
+        const seat: ReservationSeat = {
+          id: doc.id,
+          seat_no: s,
+          is_reserved: true,
+          is_selected: false
+        };
+
+        seats.push(seat);
+      });
+    });
+
+    // 空席データ作成
+    let seatNo = seats.length;
+
+    times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, () => {
+      seatNo += 1;
+      const seat: ReservationSeat = {
+        id: "",
+        seat_no: seatNo,
+        is_reserved: false,
+        is_selected: false
+      };
+
+      seats.push(seat);
+    });
+
+    seats = orderBy(seats, "seat_no", "asc");
+
+    commit(SET_RESERVATION_SEATS, seats);
   },
 
   [FETCH_BY_ID]: async ({ commit }, id: string) => {
@@ -63,7 +84,6 @@ const actions: ActionTree<ReservationState, RootState> = {
       return Promise.reject();
     }
 
-    let seatNo = 0;
     let reservationSeats: Array<ReservationSeat> = [];
 
     reservationSeatsRef.forEach(doc => {
@@ -74,39 +94,27 @@ const actions: ActionTree<ReservationState, RootState> = {
           id: doc.id,
           seat_no: s,
           is_reserved: !myReservation,
-          is_selected: myReservation,
-          reservation_id: doc.id,
-          reservation_date: doc.data().reservation_date_id,
-          reservation_date_id: doc.data()?.reservation_date_id,
-          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
-          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
-          reservation_time_id: doc.data()?.reservation_time_id
+          is_selected: myReservation
         };
         reservationSeats.push(seat);
-        seatNo = s;
-      })
+      });
     });
 
-    reservationSeats = _.orderBy(reservationSeats, "seat_no", "asc");
+    reservationSeats = orderBy(reservationSeats, "seat_no", "asc");
+    let seatNo = reservationSeats.length;
 
     // 空席を埋めていく
-    const emptySeats = (MAX_NUMBER_OF_RESERVATIONS / 2) - reservationSeats.length;
-    _.times(emptySeats, () => {
-        seatNo += 1;
-        const seat: ReservationSeat = {
-          id: "",
-          seat_no: seatNo,
-          is_reserved: false,
-          is_selected: false,
-          reservation_id: "",
-          reservation_date: null,
-          reservation_date_id: "",
-          reservation_start_time: null,
-          reservation_end_time: null,
-          reservation_time_id: ""
-        };
+    const emptySeats = MAX_NUMBER_OF_RESERVATIONS / 2 - reservationSeats.length;
+    times(emptySeats, () => {
+      seatNo += 1;
+      const seat: ReservationSeat = {
+        id: "",
+        seat_no: seatNo,
+        is_reserved: false,
+        is_selected: false
+      };
 
-        reservationSeats.push(seat);
+      reservationSeats.push(seat);
     });
 
     const reservation: Reservation = {
@@ -129,13 +137,11 @@ const actions: ActionTree<ReservationState, RootState> = {
     return Promise.all([reservationRef, reservationSeatsRef]);
   },
 
-  [SAVE]: async ({ commit }, reservation: Reservation) => {
-    const service = new ReservationService();
-    const promise = service.save(reservation);
+  [SAVE]: async ({ commit }, payload: Reservation) => {
+    let promise$ = null;
+    promise$ = ReservationService.entry(payload);
 
-    promise.then(() => commit(SET_ITEM, reservation));
-
-    return promise;
+    return promise$;
   },
 
   [CANCEL]: async ({ commit }, id: string) => {

@@ -1,21 +1,22 @@
 <div class="columns is-centered is-desktop">
     <div class="column is-half">
         <div class="container">
-            <div class="card">
-                <div class="card-content">
-                    <div class="reserved-message-container">
-                        <h3 class="main-title">
-                            <i class="fas fa-calendar-check"></i>
-                            予約完了
-                        </h3>
-                        <div class="reservation-detail-link-container">
-                            <router-link :to="{ path: redirectUrl }"
-                                    class="button is-info is-inverted link-button">
-                                <i class="fas fa-link"></i>
-                                <span class="link-text">ご予約の確認はこちら</span>
-                            </router-link>
-                        </div>
-                    </div>
+            <div class="box">
+                <div class="page-header">
+                    <h3 class="title">
+                        <i class="fas fa-calendar-check"></i>予約完了
+                    </h3>
+                </div>
+                <div class="page-content">
+                    <p class="not-receive-mail">ご予約完了メールが届かない場合</p>
+                    <p><a href="https://www.instagram.com/cafedegamoyon/?hl=ja" class="link-button" target="_blank"><i class="fab fa-instagram"></i>Instagram</a>または<a href="https://www.facebook.com/gamoyon4204/" class="link-button" target="_blank"><i class="fab fa-facebook"></i>Facebook</a>のDMにてお問い合わせください。</p>
+                </div>
+                <div class="page-footer">
+                    <router-link :to="{ path: redirectUrl }"
+                            class="button is-info is-inverted link-button">
+                        <i class="fas fa-link"></i>
+                        <span class="link-text">ご予約の確認はこちら</span>
+                    </router-link>
                 </div>
             </div>
         </div>

@@ -1,9 +1,9 @@
+import { orderBy, times } from "lodash";
 import { ActionTree } from "vuex";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { ReservationSeatSearchOption } from "@/entity/reservation-seat-search-option";
-import _ from "lodash";
 import { ReservationService } from "@/services/firestore/reservation-service";
 import { RootState } from "@/store";
 import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
@@ -40,13 +40,7 @@ const actions: ActionTree<ReservationState, RootState> = {
           id: doc.id,
           seat_no: s,
           is_reserved: true,
-          is_selected: false,
-          reservation_id: doc.id,
-          reservation_date: data?.reservation_date.toDate(),
-          reservation_date_id: data?.reservation_date_id,
-          reservation_start_time: data?.reservation_start_time.toDate(),
-          reservation_end_time: data?.reservation_end_time.toDate(),
-          reservation_time_id: data?.reservation_time_id
+          is_selected: false
         };
 
         seats.push(seat);
@@ -56,25 +50,19 @@ const actions: ActionTree<ReservationState, RootState> = {
     // 空席データ作成
     let seatNo = seats.length;
 
-    _.times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, () => {
+    times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, () => {
       seatNo += 1;
       const seat: ReservationSeat = {
         id: "",
         seat_no: seatNo,
         is_reserved: false,
-        is_selected: false,
-        reservation_id: "",
-        reservation_date: null,
-        reservation_date_id: "",
-        reservation_start_time: null,
-        reservation_end_time: null,
-        reservation_time_id: ""
+        is_selected: false
       };
 
       seats.push(seat);
     });
 
-    seats = _.orderBy(seats, "seat_no", "asc");
+    seats = orderBy(seats, "seat_no", "asc");
 
     commit(SET_RESERVATION_SEATS, seats);
   },
@@ -106,36 +94,24 @@ const actions: ActionTree<ReservationState, RootState> = {
           id: doc.id,
           seat_no: s,
           is_reserved: !myReservation,
-          is_selected: myReservation,
-          reservation_id: doc.id,
-          reservation_date: doc.data().reservation_date_id,
-          reservation_date_id: doc.data()?.reservation_date_id,
-          reservation_start_time: doc.data()?.reservation_start_time.toDate(),
-          reservation_end_time: doc.data()?.reservation_end_time.toDate(),
-          reservation_time_id: doc.data()?.reservation_time_id
+          is_selected: myReservation
         };
         reservationSeats.push(seat);
       });
     });
 
-    reservationSeats = _.orderBy(reservationSeats, "seat_no", "asc");
+    reservationSeats = orderBy(reservationSeats, "seat_no", "asc");
     let seatNo = reservationSeats.length;
 
     // 空席を埋めていく
     const emptySeats = MAX_NUMBER_OF_RESERVATIONS / 2 - reservationSeats.length;
-    _.times(emptySeats, () => {
+    times(emptySeats, () => {
       seatNo += 1;
       const seat: ReservationSeat = {
         id: "",
         seat_no: seatNo,
         is_reserved: false,
-        is_selected: false,
-        reservation_id: "",
-        reservation_date: null,
-        reservation_date_id: "",
-        reservation_start_time: null,
-        reservation_end_time: null,
-        reservation_time_id: ""
+        is_selected: false
       };
 
       reservationSeats.push(seat);

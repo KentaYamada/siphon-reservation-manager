@@ -128,7 +128,7 @@
     </div>
     <div class="field">
         <label class="label">メモ</label>
-        <textarea class="textarea" placeholder="桃のショートケーキ1つ" @input="handleUpdateComment($event.target.value)"></textarea>
+        <textarea class="textarea" placeholder="桃のショートケーキ1つ" @input="handleUpdateComment($event.target.value)">{{ reservation.comment }}</textarea>
         <small class="note">※ご注文メニューまたは連絡事項をご入力ください</small>
     </div>
 </form>

@@ -85,7 +85,6 @@ export class ReservationService {
         created_at: timestamp,
         modified_at: timestamp
       };
-      console.log(saveData);
       const ref = await transaction.get(doc);
 
       if (ref.exists) {

@@ -2,6 +2,7 @@ import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import { required, email } from "vuelidate/lib/validators";
 import { tel } from "@/plugins/validate";
+import NewYearDishesReservationEntryLink from "@/components/new-year-dishes-reservations/entry-link/NewYearDishesReservationEntryLink.vue";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
@@ -35,6 +36,7 @@ import { BNoticeConfig } from "buefy/types/components";
 export default Vue.extend({
   name: "reservation-edit-view",
   components: {
+    NewYearDishesReservationEntryLink,
     ReservationForm
   },
   props: {

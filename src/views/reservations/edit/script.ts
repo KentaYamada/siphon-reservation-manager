@@ -126,8 +126,14 @@ export default Vue.extend({
             this.$router.push({ name: "reservation-edited-message", params: { id: id } });
           })
           .catch(err => {
-            console.error(err);
-            this._handleFailed("予約内容の変更に失敗しました");
+            let message = "予約内容の変更に失敗しました";
+
+            if (err.refetch_seats) {
+              message = err.message;
+              this._fetchReservationSeats();
+            }
+
+            this._handleFailed(message);
           })
           .finally(() => (this.isLoading = false));
       }

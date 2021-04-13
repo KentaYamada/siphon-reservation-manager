@@ -109,7 +109,16 @@ export default Vue.extend({
             this._handleSucceeded("予約しました");
             this.$router.push({ name: "reserved-message", params: { id: id } });
           })
-          .catch(() => this._handleFailed("予約することができませんでした"))
+          .catch(err => {
+            let message = "予約することができませんでした";
+
+            if (err.refetch_seats) {
+              message = err.message;
+              this._fetchReservationSeats();
+            }
+
+            this._handleFailed(message);
+          })
           .finally(() => (this.isLoading = false));
       }
     },

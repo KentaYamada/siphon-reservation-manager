@@ -60,17 +60,7 @@ export const IS_FULL_OF_RESERVATIONS = "isFullOfReservations";
 
 export const IS_SELECTED_SEATS = "isSelectedSeats";
 
-export const RESET_RESERVATION_SEATS = "resetReservationSeats";
-
-export const RESET_RESERVATION_TIMEZONE = "resetReservationTimezone";
-
-export const SET_RESERVATION_SEAT = "setReservationSeat";
-
 export const SET_RESERVATION_SEATS = "setReservationSeats";
-
-export const SET_RESERVATION_DATE = "setReservationDate";
-
-export const SET_RESERVATION_TIMEZONE = "setReservationTimezone";
 
 export const UPDATE_COMMENT = "updateComment";
 
@@ -89,11 +79,3 @@ export const UPDATE_RESERVER_NAME = "updateReserverName";
 export const UPDATE_TEL = "updateTel";
 
 export const VISIBLE_ACTIONS = "visibleActions";
-
-// Reservation seat actions
-export const GET_RESERVABLE_SEATS = "getReservableSeats";
-
-// Timezone
-export const GET_RESERVABLE_TIMEZONES = "getReservableTimezones";
-
-export const GET_TIMEZONES_BY_RESERVATION_DATE = "getTimezonesByReservationDate";

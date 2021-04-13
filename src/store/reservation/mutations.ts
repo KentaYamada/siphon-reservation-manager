@@ -1,17 +1,13 @@
 import { MutationTree } from "vuex";
-import _ from "lodash";
 import { BusinessDay } from "@/entity/business-day";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
 import {
   INITIALIZE,
-  RESET_RESERVATION_TIMEZONE,
   SET_ITEM,
   SET_ITEMS,
-  SET_RESERVATION_SEAT,
   SET_RESERVATION_SEATS,
-  SET_RESERVATION_TIMEZONE,
   UPDATE_COMMENT,
   UPDATE_MAIL,
   UPDATE_NUMBER_OF_RESERVATIONS,
@@ -49,42 +45,9 @@ const mutations: MutationTree<ReservationState> = {
     state.reservations = items;
   },
 
-  [SET_RESERVATION_SEAT]: (state: ReservationState, seat: ReservationSeat): void => {
-    if (state.reservation && state.reservation.reservation_seats && state.reservation.reservation_seats.length > 0) {
-      _.each(state.reservation.reservation_seats, (item: ReservationSeat) => {
-        if (item.seat_no === seat.seat_no) {
-          item.id = seat.id;
-          item.is_reserved = seat.is_reserved;
-          item.is_selected = seat.is_selected;
-          item.reservation_id = seat.reservation_id;
-          item.reservation_date = seat.reservation_date;
-          item.reservation_date_id = seat.reservation_date_id;
-          item.reservation_start_time = seat.reservation_start_time;
-          item.reservation_end_time = seat.reservation_end_time;
-          item.reservation_time_id = seat.reservation_time_id;
-        }
-      });
-    }
-  },
-
   [SET_RESERVATION_SEATS]: (state: ReservationState, seats: ReservationSeat[]): void => {
     if (state.reservation) {
       state.reservation.reservation_seats = seats;
-    }
-  },
-
-  [SET_RESERVATION_TIMEZONE]: (state: ReservationState, timezone: SelectableTimezone): void => {
-    if (state.reservation) {
-      state.reservation.reservation_start_time = timezone.start_time;
-      state.reservation.reservation_end_time = timezone.end_time;
-    }
-  },
-
-  [RESET_RESERVATION_TIMEZONE]: (state: ReservationState): void => {
-    if (state.reservation) {
-      state.reservation.reservation_start_time = null;
-      state.reservation.reservation_end_time = null;
-      state.reservation.reservation_time_id = "";
     }
   },
 

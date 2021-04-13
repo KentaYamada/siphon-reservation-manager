@@ -121,7 +121,7 @@ export default Vue.extend({
         this.edit(this.reservation)
           .then((id: string) => {
             this._handleSucceeded("予約内容を変更しました");
-            this.$router.push({ name: "reserved-message", params: { id: id } });
+            this.$router.push({ name: "reservation-edited-message", params: { id: id } });
           })
           .catch(err => {
             console.error(err);

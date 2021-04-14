@@ -1,5 +1,4 @@
 import { GetterTree } from "vuex";
-import { ReservationList } from "@/entity/reservation-list";
 import { RootState } from "@/store";
 import { HAS_ITEMS } from "@/store/constant";
 import { ReservationListState } from "@/store/reservation-list";

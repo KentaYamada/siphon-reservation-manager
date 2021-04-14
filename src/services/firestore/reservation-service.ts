@@ -1,31 +1,19 @@
-import _ from "lodash";
+import moment from "moment";
+import { each, intersection, orderBy } from "lodash";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import firebase from "@/plugins/firebase";
 import { RESERVATION_DETAIL_URL } from "@/router/url";
 
 export class ReservationService {
-  private readonly COLLECTION_NAME: string = "reservations";
+  private static readonly COLLECTION_NAME: string = "reservations";
 
   private static getCollection() {
-    return firebase.firestore().collection("reservations");
+    return firebase.firestore().collection(ReservationService.COLLECTION_NAME);
   }
 
-  fetch(option: ReservationSearchOption) {
-    if (_.isNil(option)) {
-      return Promise.reject();
-    }
-
-    let query = firebase
-      .firestore()
-      .collection(this.COLLECTION_NAME)
-      .where("reservation_date_id", "==", option.reservation_date_id);
-
-    if (!_.isEmpty(option.reservation_time_id)) {
-      query = query.where("reservation_time_id", "==", option.reservation_time_id);
-    }
-
-    return query.get();
+  private static formatReservationTime(payload: Date): Date {
+    return moment(payload).set({ year: 2020, month: 0, date: 1}).toDate();
   }
 
   static cancel(id: string) {
@@ -152,6 +140,43 @@ export class ReservationService {
     return transaction$;
   }
 
+  static async fetch(payload: ReservationSearchOption): Promise<Array<Reservation>> {
+    let query = ReservationService.getCollection()
+      .where("reservation_date_id", "==", payload.reservation_date_id);
+    
+    if (payload.reservation_time_id !== "") {
+      query = query.where("reservation_time_id", "==", payload.reservation_time_id);
+    }
+
+    const promise$ = await query.get();
+    const items: Array<Reservation> = [];
+
+    promise$.forEach(doc => {
+      const data = doc.data();
+      const reservationStartTime = ReservationService.formatReservationTime(data?.reservation_start_time.toDate());
+      const reservationEndTime = ReservationService.formatReservationTime(data?.reservation_end_time.toDate());
+
+      (data?.seats as Array<number>).forEach(s => {
+        items.push({
+          id: doc.id,
+          reservation_date: data?.reservation_date.toDate(),
+          reservation_date_id: data?.reservation_date_id,
+          reservation_start_time: reservationStartTime,
+          reservation_end_time: reservationEndTime,
+          reservation_time_id: data?.reservation_time_id,
+          reserver_name: data?.reserver_name,
+          reservation_seats: [],
+          number_of_reservations: data?.number_of_reservations,
+          tel: data?.tel,
+          mail: data?.mail,
+          comment: data?.comment
+        });
+      });
+    });
+
+    return orderBy(items, ["reservation_start_time", "reservation_end_time", "seat_no"]);
+  }
+
   static fetchById(id: string) {
     return ReservationService.getCollection().doc(id).get();
   }
@@ -179,11 +204,11 @@ export class ReservationService {
     const ref = await ReservationService.fetchSeats(options);
     let reserved = false;
 
-    _.each(ref.docs, doc => {
+    each(ref.docs, doc => {
       if (doc.id !== payload.id) {
         const seats = doc.data()?.seats as Array<number>;
 
-        if (_.intersection(selectedSeats, seats).length > 0) {
+        if (intersection(selectedSeats, seats).length > 0) {
           reserved = true;
           return false;
         }

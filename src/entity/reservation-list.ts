@@ -1,4 +1,4 @@
-import { Reserver } from "@/entity/reserver";
+import { Reservation } from "@/entity/reservation";
 
 /**
  * Reservation list seat entity
@@ -10,5 +10,5 @@ export interface ReservationList {
   reservation_start_time: Date;
   reservation_end_time: Date;
   reservation_time_id: string;
-  seats: Array<Reserver>;
+  seats: Array<Reservation>;
 }

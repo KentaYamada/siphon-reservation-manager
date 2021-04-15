@@ -1,14 +1,15 @@
 import { Reservation } from "@/entity/reservation";
+import { ReservationSeat } from "@/entity/reservation-seat";
 
 /**
- * Reservation list seat entity
+ * Reservation by date time entity
  */
-export interface ReservationList {
-  id: string;
+export interface ReservationByDateTime {
   reservation_date: Date;
   reservation_date_id: string;
   reservation_start_time: Date;
   reservation_end_time: Date;
   reservation_time_id: string;
-  seats: Array<Reservation>;
+  seats: Array<ReservationSeat>;
+  reservations: Array<Reservation>;
 }

@@ -23,9 +23,9 @@
                     <div class="divider"></div>
                     <div class="list-container">
                         <reservation-list
-                            :reservation-list="reservationList"
-                            @cancel-succeeded="handleCancelSucceeded()"
-                            @cancel-failed="handleCancelFailed()"
+                            :hasItems="hasItems"
+                            :reservation-list="reservations"
+                            @cancel="handleCancel"
                         >
                         </reservation-list>
                         <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>

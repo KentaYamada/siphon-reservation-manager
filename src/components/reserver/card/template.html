@@ -3,7 +3,7 @@
         <h3 class="reserver">
             {{ reserver.reserver_name | formatReserver(reserver.number_of_reservations) }}
         </h3>
-        <p>座席番号: {{ seatNo }}</p>
+        <p>予約座席: {{ seatNo }}</p>
         <p v-html="comment"></p>
         <div class="buttons is-right">
             <button type="button" class="button is-info is-inverted" @click="handleShowAddressDialog()">

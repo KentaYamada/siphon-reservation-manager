@@ -1,7 +1,8 @@
 import moment from "moment";
-import { each, intersection, orderBy } from "lodash";
+import { each, filter, intersection, orderBy, times } from "lodash";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
+import { ReservationSeat } from "@/entity/reservation-seat";
 import firebase from "@/plugins/firebase";
 import { RESERVATION_DETAIL_URL } from "@/router/url";
 
@@ -13,7 +14,7 @@ export class ReservationService {
   }
 
   private static formatReservationTime(payload: Date): Date {
-    return moment(payload).set({ year: 2020, month: 0, date: 1}).toDate();
+    return moment(payload).set({ year: 2020, month: 0, date: 1 }).toDate();
   }
 
   static cancel(id: string) {
@@ -141,23 +142,32 @@ export class ReservationService {
   }
 
   static async fetch(payload: ReservationSearchOption): Promise<Array<Reservation>> {
-    let query = ReservationService.getCollection()
-      .where("reservation_date_id", "==", payload.reservation_date_id);
-    
+    let query = ReservationService.getCollection().where("reservation_date_id", "==", payload.reservation_date_id);
+
     if (payload.reservation_time_id !== "") {
       query = query.where("reservation_time_id", "==", payload.reservation_time_id);
     }
 
     const promise$ = await query.get();
     const items: Array<Reservation> = [];
+    const reservationSeats: Array<ReservationSeat> = [];
 
     promise$.forEach(doc => {
       const data = doc.data();
       const reservationStartTime = ReservationService.formatReservationTime(data?.reservation_start_time.toDate());
       const reservationEndTime = ReservationService.formatReservationTime(data?.reservation_end_time.toDate());
+      const emptySeats: Array<ReservationSeat> = times(4, n => {
+        return {
+          seat_no: n + 1,
+          is_reserved: false,
+          is_selected: false,
+          reservation_date_id: "",
+          reservation_time_id: ""
+        } as ReservationSeat;
+      });
 
       (data?.seats as Array<number>).forEach(s => {
-        items.push({
+        const item: Reservation = {
           id: doc.id,
           reservation_date: data?.reservation_date.toDate(),
           reservation_date_id: data?.reservation_date_id,
@@ -165,16 +175,57 @@ export class ReservationService {
           reservation_end_time: reservationEndTime,
           reservation_time_id: data?.reservation_time_id,
           reserver_name: data?.reserver_name,
-          reservation_seats: [],
+          reservation_seats: emptySeats,
           number_of_reservations: data?.number_of_reservations,
           tel: data?.tel,
           mail: data?.mail,
           comment: data?.comment
+        };
+
+        // 自身の予約座席データを更新
+        item.reservation_seats.forEach(seat => {
+          if (seat.seat_no === s) {
+            seat.is_selected = true;
+            seat.reservation_date_id = item.reservation_date_id;
+            seat.reservation_id = item.id;
+            seat.reservation_time_id = item.reservation_time_id;
+          }
         });
+
+        reservationSeats.push({
+          seat_no: s,
+          is_reserved: false,
+          is_selected: false,
+          reservation_date_id: item.reservation_date_id,
+          reservation_id: item.id,
+          reservation_time_id: item.reservation_time_id
+        });
+
+        items.push(item);
       });
     });
 
-    return orderBy(items, ["reservation_start_time", "reservation_end_time", "seat_no"]);
+    // 同一予約日時の座席データをセット
+    items.forEach(item => {
+      item.reservation_seats.forEach(seat => {
+       const data = reservationSeats.find(s => {
+         return item.id !== s.reservation_id &&
+           item.reservation_date_id === s.reservation_date_id &&
+           item.reservation_time_id === s.reservation_time_id &&
+           seat.seat_no === s.seat_no;
+       }); 
+
+       if (data) {
+        seat.is_reserved = true;
+        seat.reservation_date_id = data.reservation_date_id;
+        seat.reservation_id = data.reservation_id;
+        seat.reservation_time_id = data.reservation_time_id;
+       }
+      });
+    });
+
+
+    return orderBy(items, ["reservation_start_time", "reservation_end_time"], ["asc", "asc"]);
   }
 
   static fetchById(id: string) {

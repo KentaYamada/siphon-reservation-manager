@@ -29,11 +29,11 @@ export default Vue.extend({
       this.$emit("search");
     },
 
-    handleUpdateReservationDate(reservationDateId:string): void {
+    handleUpdateReservationDate(reservationDateId: string): void {
       this.$emit("update-reservation-date", reservationDateId);
     },
 
-    handleUpdateReservationTime(reservationTimeId:string): void {
+    handleUpdateReservationTime(reservationTimeId: string): void {
       this.$emit("update-reservation-time", reservationTimeId);
     }
   },

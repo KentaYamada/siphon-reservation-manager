@@ -1,9 +1,10 @@
 <div>
-    <reservation-list-item :reservation="r" 
-                           :key="r.id"
-                           @cancel-succeeded="handleCancelSucceeded()"
-                           @cancel-failed="handleCancelFailed()"
-                           v-for="r in reservationList">
+    <reservation-list-item 
+        :reservation="r" 
+        :key="r.id"
+        v-for="r in reservationList"
+        @cancel="handleCancel()"
+    >
     </reservation-list-item>
     <p class="has-text-centered" v-if="!hasItems">表示できるデータはありません</p>
 </div>

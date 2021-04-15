@@ -2,11 +2,15 @@
     <h2 class="reservation-datetime">
         {{ reservation.reservation_date | formatReservationDatetime(reservation.reservation_start_time, reservation.reservation_end_time) }}
     </h2>
+    <h4>座席状況</h4>
+    <reservation-seat-list
+        :reservationSeats="reservation.seats"
+    >
+    </reservation-seat-list>
     <reserver-card
         :reserver="r"
         :key="r.id"
-        @cancel-succeeded="handleCancelSucceeded()"
-        @cancel-failed="handleCancelFailed()"
-        v-for="r in reservation.seats">
+        @cancel="handleCancel()"
+        v-for="r in reservation.reservations">
     </reserver-card>
 </div>

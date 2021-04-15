@@ -1,32 +1,26 @@
 import Vue, { PropType } from "vue";
-import { mapGetters } from "vuex";
-import { ReservationList } from "@/entity/reservation-list";
+import { ReservationByDateTime } from "@/entity/reservation-by-datetime";
 import ReservationListItem from "@/components/reservations/list-item/ReservationListItem.vue";
-import { HAS_ITEMS } from "@/store/constant";
 
 export default Vue.extend({
-  template: "<reservation-list/>",
+  name: "reservation-list",
   components: {
     ReservationListItem
   },
   props: {
+    hasItems: {
+      required: true,
+      type: Boolean
+    },
     reservationList: {
       required: true,
-      type: Array as PropType<Array<ReservationList>>
+      type: Array as PropType<Array<ReservationByDateTime>>
     }
-  },
-  computed: {
-    ...mapGetters("reservationList", {
-      hasItems: HAS_ITEMS
-    })
   },
   methods: {
-    handleCancelSucceeded() {
-      this.$emit("cancel-succeeded");
-    },
-
-    handleCancelFailed() {
-      this.$emit("cancel-failed");
+    handleCancel(id: string): void {
+      this.$emit("cancel", id);
     }
-  }
+  },
+  template: "<reservation-list/>"
 });

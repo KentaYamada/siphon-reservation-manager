@@ -38,7 +38,10 @@
                 </div>
                 <div class="page-footer">
                     <div class="has-text-right">
-                        <button class="button is-info" @click="handleSave()" :disabled="isFullOfReservations">
+                        <button
+                            class="button is-info"
+                            :disabled="!isSelectedSeats"
+                            @click="handleSave()">
                             <i class="fas fa-calendar-check"></i>予約する
                         </button>
                     </div>

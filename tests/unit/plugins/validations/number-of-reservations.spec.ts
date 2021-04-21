@@ -15,11 +15,11 @@ describe("Number of reservations validation rule tests", () => {
     ];
 
     it.each([1, 2])("[positive] reservation people within range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeTruthy();
+      expect(numberOfReservations(seats)(value)).toBeTruthy();
     });
 
     it.each([0, 3, 4, 5, 6, 7, 8, 9])("[negative] reservation people out of range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeFalsy();
+      expect(numberOfReservations(seats)(value)).toBeFalsy();
     });
   });
 
@@ -44,11 +44,11 @@ describe("Number of reservations validation rule tests", () => {
     ];
 
     it.each([3, 4])("[positive] reservation people within range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeTruthy();
+      expect(numberOfReservations(seats)(value)).toBeTruthy();
     });
 
     it.each([0, 1, 2, 5, 6, 7, 8, 9])("[negative] reservation people out of range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeFalsy();
+      expect(numberOfReservations(seats)(value)).toBeFalsy();
     });
   });
 
@@ -81,11 +81,11 @@ describe("Number of reservations validation rule tests", () => {
     ];
 
     it.each([5, 6])("[positive] reservation people within range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeTruthy();
+      expect(numberOfReservations(seats)(value)).toBeTruthy();
     });
 
     it.each([0, 1, 2, 3, 4, 7, 8, 9])("[negative] reservation people out of range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeFalsy();
+      expect(numberOfReservations(seats)(value)).toBeFalsy();
     });
   });
 
@@ -126,11 +126,11 @@ describe("Number of reservations validation rule tests", () => {
     ];
 
     it.each([7, 8])("[positive] reservation people within range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeTruthy();
+      expect(numberOfReservations(seats)(value)).toBeTruthy();
     });
 
     it.each([0, 1, 2, 3, 4, 5, 6, 9])("[negative] reservation people out of range", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeFalsy();
+      expect(numberOfReservations(seats)(value)).toBeFalsy();
     });
   });
 
@@ -138,7 +138,7 @@ describe("Number of reservations validation rule tests", () => {
     const seats: Array<ReservationSeat> = [];
 
     it.each([1, 2, 3, 4, 5, 6, 7, 8, 9])("[positive] should be invalid", (value: number) => {
-      expect(numberOfReservations(value)(seats)).toBeFalsy();
+      expect(numberOfReservations(seats)(value)).toBeFalsy();
     });
   });
 });

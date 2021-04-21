@@ -22,7 +22,8 @@ import {
   NEW_YEAR_DISHES_RESERVATION_EDIT_URL,
   NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL,
   NEW_YEAR_DISHES_RESERVATION_CANCELED_URL,
-  NEW_YEAR_DISHES_SETTING_URL
+  NEW_YEAR_DISHES_SETTING_URL,
+  MAIL_TRANSMISSION_LOG_LIST_URL
 } from "@/router/url";
 
 // Reservation
@@ -208,6 +209,17 @@ const routes: RouteConfig[] = [
     component: () =>
       import(
         /* webpackChunkName: "new-year-dishes-setting" */ "@/views/new-year-dishes-settings/NewYearDishesSettingView.vue"
+      ),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: MAIL_TRANSMISSION_LOG_LIST_URL,
+    name: "mail-transmission-log-list",
+    component: () =>
+      import(
+        /* webpackChunkName: "mail-transmission-log-list" */ "@/views/mail-transmission-logs/list/MailTransmissionLogListView.vue"
       ),
     meta: {
       requireAuth: true

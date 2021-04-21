@@ -9,7 +9,8 @@ import {
   HELP_MAIL_UNREACHED,
   NEW_YEAR_DISHED_RESERVATION_LIST_URL,
   NEW_YEAR_DISHES_RESERVATION_ENTRY_URL,
-  NEW_YEAR_DISHES_SETTING_URL
+  NEW_YEAR_DISHES_SETTING_URL,
+  MAIL_TRANSMISSION_LOG_LIST_URL
 } from "@/router/url";
 import { IS_ADMIN, IS_SIGNED_IN, SIGN_OUT } from "@/store/constant";
 
@@ -55,6 +56,11 @@ const getNavigations = (): Navigation[] => {
           name: "新春スイーツ予約設定",
           url: NEW_YEAR_DISHES_SETTING_URL,
           icon: "fa-store"
+        },
+        {
+          name: "メール配信履歴",
+          url: MAIL_TRANSMISSION_LOG_LIST_URL,
+          icon: "fa-envelope"
         }
       ]
     },

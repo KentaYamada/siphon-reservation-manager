@@ -22,6 +22,8 @@ export const SHOP_SETTING_URL = "/managements/shops";
 
 export const MANAGEMENT_LOGIN_URL = "/managements/login";
 
+export const MAIL_TRANSMISSION_LOG_LIST_URL = "/managements/mail_transmission_logs";
+
 export const FORBIDDEN_URL = "/forbidden";
 
 export const NOTFOUND_URL = "/notfound";

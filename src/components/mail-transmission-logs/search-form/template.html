@@ -2,12 +2,12 @@
     <div class="field">
         <label class="label">予約者氏名</label>
         <div class="control">
-            <input type="text" class="input" @input="updateReserverName($event.target.value)">
+            <input type="text" class="input" :value="searchOption.reserver_name" @input="handleUpdateReserverName($event.target.value)">
         </div>
     </div>
     <div class="field">
         <label class="label">送信日時</label>
-            <b-datepicker @input="updateSendDate($event)"></b-datepicker>
+            <b-datepicker :value="searchOption.send_date" @input="handleUpdateSendDate($event)"></b-datepicker>
     </div>
     <div class="buttons is-right">
         <button type="button" class="button" @click="handleClear()">

@@ -1,10 +1,17 @@
 import Vue, { PropType } from "vue";
+import { MailTransmissionLogSearchOption } from "@/entity/mail-transmission-log-search-option";
 
 /**
  * Mail transmission log search form component
  */
 export default Vue.extend({
   name: "mail-transmission-log-search-form",
+  props: {
+    searchOption: {
+      required: true,
+      type: Object as PropType<MailTransmissionLogSearchOption>
+    }
+  },
   methods: {
     handleClear(): void {
       this.$emit("clear-search-option");
@@ -12,7 +19,7 @@ export default Vue.extend({
     handleSearch(): void {
       this.$emit("search");
     },
-    handleUpdateReserveName(value: string): void {
+    handleUpdateReserverName(value: string): void {
       this.$emit("update-reserver-name", value);
     },
     handleUpdateSendDate(value: Date): void {

@@ -41,6 +41,11 @@ export const GET_SELECTED_TIMEZONE = "getSelectedTimezone";
 
 export const SET_SELECTABLE_TIMEZONES = "setSelectableTimezones";
 
+// Mail transmission log actions
+export const UPDATE_RESERVER_NAME = "updateReserverName";
+
+export const UPDATE_SEND_DATE = "updateSendDate";
+
 // Reservation actions
 export const CANCEL = "cancel";
 

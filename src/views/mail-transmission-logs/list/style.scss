@@ -7,4 +7,11 @@
         margin-top: 0.8rem;
         margin-bottom: 0.8rem;
     }
+    .list-container {
+        position: relative;
+        max-height: 320px;
+        overflow-x: scroll;
+        /** for iOS **/
+        -webkit-overflow-scroll: touch;
+    }
 }

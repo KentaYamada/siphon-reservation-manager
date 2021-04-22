@@ -7,7 +7,7 @@ import { MailTransmissionLogState } from "@/store/mail-transmission-log";
 
 const actions: ActionTree<MailTransmissionLogState, RootState> = {
   [FETCH]: async ({ commit }, payload: MailTransmissionLogSearchOption) => {
-    const items = MailTransmissionLogService.fetch(payload);
+    const items = await MailTransmissionLogService.fetch(payload);
     commit(SET_ITEMS, items);
   }
 };

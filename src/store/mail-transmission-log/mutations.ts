@@ -6,7 +6,7 @@ import { MailTransmissionLogState } from "@/store/mail-transmission-log";
 const mutations: MutationTree<MailTransmissionLogState> = {
   [INITIALIZE]: (state: MailTransmissionLogState): void => {
     state.mailTransmissionLogs = [];
-    state.searchOption.reserver_name = "";
+    state.searchOption.keyword = "";
     state.searchOption.send_date = null;
   },
 
@@ -15,7 +15,7 @@ const mutations: MutationTree<MailTransmissionLogState> = {
   },
 
   [UPDATE_RESERVER_NAME]: (state: MailTransmissionLogState, payload: string): void => {
-    state.searchOption.reserver_name = payload;
+    state.searchOption.keyword = payload;
   },
 
   [UPDATE_SEND_DATE]: (state: MailTransmissionLogState, payload: Date): void => {

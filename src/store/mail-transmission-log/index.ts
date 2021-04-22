@@ -14,7 +14,7 @@ export interface MailTransmissionLogState {
 const state: MailTransmissionLogState = {
   mailTransmissionLogs: [],
   searchOption: {
-    reserver_name: "",
+    keyword: "",
     send_date: null
   }
 };

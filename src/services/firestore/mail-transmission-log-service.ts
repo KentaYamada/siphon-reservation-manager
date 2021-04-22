@@ -14,7 +14,7 @@ export class MailTransmissionLogService {
       query = query.where("send_datetime", "<=", payload.send_date);
     }
 
-    const items = await (await query.get()).docs.map(doc => {
+    const items = (await query.get()).docs.map(doc => {
       const data = doc.data();
 
       return {
@@ -28,9 +28,10 @@ export class MailTransmissionLogService {
       } as MailTransmissionLog;
     });
 
-    if (payload.reserver_name !== "") {
+    if (payload.keyword !== "") {
       return items.filter(item => {
-        return item.reserver_name.indexOf(payload.reserver_name) > -1;
+        return item.reserver_name.indexOf(payload.keyword) > -1 ||
+          item.mail.indexOf(payload.keyword) > -1;
       });
     }
 

@@ -1,0 +1,11 @@
+.mail-transmission-log-list-item {
+    padding: 0.8rem 0.2rem;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .buttons {
+        margin-top: 0.6rem;
+    }
+}

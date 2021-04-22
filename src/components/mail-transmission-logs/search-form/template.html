@@ -1,0 +1,21 @@
+<form>
+    <div class="field">
+        <label class="label">予約者氏名</label>
+        <div class="control">
+            <input type="text" class="input" @input="updateReserverName($event.target.value)">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">送信日時</label>
+            <b-datepicker @input="updateSendDate($event)"></b-datepicker>
+    </div>
+    <div class="buttons is-right">
+        <button type="button" class="button" @click="handleClear()">
+            <i class="fa fa-times"></i>
+            <span>クリア</span>
+        </button>
+        <button type="button" class="button is-info" @click="handleSearch()">
+            <i class="fas fa-search"></i>検索
+        </button>
+    </div>
+</form>

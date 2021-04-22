@@ -1,8 +1,8 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { BNoticeConfig } from "buefy/types/components";
 import MailTransmissionLogList from "@/components/mail-transmission-logs/list/MailTransmissionLogList.vue";
 import MailTransmissionLogSearchForm from "@/components/mail-transmission-logs/search-form/MailTransmissionLogSearchForm.vue";
-import { MailTransmissionLog } from "@/entity/mail-transmission-log";
 import { FETCH, HAS_ITEMS, INITIALIZE, UPDATE_RESERVER_NAME, UPDATE_SEND_DATE } from "@/store/constant";
 
 /**
@@ -44,7 +44,18 @@ export default Vue.extend({
     },
 
     handleSearch(): void {
-      this.fetch(this.searchOption);
+      this.isLoading = true;
+      this.fetch(this.searchOption)
+        .catch(() => {
+          const config: BNoticeConfig = {
+            type: "is-danger",
+            message: "データの取得に失敗しました"
+          };
+          this.$buefy.toast.open(config);
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
 
     handleUpdateReserveName(value: string): void {

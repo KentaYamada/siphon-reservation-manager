@@ -299,7 +299,7 @@ service cloud.firestore {
     }
 
     match /mail_transmission_logs/{document} {
-        allow create: if isAuth(request.auth);
+        allow list, create: if isAuth(request.auth);
     }
   }
 }

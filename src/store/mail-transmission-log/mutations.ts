@@ -1,5 +1,6 @@
 import { MutationTree } from "vuex";
-import { INITIALIZE, UPDATE_RESERVER_NAME, UPDATE_SEND_DATE } from "@/store/constant";
+import { MailTransmissionLog } from "@/entity/mail-transmission-log";
+import { INITIALIZE, SET_ITEMS, UPDATE_RESERVER_NAME, UPDATE_SEND_DATE } from "@/store/constant";
 import { MailTransmissionLogState } from "@/store/mail-transmission-log";
 
 const mutations: MutationTree<MailTransmissionLogState> = {
@@ -7,6 +8,10 @@ const mutations: MutationTree<MailTransmissionLogState> = {
     state.mailTransmissionLogs = [];
     state.searchOption.reserver_name = "";
     state.searchOption.send_date = null;
+  },
+
+  [SET_ITEMS]: (state: MailTransmissionLogState, payload: Array<MailTransmissionLog>): void => {
+    state.mailTransmissionLogs = payload;
   },
 
   [UPDATE_RESERVER_NAME]: (state: MailTransmissionLogState, payload: string): void => {

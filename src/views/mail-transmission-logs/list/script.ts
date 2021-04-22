@@ -1,9 +1,9 @@
 import Vue from "vue";
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import MailTransmissionLogList from "@/components/mail-transmission-logs/list/MailTransmissionLogList.vue";
 import MailTransmissionLogSearchForm from "@/components/mail-transmission-logs/search-form/MailTransmissionLogSearchForm.vue";
 import { MailTransmissionLog } from "@/entity/mail-transmission-log";
-import { INITIALIZE, UPDATE_RESERVER_NAME, UPDATE_SEND_DATE } from "@/store/constant";
+import { FETCH, HAS_ITEMS, INITIALIZE, UPDATE_RESERVER_NAME, UPDATE_SEND_DATE } from "@/store/constant";
 
 /**
  * Mail transmission log list view
@@ -16,41 +16,23 @@ export default Vue.extend({
   },
   data() {
     return {
-      isLoading: false,
-      mailTransmissionLogs: [
-        {
-          id: "1",
-          mail: "test@email.com",
-          redirect_url: "",
-          reserver_name: "Test 太郎",
-          send_datetime: new Date(),
-          type: "reservation_create",
-          // type: "cancel_reservation",
-          type_name: "予約作成"
-        },
-        {
-          id: "2",
-          mail: "test@email.com",
-          redirect_url: "",
-          reserver_name: "Test 太郎",
-          send_datetime: new Date(),
-          type: "reservation_create",
-          // type: "cancel_reservation",
-          type_name: "予約作成"
-        }
-      ] as Array<MailTransmissionLog>
+      isLoading: false
     };
   },
   computed: {
-    ...mapState("mailTransmissionLog", [
-      // "mailTransmissionLogs",
-      "searchOption"
-    ])
+    ...mapState("mailTransmissionLog", ["mailTransmissionLogs", "searchOption"]),
+    ...mapGetters("mailTransmissionLog", {
+      hasItems: HAS_ITEMS
+    })
   },
   created() {
     this.initialize();
   },
   methods: {
+    ...mapActions("mailTransmissionLog", {
+      fetch: FETCH
+    }),
+
     ...mapMutations("mailTransmissionLog", {
       initialize: INITIALIZE,
       updateReserverName: UPDATE_RESERVER_NAME,
@@ -62,7 +44,7 @@ export default Vue.extend({
     },
 
     handleSearch(): void {
-      console.log("search");
+      this.fetch(this.searchOption);
     },
 
     handleUpdateReserveName(value: string): void {

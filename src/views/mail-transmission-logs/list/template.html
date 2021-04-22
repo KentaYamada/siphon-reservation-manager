@@ -24,7 +24,7 @@
                             :mailTransmissionLogs="mailTransmissionLogs"
                         >
                         </mail-transmission-log-list>
-                        <p class="has-text-centered">表示できるデータがありません</p>
+                        <p class="has-text-centered" v-if="!hasItems">表示できるデータがありません</p>
                         <b-loading :is-full-page="false" :active.sync="isLoading"></b-loading>
                     </div>
                 </div>

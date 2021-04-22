@@ -2,6 +2,8 @@ import { Module } from "vuex";
 import { MailTransmissionLog } from "@/entity/mail-transmission-log";
 import { MailTransmissionLogSearchOption } from "@/entity/mail-transmission-log-search-option";
 import { RootState } from "@/store";
+import actions from "@/store/mail-transmission-log/actions";
+import getters from "@/store/mail-transmission-log/getters";
 import mutations from "@/store/mail-transmission-log/mutations";
 
 export interface MailTransmissionLogState {
@@ -21,8 +23,8 @@ const namespaced = true;
 const module: Module<MailTransmissionLogState, RootState> = {
   namespaced,
   state,
-  // actions,
-  // getters,
+  actions,
+  getters,
   mutations
 };
 

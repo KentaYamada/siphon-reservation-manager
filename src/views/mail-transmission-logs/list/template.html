@@ -11,6 +11,7 @@
                     <div class="search-form-container">
                         <mail-transmission-log-search-form
                             :searchOption="searchOption"
+                            @clear-search-option="handleClearSearchOption"
                             @search="handleSearch"
                             @update-reserver-name="handleUpdateReserveName"
                             @update-send-date="handleUpdateSendDate"

@@ -57,6 +57,10 @@ export default Vue.extend({
       updateSendDate: UPDATE_SEND_DATE
     }),
 
+    handleClearSearchOption(): void {
+      this.initialize();
+    },
+
     handleSearch(): void {
       console.log("search");
     },

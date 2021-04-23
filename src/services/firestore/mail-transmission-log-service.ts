@@ -7,9 +7,7 @@ export class MailTransmissionLogService {
   }
 
   static fetch(payload: MailTransmissionLogSearchOption): Promise<firebase.firestore.QuerySnapshot> {
-    let query = MailTransmissionLogService
-      ._getCollection()
-      .orderBy("send_datetime", "asc");
+    let query = MailTransmissionLogService._getCollection().orderBy("send_datetime", "asc");
 
     if (payload.send_date) {
       query = query.where("send_datetime", ">=", payload.send_date);

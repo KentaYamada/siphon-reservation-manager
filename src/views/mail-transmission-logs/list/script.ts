@@ -82,18 +82,6 @@ export default Vue.extend({
     },
 
     handleSearch(): void {
-      this._fetch();
-    },
-
-    handleUpdateReserveName(value: string): void {
-      this.updateReserverName(value);
-    },
-
-    handleUpdateSendDate(value: Date): void {
-      this.updateSendDate(value);
-    },
-
-    _fetch(): void {
       this.isLoading = true;
       this.fetch(this.searchOption)
         .catch(() => {
@@ -104,6 +92,14 @@ export default Vue.extend({
           this.$buefy.toast.open(config);
         })
         .finally(() => (this.isLoading = false));
+    },
+
+    handleUpdateReserveName(value: string): void {
+      this.updateReserverName(value);
+    },
+
+    handleUpdateSendDate(value: Date): void {
+      this.updateSendDate(value);
     }
   }
 });

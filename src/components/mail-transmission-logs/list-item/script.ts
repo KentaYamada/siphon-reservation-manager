@@ -1,6 +1,6 @@
 import Vue, { PropType } from "vue";
 import { MailTransmissionLog } from "@/entity/mail-transmission-log";
-import { formatDateJp } from "@/filters/format-date-jp";
+import { formatDateTimeJp } from "@/filters/format-datetime-jp";
 
 /**
  * Mail transmission log list item component
@@ -8,7 +8,7 @@ import { formatDateJp } from "@/filters/format-date-jp";
 export default Vue.extend({
   name: "mail-transmission-log-list-item",
   filters: {
-    formatDateJp
+    formatDateTimeJp
   },
   props: {
     mailTransmissionLog: {
@@ -17,6 +17,18 @@ export default Vue.extend({
     }
   },
   computed: {
+    tagColor(): string {
+      if (this.mailTransmissionLog.type.indexOf("create") > -1) {
+        return "is-info";
+      } else if (this.mailTransmissionLog.type.indexOf("edit") > -1) {
+        return "is-success";
+      } else if (this.mailTransmissionLog.type.indexOf("cancel") > -1) {
+        return "is-danger";
+      } else {
+        return "";
+      }
+    },
+
     visibleReservationDetailLink(): boolean {
       return this.mailTransmissionLog.type !== "cancel_reservation";
     }

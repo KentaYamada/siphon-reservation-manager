@@ -14,6 +14,11 @@ export interface MailTransmissionLogState {
 const state: MailTransmissionLogState = {
   mailTransmissionLogs: [],
   searchOption: {
+    page: {
+      limit: 20,
+      start: null,
+      end: null
+    },
     keyword: "",
     send_date: null
   }

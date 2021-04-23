@@ -1,5 +1,4 @@
 import firebase from "@/plugins/firebase";
-import { MailTransmissionLog } from "@/entity/mail-transmission-log";
 import { MailTransmissionLogSearchOption } from "@/entity/mail-transmission-log-search-option";
 
 export class MailTransmissionLogService {
@@ -7,34 +6,25 @@ export class MailTransmissionLogService {
     return firebase.firestore().collection("mail_transmission_logs");
   }
 
-  static async fetch(payload: MailTransmissionLogSearchOption): Promise<Array<MailTransmissionLog>> {
-    let query = MailTransmissionLogService._getCollection().orderBy("send_datetime", "desc").limit(20);
+  static fetch(payload: MailTransmissionLogSearchOption): Promise<firebase.firestore.QuerySnapshot> {
+    let query = MailTransmissionLogService
+      ._getCollection()
+      .orderBy("send_datetime", "asc");
 
     if (payload.send_date) {
-      query = query.where("send_datetime", "<=", payload.send_date);
+      query = query.where("send_datetime", ">=", payload.send_date);
     }
 
-    const items = (await query.get()).docs.map(doc => {
-      const data = doc.data();
-
-      return {
-        id: doc.id,
-        mail: data.mail,
-        redirect_url: data.redirect_url,
-        reserver_name: data.reserver_name,
-        send_datetime: data?.send_datetime.toDate(),
-        type: data.type,
-        type_name: data.type_name
-      } as MailTransmissionLog;
-    });
-
-    if (payload.keyword !== "") {
-      return items.filter(item => {
-        return item.reserver_name.indexOf(payload.keyword) > -1 ||
-          item.mail.indexOf(payload.keyword) > -1;
-      });
+    if (payload.page.start) {
+      query = query.startAfter(payload.page.start);
     }
 
-    return items;
+    if (payload.page.end) {
+      query = query.endBefore(payload.page.end);
+    }
+
+    query = query.limit(payload.page.limit as number);
+
+    return query.get();
   }
 }

@@ -9,6 +9,8 @@ export const GET_BY_ID = "getById";
 
 export const INITIALIZE = "initialize";
 
+export const IS_LOAD_COMPLETED = "isLoadCompleted";
+
 export const HAS_ITEMS = "hasItems";
 
 export const SAVE = "save";
@@ -16,6 +18,12 @@ export const SAVE = "save";
 export const SET_ITEM = "setItem";
 
 export const SET_ITEMS = "setItems";
+
+export const LAZY_LOAD = "lazyLoad";
+
+export const UPDATE_START_CURSOR = "updateStartCursor";
+
+export const UPDATE_END_CURSOR = "updateEndCursor";
 
 // Auth actions
 export const SIGN_IN = "signIn";

@@ -5,9 +5,14 @@ import { TimezoneState } from "@/store/timezone";
 
 const mutations: MutationTree<TimezoneState> = {
   [INITIALIZE]: (state: TimezoneState): void => {
+    const today = new Date();
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+
     state.timezone = {
-      start_time: new Date(),
-      end_time: new Date(),
+      start_time: today,
+      end_time: today,
       is_default_select: false
     } as Timezone;
   },

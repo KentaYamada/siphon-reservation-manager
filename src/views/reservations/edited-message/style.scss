@@ -1,11 +1,21 @@
-.detail-link {
-    margin-bottom: 0.6rem;
+.page-content {
+    margin-top: 1.4rem;
 
-    .link {
-        background-color: #fff;
-        color: #167df0;
+    .detail-link-text {
+        font-size: 18px;
+        text-align: center;
+
+        .link {
+            background-color: #fff;
+            color: #167df0;
+        }
     }
 }
-.note {
-    font-weight: 600;
+.page-footer {
+    margin-top: 1.4rem;
+
+    .note {
+        font-weight: 600;
+        text-align: center;
+    }
 }

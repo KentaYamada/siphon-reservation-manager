@@ -1,8 +1,24 @@
-.sns-link-container {
-    margin-bottom: 0.4rem;
-    font-weight: 600;
+.page-content {
+    margin-top: 1.6rem;
 
-    span {
-        margin-left: 4px;
+    .rebook-text {
+        font-size: 18px;
+
+        .entry-link {
+            background-color: #fff;
+            color: #167df0;
+        }
+    }
+}
+.page-footer {
+    margin-top: 1.6rem;
+
+    .note {
+        font-weight: 600;
+    }
+    .buttons {
+        .fab {
+            margin-right: 4px;
+        }
     }
 }

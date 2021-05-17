@@ -8,6 +8,7 @@ import {
   HAS_ITEMS,
   IS_SELECTED_SEATS,
   IS_FULL_OF_RESERVATIONS,
+  SELECTED_SEAT_COUNT,
   VISIBLE_ACTIONS
 } from "@/store/constant";
 import { MAX_NUMBER_OF_RESERVATIONS, ReservationState } from "@/store/reservation";
@@ -53,6 +54,10 @@ const getters: GetterTree<ReservationState, RootState> = {
 
   [IS_SELECTED_SEATS]: (state: ReservationState): boolean => {
     return getSelectedSeats(state.reservation.reservation_seats).length > 0;
+  },
+
+  [SELECTED_SEAT_COUNT]: (state: ReservationState): number => {
+    return getSelectedSeats(state.reservation.reservation_seats).length;
   },
 
   [VISIBLE_ACTIONS]: (state: ReservationState): boolean => {

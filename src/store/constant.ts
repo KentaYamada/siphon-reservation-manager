@@ -60,6 +60,8 @@ export const IS_FULL_OF_RESERVATIONS = "isFullOfReservations";
 
 export const IS_SELECTED_SEATS = "isSelectedSeats";
 
+export const SELECTED_SEAT_COUNT = "selectedSeatCount";
+
 export const SET_RESERVATION_SEATS = "setReservationSeats";
 
 export const UPDATE_COMMENT = "updateComment";

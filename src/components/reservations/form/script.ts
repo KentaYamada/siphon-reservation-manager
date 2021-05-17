@@ -39,6 +39,10 @@ export default Vue.extend({
       required: true,
       type: Number
     },
+    selectedSeatCount: {
+      required: true,
+      type: Number
+    },
     timezones: {
       required: true,
       type: Array as PropType<Array<SelectableTimezone>>
@@ -55,6 +59,15 @@ export default Vue.extend({
   filters: {
     formatDateJp,
     timePeriod
+  },
+  computed: {
+    maxNumberOfReservations(): number {
+      return this.selectedSeatCount > 0 ? this.selectedSeatCount * 2 : 0;
+    },
+
+    minNumberOfReservations(): number {
+      return this.selectedSeatCount > 0 ? this.maxNumberOfReservations - 1 : 0;
+    }
   },
   methods: {
     handleUpdateComment(comment: string): void {

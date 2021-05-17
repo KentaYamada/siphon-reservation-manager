@@ -36,6 +36,18 @@
                 <small class="help is-danger" v-if="!validations.reservation.number_of_reservations.required">
                     ご来店人数を入力してください
                 </small>
+                <small
+                    class="help is-danger"
+                    v-if="!validations.reservation.number_of_reservations.numberOfReservations && selectedSeatCount < 1"
+                >
+                    座席を選択のうえ、ご来店人数を入力してください
+                </small>
+                <small
+                    class="help is-danger"
+                    v-if="!validations.reservation.number_of_reservations.numberOfReservations && selectedSeatCount > 0"
+                >
+                    ご来店人数は{{ minNumberOfReservations }}名から{{ maxNumberOfReservations }}名までをご入力ください
+                </small>
             </div>
         </div>
     </div>

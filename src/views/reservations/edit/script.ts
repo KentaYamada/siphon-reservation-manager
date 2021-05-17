@@ -1,11 +1,13 @@
 import Vue from "vue";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { BNoticeConfig } from "buefy/types/components";
 import { required, email } from "vuelidate/lib/validators";
-import { tel } from "@/plugins/validate";
 import NewYearDishesReservationEntryLink from "@/components/new-year-dishes-reservations/entry-link/NewYearDishesReservationEntryLink.vue";
 import ReservationForm from "@/components/reservations/form/ReservationForm.vue";
 import { ReservationSearchOption } from "@/entity/reservation-search-option";
 import { SelectableTimezone } from "@/entity/selectable-timezone";
+import { numberOfReservations } from "@/plugins/validations/number-of-reservations";
+import { tel } from "@/plugins/validate";
 import {
   EDIT,
   FETCH_BY_ID,
@@ -19,6 +21,7 @@ import {
   INITIALIZE,
   IS_FULL_OF_RESERVATIONS,
   IS_SELECTED_SEATS,
+  SELECTED_SEAT_COUNT,
   UPDATE_COMMENT,
   UPDATE_NUMBER_OF_RESERVATIONS,
   UPDATE_MAIL,
@@ -28,7 +31,6 @@ import {
   UPDATE_RESERVER_NAME,
   UPDATE_TEL
 } from "@/store/constant";
-import { BNoticeConfig } from "buefy/types/components";
 
 /**
  * Reservation edit view
@@ -66,7 +68,8 @@ export default Vue.extend({
       hasReservationDateTime: HAS_RESERVATION_DATETIME,
       isFullOfReservations: IS_FULL_OF_RESERVATIONS,
       isSelectedSeats: IS_SELECTED_SEATS,
-      reservablePeople: GET_RESERVABLE_PEOPLE
+      reservablePeople: GET_RESERVABLE_PEOPLE,
+      selectedSeatCount: SELECTED_SEAT_COUNT
     }),
 
     timezones(): Array<SelectableTimezone> {
@@ -204,28 +207,31 @@ export default Vue.extend({
       this.$buefy.toast.open(config);
     }
   },
-  validations: {
-    reservation: {
-      reservation_date: {
-        required
-      },
-      reservation_start_time: {
-        required
-      },
-      reserver_name: {
-        required
-      },
-      number_of_reservations: {
-        required
-      },
-      tel: {
-        required,
-        tel
-      },
-      mail: {
-        required,
-        email
+  validations() {
+    return {
+      reservation: {
+        reservation_date: {
+          required
+        },
+        reservation_start_time: {
+          required
+        },
+        reserver_name: {
+          required
+        },
+        number_of_reservations: {
+          required,
+          numberOfReservations: numberOfReservations(this.reservation.reservation_seats)
+        },
+        tel: {
+          required,
+          tel
+        },
+        mail: {
+          required,
+          email
+        }
       }
-    }
+    };
   }
 });

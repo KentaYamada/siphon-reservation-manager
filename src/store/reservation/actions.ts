@@ -1,4 +1,4 @@
-import { orderBy, times } from "lodash";
+import { includes, orderBy, times } from "lodash";
 import { ActionTree } from "vuex";
 import { Reservation } from "@/entity/reservation";
 import { ReservationSeat } from "@/entity/reservation-seat";
@@ -29,40 +29,26 @@ const actions: ActionTree<ReservationState, RootState> = {
 
   [FETCH_RESERVATION_SEATS]: async ({ commit }, payload: ReservationSeatSearchOption) => {
     const docs = await ReservationService.fetchSeats(payload);
+    const seats: Array<ReservationSeat> = [];
 
-    let seats: Array<ReservationSeat> = [];
-
-    docs.forEach(doc => {
-      const data = doc.data();
-
-      (data.seats as Array<number>).forEach(s => {
-        const seat: ReservationSeat = {
-          id: doc.id,
-          seat_no: s,
-          is_reserved: true,
-          is_selected: false
-        };
-
-        seats.push(seat);
+    times(MAX_NUMBER_OF_RESERVATIONS / 2, (n: number) => {
+      seats.push({
+        id: "",
+        seat_no: n + 1,
+        is_reserved: false,
+        is_selected: false
       });
     });
 
-    // 空席データ作成
-    let seatNo = seats.length;
-
-    times(MAX_NUMBER_OF_RESERVATIONS / 2 - seats.length, () => {
-      seatNo += 1;
-      const seat: ReservationSeat = {
-        id: "",
-        seat_no: seatNo,
-        is_reserved: false,
-        is_selected: false
-      };
-
-      seats.push(seat);
+    docs.forEach(doc => {
+      const selectedSeats: Array<number> = doc.data()?.seats;
+      seats.forEach(s => {
+        if (includes(selectedSeats, s.seat_no)) {
+          s.id = doc.id;
+          s.is_reserved = true;
+        }
+      });
     });
-
-    seats = orderBy(seats, "seat_no", "asc");
 
     commit(SET_RESERVATION_SEATS, seats);
   },
@@ -84,37 +70,29 @@ const actions: ActionTree<ReservationState, RootState> = {
       return Promise.reject();
     }
 
-    let reservationSeats: Array<ReservationSeat> = [];
+    const reservationSeats: Array<ReservationSeat> = [];
 
-    reservationSeatsRef.forEach(doc => {
-      const myReservation = doc.id === id;
-
-      (doc.data().seats as Array<number>).forEach(s => {
-        const seat: ReservationSeat = {
-          id: doc.id,
-          seat_no: s,
-          is_reserved: !myReservation,
-          is_selected: myReservation
-        };
-        reservationSeats.push(seat);
+    // 座席データ作成
+    times(MAX_NUMBER_OF_RESERVATIONS / 2, (n: number) => {
+      reservationSeats.push({
+        id: "",
+        seat_no: n + 1,
+        is_reserved: false,
+        is_selected: false
       });
     });
 
-    reservationSeats = orderBy(reservationSeats, "seat_no", "asc");
-    let seatNo = reservationSeats.length;
+    reservationSeatsRef.forEach(doc => {
+      const myReservation = doc.id === id;
+      const selectedSeats: Array<number> = doc.data()?.seats;
 
-    // 空席を埋めていく
-    const emptySeats = MAX_NUMBER_OF_RESERVATIONS / 2 - reservationSeats.length;
-    times(emptySeats, () => {
-      seatNo += 1;
-      const seat: ReservationSeat = {
-        id: "",
-        seat_no: seatNo,
-        is_reserved: false,
-        is_selected: false
-      };
-
-      reservationSeats.push(seat);
+      reservationSeats.forEach(seat => {
+        if (includes(selectedSeats, seat.seat_no)) {
+          seat.id = doc.id;
+          seat.is_reserved = !myReservation;
+          seat.is_selected = myReservation;
+        }
+      });
     });
 
     const reservation: Reservation = {

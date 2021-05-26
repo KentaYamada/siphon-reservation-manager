@@ -70,7 +70,7 @@ const mutations: MutationTree<ReservationState> = {
     state.reservations = items;
   },
 
-  [SET_RESERVATION_DATE]: (state: ReservationState, businessDay: Date): void => {
+  [SET_RESERVATION_DATE]: (state: ReservationState, businessDay: Date | null): void => {
     if (state.reservation) {
       state.reservation.reservation_date = businessDay;
     }

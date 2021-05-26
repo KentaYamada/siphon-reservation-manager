@@ -112,18 +112,20 @@ export default Vue.extend({
     }),
 
     handleUpdateReservationDate(selectedId: string): void {
-      const businessDay = this.getBusinessDayById(selectedId);
-      this.setReservationDate(businessDay.business_date);
-      this.resetReservationTimezone();
       this.option.reservation_date_id = selectedId;
       this.option.reservation_time_id = "";
-      this._fetchReservationSeats();
+      this.resetReservationTimezone();
+
+      const businessDay = this.getBusinessDayById(selectedId);
+      const selectedDate = businessDay ? businessDay.business_date : null;
+      this.setReservationDate(selectedDate);
+      this.resetReservationSeats();
     },
 
     handleUpdateReservationTimezone(selectedId: string): void {
+      this.option.reservation_time_id = selectedId;
       const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
       this.setReservationTimezone(timezone);
-      this.option.reservation_time_id = selectedId;
       this._fetchReservationSeats();
     },
 

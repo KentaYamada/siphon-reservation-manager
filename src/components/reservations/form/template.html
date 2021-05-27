@@ -4,6 +4,7 @@
         <b-select placeholder="予約日を選択してください"
                   v-model="reservation.reservation_date_id"
                   @input="handleUpdateReservationDate($event)">
+            <option value=""></option>
             <option v-for="d in businessDays" :key="d.id" :value="d.id">
                 {{ d.business_date | formatDateJp }}
             </option>

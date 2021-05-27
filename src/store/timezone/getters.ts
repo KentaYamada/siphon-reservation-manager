@@ -44,11 +44,13 @@ const getters: GetterTree<TimezoneState, RootState> = {
    * @param state
    * @returns Timezone
    */
-  [GET_BY_ID]: (state: TimezoneState) => (id: string): Timezone | undefined => {
-    return _.find(state.timezones, (item: Timezone) => {
-      return item.id === id;
-    });
-  },
+  [GET_BY_ID]:
+    (state: TimezoneState) =>
+    (id: string): Timezone | undefined => {
+      return _.find(state.timezones, (item: Timezone) => {
+        return item.id === id;
+      });
+    },
 
   /**
    * 予約可能な時間帯取得
@@ -62,35 +64,37 @@ const getters: GetterTree<TimezoneState, RootState> = {
   /**
    * 予約日ごとの予約可能な時間帯を取得
    */
-  [GET_TIMEZONES_BY_RESERVATION_DATE]: (state: TimezoneState) => (reservationDate: Date): Timezone[] => {
-    const target = moment(reservationDate, "YYYY-MM-DD");
-    let timezones: Timezone[] = _.clone(state.timezones);
-    const filterdTimezones: Timezone[] = [];
+  [GET_TIMEZONES_BY_RESERVATION_DATE]:
+    (state: TimezoneState) =>
+    (reservationDate: Date): Timezone[] => {
+      const target = moment(reservationDate, "YYYY-MM-DD");
+      let timezones: Timezone[] = _.clone(state.timezones);
+      const filterdTimezones: Timezone[] = [];
 
-    _.each(TEMPORARY_BUSINESSES, (business: TemporaryBusiness) => {
-      const isSame = moment(business.business_date, "YYYY-MM-DD").isSame(target);
+      _.each(TEMPORARY_BUSINESSES, (business: TemporaryBusiness) => {
+        const isSame = moment(business.business_date, "YYYY-MM-DD").isSame(target);
 
-      if (isSame) {
-        const item = _.find(timezones, (timezone: Timezone) => {
-          return filterTimezone(timezone, business);
-        });
+        if (isSame) {
+          const item = _.find(timezones, (timezone: Timezone) => {
+            return filterTimezone(timezone, business);
+          });
 
-        if (item) {
-          filterdTimezones.push(item);
+          if (item) {
+            filterdTimezones.push(item);
+          }
+        } else {
+          timezones = _.reject(timezones, (timezone: Timezone) => {
+            return filterTimezone(timezone, business);
+          });
         }
-      } else {
-        timezones = _.reject(timezones, (timezone: Timezone) => {
-          return filterTimezone(timezone, business);
-        });
+      });
+
+      if (filterdTimezones.length > 0) {
+        timezones = filterdTimezones;
       }
-    });
 
-    if (filterdTimezones.length > 0) {
-      timezones = filterdTimezones;
-    }
-
-    return timezones;
-  },
+      return timezones;
+    },
 
   /**
    * 予約時間帯データがあるかどうか

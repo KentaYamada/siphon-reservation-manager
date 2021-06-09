@@ -83,14 +83,6 @@ export default Vue.extend({
   methods: {
     ...mapActions("auth", [SIGN_OUT]),
 
-    toggleNavigation(): void {
-      this.isShowNav = !this.isShowNav;
-    },
-
-    onCloseNavigation(): void {
-      this.isShowNav = false;
-    },
-
     onClickSignOut(): void {
       this.signOut().then(() => {
         const toastConfig: BNoticeConfig = {
@@ -105,8 +97,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      navigations: getNavigations(),
-      isShowNav: false
+      navigations: getNavigations()
     };
   }
 });

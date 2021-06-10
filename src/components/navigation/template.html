@@ -1,48 +1,30 @@
-<div class="navbar is-dark" role="navigation" aria-label="main navigation" v-if="isAdmin">
-    <div class="navbar-brand">
-        <router-link :to="{ path: '/' }" class="navbar-item">
+<b-navbar type="is-dark" v-if="isAdmin">
+    <template #brand>
+        <b-navbar-item tag="router-link" :to="{ path: '/' }">
             <i class="fas fa-mug-hot"></i>
             <span class="brand-name">Cafe de Gamoyon</span>
-        </router-link>
-        <a role="button"
-           class="navbar-burger burger"
-           aria-label="menu"
-           data-target="nav-groups"
-           @click="toggleNavigation()">
-            <span aria-hidden="true"></span>
-            <span></span>
-            <span></span>
-        </a>
-    </div>
+        </b-navbar-item>
+    </template>
 
-    <div id="nav-groups" class="navbar-menu" :class="{ 'is-active': isShowNav }">
-        <div class="navbar-start">
-            <div class="navbar-item has-dropdown is-hoverable" v-for="n in navigations">
-                <a class="navbar-link is-arrowless">
-                    <i class="fas" :class="n.icon"></i>
-                    <span class="nav-label">{{ n.name }}</span>
-                </a>
-                <div class="navbar-dropdown" v-if="!!n.children">
-                    <router-link class="navbar-item"
-                                 v-for="c in n.children"
-                                 :key="c.name"
-                                 :to="{ path: c.url }"
-                                 @click.native="onCloseNavigation()">
-                        <i class="fas" :class="c.icon"></i>
-                        <span class="nav-label">{{ c.name }}</span>
-                    </router-link>
-                </div>
-            </div>
-        </div>
+    <template #start>
+        <b-navbar-dropdown :arrowless="true" :hoverable="true" :key="n.name" v-for="n in navigations">
+            <template #label>
+                <i class="fas" :class="n.icon"></i>
+                <span class="nav-label">{{ n.name }}</span>
+            </template>
 
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <button class="button is-inverted"
-                        v-if="isSignedIn"
-                        @click="onClickSignOut()">
-                    ログアウト
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+            <b-navbar-item tag="router-link" :to="{ path: c.url }" :key="c.name" v-for="c in n.children">
+                <i class="fas" :class="c.icon"></i>
+                <span class="nav-label">{{ c.name }}</span>
+            </b-navbar-item>
+        </b-navbar-dropdown>
+    </template>
+
+    <template #end>
+        <b-navbar-item tag="div">
+            <button class="button is-inverted" v-if="isSignedIn" @click="handleSignout()">
+                ログアウト
+            </button>
+        </b-navbar-item>
+    </template>
+</b-navbar>

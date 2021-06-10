@@ -1,21 +1,28 @@
-<b-navbar type="is-dark" v-if="isAdmin" close-on-click="true">
+<b-navbar type="is-dark" v-if="isAdmin">
     <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
             <i class="fas fa-mug-hot"></i>
             <span class="brand-name">Cafe de Gamoyon</span>
         </b-navbar-item>
     </template>
+
     <template #start>
-        <b-navbar-dropdown :label="n.name" :key="n.name" v-for="n in navigations">
+        <b-navbar-dropdown :arrowless="true" :hoverable="true" :key="n.name" v-for="n in navigations">
+            <template #label>
+                <i class="fas" :class="n.icon"></i>
+                <span class="nav-label">{{ n.name }}</span>
+            </template>
+
             <b-navbar-item tag="router-link" :to="{ path: c.url }" :key="c.name" v-for="c in n.children">
                 <i class="fas" :class="c.icon"></i>
                 <span class="nav-label">{{ c.name }}</span>
             </b-navbar-item>
         </b-navbar-dropdown>
     </template>
+
     <template #end>
         <b-navbar-item tag="div">
-            <button class="button is-inverted" v-if="isSignedIn" @click="onClickSignOut()">
+            <button class="button is-inverted" v-if="isSignedIn" @click="handleSignout()">
                 ログアウト
             </button>
         </b-navbar-item>

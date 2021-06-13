@@ -22,7 +22,8 @@ import {
   NEW_YEAR_DISHES_RESERVATION_EDIT_URL,
   NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL,
   NEW_YEAR_DISHES_RESERVATION_CANCELED_URL,
-  NEW_YEAR_DISHES_SETTING_URL
+  NEW_YEAR_DISHES_SETTING_URL,
+  DASHBOARD_URL
 } from "@/router/url";
 
 // Reservation
@@ -209,6 +210,14 @@ const routes: RouteConfig[] = [
       import(
         /* webpackChunkName: "new-year-dishes-setting" */ "@/views/new-year-dishes-settings/NewYearDishesSettingView.vue"
       ),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: DASHBOARD_URL,
+    name: "dashboard",
+    component: () => import(/* webpackChunkName: "dashboard" */ "@/views/dashboard/Dashboard.vue"),
     meta: {
       requireAuth: true
     }

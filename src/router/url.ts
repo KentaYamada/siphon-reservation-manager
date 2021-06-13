@@ -43,3 +43,5 @@ export const NEW_YEAR_DISHES_RESERVATION_EDITED_MESSAGE_URL = "/new_year_dishes_
 export const NEW_YEAR_DISHES_RESERVATION_CANCELED_URL = "/new_year_dishes_reservations/canceled";
 
 export const NEW_YEAR_DISHES_SETTING_URL = "/managements/new_year_dishes";
+
+export const DASHBOARD_URL = "/managements";

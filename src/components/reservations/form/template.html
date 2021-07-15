@@ -20,6 +20,7 @@
         <b-select placeholder="予約時間を選択してください"
                   v-model="reservation.reservation_time_id"
                   @input="handleUpdateReservationTimezone($event)">
+            <option value=""></option>
             <option v-for="t in timezones" :key="t.id" :value="t.id">
                 {{ t.start_time | timePeriod(t.end_time) }}
             </option>

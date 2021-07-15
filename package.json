@@ -1,10 +1,10 @@
 {
   "name": "siphon-reservation-manager",
-  "version": "0.1.0",
+  "version": "1.0.22",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
-    "serve:firestore": "firebase emulators:start --only firestore",
+    "serve:emulator": "firebase emulators:start",
     "build": "vue-cli-service build --mode production",
     "test:unit": "export FIRESTORE_EMULATOR_HOST=localhost:8082; vue-cli-service test:unit --watchAll",
     "lint": "vue-cli-service lint",

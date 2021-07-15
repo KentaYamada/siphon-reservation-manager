@@ -124,9 +124,15 @@ export default Vue.extend({
 
     handleUpdateReservationTimezone(selectedId: string): void {
       this.option.reservation_time_id = selectedId;
-      const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
-      this.setReservationTimezone(timezone);
-      this._fetchReservationSeats();
+
+      if (selectedId === "") {
+        this.resetReservationTimezone();
+        this.resetReservationSeats();
+      } else {
+        const timezone = this.getSelectedTimezone(this.option.reservation_date_id, selectedId);
+        this.setReservationTimezone(timezone);
+        this._fetchReservationSeats();
+      }
     },
 
     handleSave(): void {
